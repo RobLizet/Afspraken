@@ -520,7 +520,7 @@ function startSpeech() {
   recognition.onerror= function(e) {
     setListeningState(false);
     if (e.error === "not-allowed") alertBlocked.style.display = "block";
-    else if (e.error !== "no-speech") showAlert(alertError, "Fout: "+e.error);
+    else if (e.error !== "no-speech" && e.error !== "aborted") showAlert(alertError, "Fout: "+e.error);
   };
   recognition.start();
 }
