@@ -518,6 +518,7 @@
         <button class="tab" data-tab="rob">👤 Rob <span id="count-rob">(0)</span></button>
         <button class="tab" data-tab="lizet">👩 Lizet <span id="count-lizet">(0)</span></button>
         <button class="tab" data-tab="verjaardagen">🎂 Verjaardagen <span id="count-bdays">(0)</span></button>
+        <button class="tab" data-tab="herinneringen">🕯️ Herinneringen <span id="count-mem">(0)</span></button>
       </div>
 
       <div class="counts" id="summary-pills">
@@ -530,7 +531,7 @@
     <div class="content">
       <div class="controls">
         <div class="search">
-          <input id="search-input" type="text" placeholder="Zoek in afspraken..." autocomplete="off" />
+          <input id="search-input" type="text" placeholder="Zoek in afspraken, verjaardagen, herinneringen..." autocomplete="off" />
           <button id="search-clear" title="Wis">✕</button>
         </div>
       </div>
@@ -553,6 +554,39 @@
           <button id="bday-export"
             style="background:var(--rob-bg); border:1px solid var(--rob-border); color:var(--rob); border-radius:10px; padding:10px 12px; font-family:'DM Sans',sans-serif; font-size:0.85rem; cursor:pointer;">
             📥 Exporteer verjaardagen
+          </button>
+        </div>
+      </div>
+
+      <div id="mem-section" style="display:none; margin-bottom:16px;">
+        <div style="display:flex; gap:8px; margin-bottom:10px; flex-wrap:wrap;">
+          <input id="mem-name" type="text" placeholder="Naam..." autocomplete="off"
+            style="flex:1; min-width:160px; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:12px 16px; font-family:'DM Sans',sans-serif; font-size:0.95rem; color:var(--text); outline:none; -webkit-appearance:none;" />
+
+          <select id="mem-type"
+            style="width:160px; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:12px 12px; font-family:'DM Sans',sans-serif; font-size:0.95rem; color:var(--text); outline:none; -webkit-appearance:none;">
+            <option value="Overlijden">Overlijden</option>
+            <option value="Herdenking">Herdenking</option>
+            <option value="Jubileum">Jubileum</option>
+            <option value="Anders">Anders</option>
+          </select>
+
+          <input id="mem-date" type="date"
+            style="width:150px; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:12px 12px; font-family:'DM Sans',sans-serif; font-size:0.95rem; color:var(--text); outline:none; -webkit-appearance:none;" />
+
+          <button id="mem-add"
+            style="background:var(--beide-bg); border:1px solid var(--beide-border); color:var(--beide); border-radius:12px; padding:12px 14px; font-family:'DM Sans',sans-serif; font-size:1.0rem; cursor:pointer;">
+            ➕
+          </button>
+        </div>
+
+        <input id="mem-note" type="text" placeholder="Notitie, bijv. kaarsje, bloemen, bezoek..."
+          style="width:100%; margin-bottom:10px; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:12px 16px; font-family:'DM Sans',sans-serif; font-size:0.95rem; color:var(--text); outline:none; -webkit-appearance:none;" />
+
+        <div style="display:flex; gap:8px; justify-content:flex-end;">
+          <button id="mem-export"
+            style="background:var(--rob-bg); border:1px solid var(--rob-border); color:var(--rob); border-radius:10px; padding:10px 12px; font-family:'DM Sans',sans-serif; font-size:0.85rem; cursor:pointer;">
+            📥 Exporteer herinneringen
           </button>
         </div>
       </div>
@@ -583,7 +617,7 @@
             </div>
 
             <label>Omschrijving</label>
-            <textarea id="desc" placeholder="Bijv. tandarts, verjaardag, etentje, controle..."></textarea>
+            <textarea id="desc" placeholder="Bijv. tandarts, etentje, controle..."></textarea>
 
             <div class="btns">
               <button class="primary" id="add-btn">Toevoegen</button>
@@ -629,6 +663,11 @@
     try { birthdays = JSON.parse(localStorage.getItem(BDAY_KEY)) || []; } catch(e) {}
     function saveBdays(){ try { localStorage.setItem(BDAY_KEY, JSON.stringify(birthdays)); } catch(e) {} }
 
+    var MEM_KEY  = "herinneringen_v1";
+    var memories = [];
+    try { memories = JSON.parse(localStorage.getItem(MEM_KEY)) || []; } catch(e) {}
+    function saveMem(){ try { localStorage.setItem(MEM_KEY, JSON.stringify(memories)); } catch(e) {} }
+
     try {
       appointments = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
     } catch(e) {
@@ -672,6 +711,14 @@
     var bdayDate     = document.getElementById("bday-date");
     var bdayAdd      = document.getElementById("bday-add");
     var bdayExport   = document.getElementById("bday-export");
+
+    var memSection   = document.getElementById("mem-section");
+    var memName      = document.getElementById("mem-name");
+    var memType      = document.getElementById("mem-type");
+    var memDate      = document.getElementById("mem-date");
+    var memNote      = document.getElementById("mem-note");
+    var memAdd       = document.getElementById("mem-add");
+    var memExport    = document.getElementById("mem-export");
 
     var toast        = document.getElementById("toast");
     var exportBar    = document.getElementById("exportbar");
@@ -820,7 +867,8 @@
       var d = parseInt(mmdd.slice(3,5),10);
       var dt = new Date(y, m-1, d);
       dt.setHours(0,0,0,0);
-      if (dt.getTime() < new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime()) {
+      var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      if (dt.getTime() < today.getTime()) {
         dt = new Date(y+1, m-1, d);
         dt.setHours(0,0,0,0);
       }
@@ -865,6 +913,36 @@
       URL.revokeObjectURL(url);
     }
 
+    function buildMemICS(list){
+      var lines = ["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Rob Borghouts//Herinneringen//NL","CALSCALE:GREGORIAN","METHOD:PUBLISH"];
+      list.forEach(function(m){
+        if (!m.mmdd) return;
+        var year = (new Date()).getFullYear();
+        var dtstart = ""+year+m.mmdd.slice(0,2)+m.mmdd.slice(3,5);
+        var title = "🕯️ "+(m.type||"Herinnering")+": "+(m.name||"");
+        if (m.note) title += " - " + m.note;
+        lines.push(
+          "BEGIN:VEVENT",
+          "UID:mem-"+m.id+"@onze-agenda",
+          "SUMMARY:"+title.replace(/\n/g," ").slice(0,180),
+          "DTSTART;VALUE=DATE:"+dtstart,
+          "RRULE:FREQ=YEARLY",
+          "DTSTAMP:"+new Date().toISOString().replace(/[-:.]/g,"").slice(0,15)+"Z",
+          "END:VEVENT"
+        );
+      });
+      lines.push("END:VCALENDAR");
+      return lines.join("\r\n");
+    }
+
+    function downloadMemICS(){
+      if (!memories.length) { alert("Geen herinneringen."); return; }
+      var blob = new Blob([buildMemICS(memories)],{type:"text/calendar;charset=utf-8"});
+      var url  = URL.createObjectURL(blob);
+      var a    = document.createElement("a"); a.href=url; a.download="herinneringen.ics"; a.click();
+      URL.revokeObjectURL(url);
+    }
+
     function renderBirthdays() {
       document.getElementById("count-bdays").textContent = "("+birthdays.length+")";
 
@@ -898,7 +976,7 @@
         var whenTxt = b.nextISO ? new Date(b.nextISO).toLocaleDateString("nl-NL",{day:"numeric",month:"long",year:"numeric"}) : "";
         var leftTxt = (b.daysLeft === 0) ? "Vandaag" : (b.daysLeft === 1 ? "Morgen" : "Over "+b.daysLeft+" dagen");
 
-        html += '<div class="apt-card beide" style="margin-bottom:8px" data-bid="'+b.id+'">'
+        html += '<div class="apt-card beide" style="margin-bottom:8px">'
           +'<div class="apt-icon">🎂</div>'
           +'<div class="apt-body">'
           +'<div class="apt-who beide">Verjaardag</div>'
@@ -916,6 +994,67 @@
       aptList.innerHTML = html;
     }
 
+    function renderMemories(){
+      document.getElementById("count-mem").textContent = "("+memories.length+")";
+
+      var q = (searchQuery || "").trim().toLowerCase();
+      var list = memories.slice();
+
+      if (q){
+        list = list.filter(function(m){
+          return (m.name||"").toLowerCase().includes(q) ||
+                 (m.type||"").toLowerCase().includes(q) ||
+                 (m.note||"").toLowerCase().includes(q);
+        });
+      }
+
+      list.forEach(function(m){
+        m.nextISO = nextBirthdayDateISO(m.mmdd);
+        m.daysLeft = daysUntil(m.nextISO);
+      });
+
+      list.sort(function(a,b){ return a.daysLeft - b.daysLeft; });
+
+      if (!list.length){
+        aptList.innerHTML = q
+          ? '<div class="empty-state"><div class="icon">🔎</div><p>Geen herinneringen gevonden.<br>Probeer een andere zoekterm.</p></div>'
+          : '<div class="empty-state"><div class="icon">🕯️</div><p>Geen herinneringen.<br>Voeg er eentje toe hierboven.</p></div>';
+        return;
+      }
+
+      var html = "";
+      html += '<div class="section-title">Herinneringen<span class="count-badge">'+list.length+"</span></div>";
+
+      list.forEach(function(m){
+        var whenTxt = m.nextISO ? new Date(m.nextISO).toLocaleDateString("nl-NL",{day:"numeric",month:"long",year:"numeric"}) : "";
+        var leftTxt = (m.daysLeft === 0) ? "Vandaag" : (m.daysLeft === 1 ? "Morgen" : "Over "+m.daysLeft+" dagen");
+
+        var yearsTxt = "";
+        if (m.year){
+          var nowY = (new Date()).getFullYear();
+          var yrs = nowY - m.year;
+          if (yrs >= 0) yearsTxt = " , " + yrs + " jaar";
+        }
+
+        html += '<div class="apt-card beide" style="margin-bottom:8px">'
+          +'<div class="apt-icon">🕯️</div>'
+          +'<div class="apt-body">'
+          +'<div class="apt-who beide">'+escH(m.type||"Herinnering")+'</div>'
+          +'<div class="apt-desc">'+escH(m.name||"")+'</div>'
+          +'<div class="apt-meta">'
+          +'<span>📅 '+escH(whenTxt)+'</span>'
+          +'<span>'+escH(leftTxt + yearsTxt)+'</span>'
+          +(m.note ? '<span>📝 '+escH(m.note)+'</span>' : '')
+          +'</div></div>'
+          +'<div class="apt-actions">'
+          +'<button class="mem-del-btn" data-mid="'+m.id+'" title="Verwijder">🗑️</button>'
+          +'</div>'
+          +'</div>';
+      });
+
+      aptList.innerHTML = html;
+    }
+
     function updateTabCounts(){
       var all = appointments.length;
       var rob = appointments.filter(function(a){return a.who==="rob";}).length;
@@ -925,6 +1064,7 @@
       document.getElementById("count-rob").textContent   = "("+rob+")";
       document.getElementById("count-lizet").textContent = "("+liz+")";
       document.getElementById("count-bdays").textContent = "("+birthdays.length+")";
+      document.getElementById("count-mem").textContent   = "("+memories.length+")";
     }
 
     function render(){
@@ -935,13 +1075,23 @@
 
       if (activeTab === "verjaardagen") {
         bdaySection.style.display = "block";
+        memSection.style.display = "none";
         exportBar.style.display = "none";
         renderBirthdays();
         return;
-      } else {
-        bdaySection.style.display = "none";
-        exportBar.style.display = "";
       }
+
+      if (activeTab === "herinneringen") {
+        bdaySection.style.display = "none";
+        memSection.style.display = "block";
+        exportBar.style.display = "none";
+        renderMemories();
+        return;
+      }
+
+      bdaySection.style.display = "none";
+      memSection.style.display = "none";
+      exportBar.style.display = "";
 
       var list = filteredAppointments();
 
@@ -1106,6 +1256,16 @@
     aptList.addEventListener("click", function(e){
       var del = e.target.closest(".apt-del-btn");
       var bdel = e.target.closest(".bday-del-btn");
+      var mdel = e.target.closest(".mem-del-btn");
+
+      if (mdel && mdel.dataset.mid){
+        var mid = parseInt(mdel.dataset.mid,10);
+        memories = memories.filter(function(m){ return m.id !== mid; });
+        saveMem();
+        showToast("🕯️ Herinnering verwijderd");
+        render();
+        return;
+      }
 
       if (bdel && bdel.dataset.bid){
         var bid = parseInt(bdel.dataset.bid,10);
@@ -1156,6 +1316,31 @@
     bdayExport.addEventListener("click", function(){
       downloadBdayICS();
     });
+
+    memAdd.addEventListener("click", function(){
+      var name = (memName.value || "").trim();
+      var date = (memDate.value || "").trim();
+      var type = (memType.value || "Herinnering").trim();
+      var note = (memNote.value || "").trim();
+
+      if (!name || !date) { showToast("Vul naam en datum in"); return; }
+
+      var mmdd = date.slice(5,7)+"-"+date.slice(8,10);
+      var year = parseInt(date.slice(0,4),10);
+
+      memories.push({ id: Date.now(), name:name, type:type, note:note, mmdd:mmdd, year:year, createdAt:new Date().toISOString() });
+      saveMem();
+
+      memName.value = "";
+      memDate.value = "";
+      memNote.value = "";
+      showToast("🕯️ Herinnering toegevoegd");
+      render();
+    });
+
+    memExport.addEventListener("click", function(){
+      downloadMemICS();
+    });
    (function init(){
       applyReminderToggleUI();
       resetForm();
@@ -1171,4 +1356,3 @@
   </script>
 </body>
 </html>
-
