@@ -821,7 +821,7 @@
 
     var leftCard  = document.getElementById("left-card");
     var rightCard = document.getElementById("right-card");
-    var mainGrid  = document.getElementById("main-grid");
+    var mainGrid = document.getElementById("main-grid") || (leftCard ? leftCard.closest(".grid") : null);
 
     var activeTab   = "alle";
     var searchQuery = "";
@@ -1338,14 +1338,15 @@
     }
 
     function showMainGrid(){
-      mainGrid.style.display = "";
-      leftCard.style.display = "";
-      rightCard.style.gridColumn = "";
-    }
+  if (mainGrid) mainGrid.style.display = "";
+  if (leftCard) leftCard.style.display = "";
+  if (rightCard) rightCard.style.gridColumn = "";
+}
 
-    function hideMainGrid(){
-      mainGrid.style.display = "none";
-    }
+function hideMainGrid(){
+  if (mainGrid) mainGrid.style.display = "none";
+}
+    
 
     function render(){
       updateTabCounts();
