@@ -1,14 +1,13 @@
 <!DOCTYPE html>
-
 <html lang="nl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <title>Onze Agenda &#8211; Rob &amp; Lizet</title>
+  <title>Onze Agenda – Rob &amp; Lizet</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
     :root{
       --bg:#0b0f19;
@@ -102,8 +101,6 @@
       margin:0;
       letter-spacing:.2px;
       line-height:1.1;
-      font-family:"Playfair Display",serif;
-      font-weight:700;
     }
 
     .subtitle{
@@ -510,10 +507,107 @@
       padding-right:6px;
       font-weight:800;
     }
+
+    .cal-wrap{
+      border:1px solid var(--border);
+      border-radius:18px;
+      background: rgba(255,255,255,.03);
+      overflow:hidden;
+      margin-bottom:14px;
+    }
+
+    .cal-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      padding:12px 12px;
+      border-bottom:1px solid var(--border);
+      flex-wrap:wrap;
+    }
+
+    .cal-title{
+      font-weight:900;
+      letter-spacing:.2px;
+    }
+
+    .cal-nav{
+      display:flex;
+      gap:8px;
+      align-items:center;
+    }
+
+    .cal-nav button{
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      color:var(--text);
+      cursor:pointer;
+      padding:10px 12px;
+      border-radius:12px;
+      font-weight:900;
+    }
+
+    .cal-grid{
+      display:grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap:8px;
+      padding:12px;
+    }
+
+    .cal-dow{
+      color:var(--muted);
+      font-weight:900;
+      font-size:.78rem;
+      padding:0 6px 6px 6px;
+    }
+
+    .cal-cell{
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.03);
+      border-radius:14px;
+      padding:10px 10px;
+      min-height:58px;
+      cursor:pointer;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .cal-cell.dim{
+      opacity:.45;
+    }
+
+    .cal-cell.selected{
+      border-color: rgba(255,255,255,.18);
+      background: rgba(255,255,255,.08);
+    }
+
+    .cal-day{
+      font-weight:900;
+      font-size:.95rem;
+    }
+
+    .cal-badges{
+      display:flex;
+      gap:6px;
+      flex-wrap:wrap;
+      margin-top:6px;
+    }
+
+    .cal-badge{
+      font-size:.72rem;
+      font-weight:900;
+      padding:4px 8px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.03);
+      color:var(--muted);
+    }
   </style>
 </head>
 <body>
-  <div class="app">
+ <div class="app">
     <header>
       <div class="topline">
         <div class="brand">
@@ -536,6 +630,7 @@
         <button class="tab" data-tab="lizet">👩 Lizet <span id="count-lizet">(0)</span></button>
         <button class="tab" data-tab="verjaardagen">🎂 Verjaardagen <span id="count-bdays">(0)</span></button>
         <button class="tab" data-tab="herinneringen">🕯️ Herinneringen <span id="count-mem">(0)</span></button>
+        <button class="tab" data-tab="kalender">🗓️ Kalender</button>
       </div>
 
       <div class="counts" id="summary-pills">
@@ -551,68 +646,43 @@
           <input id="search-input" type="text" placeholder="Zoek in afspraken, verjaardagen, herinneringen..." autocomplete="off" />
           <button id="search-clear" title="Wis">✕</button>
         </div>
-
-        <div class="toggle off" id="mode-toggle" title="Spraak of tekst invoer">
-          <div class="dot"></div>
-          <div id="mode-label">Spraak</div>
-        </div>
       </div>
 
       <div id="search-count"></div>
 
-      <div id="bday-section" style="display:none; margin-bottom:16px;">
-        <div style="display:flex; gap:8px; margin-bottom:10px;">
-          <input id="bday-name" type="text" placeholder="Naam..." autocomplete="off"
-            style="flex:1; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:12px 16px; font-family:'DM Sans',sans-serif; font-size:0.95rem; color:var(--text); outline:none; -webkit-appearance:none; font-weight:800;" />
-          <input id="bday-date" type="date"
-            style="width:150px; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:12px 12px; font-family:'DM Sans',sans-serif; font-size:0.95rem; color:var(--text); outline:none; -webkit-appearance:none; font-weight:800;" />
-          <button id="bday-add"
-            style="background:var(--beide-bg); border:1px solid var(--beide-border); color:var(--beide); border-radius:12px; padding:12px 14px; font-family:'DM Sans',sans-serif; font-size:1.0rem; cursor:pointer; font-weight:900;">
-            ➕
-          </button>
+      <div id="calendar-section" style="display:none;">
+        <div class="cal-wrap">
+          <div class="cal-head">
+            <div class="cal-title" id="cal-title">Kalender</div>
+            <div class="cal-nav">
+              <button id="cal-prev">◀</button>
+              <button id="cal-today">Vandaag</button>
+              <button id="cal-next">▶</button>
+            </div>
+          </div>
+
+          <div class="cal-grid" id="cal-dow">
+            <div class="cal-dow">Ma</div>
+            <div class="cal-dow">Di</div>
+            <div class="cal-dow">Wo</div>
+            <div class="cal-dow">Do</div>
+            <div class="cal-dow">Vr</div>
+            <div class="cal-dow">Za</div>
+            <div class="cal-dow">Zo</div>
+          </div>
+
+          <div class="cal-grid" id="cal-grid"></div>
         </div>
 
-        <div id="bday-actions" style="display:flex; gap:8px; justify-content:flex-end;">
-          <button id="bday-export"
-            style="background:var(--rob-bg); border:1px solid var(--rob-border); color:var(--rob); border-radius:10px; padding:10px 12px; font-family:'DM Sans',sans-serif; font-size:0.85rem; cursor:pointer; font-weight:900;">
-            📥 Exporteer verjaardagen
-          </button>
-        </div>
-      </div>
-
-      <div id="mem-section" style="display:none; margin-bottom:16px;">
-        <div style="display:flex; gap:8px; margin-bottom:10px; flex-wrap:wrap;">
-          <input id="mem-name" type="text" placeholder="Naam..." autocomplete="off"
-            style="flex:1; min-width:160px; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:12px 16px; font-family:'DM Sans',sans-serif; font-size:0.95rem; color:var(--text); outline:none; -webkit-appearance:none; font-weight:800;" />
-
-          <select id="mem-type"
-            style="width:160px; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:12px 12px; font-family:'DM Sans',sans-serif; font-size:0.95rem; color:var(--text); outline:none; -webkit-appearance:none; font-weight:800;">
-            <option value="Overlijden">Overlijden</option>
-            <option value="Herdenking">Herdenking</option>
-            <option value="Jubileum">Jubileum</option>
-            <option value="Anders">Anders</option>
-          </select>
-
-          <input id="mem-date" type="date"
-            style="width:150px; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:12px 12px; font-family:'DM Sans',sans-serif; font-size:0.95rem; color:var(--text); outline:none; -webkit-appearance:none; font-weight:800;" />
-
-          <button id="mem-add"
-            style="background:var(--beide-bg); border:1px solid var(--beide-border); color:var(--beide); border-radius:12px; padding:12px 14px; font-family:'DM Sans',sans-serif; font-size:1.0rem; cursor:pointer; font-weight:900;">
-            ➕
-          </button>
-        </div>
-
-        <input id="mem-note" type="text" placeholder="Notitie, bijv. kaarsje, bloemen, bezoek..."
-          style="width:100%; margin-bottom:10px; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:12px 16px; font-family:'DM Sans',sans-serif; font-size:0.95rem; color:var(--text); outline:none; -webkit-appearance:none; font-weight:800;" />
-
-        <div style="display:flex; gap:8px; justify-content:flex-end;">
-          <button id="mem-export"
-            style="background:var(--rob-bg); border:1px solid var(--rob-border); color:var(--rob); border-radius:10px; padding:10px 12px; font-family:'DM Sans',sans-serif; font-size:0.85rem; cursor:pointer; font-weight:900;">
-            📥 Exporteer herinneringen
-          </button>
+        <div class="card" style="margin-bottom:14px;">
+          <h2>
+            <span>Dagoverzicht</span>
+            <span id="cal-day-label" style="color:var(--muted); font-weight:800; font-size:.85rem;">...</span>
+          </h2>
+          <div class="list" id="cal-day-list"></div>
         </div>
       </div>
-     <div class="grid">
+     <div class="grid" id="main-grid">
         <div class="card" id="left-card">
           <h2>
             <span>Nieuwe afspraak</span>
@@ -732,6 +802,15 @@
     var memAdd       = document.getElementById("mem-add");
     var memExport    = document.getElementById("mem-export");
 
+    var calSection   = document.getElementById("calendar-section");
+    var calTitle     = document.getElementById("cal-title");
+    var calGrid      = document.getElementById("cal-grid");
+    var calPrev      = document.getElementById("cal-prev");
+    var calNext      = document.getElementById("cal-next");
+    var calTodayBtn  = document.getElementById("cal-today");
+    var calDayLabel  = document.getElementById("cal-day-label");
+    var calDayList   = document.getElementById("cal-day-list");
+
     var toast        = document.getElementById("toast");
     var exportBar    = document.getElementById("exportbar");
     var reminderToggle = document.getElementById("reminder-toggle");
@@ -742,10 +821,15 @@
 
     var leftCard  = document.getElementById("left-card");
     var rightCard = document.getElementById("right-card");
+    var mainGrid  = document.getElementById("main-grid");
 
     var activeTab   = "alle";
     var searchQuery = "";
     var remindersOn = loadRemindersOn();
+
+    var calYear = (new Date()).getFullYear();
+    var calMonth = (new Date()).getMonth();
+    var calSelectedISO = null;
 
     function showToast(msg){
       toast.innerHTML = msg;
@@ -1091,13 +1175,197 @@
       document.getElementById("count-mem").textContent   = "("+memories.length+")";
     }
 
+    function monthNameNL(m){
+      return ["januari","februari","maart","april","mei","juni","juli","augustus","september","oktober","november","december"][m] || "";
+    }
+
+    function makeISO(y,m1,d){
+      var mm = pad2(m1);
+      var dd = pad2(d);
+      return y+"-"+mm+"-"+dd;
+    }
+
+    function isValidDate(y,m0,d){
+      var dt = new Date(y,m0,d);
+      return dt.getFullYear()===y && dt.getMonth()===m0 && dt.getDate()===d;
+    }
+
+    function collectEventsForISO(iso){
+      var out = [];
+      var d = normalizeISO(iso);
+
+      appointments.forEach(function(a){
+        var ad = normalizeISO(a.date);
+        if (ad && ad === d){
+          out.push({
+            kind:"apt",
+            who:a.who||"beide",
+            time:a.time||"",
+            title:a.desc||"Afspraak",
+            id:a.id
+          });
+        }
+      });
+
+      var y = parseInt(d.slice(0,4),10);
+      var mm = d.slice(5,7);
+      var dd = d.slice(8,10);
+      var mmdd = mm+"-"+dd;
+
+      birthdays.forEach(function(b){
+        if (b.mmdd === mmdd){
+          out.push({
+            kind:"bday",
+            who:"beide",
+            time:"",
+            title:"Verjaardag " + (b.name||""),
+            id:b.id
+          });
+        }
+      });
+
+      memories.forEach(function(m){
+        if (m.mmdd === mmdd){
+          var extra = "";
+          if (m.year){
+            var yrs = y - m.year;
+            if (yrs >= 0) extra = " , " + yrs + " jaar";
+          }
+          out.push({
+            kind:"mem",
+            who:"beide",
+            time:"",
+            title:(m.type||"Herinnering") + ": " + (m.name||"") + extra,
+            note:m.note||"",
+            id:m.id
+          });
+        }
+      });
+
+      out.sort(function(a,b){
+        return String(a.time||"").localeCompare(String(b.time||""));
+      });
+
+      return out;
+    }
+
+    function renderCalendar(){
+      calTitle.textContent = "Kalender, " + monthNameNL(calMonth) + " " + calYear;
+
+      var first = new Date(calYear, calMonth, 1);
+      var firstDowMon1 = (first.getDay() + 6) % 7;
+      var start = new Date(calYear, calMonth, 1 - firstDowMon1);
+
+      var grid = "";
+      var todayISO = dateToISO(new Date());
+
+      for (var i=0;i<42;i++){
+        var dt = new Date(start.getFullYear(), start.getMonth(), start.getDate()+i);
+        var inMonth = (dt.getMonth() === calMonth);
+        var iso = dateToISO(dt);
+        var ev = collectEventsForISO(iso);
+        var aptCount = 0, bCount = 0, mCount = 0;
+
+        ev.forEach(function(e){
+          if (e.kind==="apt") aptCount++;
+          if (e.kind==="bday") bCount++;
+          if (e.kind==="mem") mCount++;
+        });
+
+        var cls = "cal-cell" + (inMonth ? "" : " dim") + (calSelectedISO===iso ? " selected" : "");
+        var badges = "";
+        if (aptCount) badges += '<span class="cal-badge">📌 '+aptCount+'</span>';
+        if (bCount) badges += '<span class="cal-badge">🎂 '+bCount+'</span>';
+        if (mCount) badges += '<span class="cal-badge">🕯️ '+mCount+'</span>';
+
+        grid += '<div class="'+cls+'" data-iso="'+iso+'">'
+             +  '<div class="cal-day">'+dt.getDate()+'</div>'
+             +  (badges ? '<div class="cal-badges">'+badges+'</div>' : '')
+             +  '</div>';
+      }
+
+      calGrid.innerHTML = grid;
+
+      if (!calSelectedISO){
+        calSelectedISO = todayISO;
+      }
+
+      renderCalendarDay(calSelectedISO);
+    }
+
+    function renderCalendarDay(iso){
+      calSelectedISO = normalizeISO(iso);
+      var dt = isoToLocalDate(calSelectedISO);
+      calDayLabel.textContent = dt.toLocaleDateString("nl-NL",{day:"numeric",month:"long",year:"numeric"});
+
+      var ev = collectEventsForISO(calSelectedISO);
+
+      if (!ev.length){
+        calDayList.innerHTML = '<div class="empty-state"><div class="icon">🗓️</div><p>Geen items op deze dag.</p></div>';
+      } else {
+        var html = "";
+        html += '<div class="section-title">Items<span class="count-badge">'+ev.length+'</span></div>';
+
+        ev.forEach(function(e){
+          var icon = e.kind==="apt" ? "📌" : (e.kind==="bday" ? "🎂" : "🕯️");
+          var cls = (e.who==="rob" ? "rob" : (e.who==="lizet" ? "lizet" : "beide"));
+          var whoLabel = e.kind==="apt"
+            ? (e.who==="rob"?"Rob":(e.who==="lizet"?"Lizet":"Beide"))
+            : (e.kind==="bday" ? "Verjaardag" : "Herinnering");
+
+          var timeTxt = e.time ? ("⏰ "+e.time) : "";
+
+          html += '<div class="apt-card '+cls+'" style="margin-bottom:8px">'
+            +'<div class="apt-icon">'+icon+'</div>'
+            +'<div class="apt-body">'
+            +'<div class="apt-who '+cls+'">'+escH(whoLabel)+'</div>'
+            +'<div class="apt-desc">'+escH(e.title||"")+'</div>'
+            +'<div class="apt-meta">'
+            +(timeTxt ? '<span>'+escH(timeTxt)+'</span>' : '')
+            +(e.note ? '<span>📝 '+escH(e.note)+'</span>' : '')
+            +'</div></div>'
+            +'</div>';
+        });
+
+        calDayList.innerHTML = html;
+      }
+
+      var cells = Array.from(calGrid.querySelectorAll(".cal-cell"));
+      cells.forEach(function(c){
+        if (c.getAttribute("data-iso") === calSelectedISO) c.classList.add("selected");
+        else c.classList.remove("selected");
+      });
+    }
+
+    function showMainGrid(){
+      mainGrid.style.display = "";
+      leftCard.style.display = "";
+      rightCard.style.gridColumn = "";
+    }
+
+    function hideMainGrid(){
+      mainGrid.style.display = "none";
+    }
+
     function render(){
       updateTabCounts();
       computeCounts();
 
       var listSubtitle = document.getElementById("list-subtitle");
 
-      if (activeTab === "verjaardagen") {
+      if (activeTab === "kalender"){
+        calSection.style.display = "block";
+        bdaySection.style.display = "none";
+        memSection.style.display = "none";
+        hideMainGrid();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        renderCalendar();
+        return;
+      }
+
+      calSection.style.display = "none";
+      showMainGrid();
+     if (activeTab === "verjaardagen") {
         bdaySection.style.display = "block";
         memSection.style.display = "none";
         exportBar.style.display = "none";
@@ -1192,7 +1460,8 @@
         dateInput.value = dateToISO(new Date());
       }
     }
-   function scheduleNotification(a){
+
+    function scheduleNotification(a){
       if (!remindersOn) return;
       if (!("Notification" in window)) return;
 
@@ -1378,32 +1647,50 @@
     memExport.addEventListener("click", function(){
       downloadMemICS();
     });
-   function applyMobileFixForMemTabs(){
-      try{
-        var isMemTab = (activeTab === "verjaardagen" || activeTab === "herinneringen");
-        if (isMemTab){
-          leftCard.style.display = "none";
-          rightCard.style.gridColumn = "1 / -1";
-        } else {
-          leftCard.style.display = "";
-          rightCard.style.gridColumn = "";
-        }
-      } catch(e){}
-    }
 
-    (function init(){
+    calPrev.addEventListener("click", function(){
+      calMonth -= 1;
+      if (calMonth < 0){ calMonth = 11; calYear -= 1; }
+      renderCalendar();
+    });
+
+    calNext.addEventListener("click", function(){
+      calMonth += 1;
+      if (calMonth > 11){ calMonth = 0; calYear += 1; }
+      renderCalendar();
+    });
+
+    calTodayBtn.addEventListener("click", function(){
+      var now = new Date();
+      calYear = now.getFullYear();
+      calMonth = now.getMonth();
+      calSelectedISO = dateToISO(now);
+      renderCalendar();
+    });
+
+    calGrid.addEventListener("click", function(e){
+      var cell = e.target.closest(".cal-cell");
+      if (!cell) return;
+      var iso = cell.getAttribute("data-iso");
+      if (!iso) return;
+      calSelectedISO = iso;
+      renderCalendarDay(iso);
+    });
+   (function init(){
       applyReminderToggleUI();
       resetForm();
       ensureDefaultDate();
-      applyMobileFixForMemTabs();
 
       if (remindersOn){
         requestNotificationPermission();
         appointments.forEach(scheduleNotification);
       }
 
+      calSelectedISO = dateToISO(new Date());
       render();
     })();
   </script>
 </body>
 </html>
+
+
