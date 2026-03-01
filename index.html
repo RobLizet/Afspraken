@@ -75,10 +75,11 @@
     #text-submit:disabled{ opacity:.4; cursor:not-allowed; }
     .mode-toggle { font-size:0.78rem; color:var(--muted); cursor:pointer; text-decoration:underline; text-underline-offset:3px; background:none; border:none; font-family:'DM Sans',sans-serif; padding:0; }
     .mode-toggle:hover { color:var(--text); }
-    .tabs { display:flex; gap:6px; margin-bottom:28px; background:var(--surface); border-radius:14px; padding:5px; border:1px solid var(--border); }
-    .tab { flex:1; padding:10px 8px; border:1px solid transparent; border-radius:10px; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:0.875rem; font-weight:500; background:transparent; color:var(--muted); transition:all .22s; }
+    .tabs { display:flex; flex-direction:column; gap:4px; margin-bottom:28px; }
+    .tabs-row { display:flex; gap:4px; background:var(--surface); border-radius:12px; padding:4px; border:1px solid var(--border); }
+    .tab { flex:1; padding:9px 4px; border:1px solid transparent; border-radius:9px; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:0.8rem; font-weight:500; background:transparent; color:var(--muted); transition:all .22s; text-align:center; }
     .tab:hover { color:var(--text); }
-    .tab[data-tab="alle"].active  { background:var(--bg);       color:var(--text);   border-color:var(--border); box-shadow:0 1px 4px rgba(0,0,0,.08); }
+        .tab[data-tab="alle"].active  { background:var(--bg);       color:var(--text);   border-color:var(--border); box-shadow:0 1px 4px rgba(0,0,0,.08); }
     .tab[data-tab="rob"].active   { background:var(--rob-bg);   color:var(--rob);    border-color:var(--rob-border); }
     .tab[data-tab="lizet"].active { background:var(--lizet-bg); color:var(--lizet);  border-color:var(--lizet-border); }
     .tab[data-tab="bday"].active  { background:var(--bday-bg);   color:var(--bday);   border-color:var(--bday-border); }
@@ -158,11 +159,15 @@
     <button class="mode-toggle" id="mode-toggle">&#9000;&#65039; Liever typen? Gebruik tekstinvoer</button>
   </div>
   <div class="tabs">
-    <button class="tab active" data-tab="alle">&#128467; Alle <span id="count-alle">(0)</span></button>
-    <button class="tab" data-tab="rob">&#128100; Rob <span id="count-rob">(0)</span></button>
-    <button class="tab" data-tab="lizet">&#128105; Lizet <span id="count-lizet">(0)</span></button>
-    <button class="tab" data-tab="bday">&#127874; Jarig <span id="count-bday">(0)</span></button>
-    <button class="tab" data-tab="mem">&#128367; Herdenking <span id="count-mem">(0)</span></button>
+    <div class="tabs-row">
+      <button class="tab active" data-tab="alle">&#128467; Alle <span id="count-alle">(0)</span></button>
+      <button class="tab" data-tab="rob">&#128100; Rob <span id="count-rob">(0)</span></button>
+      <button class="tab" data-tab="lizet">&#128105; Lizet <span id="count-lizet">(0)</span></button>
+    </div>
+    <div class="tabs-row">
+      <button class="tab" data-tab="bday">&#127874; Jarig <span id="count-bday">(0)</span></button>
+      <button class="tab" data-tab="mem">&#128367; Herdenking <span id="count-mem">(0)</span></button>
+    </div>
   </div>
   <div id="export-bar">
     <p>&#128197; Exporteer als .ics &mdash; werkt met Apple Agenda, Google Agenda &amp; Outlook.</p>
