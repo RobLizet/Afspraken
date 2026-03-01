@@ -11,83 +11,81 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
     :root{
-      --bg:#0b0f19;
-      --surface:#121a2a;
-      --surface2:#0f1626;
-      --text:#e9eefc;
-      --muted:#9fb0d0;
-      --border:rgba(255,255,255,.08);
-      --shadow: 0 14px 40px rgba(0,0,0,.35);
-      --rob:#5fe2ff;
-      --rob-bg:rgba(95,226,255,.12);
-      --rob-border:rgba(95,226,255,.22);
-      --lizet:#ff77c8;
-      --lizet-bg:rgba(255,119,200,.12);
-      --lizet-border:rgba(255,119,200,.22);
-      --beide:#ffd86b;
-      --beide-bg:rgba(255,216,107,.12);
-      --beide-border:rgba(255,216,107,.22);
-      --danger:#ff5a5f;
-      --ok:#55f0a6;
+      --bg:#fdf8ee;
+      --surface:#f0e8d5;
+      --surface2:#e8dcc8;
+      --text:#1c1917;
+      --muted:#78716c;
+      --border:rgba(0,0,0,0.12);
+      --shadow: 0 14px 40px rgba(0,0,0,.10);
+      --rob:#1a5fa8;
+      --rob-bg:rgba(26,95,168,.10);
+      --rob-border:rgba(26,95,168,.35);
+      --lizet:#8b3a6b;
+      --lizet-bg:rgba(139,58,107,.10);
+      --lizet-border:rgba(139,58,107,.35);
+      --beide:#5a7a3a;
+      --beide-bg:rgba(90,122,58,.10);
+      --beide-border:rgba(90,122,58,.30);
+      --danger:#dc2626;
+      --ok:#2d7a46;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
       margin:0;
-      background: radial-gradient(1200px 700px at 50% -10%, #1c2a52 0%, transparent 60%),
-                  radial-gradient(900px 500px at 90% 10%, #2a1c52 0%, transparent 55%),
-                  var(--bg);
+      background: var(--bg);
       color:var(--text);
       font-family:"DM Sans",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
       -webkit-font-smoothing:antialiased;
       padding:16px;
     }
-    .app{max-width:980px;margin:0 auto;background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));border:1px solid var(--border);border-radius:22px;box-shadow:var(--shadow);overflow:hidden;}
-    header{padding:18px 18px 12px 18px;border-bottom:1px solid var(--border);background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));position:sticky;top:0;backdrop-filter:blur(10px);z-index:3;}
+    .app{max-width:980px;margin:0 auto;background:var(--surface);border:1px solid var(--border);border-radius:22px;box-shadow:var(--shadow);overflow:hidden;}
+    header{padding:18px 18px 12px 18px;background:var(--bg);border-bottom:1px solid var(--border);position:sticky;top:0;backdrop-filter:blur(10px);z-index:3;}
     .topline{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;}
     .brand{display:flex;gap:10px;align-items:center;}
-    .logo{width:40px;height:40px;border-radius:14px;background:radial-gradient(circle at 30% 20%,rgba(95,226,255,.7),transparent 55%),radial-gradient(circle at 70% 80%,rgba(255,119,200,.6),transparent 55%),rgba(255,255,255,.06);border:1px solid var(--border);display:grid;place-items:center;box-shadow:0 10px 26px rgba(0,0,0,.25);}
+    .logo{width:40px;height:40px;border-radius:14px;background:linear-gradient(135deg,var(--rob-bg),var(--lizet-bg));border:1px solid var(--border);display:grid;place-items:center;box-shadow:0 10px 26px rgba(0,0,0,.25);}
     .logo span{font-size:20px}
     h1{font-size:1.2rem;margin:0;letter-spacing:.2px;line-height:1.1;}
     .subtitle{color:var(--muted);font-size:.85rem;margin-top:2px;font-weight:700;}
     .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
-    .tab{border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--text);padding:10px 12px;border-radius:14px;cursor:pointer;font-weight:700;font-size:.9rem;display:flex;gap:8px;align-items:center;user-select:none;-webkit-tap-highlight-color:transparent;}
-    .tab.active{background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.18);}
+    .tab{border:1px solid var(--border);background:var(--bg);color:var(--muted);padding:10px 12px;border-radius:14px;cursor:pointer;font-weight:700;font-size:.9rem;display:flex;gap:8px;align-items:center;user-select:none;-webkit-tap-highlight-color:transparent;}
+    .tab.active{background:var(--surface2);color:var(--text);border-color:var(--border);box-shadow:0 1px 4px rgba(0,0,0,.08);}
     .counts{display:flex;gap:6px;align-items:center;font-size:.78rem;color:var(--muted);margin-top:10px;font-weight:700;}
-    .pill{padding:6px 10px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.04);}
+    .pill{padding:6px 10px;border-radius:999px;border:1px solid var(--border);background:var(--bg);}
     .content{padding:16px 18px 22px 18px;}
     .controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px;}
     .search{flex:1;min-width:220px;position:relative;}
-    .search input{width:100%;padding:12px 44px 12px 14px;border-radius:14px;border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--text);outline:none;font-size:.95rem;-webkit-appearance:none;font-weight:700;}
-    .search input::placeholder{color:rgba(159,176,208,.75)}
+    .search input{width:100%;padding:12px 44px 12px 14px;border-radius:14px;border:1px solid var(--border);background:var(--bg);color:var(--text);outline:none;font-size:.95rem;-webkit-appearance:none;font-weight:700;}
+    .search input::placeholder{color:var(--muted)}
     .search button{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:0;background:transparent;color:var(--muted);cursor:pointer;font-size:18px;padding:6px 8px;border-radius:10px;font-weight:800;}
-    .toggle{display:flex;gap:8px;align-items:center;border:1px solid var(--border);background:rgba(255,255,255,.04);padding:8px 10px;border-radius:14px;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;font-size:.9rem;font-weight:800;}
+    .toggle{display:flex;gap:8px;align-items:center;border:1px solid var(--border);background:var(--bg);padding:8px 10px;border-radius:14px;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;font-size:.9rem;font-weight:800;}
     .toggle .dot{width:10px;height:10px;border-radius:999px;background:var(--ok);box-shadow:0 0 0 6px rgba(85,240,166,.12);}
     .toggle.off .dot{background:var(--danger);box-shadow:0 0 0 6px rgba(255,90,95,.12);}
     .grid{display:grid;grid-template-columns:1.2fr .8fr;gap:14px;align-items:start;}
     @media(max-width:860px){.grid{grid-template-columns:1fr}}
-    .card{border:1px solid var(--border);border-radius:18px;background:rgba(255,255,255,.03);overflow:hidden;}
+    .card{border:1px solid var(--border);border-radius:18px;background:var(--bg);overflow:hidden;}
     .card h2{margin:0;padding:14px 14px 10px 14px;font-size:1rem;border-bottom:1px solid var(--border);color:rgba(233,238,252,.95);display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:900;}
     .card .body{padding:14px;}
     label{display:block;font-size:.85rem;color:var(--muted);margin-bottom:6px;margin-top:12px;font-weight:800;}
-    input[type="text"],input[type="date"],input[type="time"],textarea,select{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--text);border-radius:14px;padding:12px 12px;font-size:0.95rem;outline:none;-webkit-appearance:none;font-weight:700;}
+    input[type="text"],input[type="date"],input[type="time"],textarea,select{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);border-radius:14px;padding:12px 12px;font-size:0.95rem;outline:none;-webkit-appearance:none;font-weight:700;}
     textarea{min-height:90px;resize:vertical;font-weight:700;}
     .row{display:flex;gap:10px;align-items:center;}
     .row>*{flex:1}
     .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;}
-    button.primary{flex:1;min-width:160px;border-radius:14px;padding:12px 14px;cursor:pointer;border:1px solid rgba(255,255,255,.18);background:linear-gradient(180deg,rgba(95,226,255,.22),rgba(95,226,255,.10));color:var(--text);font-weight:900;font-size:0.95rem;}
-    button.secondary{border-radius:14px;padding:12px 14px;cursor:pointer;border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--text);font-weight:900;font-size:0.95rem;}
+    button.primary{flex:1;min-width:160px;border-radius:14px;padding:12px 14px;cursor:pointer;border:1px solid var(--rob-border);background:var(--rob-bg);color:var(--rob);font-weight:900;font-size:0.95rem;}
+    button.secondary{border-radius:14px;padding:12px 14px;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--text);font-weight:900;font-size:0.95rem;}
     .list{padding:12px 14px 14px 14px;}
     .section-title{display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:900;margin:6px 0 10px 0;color:rgba(233,238,252,.95);}
-    .count-badge{font-size:.78rem;color:var(--muted);border:1px solid var(--border);padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.03);font-weight:900;}
-    .apt-card{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--border);border-radius:16px;padding:12px 12px;background:rgba(255,255,255,.03);margin-bottom:10px;}
-    .apt-icon{width:42px;height:42px;border-radius:14px;border:1px solid var(--border);display:grid;place-items:center;background:rgba(255,255,255,.03);font-size:18px;flex:0 0 42px;}
+    .count-badge{font-size:.78rem;color:var(--muted);border:1px solid var(--border);padding:6px 10px;border-radius:999px;background:var(--surface);font-weight:900;}
+    .apt-card{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--border);border-radius:16px;padding:12px 12px;background:var(--surface);margin-bottom:10px;}
+    .apt-icon{width:42px;height:42px;border-radius:14px;border:1px solid var(--border);display:grid;place-items:center;background:var(--bg);font-size:18px;flex:0 0 42px;}
     .apt-body{flex:1;min-width:0;}
-    .apt-who{font-weight:900;letter-spacing:.2px;font-size:.85rem;display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;margin-bottom:8px;border:1px solid var(--border);background:rgba(255,255,255,.03);}
+    .apt-who{font-weight:900;letter-spacing:.2px;font-size:.85rem;display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;margin-bottom:8px;border:1px solid var(--border);background:var(--bg);}
     .apt-desc{font-weight:900;margin-bottom:8px;line-height:1.25;word-wrap:break-word;}
     .apt-meta{display:flex;gap:10px;flex-wrap:wrap;color:var(--muted);font-size:.85rem;font-weight:800;}
     .apt-actions{display:flex;gap:8px;align-items:center;flex:0 0 auto;}
-    .apt-actions button{border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--text);cursor:pointer;padding:10px 10px;border-radius:12px;font-size:16px;-webkit-tap-highlight-color:transparent;font-weight:900;}
+    .apt-actions button{border:1px solid var(--border);background:var(--surface2);color:var(--text);cursor:pointer;padding:10px 10px;border-radius:12px;font-size:16px;-webkit-tap-highlight-color:transparent;font-weight:900;}
     .rob .apt-who{color:var(--rob);border-color:var(--rob-border);background:var(--rob-bg)}
     .rob .apt-icon{border-color:var(--rob-border);background:var(--rob-bg)}
     .lizet .apt-who{color:var(--lizet);border-color:var(--lizet-border);background:var(--lizet-bg)}
@@ -96,26 +94,26 @@
     .beide .apt-icon{border-color:var(--beide-border);background:var(--beide-bg)}
     .empty-state{padding:26px 14px;text-align:center;color:var(--muted);font-weight:900;}
     .empty-state .icon{font-size:34px;margin-bottom:8px;opacity:.9;}
-    .toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:rgba(18,26,42,.92);border:1px solid var(--border);color:var(--text);padding:12px 14px;border-radius:14px;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:10;max-width:92vw;text-align:center;font-weight:900;}
+    .toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:rgba(28,25,23,.90);border:1px solid var(--border);color:var(--text);padding:12px 14px;border-radius:14px;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:10;max-width:92vw;text-align:center;font-weight:900;}
     .toast.show{opacity:1}
     .footerbar{display:flex;gap:10px;justify-content:space-between;align-items:center;margin-top:12px;flex-wrap:wrap;}
     .footerbar .small{color:var(--muted);font-size:.82rem;font-weight:800;}
     .exportbar{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;}
-    .exportbar button{border-radius:12px;padding:10px 12px;cursor:pointer;border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--text);font-weight:900;font-size:.85rem;}
+    .exportbar button{border-radius:12px;padding:10px 12px;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--text);font-weight:900;font-size:.85rem;}
     .madeby{color:rgba(159,176,208,.9);font-size:.8rem;margin-top:10px;text-align:right;padding-right:6px;font-weight:800;}
-    .cal-wrap{border:1px solid var(--border);border-radius:18px;background:rgba(255,255,255,.03);overflow:hidden;margin-bottom:14px;}
+    .cal-wrap{border:1px solid var(--border);border-radius:18px;background:var(--bg);overflow:hidden;margin-bottom:14px;}
     .cal-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 12px;border-bottom:1px solid var(--border);flex-wrap:wrap;}
     .cal-title{font-weight:900;letter-spacing:.2px;}
     .cal-nav{display:flex;gap:8px;align-items:center;}
-    .cal-nav button{border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--text);cursor:pointer;padding:10px 12px;border-radius:12px;font-weight:900;}
+    .cal-nav button{border:1px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;padding:10px 12px;border-radius:12px;font-weight:900;}
     .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;padding:12px;}
     .cal-dow{color:var(--muted);font-weight:900;font-size:.78rem;padding:0 6px 6px 6px;}
-    .cal-cell{border:1px solid var(--border);background:rgba(255,255,255,.03);border-radius:14px;padding:10px 10px;min-height:58px;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;position:relative;overflow:hidden;}
+    .cal-cell{border:1px solid var(--border);background:var(--surface);border-radius:14px;padding:10px 10px;min-height:58px;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;position:relative;overflow:hidden;}
     .cal-cell.dim{opacity:.45;}
-    .cal-cell.selected{border-color:rgba(255,255,255,.18);background:rgba(255,255,255,.08);}
+    .cal-cell.selected{border-color:var(--rob);background:var(--rob-bg);}
     .cal-day{font-weight:900;font-size:.95rem;}
     .cal-badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;}
-    .cal-badge{font-size:.72rem;font-weight:900;padding:4px 8px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.03);color:var(--muted);}
+    .cal-badge{font-size:.72rem;font-weight:900;padding:4px 8px;border-radius:999px;border:1px solid var(--border);background:var(--bg);color:var(--muted);}
   </style>
 </head>
 <body>
