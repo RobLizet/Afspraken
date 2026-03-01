@@ -539,13 +539,75 @@ function buildMemICS(list){
   lines.push("END:VCALENDAR");return lines.join("\r\n");
 }
 
+function fireNotification(title, body){
+  try{ new Notification(title, {body:body, icon:"https://roblizet.github.io/Afspraken/icon.png"}); }catch(e){}
+}
+
+function scheduleAt(when, title, body){
+  var delay = when - Date.now();
+  if(delay <= 0) return;
+  setTimeout(function(){ fireNotification(title, body); }, delay);
+}
+
 function scheduleNotification(a){
-  if(!remindersOn||!("Notification" in window))return;
-  var d=normalizeISO(a.date);if(!d)return;
-  var base=new Date(d+(a.time?"T"+a.time+":00":"T09:00:00"));
-  var when=base.getTime()-(15*60*1000);
-  if(when<=Date.now())return;
-  setTimeout(function(){try{new Notification("Afspraak",{body:(a.desc||"")+" ("+(a.who||"beide")+")"});}catch(e){}},when-Date.now());
+  if(!remindersOn||!("Notification" in window)) return;
+  var d=normalizeISO(a.date); if(!d) return;
+  var who = a.who==="rob"?"Rob":(a.who==="lizet"?"Lizet":"Rob & Lizet");
+  var desc = (a.desc||"Afspraak");
+
+  // 1. 15 minuten van tevoren (alleen als tijd bekend)
+  if(a.time){
+    var base = new Date(d+"T"+a.time+":00");
+    scheduleAt(base.getTime() - 15*60*1000,
+      "&#9201; Afspraak over 15 min",
+      desc+" ("+who+")");
+  }
+
+  // 2. Ochtend van de dag zelf (08:00)
+  var morning = new Date(d+"T08:00:00");
+  scheduleAt(morning.getTime(),
+    "&#128197; Afspraak vandaag",
+    (a.time ? a.time+" - " : "") + desc + " ("+who+")");
+}
+
+function scheduleBirthdayNotifications(){
+  if(!remindersOn||!("Notification" in window)) return;
+  birthdays.forEach(function(b){
+    var nextISO = nextBirthdayDateISO(b.mmdd);
+    if(!nextISO) return;
+    // Dag ervoor om 09:00
+    var dayBefore = isoToLocalDate(nextISO);
+    dayBefore.setDate(dayBefore.getDate()-1);
+    var when = new Date(dateToISO(dayBefore)+"T09:00:00").getTime();
+    scheduleAt(when,
+      "&#127874; Verjaardag morgen!",
+      (b.name||"")+" is morgen jarig");
+    // Dag zelf om 08:00
+    var dayOf = new Date(nextISO+"T08:00:00").getTime();
+    scheduleAt(dayOf,
+      "&#127874; Vandaag jarig!",
+      (b.name||"")+" is vandaag jarig!");
+  });
+}
+
+function scheduleMemoryNotifications(){
+  if(!remindersOn||!("Notification" in window)) return;
+  memories.forEach(function(m){
+    var nextISO = nextBirthdayDateISO(m.mmdd);
+    if(!nextISO) return;
+    // Dag ervoor om 09:00
+    var dayBefore = isoToLocalDate(nextISO);
+    dayBefore.setDate(dayBefore.getDate()-1);
+    var when = new Date(dateToISO(dayBefore)+"T09:00:00").getTime();
+    scheduleAt(when,
+      "&#128367; Herdenking morgen",
+      (m.type||"Herinnering")+": "+(m.name||""));
+    // Dag zelf om 08:00
+    var dayOf = new Date(nextISO+"T08:00:00").getTime();
+    scheduleAt(dayOf,
+      "&#128367; Herdenking vandaag",
+      (m.type||"Herinnering")+": "+(m.name||""));
+  });
 }
 function requestNotificationPermission(){if(!("Notification" in window))return;if(Notification.permission==="default")Notification.requestPermission();}
 function applyReminderToggleUI(){if(remindersOn)reminderToggle.classList.remove("off");else reminderToggle.classList.add("off");}
@@ -566,7 +628,7 @@ bdayAdd.addEventListener("click",function(){
   if(!name||!date){showToast("Vul naam en datum in");return;}
   var mmdd=date.slice(5,7)+"-"+date.slice(8,10);
   birthdays.push({id:Date.now(),name:name,mmdd:mmdd,createdAt:new Date().toISOString()});
-  saveBdays();bdayName.value="";bdayDate.value="";showToast("&#127874; Verjaardag toegevoegd");render();
+  saveBdays();bdayName.value="";bdayDate.value="";scheduleBirthdayNotifications();showToast("&#127874; Verjaardag toegevoegd");render();
 });
 bdayExport.addEventListener("click",function(){if(!birthdays.length){alert("Geen verjaardagen.");return;}var blob=new Blob([buildBdayICS(birthdays)],{type:"text/calendar;charset=utf-8"});var url=URL.createObjectURL(blob);var a=document.createElement("a");a.href=url;a.download="verjaardagen.ics";a.click();URL.revokeObjectURL(url);});
 
@@ -576,7 +638,7 @@ memAdd.addEventListener("click",function(){
   if(!name||!date){showToast("Vul naam en datum in");return;}
   var mmdd=date.slice(5,7)+"-"+date.slice(8,10);var year=parseInt(date.slice(0,4),10);
   memories.push({id:Date.now(),name:name,type:type,note:note,mmdd:mmdd,year:year,createdAt:new Date().toISOString()});
-  saveMem();memName.value="";memDate.value="";memNote.value="";showToast("&#128367; Herinnering toegevoegd");render();
+  saveMem();memName.value="";memDate.value="";memNote.value="";scheduleMemoryNotifications();showToast("&#128367; Herinnering toegevoegd");render();
 });
 memExport.addEventListener("click",function(){if(!memories.length){alert("Geen herinneringen.");return;}var blob=new Blob([buildMemICS(memories)],{type:"text/calendar;charset=utf-8"});var url=URL.createObjectURL(blob);var a=document.createElement("a");a.href=url;a.download="herinneringen.ics";a.click();URL.revokeObjectURL(url);});
 
@@ -589,7 +651,7 @@ aptList.addEventListener("click",function(e){
   if(del&&del.dataset.id){appointments=appointments.filter(function(a){return a.id!==parseInt(del.dataset.id,10);});saveAppointments();showToast("&#128465; Verwijderd");render();}
 });
 
-reminderToggle.addEventListener("click",function(){remindersOn=!remindersOn;saveRemindersOn(remindersOn);applyReminderToggleUI();if(remindersOn){requestNotificationPermission();appointments.forEach(scheduleNotification);showToast("Herinneringen aan");}else showToast("Herinneringen uit");});
+reminderToggle.addEventListener("click",function(){remindersOn=!remindersOn;saveRemindersOn(remindersOn);applyReminderToggleUI();if(remindersOn){requestNotificationPermission();appointments.forEach(scheduleNotification);scheduleBirthdayNotifications();scheduleMemoryNotifications();showToast("Herinneringen aan");}else showToast("Herinneringen uit");});
 calPrev.addEventListener("click",function(){calMonth-=1;if(calMonth<0){calMonth=11;calYear-=1;}renderCalendar();});
 calNext.addEventListener("click",function(){calMonth+=1;if(calMonth>11){calMonth=0;calYear+=1;}renderCalendar();});
 calTodayBtn.addEventListener("click",function(){var now=new Date();calYear=now.getFullYear();calMonth=now.getMonth();calSelectedISO=dateToISO(now);renderCalendar();});
@@ -597,7 +659,7 @@ calGrid.addEventListener("click",function(e){var cell=e.target.closest(".cal-cel
 
 (function init(){
   applyReminderToggleUI();resetForm();
-  if(remindersOn){requestNotificationPermission();appointments.forEach(scheduleNotification);}
+  if(remindersOn){requestNotificationPermission();appointments.forEach(scheduleNotification);scheduleBirthdayNotifications();scheduleMemoryNotifications();}
   calSelectedISO=dateToISO(new Date());render();
 })();
 </script>
