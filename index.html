@@ -1,13 +1,14 @@
 <!DOCTYPE html>
+
 <html lang="nl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <title>Onze Agenda – Rob &amp; Lizet</title>
+  <title>Onze Agenda &#8211; Rob &amp; Lizet</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
     :root{
       --bg:#0b0f19;
@@ -101,12 +102,15 @@
       margin:0;
       letter-spacing:.2px;
       line-height:1.1;
+      font-family:"Playfair Display",serif;
+      font-weight:700;
     }
 
     .subtitle{
       color:var(--muted);
       font-size:.85rem;
       margin-top:2px;
+      font-weight:700;
     }
 
     .tabs{
@@ -123,7 +127,7 @@
       padding:10px 12px;
       border-radius:14px;
       cursor:pointer;
-      font-weight:600;
+      font-weight:700;
       font-size:.9rem;
       display:flex;
       gap:8px;
@@ -143,6 +147,7 @@
       font-size:.78rem;
       color:var(--muted);
       margin-top:10px;
+      font-weight:700;
     }
 
     .pill{
@@ -180,6 +185,7 @@
       outline:none;
       font-size:.95rem;
       -webkit-appearance:none;
+      font-weight:700;
     }
     .search input::placeholder{color:rgba(159,176,208,.75)}
     .search button{
@@ -194,6 +200,7 @@
       font-size:18px;
       padding:6px 8px;
       border-radius:10px;
+      font-weight:800;
     }
 
     .toggle{
@@ -208,7 +215,7 @@
       user-select:none;
       -webkit-tap-highlight-color: transparent;
       font-size:.9rem;
-      font-weight:600;
+      font-weight:800;
     }
     .toggle .dot{
       width:10px;
@@ -250,6 +257,7 @@
       justify-content:space-between;
       align-items:center;
       gap:10px;
+      font-weight:900;
     }
 
     .card .body{
@@ -262,6 +270,7 @@
       color:var(--muted);
       margin-bottom:6px;
       margin-top:12px;
+      font-weight:800;
     }
 
     input[type="text"], input[type="date"], input[type="time"], textarea, select{
@@ -274,11 +283,13 @@
       font-size:0.95rem;
       outline:none;
       -webkit-appearance:none;
+      font-weight:700;
     }
 
     textarea{
       min-height:90px;
       resize:vertical;
+      font-weight:700;
     }
 
     .row{
@@ -304,7 +315,7 @@
       border:1px solid rgba(255,255,255,.18);
       background: linear-gradient(180deg, rgba(95,226,255,.22), rgba(95,226,255,.10));
       color:var(--text);
-      font-weight:700;
+      font-weight:900;
       font-size:0.95rem;
     }
     button.secondary{
@@ -314,7 +325,7 @@
       border:1px solid var(--border);
       background: rgba(255,255,255,.04);
       color:var(--text);
-      font-weight:700;
+      font-weight:900;
       font-size:0.95rem;
     }
 
@@ -327,7 +338,7 @@
       justify-content:space-between;
       align-items:center;
       gap:10px;
-      font-weight:800;
+      font-weight:900;
       margin:6px 0 10px 0;
       color:rgba(233,238,252,.95);
     }
@@ -339,6 +350,7 @@
       padding:6px 10px;
       border-radius:999px;
       background: rgba(255,255,255,.03);
+      font-weight:900;
     }
 
     .apt-card{
@@ -370,7 +382,7 @@
     }
 
     .apt-who{
-      font-weight:800;
+      font-weight:900;
       letter-spacing:.2px;
       font-size:.85rem;
       display:inline-flex;
@@ -384,7 +396,7 @@
     }
 
     .apt-desc{
-      font-weight:700;
+      font-weight:900;
       margin-bottom:8px;
       line-height:1.25;
       word-wrap:break-word;
@@ -396,6 +408,7 @@
       flex-wrap:wrap;
       color:var(--muted);
       font-size:.85rem;
+      font-weight:800;
     }
 
     .apt-actions{
@@ -414,6 +427,7 @@
       border-radius:12px;
       font-size:16px;
       -webkit-tap-highlight-color: transparent;
+      font-weight:900;
     }
 
     .rob .apt-who{ color:var(--rob); border-color: var(--rob-border); background: var(--rob-bg) }
@@ -427,6 +441,7 @@
       padding:26px 14px;
       text-align:center;
       color:var(--muted);
+      font-weight:900;
     }
     .empty-state .icon{
       font-size:34px;
@@ -451,7 +466,7 @@
       z-index:10;
       max-width: 92vw;
       text-align:center;
-      font-weight:700;
+      font-weight:900;
     }
     .toast.show{opacity:1}
 
@@ -467,6 +482,7 @@
     .footerbar .small{
       color:var(--muted);
       font-size:.82rem;
+      font-weight:800;
     }
 
     .exportbar{
@@ -482,7 +498,7 @@
       border:1px solid var(--border);
       background: rgba(255,255,255,.04);
       color:var(--text);
-      font-weight:800;
+      font-weight:900;
       font-size:.85rem;
     }
 
@@ -492,12 +508,13 @@
       margin-top:10px;
       text-align:right;
       padding-right:6px;
+      font-weight:800;
     }
   </style>
 </head>
 <body>
   <div class="app">
-   <header>
+    <header>
       <div class="topline">
         <div class="brand">
           <div class="logo"><span>📅</span></div>
@@ -534,6 +551,11 @@
           <input id="search-input" type="text" placeholder="Zoek in afspraken, verjaardagen, herinneringen..." autocomplete="off" />
           <button id="search-clear" title="Wis">✕</button>
         </div>
+
+        <div class="toggle off" id="mode-toggle" title="Spraak of tekst invoer">
+          <div class="dot"></div>
+          <div id="mode-label">Spraak</div>
+        </div>
       </div>
 
       <div id="search-count"></div>
@@ -541,18 +563,18 @@
       <div id="bday-section" style="display:none; margin-bottom:16px;">
         <div style="display:flex; gap:8px; margin-bottom:10px;">
           <input id="bday-name" type="text" placeholder="Naam..." autocomplete="off"
-            style="flex:1; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:12px 16px; font-family:'DM Sans',sans-serif; font-size:0.95rem; color:var(--text); outline:none; -webkit-appearance:none;" />
+            style="flex:1; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:12px 16px; font-family:'DM Sans',sans-serif; font-size:0.95rem; color:var(--text); outline:none; -webkit-appearance:none; font-weight:800;" />
           <input id="bday-date" type="date"
-            style="width:150px; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:12px 12px; font-family:'DM Sans',sans-serif; font-size:0.95rem; color:var(--text); outline:none; -webkit-appearance:none;" />
+            style="width:150px; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:12px 12px; font-family:'DM Sans',sans-serif; font-size:0.95rem; color:var(--text); outline:none; -webkit-appearance:none; font-weight:800;" />
           <button id="bday-add"
-            style="background:var(--beide-bg); border:1px solid var(--beide-border); color:var(--beide); border-radius:12px; padding:12px 14px; font-family:'DM Sans',sans-serif; font-size:1.0rem; cursor:pointer;">
+            style="background:var(--beide-bg); border:1px solid var(--beide-border); color:var(--beide); border-radius:12px; padding:12px 14px; font-family:'DM Sans',sans-serif; font-size:1.0rem; cursor:pointer; font-weight:900;">
             ➕
           </button>
         </div>
 
         <div id="bday-actions" style="display:flex; gap:8px; justify-content:flex-end;">
           <button id="bday-export"
-            style="background:var(--rob-bg); border:1px solid var(--rob-border); color:var(--rob); border-radius:10px; padding:10px 12px; font-family:'DM Sans',sans-serif; font-size:0.85rem; cursor:pointer;">
+            style="background:var(--rob-bg); border:1px solid var(--rob-border); color:var(--rob); border-radius:10px; padding:10px 12px; font-family:'DM Sans',sans-serif; font-size:0.85rem; cursor:pointer; font-weight:900;">
             📥 Exporteer verjaardagen
           </button>
         </div>
@@ -561,10 +583,10 @@
       <div id="mem-section" style="display:none; margin-bottom:16px;">
         <div style="display:flex; gap:8px; margin-bottom:10px; flex-wrap:wrap;">
           <input id="mem-name" type="text" placeholder="Naam..." autocomplete="off"
-            style="flex:1; min-width:160px; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:12px 16px; font-family:'DM Sans',sans-serif; font-size:0.95rem; color:var(--text); outline:none; -webkit-appearance:none;" />
+            style="flex:1; min-width:160px; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:12px 16px; font-family:'DM Sans',sans-serif; font-size:0.95rem; color:var(--text); outline:none; -webkit-appearance:none; font-weight:800;" />
 
           <select id="mem-type"
-            style="width:160px; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:12px 12px; font-family:'DM Sans',sans-serif; font-size:0.95rem; color:var(--text); outline:none; -webkit-appearance:none;">
+            style="width:160px; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:12px 12px; font-family:'DM Sans',sans-serif; font-size:0.95rem; color:var(--text); outline:none; -webkit-appearance:none; font-weight:800;">
             <option value="Overlijden">Overlijden</option>
             <option value="Herdenking">Herdenking</option>
             <option value="Jubileum">Jubileum</option>
@@ -572,30 +594,29 @@
           </select>
 
           <input id="mem-date" type="date"
-            style="width:150px; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:12px 12px; font-family:'DM Sans',sans-serif; font-size:0.95rem; color:var(--text); outline:none; -webkit-appearance:none;" />
+            style="width:150px; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:12px 12px; font-family:'DM Sans',sans-serif; font-size:0.95rem; color:var(--text); outline:none; -webkit-appearance:none; font-weight:800;" />
 
           <button id="mem-add"
-            style="background:var(--beide-bg); border:1px solid var(--beide-border); color:var(--beide); border-radius:12px; padding:12px 14px; font-family:'DM Sans',sans-serif; font-size:1.0rem; cursor:pointer;">
+            style="background:var(--beide-bg); border:1px solid var(--beide-border); color:var(--beide); border-radius:12px; padding:12px 14px; font-family:'DM Sans',sans-serif; font-size:1.0rem; cursor:pointer; font-weight:900;">
             ➕
           </button>
         </div>
 
         <input id="mem-note" type="text" placeholder="Notitie, bijv. kaarsje, bloemen, bezoek..."
-          style="width:100%; margin-bottom:10px; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:12px 16px; font-family:'DM Sans',sans-serif; font-size:0.95rem; color:var(--text); outline:none; -webkit-appearance:none;" />
+          style="width:100%; margin-bottom:10px; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:12px 16px; font-family:'DM Sans',sans-serif; font-size:0.95rem; color:var(--text); outline:none; -webkit-appearance:none; font-weight:800;" />
 
         <div style="display:flex; gap:8px; justify-content:flex-end;">
           <button id="mem-export"
-            style="background:var(--rob-bg); border:1px solid var(--rob-border); color:var(--rob); border-radius:10px; padding:10px 12px; font-family:'DM Sans',sans-serif; font-size:0.85rem; cursor:pointer;">
+            style="background:var(--rob-bg); border:1px solid var(--rob-border); color:var(--rob); border-radius:10px; padding:10px 12px; font-family:'DM Sans',sans-serif; font-size:0.85rem; cursor:pointer; font-weight:900;">
             📥 Exporteer herinneringen
           </button>
         </div>
       </div>
-
-      <div class="grid">
-        <div class="card">
+     <div class="grid">
+        <div class="card" id="left-card">
           <h2>
             <span>Nieuwe afspraak</span>
-            <span style="color:var(--muted); font-weight:700; font-size:.85rem;">snelle invoer</span>
+            <span style="color:var(--muted); font-weight:800; font-size:.85rem;">snelle invoer</span>
           </h2>
           <div class="body">
             <label>Voor wie</label>
@@ -628,11 +649,12 @@
           </div>
         </div>
 
-        <div class="card">
+        <div class="card" id="right-card">
           <h2>
             <span>Afspraken</span>
-            <span id="list-subtitle" style="color:var(--muted); font-weight:700; font-size:.85rem;">komende</span>
+            <span id="list-subtitle" style="color:var(--muted); font-weight:800; font-size:.85rem;">komende</span>
           </h2>
+
           <div class="list" id="apt-list"></div>
 
           <div class="body">
@@ -642,7 +664,7 @@
             </div>
 
             <div class="footerbar">
-              <div class="small">Afspraken worden lokaal opgeslagen op dit apparaat.</div>
+              <div class="small">Alles wordt lokaal opgeslagen op dit apparaat.</div>
               <button class="secondary" id="clear-all">Alles wissen</button>
             </div>
           </div>
@@ -668,15 +690,8 @@
     try { memories = JSON.parse(localStorage.getItem(MEM_KEY)) || []; } catch(e) {}
     function saveMem(){ try { localStorage.setItem(MEM_KEY, JSON.stringify(memories)); } catch(e) {} }
 
-    try {
-      appointments = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-    } catch(e) {
-      appointments = [];
-    }
-
-    function saveAppointments(){
-      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(appointments)); } catch(e) {}
-    }
+    try { appointments = JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch(e) { appointments = []; }
+    function saveAppointments(){ try { localStorage.setItem(STORAGE_KEY, JSON.stringify(appointments)); } catch(e) {} }
 
     function loadRemindersOn(){
       try {
@@ -685,10 +700,7 @@
         return v === "1";
       } catch(e) { return true; }
     }
-
-    function saveRemindersOn(on){
-      try { localStorage.setItem(REMIND_KEY, on ? "1" : "0"); } catch(e) {}
-    }
+    function saveRemindersOn(on){ try { localStorage.setItem(REMIND_KEY, on ? "1" : "0"); } catch(e) {} }
 
     var tabs         = Array.from(document.querySelectorAll(".tab"));
     var whoSelect    = document.getElementById("who");
@@ -722,12 +734,14 @@
 
     var toast        = document.getElementById("toast");
     var exportBar    = document.getElementById("exportbar");
-
     var reminderToggle = document.getElementById("reminder-toggle");
 
     var pillToday = document.getElementById("pill-today");
     var pillWeek  = document.getElementById("pill-week");
     var pillTotal = document.getElementById("pill-total");
+
+    var leftCard  = document.getElementById("left-card");
+    var rightCard = document.getElementById("right-card");
 
     var activeTab   = "alle";
     var searchQuery = "";
@@ -749,6 +763,14 @@
       return yyyy+"-"+mm+"-"+dd;
     }
 
+    function isoToLocalDate(iso){
+      var p = String(iso||"").split("-");
+      var y = parseInt(p[0],10);
+      var m = parseInt(p[1],10);
+      var d = parseInt(p[2],10);
+      return new Date(y, m-1, d);
+    }
+
     function escH(s){
       return String(s||"").replace(/[&<>"']/g,function(m){
         return ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" })[m];
@@ -761,7 +783,7 @@
       try{
         var d = new Date(iso);
         if (isNaN(d)) return "";
-        return dateToISO(d);
+        return dateToISO(new Date(d.getFullYear(), d.getMonth(), d.getDate()));
       }catch(e){ return ""; }
     }
 
@@ -857,28 +879,30 @@
 
     function downloadICSFromList(list, filename){
       if (!list.length){ showToast("Geen afspraken om te exporteren"); return; }
-      var ics = buildICS(list);
-      downloadTextFile(filename, ics, "text/calendar;charset=utf-8");
+      downloadTextFile(filename, buildICS(list), "text/calendar;charset=utf-8");
     }
    function nextBirthdayDateISO(mmdd) {
       var now = new Date();
       var y = now.getFullYear();
       var m = parseInt(mmdd.slice(0,2),10);
       var d = parseInt(mmdd.slice(3,5),10);
+
       var dt = new Date(y, m-1, d);
       dt.setHours(0,0,0,0);
+
       var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
       if (dt.getTime() < today.getTime()) {
         dt = new Date(y+1, m-1, d);
         dt.setHours(0,0,0,0);
       }
-      return dt.toISOString().slice(0,10);
+
+      return dateToISO(dt);
     }
 
     function daysUntil(iso) {
       var now = new Date();
       var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-      var dt = new Date(iso);
+      var dt = isoToLocalDate(iso);
       var diff = Math.round((dt.getTime() - today.getTime()) / 86400000);
       return diff;
     }
@@ -973,7 +997,7 @@
       html += '<div class="section-title">Verjaardagen<span class="count-badge">'+list.length+"</span></div>";
 
       list.forEach(function(b){
-        var whenTxt = b.nextISO ? new Date(b.nextISO).toLocaleDateString("nl-NL",{day:"numeric",month:"long",year:"numeric"}) : "";
+        var whenTxt = b.nextISO ? isoToLocalDate(b.nextISO).toLocaleDateString("nl-NL",{day:"numeric",month:"long",year:"numeric"}) : "";
         var leftTxt = (b.daysLeft === 0) ? "Vandaag" : (b.daysLeft === 1 ? "Morgen" : "Over "+b.daysLeft+" dagen");
 
         html += '<div class="apt-card beide" style="margin-bottom:8px">'
@@ -1026,7 +1050,7 @@
       html += '<div class="section-title">Herinneringen<span class="count-badge">'+list.length+"</span></div>";
 
       list.forEach(function(m){
-        var whenTxt = m.nextISO ? new Date(m.nextISO).toLocaleDateString("nl-NL",{day:"numeric",month:"long",year:"numeric"}) : "";
+        var whenTxt = m.nextISO ? isoToLocalDate(m.nextISO).toLocaleDateString("nl-NL",{day:"numeric",month:"long",year:"numeric"}) : "";
         var leftTxt = (m.daysLeft === 0) ? "Vandaag" : (m.daysLeft === 1 ? "Morgen" : "Over "+m.daysLeft+" dagen");
 
         var yearsTxt = "";
@@ -1077,6 +1101,11 @@
         bdaySection.style.display = "block";
         memSection.style.display = "none";
         exportBar.style.display = "none";
+
+        leftCard.style.display = "none";
+        rightCard.style.gridColumn = "1 / -1";
+        window.scrollTo({ top: 0, behavior: "smooth" });
+
         renderBirthdays();
         return;
       }
@@ -1085,6 +1114,11 @@
         bdaySection.style.display = "none";
         memSection.style.display = "block";
         exportBar.style.display = "none";
+
+        leftCard.style.display = "none";
+        rightCard.style.gridColumn = "1 / -1";
+        window.scrollTo({ top: 0, behavior: "smooth" });
+
         renderMemories();
         return;
       }
@@ -1092,6 +1126,9 @@
       bdaySection.style.display = "none";
       memSection.style.display = "none";
       exportBar.style.display = "";
+
+      leftCard.style.display = "";
+      rightCard.style.gridColumn = "";
 
       var list = filteredAppointments();
 
@@ -1120,7 +1157,7 @@
         var d = normalizeISO(a.date);
         var dtTxt = "";
         if (d){
-          dtTxt = new Date(d).toLocaleDateString("nl-NL",{day:"numeric",month:"long",year:"numeric"});
+          dtTxt = isoToLocalDate(d).toLocaleDateString("nl-NL",{day:"numeric",month:"long",year:"numeric"});
         }
         var tmTxt = a.time ? a.time : "Hele dag";
 
@@ -1341,10 +1378,24 @@
     memExport.addEventListener("click", function(){
       downloadMemICS();
     });
-   (function init(){
+   function applyMobileFixForMemTabs(){
+      try{
+        var isMemTab = (activeTab === "verjaardagen" || activeTab === "herinneringen");
+        if (isMemTab){
+          leftCard.style.display = "none";
+          rightCard.style.gridColumn = "1 / -1";
+        } else {
+          leftCard.style.display = "";
+          rightCard.style.gridColumn = "";
+        }
+      } catch(e){}
+    }
+
+    (function init(){
       applyReminderToggleUI();
       resetForm();
       ensureDefaultDate();
+      applyMobileFixForMemTabs();
 
       if (remindersOn){
         requestNotificationPermission();
