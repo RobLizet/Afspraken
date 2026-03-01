@@ -256,7 +256,7 @@ mark{background:rgba(180,83,9,.20);color:var(--text);border-radius:2px;padding:0
     <button class="tab" data-tab="rob">&#128100;<br>Rob <span id="count-rob"></span></button>
     <button class="tab" data-tab="lizet">&#128105;<br>Lizet <span id="count-lizet"></span></button>
     <button class="tab" data-tab="bday">&#127874;<br>Jarig <span id="count-bday"></span></button>
-    <button class="tab" data-tab="mem">&#129559;<br>Herdenkingen <span id="count-mem"></span></button>
+    <button class="tab" data-tab="mem">&#128367;<br>Herdenkingen <span id="count-mem"></span></button>
   </div>
 
   <div id="search-wrap">
@@ -318,7 +318,7 @@ if(d<now)d=new Date((yr+1)+”-”+apt.dateISO.slice(5));
 if(apt.time){var p=apt.time.split(”:”);d.setHours(parseInt(p[0]),parseInt(p[1]),0,0);}else d.setHours(8,0,0,0);
 return d;
 }
-function scheduleReminder(apt){var mins=reminders[apt.id];if(mins===undefined)return;if(!notifSupported()||Notification.permission!==“granted”)return;if(timers[apt.id]){clearTimeout(timers[apt.id]);delete timers[apt.id];}var dt=aptDateTime(apt);if(!dt)return;var delay=dt.getTime()-mins*60000-Date.now();if(delay<0)return;timers[apt.id]=setTimeout(function(){var who=apt.person===“beide”?“Rob & Lizet”:apt.person===“rob”?“Rob”:“Lizet”;try{new Notification((apt.type===“verjaardag”?”\u{1F382} “:apt.type===“herdenking”?”\u{1FAF7} “:””)+apt.description,{body:(apt.date||apt.dateISO)+(apt.time?” om “+apt.time:””)+” \u2022 “+who});}catch(e){showToast(”\u{1F514} “+apt.description);}delete timers[apt.id];},delay);}
+function scheduleReminder(apt){var mins=reminders[apt.id];if(mins===undefined)return;if(!notifSupported()||Notification.permission!==“granted”)return;if(timers[apt.id]){clearTimeout(timers[apt.id]);delete timers[apt.id];}var dt=aptDateTime(apt);if(!dt)return;var delay=dt.getTime()-mins*60000-Date.now();if(delay<0)return;timers[apt.id]=setTimeout(function(){var who=apt.person===“beide”?“Rob & Lizet”:apt.person===“rob”?“Rob”:“Lizet”;try{new Notification((apt.type===“verjaardag”?”\u{1F382} “:apt.type===“herdenking”?”\u{1F56F} “:””)+apt.description,{body:(apt.date||apt.dateISO)+(apt.time?” om “+apt.time:””)+” \u2022 “+who});}catch(e){showToast(”\u{1F514} “+apt.description);}delete timers[apt.id];},delay);}
 function scheduleAllReminders(){appointments.forEach(function(a){if(reminders[a.id]!==undefined)scheduleReminder(a);});}
 function cancelReminder(id){if(timers[id]){clearTimeout(timers[id]);delete timers[id];}delete reminders[id];saveReminders();}
 function setReminder(apt,mins){reminders[apt.id]=mins;saveReminders();scheduleReminder(apt);}
@@ -337,7 +337,7 @@ var tm=lower.match(/(\d{1,2})[:.h](\d{2})/);
 var dateStr=null,dateISO=null;
 if(dm){var day=parseInt(dm[1]),month=MONTHS[dm[2]],year=new Date().getFullYear();var d=new Date(year,month,day);dateStr=d.toLocaleDateString(“nl-NL”,{day:“numeric”,month:“long”});dateISO=(type===“verjaardag”||type===“herdenking”?“2000”:year)+”-”+String(month+1).padStart(2,“0”)+”-”+String(day).padStart(2,“0”);}
 var time=tm?String(tm[1]).padStart(2,“0”)+”:”+tm[2]:null;
-var icon=type===“verjaardag”?”\u{1F382}”:type===“herdenking”?”\u{1FAF7}”:”\u{1F4C5}”;
+var icon=type===“verjaardag”?”\u{1F382}”:type===“herdenking”?”\u{1F56F}”:”\u{1F4C5}”;
 return {person,type,description:text,date:dateStr,dateISO,time,icon};
 }
 
@@ -418,7 +418,7 @@ var q=searchQuery.trim().toLowerCase();
 if(q)filtered=filtered.filter(function(a){return(a.description||””).toLowerCase().includes(q)||(a.date||””).toLowerCase().includes(q)||(a.rawText||””).toLowerCase().includes(q);});
 filtered.sort(function(a,b){var ka=aptSortKey(a),kb=aptSortKey(b);return ka<kb?-1:ka>kb?1:0;});
 if(q){searchCount.style.display=“block”;searchCount.textContent=filtered.length===0?“Geen resultaten voor \u201C”+searchQuery+”\u201D”:filtered.length+” resultaat”+(filtered.length!==1?“en”:””)+” voor \u201C”+searchQuery+”\u201D”;}else searchCount.style.display=“none”;
-if(filtered.length===0){var icon=activeTab===“bday”?”🎂”:activeTab===“mem”?”🨗”:”🎙️”;var msg=activeTab===“bday”?“Nog geen verjaardagen. Voeg toe via spraak of tekst!”:activeTab===“mem”?“Nog geen herdenkingen.”:“Geen afspraken. Spreek, typ of scan!”;aptList.innerHTML=’<div class="empty-state"><div class="icon">’+icon+’</div><p>’+msg+’</p></div>’;return;}
+if(filtered.length===0){var icon=activeTab===“bday”?”🎂”:activeTab===“mem”?”🕯”:”🎙️”;var msg=activeTab===“bday”?“Nog geen verjaardagen. Voeg toe via spraak of tekst!”:activeTab===“mem”?“Nog geen herdenkingen.”:“Geen afspraken. Spreek, typ of scan!”;aptList.innerHTML=’<div class="empty-state"><div class="icon">’+icon+’</div><p>’+msg+’</p></div>’;return;}
 var canNotif=notifSupported()&&Notification.permission===“granted”;
 var html=””,groupKeys=[],groups={};
 filtered.forEach(function(a){var k=a.date||“Geen datum”;if(!groups[k]){groups[k]=[];groupKeys.push(k);}groups[k].push(a);});
@@ -432,7 +432,7 @@ var whoClass=atype===“verjaardag”?“bday”:atype===“herdenking”?“mem
 var expDone=exported[a.id],hasRem=reminders[a.id]!==undefined;
 var calBtn=a.dateISO?’<button class=“apt-cal-btn’+(expDone?” done”:””)+’” data-id=”’+a.id+’”>’+(expDone?”✓”:”📥”)+”</button>”:””;
 var bellBtn=a.dateISO&&canNotif?’<button class=“apt-bell-btn’+(hasRem?” set”:””)+’” data-id=”’+a.id+’”>🔔</button>’:””;
-var yearlyBadge=atype===“verjaardag”?’<span class="yearly-badge">🎂 Jaarlijks</span>’:atype===“herdenking”?’<span class="yearly-badge mem">🨗 Jaarlijks</span>’:””;
+var yearlyBadge=atype===“verjaardag”?’<span class="yearly-badge">🎂 Jaarlijks</span>’:atype===“herdenking”?’<span class="yearly-badge mem">🕯 Jaarlijks</span>’:””;
 var remBadge=hasRem?’<span class="reminder-badge">🔔 ‘+escH(remLabel(reminders[a.id]))+”</span>”:””;
 var popOpts=””;if(a.dateISO&&canNotif){REM_OPTS.forEach(function(o){var act=reminders[a.id]===o.mins;popOpts+=’<button class=“reminder-opt’+(act?” active”:””)+’” data-id=”’+a.id+’” data-mins=”’+o.mins+’”>’+escH(o.label)+(act?” ✓”:””)+”</button>”;});if(hasRem)popOpts+=’<button class="reminder-opt cancel" data-id="'+a.id+'" data-mins="cancel">✕ Verwijder herinnering</button>’;}
 var pop=a.dateISO&&canNotif?’<div class="reminder-popover" id="pop-'+a.id+'"><p>Herinnering</p>’+popOpts+”</div>”:””;
