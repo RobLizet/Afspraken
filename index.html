@@ -1,797 +1,1174 @@
 <!DOCTYPE html>
-
 <html lang="nl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <title>Onze Agenda &#8211; Rob &amp; Lizet</title>
+  <title>Onze Agenda – Rob &amp; Lizet</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
-    :root {
-      --bg:           #0d1117;
-      --surface:      #161b22;
-      --card:         #21262d;
-      --rob:          #58a6ff;
-      --rob-bg:       rgba(88,166,255,0.10);
-      --rob-border:   rgba(88,166,255,0.45);
-      --lizet:        #f778ba;
-      --lizet-bg:     rgba(247,120,186,0.10);
-      --lizet-border: rgba(247,120,186,0.45);
-      --beide:        #a5d6a7;
-      --beide-bg:     rgba(165,214,167,0.10);
-      --beide-border: rgba(165,214,167,0.40);
-      --text:         #e6edf3;
-      --muted:        #6e7681;
-      --border:       rgba(255,255,255,0.07);
-      --green:        #3fb950;
-      --yellow:       #e3b341;
-      --red:          #f85149;
+    :root{
+      --bg:#0b0f19;
+      --surface:#121a2a;
+      --surface2:#0f1626;
+      --text:#e9eefc;
+      --muted:#9fb0d0;
+      --border:rgba(255,255,255,.08);
+      --shadow: 0 14px 40px rgba(0,0,0,.35);
+
+      --rob:#5fe2ff;
+      --rob-bg:rgba(95,226,255,.12);
+      --rob-border:rgba(95,226,255,.22);
+
+      --lizet:#ff77c8;
+      --lizet-bg:rgba(255,119,200,.12);
+      --lizet-border:rgba(255,119,200,.22);
+
+      --beide:#ffd86b;
+      --beide-bg:rgba(255,216,107,.12);
+      --beide-border:rgba(255,216,107,.22);
+
+      --danger:#ff5a5f;
+      --ok:#55f0a6;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; min-height:100vh; -webkit-tap-highlight-color:transparent; }
-    #app { max-width:720px; margin:0 auto; padding:36px 20px 80px; }
 
-```
-/* ── Notification banner ── */
-#notif-banner { display:none; align-items:center; gap:12px; background:rgba(88,166,255,0.08); border:1px solid rgba(88,166,255,0.3); border-radius:14px; padding:14px 16px; margin-bottom:28px; }
-#notif-banner p { flex:1; font-size:0.83rem; color:var(--text); line-height:1.45; }
-#notif-banner p strong { display:block; margin-bottom:2px; color:var(--rob); }
-#notif-allow-btn { background:var(--rob-bg); border:1px solid var(--rob-border); color:var(--rob); border-radius:8px; padding:8px 14px; font-family:'DM Sans',sans-serif; font-size:0.82rem; font-weight:500; cursor:pointer; white-space:nowrap; flex-shrink:0; transition:all .2s; }
-#notif-allow-btn:hover { background:rgba(88,166,255,.22); }
-#notif-dismiss { background:none; border:none; color:var(--muted); cursor:pointer; font-size:1.1rem; flex-shrink:0; padding:0 2px; }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background: radial-gradient(1200px 700px at 50% -10%, #1c2a52 0%, transparent 60%),
+                  radial-gradient(900px 500px at 90% 10%, #2a1c52 0%, transparent 55%),
+                  var(--bg);
+      color:var(--text);
+      font-family:"DM Sans",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      -webkit-font-smoothing:antialiased;
+      padding:16px;
+    }
 
-/* ── Toast ── */
-#toast { display:none; position:fixed; top:20px; left:50%; transform:translateX(-50%); background:var(--card); border:1px solid var(--border); border-radius:12px; padding:12px 20px; font-size:0.85rem; color:var(--text); box-shadow:0 8px 32px rgba(0,0,0,.5); z-index:999; white-space:nowrap; animation:toastIn .3s ease; }
-@keyframes toastIn { from{opacity:0;transform:translateX(-50%) translateY(-8px)} to{opacity:1;transform:translateX(-50%) translateY(0)} }
+    .app{
+      max-width:980px;
+      margin:0 auto;
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      border:1px solid var(--border);
+      border-radius:22px;
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
 
-/* ── Header ── */
-.header { text-align:center; margin-bottom:48px; }
-.header h1 { font-family:'Playfair Display',serif; font-size:2.6rem; letter-spacing:-0.5px; background:linear-gradient(135deg,var(--rob) 0%,var(--lizet) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:10px; }
-.header-names { display:flex; justify-content:center; gap:14px; margin-bottom:8px; }
-.name-pill { padding:4px 16px; border-radius:20px; font-size:0.8rem; font-weight:500; }
-.name-pill.rob   { background:var(--rob-bg);   border:1px solid var(--rob-border);   color:var(--rob); }
-.name-pill.lizet { background:var(--lizet-bg); border:1px solid var(--lizet-border); color:var(--lizet); }
-.header p { color:var(--muted); font-size:0.85rem; font-weight:300; }
+    header{
+      padding:18px 18px 12px 18px;
+      border-bottom:1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      position:sticky;
+      top:0;
+      backdrop-filter: blur(10px);
+      z-index:3;
+    }
 
-/* ── Mic section ── */
-.mic-section { display:flex; flex-direction:column; align-items:center; gap:18px; margin-bottom:40px; }
-.mic-ring { position:relative; width:100px; height:100px; flex-shrink:0; }
-.mic-ring::before { content:''; position:absolute; inset:-6px; border-radius:50%; background:conic-gradient(var(--rob),var(--lizet),var(--rob)); opacity:0; transition:opacity 0.4s; }
-.mic-ring.listening::before { opacity:1; animation:ringRotate 2s linear infinite; }
-.mic-ring::after { content:''; position:absolute; inset:-3px; border-radius:50%; background:var(--bg); opacity:0; transition:opacity 0.4s; }
-.mic-ring.listening::after { opacity:1; }
-@keyframes ringRotate { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
-#mic-btn { position:relative; z-index:1; width:100px; height:100px; border-radius:50%; border:2px solid var(--border); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:2rem; background:var(--surface); transition:all 0.3s ease; -webkit-appearance:none; }
-#mic-btn:hover  { transform:scale(1.05); border-color:var(--rob); }
-#mic-btn.active { background:linear-gradient(135deg,rgba(88,166,255,.15),rgba(247,120,186,.15)); border-color:transparent; box-shadow:0 0 30px rgba(88,166,255,.2); }
-#mic-btn.busy   { background:var(--beide-bg); border-color:var(--beide); animation:spinGlow 1.5s infinite; }
-@keyframes spinGlow { 0%,100%{box-shadow:0 0 20px rgba(165,214,167,.3)} 50%{box-shadow:0 0 40px rgba(165,214,167,.6)} }
-#status-text { font-size:0.85rem; color:var(--muted); text-align:center; min-height:20px; transition:color .3s; }
-#status-text.active     { color:var(--rob); }
-#status-text.processing { color:var(--beide); }
-#transcript-box { display:none; width:100%; background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:14px 18px; font-size:0.93rem; font-style:italic; color:var(--text); line-height:1.5; }
-.alert { display:none; width:100%; border-radius:12px; padding:13px 16px; font-size:0.83rem; line-height:1.55; }
-.alert.error { background:rgba(248,81,73,.10); border:1px solid rgba(248,81,73,.25); color:var(--red); text-align:center; }
-.alert.warn  { background:rgba(255,184,0,.08); border:1px solid rgba(255,184,0,.25); color:var(--yellow); }
-.alert.warn strong { font-weight:600; display:block; margin-bottom:4px; }
-#text-section { display:none; width:100%; flex-direction:column; gap:10px; }
-#text-section.visible { display:flex; animation:slideIn .3s ease; }
-#text-hint { font-size:0.8rem; color:var(--muted); text-align:center; }
-.text-row { display:flex; gap:8px; }
-#text-input { flex:1; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:12px 16px; font-family:'DM Sans',sans-serif; font-size:0.95rem; color:var(--text); outline:none; transition:border-color .2s; -webkit-appearance:none; }
-#text-input::placeholder { color:var(--muted); }
-#text-input:focus { border-color:rgba(88,166,255,.5); }
-#text-submit { background:var(--rob-bg); border:1px solid var(--rob-border); color:var(--rob); border-radius:12px; padding:12px 18px; font-family:'DM Sans',sans-serif; font-size:1.1rem; cursor:pointer; transition:all .2s; flex-shrink:0; }
-#text-submit:hover   { background:rgba(88,166,255,.22); }
-#text-submit:disabled{ opacity:.4; cursor:not-allowed; }
-.mode-toggle { font-size:0.78rem; color:var(--muted); cursor:pointer; text-decoration:underline; text-underline-offset:3px; background:none; border:none; font-family:'DM Sans',sans-serif; padding:0; }
-.mode-toggle:hover { color:var(--text); }
+    .topline{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
 
-/* ── Tabs ── */
-.tabs { display:flex; gap:6px; margin-bottom:16px; background:var(--surface); border-radius:14px; padding:5px; border:1px solid var(--border); }
-.tab { flex:1; padding:10px 8px; border:1px solid transparent; border-radius:10px; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:0.875rem; font-weight:500; background:transparent; color:var(--muted); transition:all .22s; }
-.tab:hover { color:var(--text); }
-.tab[data-tab="alle"].active  { background:rgba(230,237,243,.05); color:var(--text);  border-color:rgba(230,237,243,.15); }
-.tab[data-tab="rob"].active   { background:var(--rob-bg);  color:var(--rob);   border-color:var(--rob-border); }
-.tab[data-tab="lizet"].active { background:var(--lizet-bg); color:var(--lizet); border-color:var(--lizet-border); }
+    .brand{
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
 
-/* ── Search bar ── */
-#search-wrap { position:relative; margin-bottom:16px; }
-#search-input { width:100%; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:11px 38px 11px 40px; font-family:'DM Sans',sans-serif; font-size:0.9rem; color:var(--text); outline:none; transition:border-color .2s; -webkit-appearance:none; }
-#search-input::placeholder { color:var(--muted); }
-#search-input:focus { border-color:rgba(88,166,255,.5); }
-#search-icon { position:absolute; left:13px; top:50%; transform:translateY(-50%); color:var(--muted); font-size:0.95rem; pointer-events:none; line-height:1; }
-#search-clear { display:none; position:absolute; right:10px; top:50%; transform:translateY(-50%); background:none; border:none; color:var(--muted); cursor:pointer; font-size:0.85rem; padding:4px 6px; border-radius:6px; }
-#search-clear:hover { color:var(--text); background:rgba(255,255,255,.06); }
-#search-count { display:none; font-size:0.75rem; color:var(--muted); text-align:right; margin-top:-10px; margin-bottom:10px; }
-mark { background:rgba(227,179,65,0.35); color:inherit; border-radius:2px; padding:0 1px; }
+    .logo{
+      width:40px;
+      height:40px;
+      border-radius:14px;
+      background: radial-gradient(circle at 30% 20%, rgba(95,226,255,.7), transparent 55%),
+                  radial-gradient(circle at 70% 80%, rgba(255,119,200,.6), transparent 55%),
+                  rgba(255,255,255,.06);
+      border:1px solid var(--border);
+      display:grid;
+      place-items:center;
+      box-shadow: 0 10px 26px rgba(0,0,0,.25);
+    }
 
-/* ── Export bar ── */
-#export-bar { display:none; align-items:center; justify-content:space-between; gap:12px; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:12px 16px; margin-bottom:16px; }
-#export-bar p { font-size:0.82rem; color:var(--muted); line-height:1.4; }
-#export-all-btn { background:var(--rob-bg); border:1px solid var(--rob-border); color:var(--rob); border-radius:8px; padding:8px 14px; font-family:'DM Sans',sans-serif; font-size:0.82rem; font-weight:500; cursor:pointer; white-space:nowrap; flex-shrink:0; transition:all .2s; }
-#export-all-btn:hover { background:rgba(88,166,255,.22); transform:translateY(-1px); }
+    .logo span{font-size:20px}
 
-/* ── Appointment cards ── */
-#apt-list { display:flex; flex-direction:column; gap:8px; }
-.section-title { font-size:0.8rem; font-weight:600; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); margin:24px 0 10px; display:flex; align-items:center; gap:10px; }
-.section-title::after { content:''; flex:1; height:1px; background:var(--border); }
-.count-badge { background:var(--card); border-radius:20px; padding:1px 9px; font-size:.75rem; font-weight:500; color:var(--muted); }
-.apt-card { border-radius:14px; padding:16px 18px; display:flex; align-items:flex-start; gap:14px; border:1px solid; transition:transform .2s,box-shadow .2s; animation:slideIn .3s ease; }
-.apt-card:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,.25); }
-.apt-card.rob   { background:var(--rob-bg);   border-color:var(--rob-border); }
-.apt-card.lizet { background:var(--lizet-bg); border-color:var(--lizet-border); }
-.apt-card.beide { background:var(--beide-bg); border-color:var(--beide-border); }
-@keyframes slideIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
-.apt-icon { font-size:1.3rem; flex-shrink:0; margin-top:2px; }
-.apt-body { flex:1; min-width:0; }
-.apt-who { font-size:.7rem; font-weight:600; text-transform:uppercase; letter-spacing:.1em; margin-bottom:4px; }
-.apt-who.rob   { color:var(--rob); }
-.apt-who.lizet { color:var(--lizet); }
-.apt-who.beide { color:var(--beide); }
-.apt-desc { font-size:.975rem; margin-bottom:6px; line-height:1.4; }
-.apt-meta { font-size:.78rem; color:var(--muted); display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
-.reminder-badge { display:inline-flex; align-items:center; gap:4px; background:rgba(227,179,65,0.15); border:1px solid rgba(227,179,65,0.3); color:var(--yellow); border-radius:20px; padding:1px 8px; font-size:.72rem; font-weight:500; }
-.apt-actions { display:flex; gap:4px; flex-shrink:0; align-items:flex-start; position:relative; }
-.apt-cal-btn,.apt-del-btn,.apt-bell-btn { background:none; border:none; cursor:pointer; font-size:.95rem; padding:4px 6px; border-radius:6px; transition:all .2s; opacity:.4; color:var(--muted); }
-.apt-card:hover .apt-cal-btn,
-.apt-card:hover .apt-del-btn,
-.apt-card:hover .apt-bell-btn { opacity:1; }
-.apt-cal-btn:hover  { background:rgba(88,166,255,.12); color:var(--rob); }
-.apt-cal-btn.done   { color:var(--green); opacity:1 !important; }
-.apt-del-btn:hover  { background:rgba(248,81,73,.10); color:var(--red); }
-.apt-bell-btn:hover { background:rgba(227,179,65,.12); color:var(--yellow); }
-.apt-bell-btn.set   { color:var(--yellow); opacity:1 !important; }
+    h1{
+      font-size:1.2rem;
+      margin:0;
+      letter-spacing:.2px;
+      line-height:1.1;
+    }
 
-/* ── Reminder popover ── */
-.reminder-popover { display:none; position:absolute; top:calc(100% + 6px); right:0; background:var(--card); border:1px solid var(--border); border-radius:12px; padding:8px; z-index:100; min-width:190px; box-shadow:0 8px 24px rgba(0,0,0,.5); animation:slideIn .15s ease; }
-.reminder-popover.open { display:block; }
-.reminder-popover p { font-size:0.75rem; color:var(--muted); padding:4px 8px 6px; font-weight:500; text-transform:uppercase; letter-spacing:.06em; }
-.reminder-opt { display:block; width:100%; text-align:left; background:none; border:none; color:var(--text); font-family:'DM Sans',sans-serif; font-size:0.85rem; padding:8px 10px; border-radius:8px; cursor:pointer; transition:background .15s; white-space:nowrap; }
-.reminder-opt:hover  { background:rgba(255,255,255,.06); }
-.reminder-opt.active { color:var(--yellow); background:rgba(227,179,65,.1); }
-.reminder-opt.cancel { color:var(--red); }
-.reminder-opt.cancel:hover { background:rgba(248,81,73,.1); }
+    .subtitle{
+      color:var(--muted);
+      font-size:.85rem;
+      margin-top:2px;
+    }
 
-/* ── Empty state / footer ── */
-.empty-state { text-align:center; padding:60px 20px; color:var(--muted); }
-.empty-state .icon { font-size:2.5rem; margin-bottom:12px; }
-.empty-state p { font-size:.88rem; font-weight:300; line-height:1.6; }
-.footer { text-align:center; margin-top:56px; padding-top:20px; border-top:1px solid var(--border); font-size:.75rem; color:var(--muted); font-weight:300; letter-spacing:.04em; }
-.footer span { background:linear-gradient(90deg,var(--rob),var(--lizet)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; font-weight:500; }
-```
+    .tabs{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:12px;
+    }
 
+    .tab{
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:14px;
+      cursor:pointer;
+      font-weight:600;
+      font-size:.9rem;
+      display:flex;
+      gap:8px;
+      align-items:center;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .tab.active{
+      background: rgba(255,255,255,.10);
+      border-color: rgba(255,255,255,.18);
+    }
+
+    .counts{
+      display:flex;
+      gap:6px;
+      align-items:center;
+      font-size:.78rem;
+      color:var(--muted);
+      margin-top:10px;
+    }
+
+    .pill{
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.04);
+    }
+
+    .content{
+      padding:16px 18px 22px 18px;
+    }
+
+    .controls{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+      margin-bottom:12px;
+    }
+
+    .search{
+      flex:1;
+      min-width:220px;
+      position:relative;
+    }
+
+    .search input{
+      width:100%;
+      padding:12px 44px 12px 14px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      color:var(--text);
+      outline:none;
+      font-size:.95rem;
+      -webkit-appearance:none;
+    }
+    .search input::placeholder{color:rgba(159,176,208,.75)}
+    .search button{
+      position:absolute;
+      right:8px;
+      top:50%;
+      transform: translateY(-50%);
+      border:0;
+      background:transparent;
+      color:var(--muted);
+      cursor:pointer;
+      font-size:18px;
+      padding:6px 8px;
+      border-radius:10px;
+    }
+
+    .toggle{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      padding:8px 10px;
+      border-radius:14px;
+      cursor:pointer;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+      font-size:.9rem;
+      font-weight:600;
+    }
+    .toggle .dot{
+      width:10px;
+      height:10px;
+      border-radius:999px;
+      background: var(--ok);
+      box-shadow: 0 0 0 6px rgba(85,240,166,.12);
+    }
+    .toggle.off .dot{
+      background: var(--danger);
+      box-shadow: 0 0 0 6px rgba(255,90,95,.12);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:14px;
+      align-items:start;
+    }
+
+    @media (max-width: 860px){
+      .grid{grid-template-columns: 1fr}
+    }
+
+    .card{
+      border:1px solid var(--border);
+      border-radius:18px;
+      background: rgba(255,255,255,.03);
+      overflow:hidden;
+    }
+
+    .card h2{
+      margin:0;
+      padding:14px 14px 10px 14px;
+      font-size:1rem;
+      border-bottom:1px solid var(--border);
+      color:rgba(233,238,252,.95);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+    }
+
+    .card .body{
+      padding:14px;
+    }
+
+    label{
+      display:block;
+      font-size:.85rem;
+      color:var(--muted);
+      margin-bottom:6px;
+      margin-top:12px;
+    }
+
+    input[type="text"], input[type="date"], input[type="time"], textarea, select{
+      width:100%;
+      background: rgba(255,255,255,.04);
+      border:1px solid var(--border);
+      color:var(--text);
+      border-radius:14px;
+      padding:12px 12px;
+      font-size:0.95rem;
+      outline:none;
+      -webkit-appearance:none;
+    }
+
+    textarea{
+      min-height:90px;
+      resize:vertical;
+    }
+
+    .row{
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+    .row > *{flex:1}
+
+    .btns{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:14px;
+    }
+
+    button.primary{
+      flex:1;
+      min-width:160px;
+      border-radius:14px;
+      padding:12px 14px;
+      cursor:pointer;
+      border:1px solid rgba(255,255,255,.18);
+      background: linear-gradient(180deg, rgba(95,226,255,.22), rgba(95,226,255,.10));
+      color:var(--text);
+      font-weight:700;
+      font-size:0.95rem;
+    }
+    button.secondary{
+      border-radius:14px;
+      padding:12px 14px;
+      cursor:pointer;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      color:var(--text);
+      font-weight:700;
+      font-size:0.95rem;
+    }
+
+    .list{
+      padding:12px 14px 14px 14px;
+    }
+
+    .section-title{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      font-weight:800;
+      margin:6px 0 10px 0;
+      color:rgba(233,238,252,.95);
+    }
+
+    .count-badge{
+      font-size:.78rem;
+      color:var(--muted);
+      border:1px solid var(--border);
+      padding:6px 10px;
+      border-radius:999px;
+      background: rgba(255,255,255,.03);
+    }
+
+    .apt-card{
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:12px 12px;
+      background: rgba(255,255,255,.03);
+      margin-bottom:10px;
+    }
+
+    .apt-icon{
+      width:42px;
+      height:42px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      display:grid;
+      place-items:center;
+      background: rgba(255,255,255,.03);
+      font-size:18px;
+      flex:0 0 42px;
+    }
+
+    .apt-body{
+      flex:1;
+      min-width:0;
+    }
+
+    .apt-who{
+      font-weight:800;
+      letter-spacing:.2px;
+      font-size:.85rem;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:6px 10px;
+      border-radius:999px;
+      margin-bottom:8px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.03);
+    }
+
+    .apt-desc{
+      font-weight:700;
+      margin-bottom:8px;
+      line-height:1.25;
+      word-wrap:break-word;
+    }
+
+    .apt-meta{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      color:var(--muted);
+      font-size:.85rem;
+    }
+
+    .apt-actions{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      flex:0 0 auto;
+    }
+
+    .apt-actions button{
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      color:var(--text);
+      cursor:pointer;
+      padding:10px 10px;
+      border-radius:12px;
+      font-size:16px;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .rob .apt-who{ color:var(--rob); border-color: var(--rob-border); background: var(--rob-bg) }
+    .rob .apt-icon{ border-color: var(--rob-border); background: var(--rob-bg) }
+    .lizet .apt-who{ color:var(--lizet); border-color: var(--lizet-border); background: var(--lizet-bg) }
+    .lizet .apt-icon{ border-color: var(--lizet-border); background: var(--lizet-bg) }
+    .beide .apt-who{ color:var(--beide); border-color: var(--beide-border); background: var(--beide-bg) }
+    .beide .apt-icon{ border-color: var(--beide-border); background: var(--beide-bg) }
+
+    .empty-state{
+      padding:26px 14px;
+      text-align:center;
+      color:var(--muted);
+    }
+    .empty-state .icon{
+      font-size:34px;
+      margin-bottom:8px;
+      opacity:.9;
+    }
+
+    .toast{
+      position:fixed;
+      left:50%;
+      bottom:18px;
+      transform: translateX(-50%);
+      background: rgba(18,26,42,.92);
+      border:1px solid var(--border);
+      color:var(--text);
+      padding:12px 14px;
+      border-radius:14px;
+      box-shadow: var(--shadow);
+      opacity:0;
+      pointer-events:none;
+      transition: opacity .25s ease;
+      z-index:10;
+      max-width: 92vw;
+      text-align:center;
+      font-weight:700;
+    }
+    .toast.show{opacity:1}
+
+    .footerbar{
+      display:flex;
+      gap:10px;
+      justify-content:space-between;
+      align-items:center;
+      margin-top:12px;
+      flex-wrap:wrap;
+    }
+
+    .footerbar .small{
+      color:var(--muted);
+      font-size:.82rem;
+    }
+
+    .exportbar{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:10px;
+    }
+    .exportbar button{
+      border-radius:12px;
+      padding:10px 12px;
+      cursor:pointer;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      color:var(--text);
+      font-weight:800;
+      font-size:.85rem;
+    }
+
+    .madeby{
+      color:rgba(159,176,208,.9);
+      font-size:.8rem;
+      margin-top:10px;
+      text-align:right;
+      padding-right:6px;
+    }
   </style>
 </head>
 <body>
-<div id="app">
+  <div class="app">
+   <header>
+      <div class="topline">
+        <div class="brand">
+          <div class="logo"><span>📅</span></div>
+          <div>
+            <h1>Onze Agenda</h1>
+            <div class="subtitle">Rob &amp; Lizet, afspraken, export, herinneringen</div>
+          </div>
+        </div>
 
-  <!-- Notification permission banner -->
-
-  <div id="notif-banner">
-    <p><strong>&#128276; Meldingen inschakelen</strong>Ontvang herinneringen voor je afspraken.</p>
-    <button id="notif-allow-btn">Toestaan</button>
-    <button id="notif-dismiss">&#10005;</button>
-  </div>
-
-  <!-- Header -->
-
-  <div class="header">
-    <h1>Onze Agenda</h1>
-    <div class="header-names">
-      <span class="name-pill rob">&#128100; Rob</span>
-      <span class="name-pill lizet">&#128105; Lizet</span>
-    </div>
-    <p>Spreek of typ je afspraken in</p>
-  </div>
-
-  <!-- Mic / text section -->
-
-  <div class="mic-section">
-    <div class="mic-ring" id="mic-ring">
-      <button id="mic-btn" title="Start opname">&#127897;&#65039;</button>
-    </div>
-    <div id="status-text">Tik de microfoon om een afspraak in te spreken</div>
-    <div id="transcript-box"></div>
-    <div class="alert warn" id="alert-blocked">
-      <strong>&#128274; Microfoon geblokkeerd</strong>
-      Safari staat de microfoon niet toe. Oplossing:<br>
-      1. Ga naar <strong>Instellingen &rarr; Safari &rarr; Microfoon</strong> &rarr; Toestaan<br>
-      2. Herlaad de pagina en probeer opnieuw<br>
-      3. Of gebruik de tekstinvoer hieronder &darr;
-    </div>
-    <div class="alert error" id="alert-error"></div>
-    <div id="text-section">
-      <div id="text-hint">Typ je afspraak &mdash; bv. "Vrijdag 14 maart om 10:00 tandarts voor Rob"</div>
-      <div class="text-row">
-        <input id="text-input" type="text" placeholder="Afspraak beschrijving..." autocomplete="off" />
-        <button id="text-submit">&#10133;</button>
+        <div class="toggle" id="reminder-toggle" title="Herinneringen aan of uit">
+          <div class="dot"></div>
+          <div>Herinneringen</div>
+        </div>
       </div>
-      <div class="alert error" id="alert-text-error"></div>
+
+      <div class="tabs">
+        <button class="tab active" data-tab="alle">📅 Alle <span id="count-alle">(0)</span></button>
+        <button class="tab" data-tab="rob">👤 Rob <span id="count-rob">(0)</span></button>
+        <button class="tab" data-tab="lizet">👩 Lizet <span id="count-lizet">(0)</span></button>
+        <button class="tab" data-tab="verjaardagen">🎂 Verjaardagen <span id="count-bdays">(0)</span></button>
+      </div>
+
+      <div class="counts" id="summary-pills">
+        <div class="pill" id="pill-today">Vandaag: 0</div>
+        <div class="pill" id="pill-week">Deze week: 0</div>
+        <div class="pill" id="pill-total">Totaal: 0</div>
+      </div>
+    </header>
+
+    <div class="content">
+      <div class="controls">
+        <div class="search">
+          <input id="search-input" type="text" placeholder="Zoek in afspraken..." autocomplete="off" />
+          <button id="search-clear" title="Wis">✕</button>
+        </div>
+      </div>
+
+      <div id="search-count"></div>
+
+      <div id="bday-section" style="display:none; margin-bottom:16px;">
+        <div style="display:flex; gap:8px; margin-bottom:10px;">
+          <input id="bday-name" type="text" placeholder="Naam..." autocomplete="off"
+            style="flex:1; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:12px 16px; font-family:'DM Sans',sans-serif; font-size:0.95rem; color:var(--text); outline:none; -webkit-appearance:none;" />
+          <input id="bday-date" type="date"
+            style="width:150px; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:12px 12px; font-family:'DM Sans',sans-serif; font-size:0.95rem; color:var(--text); outline:none; -webkit-appearance:none;" />
+          <button id="bday-add"
+            style="background:var(--beide-bg); border:1px solid var(--beide-border); color:var(--beide); border-radius:12px; padding:12px 14px; font-family:'DM Sans',sans-serif; font-size:1.0rem; cursor:pointer;">
+            ➕
+          </button>
+        </div>
+
+        <div id="bday-actions" style="display:flex; gap:8px; justify-content:flex-end;">
+          <button id="bday-export"
+            style="background:var(--rob-bg); border:1px solid var(--rob-border); color:var(--rob); border-radius:10px; padding:10px 12px; font-family:'DM Sans',sans-serif; font-size:0.85rem; cursor:pointer;">
+            📥 Exporteer verjaardagen
+          </button>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h2>
+            <span>Nieuwe afspraak</span>
+            <span style="color:var(--muted); font-weight:700; font-size:.85rem;">snelle invoer</span>
+          </h2>
+          <div class="body">
+            <label>Voor wie</label>
+            <select id="who">
+              <option value="beide">Beide</option>
+              <option value="rob">Rob</option>
+              <option value="lizet">Lizet</option>
+            </select>
+
+            <div class="row">
+              <div>
+                <label>Datum</label>
+                <input id="date" type="date" />
+              </div>
+              <div>
+                <label>Tijd</label>
+                <input id="time" type="time" />
+              </div>
+            </div>
+
+            <label>Omschrijving</label>
+            <textarea id="desc" placeholder="Bijv. tandarts, verjaardag, etentje, controle..."></textarea>
+
+            <div class="btns">
+              <button class="primary" id="add-btn">Toevoegen</button>
+              <button class="secondary" id="reset-btn">Leegmaken</button>
+            </div>
+
+            <div class="madeby">made by Rob Borghouts 2026</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>
+            <span>Afspraken</span>
+            <span id="list-subtitle" style="color:var(--muted); font-weight:700; font-size:.85rem;">komende</span>
+          </h2>
+          <div class="list" id="apt-list"></div>
+
+          <div class="body">
+            <div class="exportbar" id="exportbar">
+              <button id="export-all">📤 Exporteer alles (.ics)</button>
+              <button id="export-tab">📤 Exporteer tab (.ics)</button>
+            </div>
+
+            <div class="footerbar">
+              <div class="small">Afspraken worden lokaal opgeslagen op dit apparaat.</div>
+              <button class="secondary" id="clear-all">Alles wissen</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <button class="mode-toggle" id="mode-toggle">&#9000;&#65039; Liever typen? Gebruik tekstinvoer</button>
+
+    <div class="toast" id="toast">...</div>
   </div>
 
-  <!-- Person filter tabs -->
+  <script>
+   var STORAGE_KEY  = "afspraken_v3";
+    var REMIND_KEY   = "afspraken_reminders";
+    var appointments = [];
 
-  <div class="tabs">
-    <button class="tab active" data-tab="alle">&#128467; Alle <span id="count-alle">(0)</span></button>
-    <button class="tab" data-tab="rob">&#128100; Rob <span id="count-rob">(0)</span></button>
-    <button class="tab" data-tab="lizet">&#128105; Lizet <span id="count-lizet">(0)</span></button>
-  </div>
+    var BDAY_KEY     = "verjaardagen_v1";
+    var birthdays    = [];
+    try { birthdays = JSON.parse(localStorage.getItem(BDAY_KEY)) || []; } catch(e) {}
+    function saveBdays(){ try { localStorage.setItem(BDAY_KEY, JSON.stringify(birthdays)); } catch(e) {} }
 
-  <!-- Search bar -->
-
-  <div id="search-wrap">
-    <span id="search-icon">&#128269;</span>
-    <input id="search-input" type="search" placeholder="Zoeken in afspraken..." autocomplete="off" />
-    <button id="search-clear" title="Wis zoekopdracht">&#10005;</button>
-  </div>
-  <div id="search-count"></div>
-
-  <!-- Export bar -->
-
-  <div id="export-bar">
-    <p>&#128197; Exporteer als .ics &mdash; werkt met Apple Agenda, Google Agenda &amp; Outlook.</p>
-    <button id="export-all-btn">Alles exporteren</button>
-  </div>
-
-  <!-- Appointment list -->
-
-  <div id="apt-list">
-    <div class="empty-state">
-      <div class="icon">&#127897;&#65039;</div>
-      <p>Geen afspraken. Spreek of typ een afspraak in!</p>
-      <p style="margin-top:8px">Bv: "Woensdag 5 maart om 14:00 tandarts voor Lizet"</p>
-    </div>
-  </div>
-
-  <!-- In-app toast -->
-
-  <div id="toast"></div>
-
-  <div class="footer"><span>Made by Rob Borghouts</span> &middot; 2026</div>
-</div>
-
-<script>
-// ─── State ───────────────────────────────────────────────────────────────────
-var STORAGE_KEY  = "afspraken_v3";
-var REMIND_KEY   = "afspraken_reminders";
-var appointments = [];
-var reminders    = {};
-var timers       = {};
-var activeTab    = "alle";
-var searchQuery  = "";
-var textMode     = false;
-var listening    = false;
-var processing   = false;
-var recognition  = null;
-var finalText    = "";
-var exported     = {};
-var openPopover  = null;
-
-try { appointments = JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch(e) {}
-try { reminders    = JSON.parse(localStorage.getItem(REMIND_KEY))  || {}; } catch(e) {}
-
-// ─── DOM refs ────────────────────────────────────────────────────────────────
-var notifBanner   = document.getElementById("notif-banner");
-var notifAllowBtn = document.getElementById("notif-allow-btn");
-var notifDismiss  = document.getElementById("notif-dismiss");
-var micRing       = document.getElementById("mic-ring");
-var micBtn        = document.getElementById("mic-btn");
-var statusText    = document.getElementById("status-text");
-var transcriptBox = document.getElementById("transcript-box");
-var alertBlocked  = document.getElementById("alert-blocked");
-var alertError    = document.getElementById("alert-error");
-var textSection   = document.getElementById("text-section");
-var textInput     = document.getElementById("text-input");
-var textSubmit    = document.getElementById("text-submit");
-var alertTextErr  = document.getElementById("alert-text-error");
-var modeToggle    = document.getElementById("mode-toggle");
-var searchInput   = document.getElementById("search-input");
-var searchClear   = document.getElementById("search-clear");
-var searchCount   = document.getElementById("search-count");
-var aptList       = document.getElementById("apt-list");
-var exportBar     = document.getElementById("export-bar");
-var exportAllBtn  = document.getElementById("export-all-btn");
-var toastEl       = document.getElementById("toast");
-
-// ─── Month map ───────────────────────────────────────────────────────────────
-var MONTHS = {
-  januari:0, februari:1, maart:2, april:3, mei:4, juni:5,
-  juli:6, augustus:7, september:8, oktober:9, november:10, december:11
-};
-
-// ─── Helpers ─────────────────────────────────────────────────────────────────
-function save() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(appointments)); } catch(e) {} }
-function saveReminders() { try { localStorage.setItem(REMIND_KEY, JSON.stringify(reminders)); } catch(e) {} }
-function showAlert(el, msg) { el.innerHTML = msg||""; el.style.display = msg ? "block" : "none"; }
-function clearAlerts() { showAlert(alertBlocked,""); showAlert(alertError,""); showAlert(alertTextErr,""); }
-
-// Safe HTML escape
-function escH(str) {
-  return String(str)
-    .replace(/&/g,"&amp;").replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
-}
-
-// Highlight search query in text (returns HTML string)
-function highlight(text, query) {
-  if (!query) return escH(text);
-  var safe = escH(text);
-  var safeQ = query.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
-  return safe.replace(new RegExp("("+safeQ+")", "gi"), "<mark>$1</mark>");
-}
-
-// Sort key: appointments with a date come first (chronologically),
-// then appointments without a date (sorted by creation time)
-function aptSortKey(a) {
-  if (a.dateISO) {
-    var base = a.dateISO; // "YYYY-MM-DD"
-    var t    = a.time ? a.time.replace(":","") : "0000";
-    return base + "T" + t;
-  }
-  return "9999-99-99T" + new Date(a.createdAt).getTime();
-}
-
-// ─── Toast ───────────────────────────────────────────────────────────────────
-var toastTimer = null;
-function showToast(msg) {
-  toastEl.innerHTML = msg;
-  toastEl.style.display = "block";
-  if (toastTimer) clearTimeout(toastTimer);
-  toastTimer = setTimeout(function(){ toastEl.style.display = "none"; }, 4000);
-}
-
-// ─── Notifications ───────────────────────────────────────────────────────────
-function notifSupported() { return "Notification" in window; }
-
-function checkNotifBanner() {
-  if (!notifSupported()) return;
-  notifBanner.style.display = Notification.permission === "default" ? "flex" : "none";
-}
-
-function requestNotifPermission() {
-  if (!notifSupported()) return;
-  Notification.requestPermission().then(function(result) {
-    notifBanner.style.display = "none";
-    if (result === "granted") { showToast("&#128276; Meldingen ingeschakeld!"); scheduleAllReminders(); render(); }
-  });
-}
-
-function aptDateTime(apt) {
-  if (!apt.dateISO) return null;
-  var d = new Date(apt.dateISO);
-  if (apt.time) {
-    var p = apt.time.split(":");
-    d.setHours(parseInt(p[0]), parseInt(p[1]), 0, 0);
-  } else {
-    d.setHours(8, 0, 0, 0);
-  }
-  return d;
-}
-
-function scheduleReminder(apt) {
-  var mins = reminders[apt.id];
-  if (mins === undefined) return;
-  if (!notifSupported() || Notification.permission !== "granted") return;
-  if (timers[apt.id]) { clearTimeout(timers[apt.id]); delete timers[apt.id]; }
-  var aptDt = aptDateTime(apt);
-  if (!aptDt) return;
-  var delay = aptDt.getTime() - mins * 60000 - Date.now();
-  if (delay < 0) return;
-  timers[apt.id] = setTimeout(function() {
-    var who = apt.person==="beide"?"Rob & Lizet":apt.person==="rob"?"Rob":"Lizet";
-    var body = (apt.date||apt.dateISO) + (apt.time?" om "+apt.time:"") + " \u2022 " + who;
-    try { new Notification(apt.description, { body: body }); }
-    catch(e) { showToast("&#128276; Herinnering: " + apt.description); }
-    delete timers[apt.id];
-  }, delay);
-}
-
-function scheduleAllReminders() {
-  appointments.forEach(function(apt) { if (reminders[apt.id] !== undefined) scheduleReminder(apt); });
-}
-
-function cancelReminder(aptId) {
-  if (timers[aptId]) { clearTimeout(timers[aptId]); delete timers[aptId]; }
-  delete reminders[aptId];
-  saveReminders();
-}
-
-function setReminder(apt, minutesBefore) {
-  reminders[apt.id] = minutesBefore;
-  saveReminders();
-  scheduleReminder(apt);
-}
-
-var REMINDER_OPTIONS = [
-  { label:"15 minuten van tevoren", mins:15   },
-  { label:"1 uur van tevoren",      mins:60   },
-  { label:"Ochtend van de dag",     mins:480  },
-  { label:"1 dag van tevoren",      mins:1440 },
-  { label:"1 week van tevoren",     mins:10080},
-];
-
-function reminderLabel(mins) {
-  var opt = REMINDER_OPTIONS.find(function(o){ return o.mins === mins; });
-  return opt ? opt.label : mins + " min";
-}
-
-// ─── Parsers ─────────────────────────────────────────────────────────────────
-function parseFallback(text) {
-  var lower   = text.toLowerCase();
-  var person  = "beide";
-  var hasRob  = lower.includes("rob");
-  var hasLizet= lower.includes("lizet");
-  if (hasLizet && !hasRob) person = "lizet";
-  else if (hasRob && !hasLizet) person = "rob";
-  var dMatch  = lower.match(/(\d{1,2})\s*(januari|februari|maart|april|mei|juni|juli|augustus|september|oktober|november|december)/);
-  var tMatch  = lower.match(/(\d{1,2})[:.h](\d{2})/);
-  var dateStr = null, dateISO = null;
-  if (dMatch) {
-    var day = parseInt(dMatch[1]), month = MONTHS[dMatch[2]], year = new Date().getFullYear();
-    var d = new Date(year, month, day);
-    dateStr = d.toLocaleDateString("nl-NL",{day:"numeric",month:"long",year:"numeric"});
-    dateISO = year+"-"+String(month+1).padStart(2,"0")+"-"+String(day).padStart(2,"0");
-  }
-  var time = tMatch ? String(tMatch[1]).padStart(2,"0")+":"+tMatch[2] : null;
-  return { person:person, description:text, date:dateStr, dateISO:dateISO, time:time, icon:"&#128197;" };
-}
-
-async function parseWithAI(text) {
-  var today    = new Date().toLocaleDateString("nl-NL",{weekday:"long",year:"numeric",month:"long",day:"numeric"});
-  var todayISO = new Date().toISOString().slice(0,10);
-  var res = await fetch("https://api.anthropic.com/v1/messages", {
-    method:"POST", headers:{"Content-Type":"application/json"},
-    body: JSON.stringify({
-      model:"claude-sonnet-4-20250514", max_tokens:1000,
-      system:"Je bent een assistent die gesproken tekst omzet naar afspraakgegevens. Vandaag is het "+today+" ("+todayISO+").\nDe gebruikers heten Rob en Lizet.\nGeef altijd JSON terug (geen markdown), met deze velden:\n- person: \"rob\", \"lizet\", of \"beide\"\n- description: korte beschrijving van de afspraak (max 80 tekens)\n- date: datum als \"d MMMM yyyy\" in het Nederlands, of null\n- dateISO: datum als \"YYYY-MM-DD\", of null\n- time: tijd als \"HH:mm\", of null\n- icon: 1 passend emoji\nGeef ALLEEN de JSON terug, niets anders.",
-      messages:[{role:"user",content:"Zet deze tekst om naar een afspraak: \""+text+"\""}]
-    })
-  });
-  var data = await res.json();
-  var raw  = data.content && data.content[0] && data.content[0].text;
-  if (!raw) throw new Error("geen response");
-  return JSON.parse(raw.replace(/```json|```/g,"").trim());
-}
-
-// ─── Process input ────────────────────────────────────────────────────────────
-async function processInput(text) {
-  if (!text.trim() || processing) return;
-  clearAlerts();
-  setProcessingState(true);
-  try {
-    var parsed;
-    try { parsed = await parseWithAI(text); } catch(e) { parsed = parseFallback(text); }
-    var apt = Object.assign({}, parsed, {id:Date.now(), createdAt:new Date().toISOString(), rawText:text});
-    appointments.push(apt);
-    save(); render();
-    transcriptBox.style.display = "none"; transcriptBox.textContent = "";
-    textInput.value = ""; finalText = "";
-    if (notifSupported() && Notification.permission === "default") notifBanner.style.display = "flex";
-  } catch(e) {
-    if (textMode) showAlert(alertTextErr, "Kon de afspraak niet verwerken. Probeer opnieuw.");
-    else          showAlert(alertError,   "Kon de afspraak niet verwerken. Probeer opnieuw.");
-  } finally { setProcessingState(false); }
-}
-
-// ─── Speech ───────────────────────────────────────────────────────────────────
-function setListeningState(val) {
-  listening = val;
-  micRing.classList.toggle("listening", val);
-  micBtn.classList.toggle("active", val);
-  micBtn.textContent = val ? "⏹" : (processing ? "⚙️" : "🎙️");
-  statusText.className = val ? "active" : (processing ? "processing" : "");
-  statusText.textContent = val ? "Luisteren\u2026 spreek uw afspraak in" : (processing ? "Verwerken\u2026" : "Tik de microfoon om een afspraak in te spreken");
-}
-
-function setProcessingState(val) {
-  processing = val;
-  micBtn.classList.toggle("busy", val);
-  textSubmit.disabled = val;
-  if (!listening) {
-    micBtn.textContent = val ? "⚙️" : "🎙️";
-    statusText.className = val ? "processing" : "";
-    statusText.textContent = val ? "Verwerken\u2026" : "Tik de microfoon om een afspraak in te spreken";
-  }
-}
-
-function startSpeech() {
-  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SR) { showAlert(alertError, "Spraakherkenning niet ondersteund. Gebruik de tekstinvoer."); return; }
-  clearAlerts(); finalText = "";
-  recognition = new SR();
-  recognition.lang = "nl-NL"; recognition.continuous = false; recognition.interimResults = true;
-  recognition.onstart = function(){ setListeningState(true); };
-  recognition.onresult = function(e) {
-    var interim = "";
-    for (var i = e.resultIndex; i < e.results.length; i++) {
-      if (e.results[i].isFinal) finalText += e.results[i][0].transcript;
-      else interim += e.results[i][0].transcript;
+    try {
+      appointments = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    } catch(e) {
+      appointments = [];
     }
-    var display = (finalText + interim).trim();
-    if (display) { transcriptBox.textContent = '"'+display+'"'; transcriptBox.style.display = "block"; }
-  };
-  recognition.onend  = function() { setListeningState(false); if (finalText.trim()) processInput(finalText.trim()); };
-  recognition.onerror= function(e) {
-    setListeningState(false);
-    if (e.error === "not-allowed") alertBlocked.style.display = "block";
-    else if (e.error !== "no-speech" && e.error !== "aborted") showAlert(alertError, "Fout: "+e.error);
-  };
-  recognition.start();
-}
-function stopSpeech() { if (recognition) recognition.stop(); }
 
-// ─── ICS export ───────────────────────────────────────────────────────────────
-function toICSDate(iso, time) {
-  if (!iso) return null;
-  var p = iso.split("-");
-  if (time) { var t = time.split(":"); return p[0]+p[1]+p[2]+"T"+t[0]+t[1]+"00"; }
-  return p[0]+p[1]+p[2];
-}
-function buildICS(apts) {
-  var lines = ["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Rob Borghouts//Onze Agenda//NL","CALSCALE:GREGORIAN","METHOD:PUBLISH"];
-  apts.forEach(function(a) {
-    var dt = toICSDate(a.dateISO, a.time); if (!dt) return;
-    var who = a.person==="beide"?"Rob & Lizet":a.person==="rob"?"Rob":"Lizet";
-    lines.push("BEGIN:VEVENT","UID:"+a.id+"@onze-agenda","SUMMARY:"+(a.icon||"")+" "+a.description,"DESCRIPTION:Afspraak voor "+who);
-    if (!a.time) {
-      lines.push("DTSTART;VALUE=DATE:"+dt);
-      var nx = new Date(a.dateISO); nx.setDate(nx.getDate()+1);
-      var np = nx.toISOString().slice(0,10).split("-");
-      lines.push("DTEND;VALUE=DATE:"+np[0]+np[1]+np[2]);
-    } else {
-      lines.push("DTSTART:"+dt);
-      var hp = a.time.split(":").map(Number), dp = a.dateISO.split("-");
-      lines.push("DTEND:"+dp[0]+dp[1]+dp[2]+"T"+String(hp[0]+1).padStart(2,"0")+String(hp[1]).padStart(2,"0")+"00");
+    function saveAppointments(){
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(appointments)); } catch(e) {}
     }
-    lines.push("DTSTAMP:"+new Date().toISOString().replace(/[-:.]/g,"").slice(0,15)+"Z","END:VEVENT");
-  });
-  lines.push("END:VCALENDAR");
-  return lines.join("\r\n");
-}
-function downloadICS(apts, name) {
-  var blob = new Blob([buildICS(apts)],{type:"text/calendar;charset=utf-8"});
-  var url  = URL.createObjectURL(blob);
-  var a    = document.createElement("a"); a.href=url; a.download=name; a.click();
-  URL.revokeObjectURL(url);
-}
 
-// ─── Render ───────────────────────────────────────────────────────────────────
-function render() {
-  // Update tab counts
-  document.getElementById("count-alle").textContent  = "("+appointments.length+")";
-  document.getElementById("count-rob").textContent   = "("+appointments.filter(function(a){return a.person==="rob";}).length+")";
-  document.getElementById("count-lizet").textContent = "("+appointments.filter(function(a){return a.person==="lizet";}).length+")";
-  exportBar.style.display = appointments.length > 0 ? "flex" : "none";
-
-  // 1. Filter by person tab
-  var filtered = activeTab === "alle"
-    ? appointments.slice()
-    : appointments.filter(function(a){ return a.person === activeTab; });
-
-  // 2. Filter by search query
-  var q = searchQuery.trim().toLowerCase();
-  if (q) {
-    filtered = filtered.filter(function(a){
-      return (a.description||"").toLowerCase().includes(q)
-          || (a.date||"").toLowerCase().includes(q)
-          || (a.rawText||"").toLowerCase().includes(q);
-    });
-  }
-
-  // 3. Sort chronologically (earliest first; no-date appointments go at the end)
-  filtered.sort(function(a, b){
-    var ka = aptSortKey(a), kb = aptSortKey(b);
-    return ka < kb ? -1 : ka > kb ? 1 : 0;
-  });
-
-  // Search count hint
-  if (q) {
-    searchCount.style.display = "block";
-    searchCount.textContent   = filtered.length === 0
-      ? "Geen resultaten voor \u201C"+searchQuery+"\u201D"
-      : filtered.length+" resultaat"+(filtered.length!==1?"en":"")+" voor \u201C"+searchQuery+"\u201D";
-  } else {
-    searchCount.style.display = "none";
-  }
-
-  // Empty state
-  if (filtered.length === 0) {
-    if (q) {
-      aptList.innerHTML = '<div class="empty-state"><div class="icon">&#128269;</div><p>Geen afspraken gevonden.<br>Probeer een andere zoekterm.</p></div>';
-    } else {
-      aptList.innerHTML = '<div class="empty-state"><div class="icon">&#127897;&#65039;</div><p>Geen afspraken. Spreek of typ een afspraak in!</p><p style="margin-top:8px">Bv: \u201CWoensdag 5 maart om 14:00 tandarts voor Lizet\u201D</p></div>';
+    function loadRemindersOn(){
+      try {
+        var v = localStorage.getItem(REMIND_KEY);
+        if (v === null) return true;
+        return v === "1";
+      } catch(e) { return true; }
     }
-    return;
-  }
 
-  var canNotif = notifSupported() && Notification.permission === "granted";
-  var html = "";
+    function saveRemindersOn(on){
+      try { localStorage.setItem(REMIND_KEY, on ? "1" : "0"); } catch(e) {}
+    }
 
-  // Group by date (keeping chronological order of group keys)
-  var groupKeys = [], groups = {};
-  filtered.forEach(function(a){
-    var k = a.date || "Geen datum";
-    if (!groups[k]) { groups[k] = []; groupKeys.push(k); }
-    groups[k].push(a);
-  });
+    var tabs         = Array.from(document.querySelectorAll(".tab"));
+    var whoSelect    = document.getElementById("who");
+    var dateInput    = document.getElementById("date");
+    var timeInput    = document.getElementById("time");
+    var descInput    = document.getElementById("desc");
+    var addBtn       = document.getElementById("add-btn");
+    var resetBtn     = document.getElementById("reset-btn");
+    var aptList      = document.getElementById("apt-list");
+    var exportAllBtn = document.getElementById("export-all");
+    var exportTabBtn = document.getElementById("export-tab");
+    var clearAllBtn  = document.getElementById("clear-all");
 
-  groupKeys.forEach(function(date) {
-    var apts = groups[date];
-    html += '<div class="section-title">'+escH(date)+'<span class="count-badge">'+apts.length+"</span></div>";
-    apts.forEach(function(a) {
-      var who        = a.person==="beide"?"Rob & Lizet":a.person==="rob"?"Rob":"Lizet";
-      var expDone    = exported[a.id];
-      var hasReminder= reminders[a.id] !== undefined;
+    var searchInput  = document.getElementById("search-input");
+    var searchClear  = document.getElementById("search-clear");
+    var searchCount  = document.getElementById("search-count");
 
-      var calBtn = a.dateISO
-        ? '<button class="apt-cal-btn'+(expDone?" done":"")+'" data-id="'+a.id+'" title="Exporteer naar agenda">'+(expDone?"&#10003;":"&#128229;")+"</button>"
-        : "";
+    var bdaySection  = document.getElementById("bday-section");
+    var bdayName     = document.getElementById("bday-name");
+    var bdayDate     = document.getElementById("bday-date");
+    var bdayAdd      = document.getElementById("bday-add");
+    var bdayExport   = document.getElementById("bday-export");
 
-      var bellBtn = (a.dateISO && canNotif)
-        ? '<button class="apt-bell-btn'+(hasReminder?" set":"")+'" data-id="'+a.id+'" title="Herinnering instellen">&#128276;</button>'
-        : "";
+    var toast        = document.getElementById("toast");
+    var exportBar    = document.getElementById("exportbar");
 
-      var remBadge = hasReminder
-        ? '<span class="reminder-badge">&#128276; '+escH(reminderLabel(reminders[a.id]))+"</span>"
-        : "";
+    var reminderToggle = document.getElementById("reminder-toggle");
 
-      var popoverOpts = "";
-      if (a.dateISO && canNotif) {
-        REMINDER_OPTIONS.forEach(function(opt){
-          var active = reminders[a.id] === opt.mins;
-          popoverOpts += '<button class="reminder-opt'+(active?" active":"")+'" data-id="'+a.id+'" data-mins="'+opt.mins+'">'+escH(opt.label)+(active?" &#10003;":"")+"</button>";
-        });
-        if (hasReminder) popoverOpts += '<button class="reminder-opt cancel" data-id="'+a.id+'" data-mins="cancel">&#10005; Herinnering verwijderen</button>';
+    var pillToday = document.getElementById("pill-today");
+    var pillWeek  = document.getElementById("pill-week");
+    var pillTotal = document.getElementById("pill-total");
+
+    var activeTab   = "alle";
+    var searchQuery = "";
+    var remindersOn = loadRemindersOn();
+
+    function showToast(msg){
+      toast.innerHTML = msg;
+      toast.classList.add("show");
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(function(){ toast.classList.remove("show"); }, 2200);
+    }
+
+    function pad2(n){ return (n<10?"0":"")+n; }
+
+    function dateToISO(d){
+      var yyyy = d.getFullYear();
+      var mm = pad2(d.getMonth()+1);
+      var dd = pad2(d.getDate());
+      return yyyy+"-"+mm+"-"+dd;
+    }
+
+    function escH(s){
+      return String(s||"").replace(/[&<>"']/g,function(m){
+        return ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" })[m];
+      });
+    }
+
+    function normalizeISO(iso){
+      if (!iso) return "";
+      if (/^\d{4}-\d{2}-\d{2}$/.test(iso)) return iso;
+      try{
+        var d = new Date(iso);
+        if (isNaN(d)) return "";
+        return dateToISO(d);
+      }catch(e){ return ""; }
+    }
+
+    function computeCounts(){
+      var today = new Date();
+      var todayISO = dateToISO(new Date(today.getFullYear(), today.getMonth(), today.getDate()));
+      var weekEnd = new Date(today.getFullYear(), today.getMonth(), today.getDate()+7);
+      var weekEndISO = dateToISO(weekEnd);
+
+      var list = appointments.slice();
+      var todayCount = 0;
+      var weekCount = 0;
+
+      list.forEach(function(a){
+        var d = normalizeISO(a.date);
+        if (!d) return;
+        if (d === todayISO) todayCount++;
+        if (d >= todayISO && d < weekEndISO) weekCount++;
+      });
+
+      pillToday.textContent = "Vandaag: " + todayCount;
+      pillWeek.textContent = "Deze week: " + weekCount;
+      pillTotal.textContent = "Totaal: " + list.length;
+    }
+
+    function filteredAppointments(){
+      var list = appointments.slice();
+
+      if (activeTab !== "alle"){
+        list = list.filter(function(a){ return a.who === activeTab; });
       }
-      var popover = (a.dateISO && canNotif)
-        ? '<div class="reminder-popover" id="pop-'+a.id+'"><p>Herinnering</p>'+popoverOpts+"</div>"
-        : "";
 
-      // Highlight description if searching
-      var descHtml = highlight(a.description, searchQuery.trim());
+      if (searchQuery){
+        var q = searchQuery.toLowerCase();
+        list = list.filter(function(a){
+          return (a.desc||"").toLowerCase().includes(q) ||
+                 (a.date||"").toLowerCase().includes(q) ||
+                 (a.time||"").toLowerCase().includes(q) ||
+                 (a.who||"").toLowerCase().includes(q);
+        });
+      }
 
-      html += '<div class="apt-card '+a.person+'" style="margin-bottom:8px" data-id="'+a.id+'">'
-        +'<div class="apt-icon">'+(a.icon||"&#128197;")+"</div>"
-        +'<div class="apt-body">'
-        +'<div class="apt-who '+a.person+'">'+escH(who)+"</div>"
-        +'<div class="apt-desc">'+descHtml+"</div>"
-        +'<div class="apt-meta">'
-        +(a.time ? '<span>&#128336; '+escH(a.time)+"</span>" : "")
-        +'<span>Toegevoegd: '+new Date(a.createdAt).toLocaleTimeString("nl-NL",{hour:"2-digit",minute:"2-digit"})+"</span>"
-        +remBadge
-        +"</div></div>"
-        +'<div class="apt-actions">'+calBtn+bellBtn+popover
-        +'<button class="apt-del-btn" data-id="'+a.id+'" title="Verwijder">&#128465;</button></div>'
-        +"</div>";
-    });
-  });
-  aptList.innerHTML = html;
-}
+      list.sort(function(a,b){
+        var da = (a.date||"") + " " + (a.time||"");
+        var db = (b.date||"") + " " + (b.time||"");
+        return da.localeCompare(db);
+      });
 
-// ─── Close popovers ───────────────────────────────────────────────────────────
-function closeAllPopovers() {
-  document.querySelectorAll(".reminder-popover.open").forEach(function(p){ p.classList.remove("open"); });
-  openPopover = null;
-}
-
-// ─── Event listeners ─────────────────────────────────────────────────────────
-notifAllowBtn.addEventListener("click", requestNotifPermission);
-notifDismiss.addEventListener("click", function(){ notifBanner.style.display = "none"; });
-
-micBtn.addEventListener("click", function(){
-  if (processing) return;
-  if (listening) stopSpeech(); else startSpeech();
-});
-
-modeToggle.addEventListener("click", function(){
-  textMode = !textMode; clearAlerts();
-  if (textMode) {
-    textSection.classList.add("visible");
-    modeToggle.textContent = "&#127897;&#65039; Terug naar spraakopname";
-    micRing.style.display = "none"; statusText.style.display = "none";
-  } else {
-    textSection.classList.remove("visible");
-    modeToggle.textContent = "&#9000;&#65039; Liever typen? Gebruik tekstinvoer";
-    micRing.style.display = ""; statusText.style.display = "";
-  }
-});
-
-textSubmit.addEventListener("click", function(){ processInput(textInput.value); });
-textInput.addEventListener("keydown", function(e){ if (e.key==="Enter") processInput(textInput.value); });
-
-// Search
-searchInput.addEventListener("input", function(){
-  searchQuery = searchInput.value;
-  searchClear.style.display = searchQuery ? "block" : "none";
-  render();
-});
-searchClear.addEventListener("click", function(){
-  searchInput.value = ""; searchQuery = "";
-  searchClear.style.display = "none";
-  searchInput.focus();
-  render();
-});
-
-// Tabs
-document.querySelectorAll(".tab").forEach(function(btn){
-  btn.addEventListener("click", function(){
-    document.querySelectorAll(".tab").forEach(function(t){ t.classList.remove("active"); });
-    btn.classList.add("active");
-    activeTab = btn.dataset.tab;
-    render();
-  });
-});
-
-// Export all
-exportAllBtn.addEventListener("click", function(){
-  var withDate = appointments.filter(function(a){ return a.dateISO; });
-  if (!withDate.length) { alert("Geen afspraken met een datum."); return; }
-  downloadICS(withDate, "onze-agenda.ics");
-});
-
-// Delegated clicks on appointment list
-aptList.addEventListener("click", function(e) {
-  var delBtn  = e.target.closest(".apt-del-btn");
-  var calBtn  = e.target.closest(".apt-cal-btn");
-  var bellBtn = e.target.closest(".apt-bell-btn");
-  var remOpt  = e.target.closest(".reminder-opt");
-
-  if (delBtn) {
-    var id = parseInt(delBtn.dataset.id);
-    cancelReminder(id);
-    appointments = appointments.filter(function(a){ return a.id !== id; });
-    save(); render(); return;
-  }
-  if (calBtn) {
-    var id2 = parseInt(calBtn.dataset.id);
-    var apt  = appointments.find(function(a){ return a.id === id2; });
-    if (!apt) return;
-    downloadICS([apt], apt.description.slice(0,30).replace(/\s/g,"-")+".ics");
-    exported[id2] = true; render(); return;
-  }
-  if (bellBtn) {
-    e.stopPropagation();
-    var id3 = parseInt(bellBtn.dataset.id);
-    var pop = document.getElementById("pop-"+id3);
-    if (!pop) return;
-    if (pop.classList.contains("open")) { pop.classList.remove("open"); openPopover = null; }
-    else { closeAllPopovers(); pop.classList.add("open"); openPopover = id3; }
-    return;
-  }
-  if (remOpt) {
-    e.stopPropagation();
-    var id4  = parseInt(remOpt.dataset.id);
-    var mins = remOpt.dataset.mins;
-    var apt2 = appointments.find(function(a){ return a.id === id4; });
-    if (!apt2) return;
-    closeAllPopovers();
-    if (mins === "cancel") {
-      cancelReminder(id4);
-      showToast("&#128276; Herinnering verwijderd");
-    } else {
-      setReminder(apt2, parseInt(mins));
-      showToast("&#128276; Herinnering ingesteld: "+reminderLabel(parseInt(mins)));
+      return list;
     }
-    render(); return;
-  }
-  closeAllPopovers();
-});
 
-document.addEventListener("click", function(e){
-  if (!e.target.closest(".apt-actions")) closeAllPopovers();
-});
+    function buildICS(apts){
+      var lines = [
+        "BEGIN:VCALENDAR",
+        "VERSION:2.0",
+        "PRODID:-//Rob Borghouts//Onze Agenda//NL",
+        "CALSCALE:GREGORIAN",
+        "METHOD:PUBLISH"
+      ];
 
-// ─── Init ─────────────────────────────────────────────────────────────────────
-checkNotifBanner();
-scheduleAllReminders();
-render();
-</script>
+      apts.forEach(function(a){
+        var d = normalizeISO(a.date);
+        if (!d) return;
+        var dt = d.replace(/-/g,"");
+        var summary = (a.who==="rob"?"Rob":(a.who==="lizet"?"Lizet":"Beide")) + " - " + (a.desc||"");
+        lines.push("BEGIN:VEVENT");
+        lines.push("UID:apt-"+a.id+"@onze-agenda");
+        lines.push("DTSTAMP:"+new Date().toISOString().replace(/[-:.]/g,"").slice(0,15)+"Z");
+        if (a.time){
+          var tm = a.time.replace(":","");
+          lines.push("DTSTART:"+dt+"T"+tm+"00");
+          lines.push("DTEND:"+dt+"T"+tm+"00");
+        } else {
+          lines.push("DTSTART;VALUE=DATE:"+dt);
+        }
+        lines.push("SUMMARY:"+summary.replace(/\n/g," ").slice(0,160));
+        lines.push("END:VEVENT");
+      });
 
+      lines.push("END:VCALENDAR");
+      return lines.join("\r\n");
+    }
+
+    function downloadTextFile(filename, content, mime){
+      var blob = new Blob([content],{type:mime||"text/plain;charset=utf-8"});
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function downloadICSFromList(list, filename){
+      if (!list.length){ showToast("Geen afspraken om te exporteren"); return; }
+      var ics = buildICS(list);
+      downloadTextFile(filename, ics, "text/calendar;charset=utf-8");
+    }
+   function nextBirthdayDateISO(mmdd) {
+      var now = new Date();
+      var y = now.getFullYear();
+      var m = parseInt(mmdd.slice(0,2),10);
+      var d = parseInt(mmdd.slice(3,5),10);
+      var dt = new Date(y, m-1, d);
+      dt.setHours(0,0,0,0);
+      if (dt.getTime() < new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime()) {
+        dt = new Date(y+1, m-1, d);
+        dt.setHours(0,0,0,0);
+      }
+      return dt.toISOString().slice(0,10);
+    }
+
+    function daysUntil(iso) {
+      var now = new Date();
+      var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      var dt = new Date(iso);
+      var diff = Math.round((dt.getTime() - today.getTime()) / 86400000);
+      return diff;
+    }
+
+    function buildBdayICS(list) {
+      var lines = ["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Rob Borghouts//Verjaardagen//NL","CALSCALE:GREGORIAN","METHOD:PUBLISH"];
+      list.forEach(function(b) {
+        if (!b.mmdd) return;
+        var year = (new Date()).getFullYear();
+        var m = b.mmdd.slice(0,2);
+        var d = b.mmdd.slice(3,5);
+        var dtstart = ""+year+m+d;
+        lines.push(
+          "BEGIN:VEVENT",
+          "UID:bday-"+b.id+"@onze-agenda",
+          "SUMMARY:🎂 Verjaardag "+(b.name||""),
+          "DTSTART;VALUE=DATE:"+dtstart,
+          "RRULE:FREQ=YEARLY",
+          "DTSTAMP:"+new Date().toISOString().replace(/[-:.]/g,"").slice(0,15)+"Z",
+          "END:VEVENT"
+        );
+      });
+      lines.push("END:VCALENDAR");
+      return lines.join("\r\n");
+    }
+
+    function downloadBdayICS() {
+      if (!birthdays.length) { alert("Geen verjaardagen."); return; }
+      var blob = new Blob([buildBdayICS(birthdays)],{type:"text/calendar;charset=utf-8"});
+      var url  = URL.createObjectURL(blob);
+      var a    = document.createElement("a"); a.href=url; a.download="verjaardagen.ics"; a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function renderBirthdays() {
+      document.getElementById("count-bdays").textContent = "("+birthdays.length+")";
+
+      var q = (searchQuery || "").trim().toLowerCase();
+      var list = birthdays.slice();
+
+      if (q) {
+        list = list.filter(function(b){
+          return (b.name||"").toLowerCase().includes(q);
+        });
+      }
+
+      list.forEach(function(b){
+        b.nextISO = nextBirthdayDateISO(b.mmdd);
+        b.daysLeft = daysUntil(b.nextISO);
+      });
+
+      list.sort(function(a,b){ return a.daysLeft - b.daysLeft; });
+
+      if (!list.length) {
+        aptList.innerHTML = q
+          ? '<div class="empty-state"><div class="icon">🔎</div><p>Geen verjaardagen gevonden.<br>Probeer een andere zoekterm.</p></div>'
+          : '<div class="empty-state"><div class="icon">🎂</div><p>Geen verjaardagen.<br>Voeg er eentje toe hierboven.</p></div>';
+        return;
+      }
+
+      var html = "";
+      html += '<div class="section-title">Verjaardagen<span class="count-badge">'+list.length+"</span></div>";
+
+      list.forEach(function(b){
+        var whenTxt = b.nextISO ? new Date(b.nextISO).toLocaleDateString("nl-NL",{day:"numeric",month:"long",year:"numeric"}) : "";
+        var leftTxt = (b.daysLeft === 0) ? "Vandaag" : (b.daysLeft === 1 ? "Morgen" : "Over "+b.daysLeft+" dagen");
+
+        html += '<div class="apt-card beide" style="margin-bottom:8px" data-bid="'+b.id+'">'
+          +'<div class="apt-icon">🎂</div>'
+          +'<div class="apt-body">'
+          +'<div class="apt-who beide">Verjaardag</div>'
+          +'<div class="apt-desc">'+escH(b.name||"")+'</div>'
+          +'<div class="apt-meta">'
+          +'<span>📅 '+escH(whenTxt)+'</span>'
+          +'<span>'+escH(leftTxt)+'</span>'
+          +'</div></div>'
+          +'<div class="apt-actions">'
+          +'<button class="bday-del-btn" data-bid="'+b.id+'" title="Verwijder">🗑️</button>'
+          +'</div>'
+          +'</div>';
+      });
+
+      aptList.innerHTML = html;
+    }
+
+    function updateTabCounts(){
+      var all = appointments.length;
+      var rob = appointments.filter(function(a){return a.who==="rob";}).length;
+      var liz = appointments.filter(function(a){return a.who==="lizet";}).length;
+
+      document.getElementById("count-alle").textContent  = "("+all+")";
+      document.getElementById("count-rob").textContent   = "("+rob+")";
+      document.getElementById("count-lizet").textContent = "("+liz+")";
+      document.getElementById("count-bdays").textContent = "("+birthdays.length+")";
+    }
+
+    function render(){
+      updateTabCounts();
+      computeCounts();
+
+      var listSubtitle = document.getElementById("list-subtitle");
+
+      if (activeTab === "verjaardagen") {
+        bdaySection.style.display = "block";
+        exportBar.style.display = "none";
+        renderBirthdays();
+        return;
+      } else {
+        bdaySection.style.display = "none";
+        exportBar.style.display = "";
+      }
+
+      var list = filteredAppointments();
+
+      if (searchQuery){
+        searchCount.innerHTML = '<div class="pill">Zoekresultaten: '+list.length+'</div>';
+      } else {
+        searchCount.innerHTML = "";
+      }
+
+      if (!list.length){
+        aptList.innerHTML = searchQuery
+          ? '<div class="empty-state"><div class="icon">🔎</div><p>Geen afspraken gevonden.<br>Probeer een andere zoekterm.</p></div>'
+          : '<div class="empty-state"><div class="icon">📅</div><p>Geen afspraken.<br>Voeg er eentje toe links.</p></div>';
+        listSubtitle.textContent = searchQuery ? "gevonden" : "komende";
+        return;
+      }
+
+      listSubtitle.textContent = searchQuery ? "gevonden" : "komende";
+
+      var html = "";
+      html += '<div class="section-title">Afspraken<span class="count-badge">'+list.length+"</span></div>";
+
+      list.forEach(function(a){
+        var whoLabel = a.who==="rob" ? "Rob" : (a.who==="lizet" ? "Lizet" : "Beide");
+        var cls = a.who || "beide";
+        var d = normalizeISO(a.date);
+        var dtTxt = "";
+        if (d){
+          dtTxt = new Date(d).toLocaleDateString("nl-NL",{day:"numeric",month:"long",year:"numeric"});
+        }
+        var tmTxt = a.time ? a.time : "Hele dag";
+
+        html += '<div class="apt-card '+cls+'" data-id="'+a.id+'">'
+          +'<div class="apt-icon">📌</div>'
+          +'<div class="apt-body">'
+          +'<div class="apt-who '+cls+'">'+whoLabel+'</div>'
+          +'<div class="apt-desc">'+escH(a.desc||"")+'</div>'
+          +'<div class="apt-meta">'
+          +'<span>📅 '+escH(dtTxt)+'</span>'
+          +'<span>⏰ '+escH(tmTxt)+'</span>'
+          +'</div></div>'
+          +'<div class="apt-actions">'
+          +'<button class="apt-del-btn" data-id="'+a.id+'" title="Verwijder">🗑️</button>'
+          +'</div>'
+          +'</div>';
+      });
+
+      aptList.innerHTML = html;
+    }
+
+    function resetForm(){
+      whoSelect.value = "beide";
+      var now = new Date();
+      dateInput.value = dateToISO(now);
+      timeInput.value = "";
+      descInput.value = "";
+    }
+
+    function ensureDefaultDate(){
+      if (!dateInput.value){
+        dateInput.value = dateToISO(new Date());
+      }
+    }
+   function scheduleNotification(a){
+      if (!remindersOn) return;
+      if (!("Notification" in window)) return;
+
+      var d = normalizeISO(a.date);
+      if (!d) return;
+
+      var hasTime = !!a.time;
+      var base = new Date(d + (hasTime ? "T"+a.time+":00" : "T09:00:00"));
+      var when = base.getTime() - (15 * 60 * 1000);
+      var now = Date.now();
+      if (when <= now) return;
+
+      var delay = when - now;
+      setTimeout(function(){
+        try{
+          new Notification("Afspraak", { body: (a.desc||"") + " ("+(a.who||"beide")+")" });
+        }catch(e){}
+      }, delay);
+    }
+
+    function requestNotificationPermission(){
+      if (!("Notification" in window)) return;
+      if (Notification.permission === "default"){
+        Notification.requestPermission().then(function(){});
+      }
+    }
+
+    function applyReminderToggleUI(){
+      if (remindersOn){
+        reminderToggle.classList.remove("off");
+      } else {
+        reminderToggle.classList.add("off");
+      }
+    }
+
+    tabs.forEach(function(btn){
+      btn.addEventListener("click", function(){
+        tabs.forEach(function(b){ b.classList.remove("active"); });
+        btn.classList.add("active");
+        activeTab = btn.getAttribute("data-tab");
+        render();
+      });
+    });
+
+    searchInput.addEventListener("input", function(){
+      searchQuery = searchInput.value || "";
+      render();
+    });
+
+    searchClear.addEventListener("click", function(){
+      searchInput.value = "";
+      searchQuery = "";
+      render();
+    });
+
+    addBtn.addEventListener("click", function(){
+      ensureDefaultDate();
+      var a = {
+        id: Date.now(),
+        who: whoSelect.value,
+        date: dateInput.value,
+        time: timeInput.value,
+        desc: (descInput.value||"").trim() || "Afspraak",
+        createdAt: new Date().toISOString()
+      };
+      appointments.push(a);
+      saveAppointments();
+      if (remindersOn) scheduleNotification(a);
+      showToast("✅ Afspraak toegevoegd");
+      descInput.value = "";
+      timeInput.value = "";
+      render();
+    });
+
+    resetBtn.addEventListener("click", function(){
+      resetForm();
+      showToast("Formulier leeg");
+    });
+
+    clearAllBtn.addEventListener("click", function(){
+      if (!confirm("Alles wissen?")) return;
+      appointments = [];
+      saveAppointments();
+      showToast("Alles gewist");
+      render();
+    });
+
+    exportAllBtn.addEventListener("click", function(){
+      downloadICSFromList(appointments.slice(), "onze-agenda.ics");
+    });
+
+    exportTabBtn.addEventListener("click", function(){
+      var list = filteredAppointments();
+      var name = activeTab === "alle" ? "alle" : activeTab;
+      downloadICSFromList(list, "onze-agenda-"+name+".ics");
+    });
+
+    aptList.addEventListener("click", function(e){
+      var del = e.target.closest(".apt-del-btn");
+      var bdel = e.target.closest(".bday-del-btn");
+
+      if (bdel && bdel.dataset.bid){
+        var bid = parseInt(bdel.dataset.bid,10);
+        birthdays = birthdays.filter(function(b){ return b.id !== bid; });
+        saveBdays();
+        showToast("🎂 Verjaardag verwijderd");
+        render();
+        return;
+      }
+
+      if (del && del.dataset.id){
+        var id = parseInt(del.dataset.id,10);
+        appointments = appointments.filter(function(a){ return a.id !== id; });
+        saveAppointments();
+        showToast("🗑️ Verwijderd");
+        render();
+      }
+    });
+
+    reminderToggle.addEventListener("click", function(){
+      remindersOn = !remindersOn;
+      saveRemindersOn(remindersOn);
+      applyReminderToggleUI();
+      if (remindersOn){
+        requestNotificationPermission();
+        appointments.forEach(scheduleNotification);
+        showToast("Herinneringen aan");
+      } else {
+        showToast("Herinneringen uit");
+      }
+    });
+
+    bdayAdd.addEventListener("click", function(){
+      var name = (bdayName.value || "").trim();
+      var date = (bdayDate.value || "").trim();
+      if (!name || !date) { showToast("Vul naam en datum in"); return; }
+
+      var mmdd = date.slice(5,7)+"-"+date.slice(8,10);
+      var item = { id: Date.now(), name: name, mmdd: mmdd, createdAt: new Date().toISOString() };
+      birthdays.push(item);
+      saveBdays();
+      bdayName.value = "";
+      bdayDate.value = "";
+      showToast("🎂 Verjaardag toegevoegd");
+      render();
+    });
+
+    bdayExport.addEventListener("click", function(){
+      downloadBdayICS();
+    });
+   (function init(){
+      applyReminderToggleUI();
+      resetForm();
+      ensureDefaultDate();
+
+      if (remindersOn){
+        requestNotificationPermission();
+        appointments.forEach(scheduleNotification);
+      }
+
+      render();
+    })();
+  </script>
 </body>
 </html>
+
