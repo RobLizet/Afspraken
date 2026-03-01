@@ -115,6 +115,8 @@
     .cal-badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;}
     .cal-badge{font-size:.72rem;font-weight:900;padding:4px 8px;border-radius:999px;border:1px solid var(--border);background:var(--bg);color:var(--muted);}
   </style>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 </head>
 <body>
 <div class="app">
@@ -278,6 +280,57 @@
 </div>
 
 <script>
+// Firebase configuratie
+var firebaseConfig = {
+  apiKey: "AIzaSyDeGP5IIWaFoG4PuISUueeccexrZOIVwGY",
+  authDomain: "agenda-roblizet.firebaseapp.com",
+  databaseURL: "https://agenda-roblizet-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "agenda-roblizet",
+  storageBucket: "agenda-roblizet.appspot.com"
+};
+firebase.initializeApp(firebaseConfig);
+var db = firebase.database();
+var fbConnected = false;
+
+// Sync status tonen
+var syncStatus = document.createElement("div");
+syncStatus.id = "sync-status";
+syncStatus.style.cssText = "position:fixed;top:10px;right:10px;font-size:.75rem;font-weight:800;padding:5px 10px;border-radius:20px;z-index:100;background:var(--surface);border:1px solid var(--border);color:var(--muted);";
+syncStatus.textContent = "⏳ Verbinden...";
+document.body.appendChild(syncStatus);
+
+function setSyncStatus(connected){
+  fbConnected = connected;
+  syncStatus.textContent = connected ? "🟢 Gesynchroniseerd" : "🔴 Offline";
+  syncStatus.style.color = connected ? "var(--ok)" : "var(--danger)";
+}
+
+db.ref(".info/connected").on("value", function(snap){
+  setSyncStatus(snap.val() === true);
+});
+
+// Firebase listeners
+function startFirebaseSync(){
+  db.ref("appointments").on("value", function(snap){
+    var data = snap.val();
+    appointments = data ? Object.values(data) : [];
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(appointments)); }catch(e){}
+    render();
+  });
+  db.ref("birthdays").on("value", function(snap){
+    var data = snap.val();
+    birthdays = data ? Object.values(data) : [];
+    try{ localStorage.setItem(BDAY_KEY, JSON.stringify(birthdays)); }catch(e){}
+    render();
+  });
+  db.ref("memories").on("value", function(snap){
+    var data = snap.val();
+    memories = data ? Object.values(data) : [];
+    try{ localStorage.setItem(MEM_KEY, JSON.stringify(memories)); }catch(e){}
+    render();
+  });
+}
+
 var STORAGE_KEY="afspraken_v3";
 var REMIND_KEY="afspraken_reminders";
 var BDAY_KEY="verjaardagen_v1";
@@ -288,9 +341,21 @@ var memories=[];
 try{appointments=JSON.parse(localStorage.getItem(STORAGE_KEY))||[];}catch(e){}
 try{birthdays=JSON.parse(localStorage.getItem(BDAY_KEY))||[];}catch(e){}
 try{memories=JSON.parse(localStorage.getItem(MEM_KEY))||[];}catch(e){}
-function saveAppointments(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(appointments));}catch(e){}}
-function saveBdays(){try{localStorage.setItem(BDAY_KEY,JSON.stringify(birthdays));}catch(e){}}
-function saveMem(){try{localStorage.setItem(MEM_KEY,JSON.stringify(memories));}catch(e){}}
+function saveAppointments(){
+  try{localStorage.setItem(STORAGE_KEY,JSON.stringify(appointments));}catch(e){}
+  var obj={};appointments.forEach(function(a){obj[a.id]=a;});
+  db.ref("appointments").set(obj).catch(function(){});
+}
+function saveBdays(){
+  try{localStorage.setItem(BDAY_KEY,JSON.stringify(birthdays));}catch(e){}
+  var obj={};birthdays.forEach(function(b){obj[b.id]=b;});
+  db.ref("birthdays").set(obj).catch(function(){});
+}
+function saveMem(){
+  try{localStorage.setItem(MEM_KEY,JSON.stringify(memories));}catch(e){}
+  var obj={};memories.forEach(function(m){obj[m.id]=m;});
+  db.ref("memories").set(obj).catch(function(){});
+}
 function loadRemindersOn(){try{var v=localStorage.getItem(REMIND_KEY);if(v===null)return true;return v==="1";}catch(e){return true;}}
 function saveRemindersOn(on){try{localStorage.setItem(REMIND_KEY,on?"1":"0");}catch(e){}}
 
@@ -762,7 +827,7 @@ calGrid.addEventListener("click",function(e){var cell=e.target.closest(".cal-cel
 (function init(){
   applyReminderToggleUI();resetForm();
   if(remindersOn){requestNotificationPermission();appointments.forEach(scheduleNotification);scheduleBirthdayNotifications();scheduleMemoryNotifications();}
-  calSelectedISO=dateToISO(new Date());render();
+  calSelectedISO=dateToISO(new Date());startFirebaseSync();render();
 })();
 </script>
 
