@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="nl">
 <head>
   <meta charset="UTF-8" />
@@ -17,23 +18,18 @@
       --muted:#9fb0d0;
       --border:rgba(255,255,255,.08);
       --shadow: 0 14px 40px rgba(0,0,0,.35);
-
       --rob:#5fe2ff;
       --rob-bg:rgba(95,226,255,.12);
       --rob-border:rgba(95,226,255,.22);
-
       --lizet:#ff77c8;
       --lizet-bg:rgba(255,119,200,.12);
       --lizet-border:rgba(255,119,200,.22);
-
       --beide:#ffd86b;
       --beide-bg:rgba(255,216,107,.12);
       --beide-border:rgba(255,216,107,.22);
-
       --danger:#ff5a5f;
       --ok:#55f0a6;
     }
-
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
@@ -46,1652 +42,565 @@
       -webkit-font-smoothing:antialiased;
       padding:16px;
     }
-
-    .app{
-      max-width:980px;
-      margin:0 auto;
-      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
-      border:1px solid var(--border);
-      border-radius:22px;
-      box-shadow: var(--shadow);
-      overflow:hidden;
-    }
-
-    header{
-      padding:18px 18px 12px 18px;
-      border-bottom:1px solid var(--border);
-      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
-      position:sticky;
-      top:0;
-      backdrop-filter: blur(10px);
-      z-index:3;
-    }
-
-    .topline{
-      display:flex;
-      gap:12px;
-      align-items:center;
-      justify-content:space-between;
-      flex-wrap:wrap;
-    }
-
-    .brand{
-      display:flex;
-      gap:10px;
-      align-items:center;
-    }
-
-    .logo{
-      width:40px;
-      height:40px;
-      border-radius:14px;
-      background: radial-gradient(circle at 30% 20%, rgba(95,226,255,.7), transparent 55%),
-                  radial-gradient(circle at 70% 80%, rgba(255,119,200,.6), transparent 55%),
-                  rgba(255,255,255,.06);
-      border:1px solid var(--border);
-      display:grid;
-      place-items:center;
-      box-shadow: 0 10px 26px rgba(0,0,0,.25);
-    }
-
+    .app{max-width:980px;margin:0 auto;background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));border:1px solid var(--border);border-radius:22px;box-shadow:var(--shadow);overflow:hidden;}
+    header{padding:18px 18px 12px 18px;border-bottom:1px solid var(--border);background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));position:sticky;top:0;backdrop-filter:blur(10px);z-index:3;}
+    .topline{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;}
+    .brand{display:flex;gap:10px;align-items:center;}
+    .logo{width:40px;height:40px;border-radius:14px;background:radial-gradient(circle at 30% 20%,rgba(95,226,255,.7),transparent 55%),radial-gradient(circle at 70% 80%,rgba(255,119,200,.6),transparent 55%),rgba(255,255,255,.06);border:1px solid var(--border);display:grid;place-items:center;box-shadow:0 10px 26px rgba(0,0,0,.25);}
     .logo span{font-size:20px}
-
-    h1{
-      font-size:1.2rem;
-      margin:0;
-      letter-spacing:.2px;
-      line-height:1.1;
-    }
-
-    .subtitle{
-      color:var(--muted);
-      font-size:.85rem;
-      margin-top:2px;
-      font-weight:700;
-    }
-
-    .tabs{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      margin-top:12px;
-    }
-
-    .tab{
-      border:1px solid var(--border);
-      background: rgba(255,255,255,.04);
-      color:var(--text);
-      padding:10px 12px;
-      border-radius:14px;
-      cursor:pointer;
-      font-weight:700;
-      font-size:.9rem;
-      display:flex;
-      gap:8px;
-      align-items:center;
-      user-select:none;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .tab.active{
-      background: rgba(255,255,255,.10);
-      border-color: rgba(255,255,255,.18);
-    }
-
-    .counts{
-      display:flex;
-      gap:6px;
-      align-items:center;
-      font-size:.78rem;
-      color:var(--muted);
-      margin-top:10px;
-      font-weight:700;
-    }
-
-    .pill{
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid var(--border);
-      background: rgba(255,255,255,.04);
-    }
-
-    .content{
-      padding:16px 18px 22px 18px;
-    }
-
-    .controls{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      flex-wrap:wrap;
-      margin-bottom:12px;
-    }
-
-    .search{
-      flex:1;
-      min-width:220px;
-      position:relative;
-    }
-
-    .search input{
-      width:100%;
-      padding:12px 44px 12px 14px;
-      border-radius:14px;
-      border:1px solid var(--border);
-      background: rgba(255,255,255,.04);
-      color:var(--text);
-      outline:none;
-      font-size:.95rem;
-      -webkit-appearance:none;
-      font-weight:700;
-    }
+    h1{font-size:1.2rem;margin:0;letter-spacing:.2px;line-height:1.1;}
+    .subtitle{color:var(--muted);font-size:.85rem;margin-top:2px;font-weight:700;}
+    .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
+    .tab{border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--text);padding:10px 12px;border-radius:14px;cursor:pointer;font-weight:700;font-size:.9rem;display:flex;gap:8px;align-items:center;user-select:none;-webkit-tap-highlight-color:transparent;}
+    .tab.active{background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.18);}
+    .counts{display:flex;gap:6px;align-items:center;font-size:.78rem;color:var(--muted);margin-top:10px;font-weight:700;}
+    .pill{padding:6px 10px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.04);}
+    .content{padding:16px 18px 22px 18px;}
+    .controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px;}
+    .search{flex:1;min-width:220px;position:relative;}
+    .search input{width:100%;padding:12px 44px 12px 14px;border-radius:14px;border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--text);outline:none;font-size:.95rem;-webkit-appearance:none;font-weight:700;}
     .search input::placeholder{color:rgba(159,176,208,.75)}
-    .search button{
-      position:absolute;
-      right:8px;
-      top:50%;
-      transform: translateY(-50%);
-      border:0;
-      background:transparent;
-      color:var(--muted);
-      cursor:pointer;
-      font-size:18px;
-      padding:6px 8px;
-      border-radius:10px;
-      font-weight:800;
-    }
-
-    .toggle{
-      display:flex;
-      gap:8px;
-      align-items:center;
-      border:1px solid var(--border);
-      background: rgba(255,255,255,.04);
-      padding:8px 10px;
-      border-radius:14px;
-      cursor:pointer;
-      user-select:none;
-      -webkit-tap-highlight-color: transparent;
-      font-size:.9rem;
-      font-weight:800;
-    }
-    .toggle .dot{
-      width:10px;
-      height:10px;
-      border-radius:999px;
-      background: var(--ok);
-      box-shadow: 0 0 0 6px rgba(85,240,166,.12);
-    }
-    .toggle.off .dot{
-      background: var(--danger);
-      box-shadow: 0 0 0 6px rgba(255,90,95,.12);
-    }
-
-    .grid{
-      display:grid;
-      grid-template-columns: 1.2fr .8fr;
-      gap:14px;
-      align-items:start;
-    }
-
-    @media (max-width: 860px){
-      .grid{grid-template-columns: 1fr}
-    }
-
-    .card{
-      border:1px solid var(--border);
-      border-radius:18px;
-      background: rgba(255,255,255,.03);
-      overflow:hidden;
-    }
-
-    .card h2{
-      margin:0;
-      padding:14px 14px 10px 14px;
-      font-size:1rem;
-      border-bottom:1px solid var(--border);
-      color:rgba(233,238,252,.95);
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      font-weight:900;
-    }
-
-    .card .body{
-      padding:14px;
-    }
-
-    label{
-      display:block;
-      font-size:.85rem;
-      color:var(--muted);
-      margin-bottom:6px;
-      margin-top:12px;
-      font-weight:800;
-    }
-
-    input[type="text"], input[type="date"], input[type="time"], textarea, select{
-      width:100%;
-      background: rgba(255,255,255,.04);
-      border:1px solid var(--border);
-      color:var(--text);
-      border-radius:14px;
-      padding:12px 12px;
-      font-size:0.95rem;
-      outline:none;
-      -webkit-appearance:none;
-      font-weight:700;
-    }
-
-    textarea{
-      min-height:90px;
-      resize:vertical;
-      font-weight:700;
-    }
-
-    .row{
-      display:flex;
-      gap:10px;
-      align-items:center;
-    }
-    .row > *{flex:1}
-
-    .btns{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top:14px;
-    }
-
-    button.primary{
-      flex:1;
-      min-width:160px;
-      border-radius:14px;
-      padding:12px 14px;
-      cursor:pointer;
-      border:1px solid rgba(255,255,255,.18);
-      background: linear-gradient(180deg, rgba(95,226,255,.22), rgba(95,226,255,.10));
-      color:var(--text);
-      font-weight:900;
-      font-size:0.95rem;
-    }
-    button.secondary{
-      border-radius:14px;
-      padding:12px 14px;
-      cursor:pointer;
-      border:1px solid var(--border);
-      background: rgba(255,255,255,.04);
-      color:var(--text);
-      font-weight:900;
-      font-size:0.95rem;
-    }
-
-    .list{
-      padding:12px 14px 14px 14px;
-    }
-
-    .section-title{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      font-weight:900;
-      margin:6px 0 10px 0;
-      color:rgba(233,238,252,.95);
-    }
-
-    .count-badge{
-      font-size:.78rem;
-      color:var(--muted);
-      border:1px solid var(--border);
-      padding:6px 10px;
-      border-radius:999px;
-      background: rgba(255,255,255,.03);
-      font-weight:900;
-    }
-
-    .apt-card{
-      display:flex;
-      gap:12px;
-      align-items:flex-start;
-      border:1px solid var(--border);
-      border-radius:16px;
-      padding:12px 12px;
-      background: rgba(255,255,255,.03);
-      margin-bottom:10px;
-    }
-
-    .apt-icon{
-      width:42px;
-      height:42px;
-      border-radius:14px;
-      border:1px solid var(--border);
-      display:grid;
-      place-items:center;
-      background: rgba(255,255,255,.03);
-      font-size:18px;
-      flex:0 0 42px;
-    }
-
-    .apt-body{
-      flex:1;
-      min-width:0;
-    }
-
-    .apt-who{
-      font-weight:900;
-      letter-spacing:.2px;
-      font-size:.85rem;
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:6px 10px;
-      border-radius:999px;
-      margin-bottom:8px;
-      border:1px solid var(--border);
-      background: rgba(255,255,255,.03);
-    }
-
-    .apt-desc{
-      font-weight:900;
-      margin-bottom:8px;
-      line-height:1.25;
-      word-wrap:break-word;
-    }
-
-    .apt-meta{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      color:var(--muted);
-      font-size:.85rem;
-      font-weight:800;
-    }
-
-    .apt-actions{
-      display:flex;
-      gap:8px;
-      align-items:center;
-      flex:0 0 auto;
-    }
-
-    .apt-actions button{
-      border:1px solid var(--border);
-      background: rgba(255,255,255,.04);
-      color:var(--text);
-      cursor:pointer;
-      padding:10px 10px;
-      border-radius:12px;
-      font-size:16px;
-      -webkit-tap-highlight-color: transparent;
-      font-weight:900;
-    }
-
-    .rob .apt-who{ color:var(--rob); border-color: var(--rob-border); background: var(--rob-bg) }
-    .rob .apt-icon{ border-color: var(--rob-border); background: var(--rob-bg) }
-    .lizet .apt-who{ color:var(--lizet); border-color: var(--lizet-border); background: var(--lizet-bg) }
-    .lizet .apt-icon{ border-color: var(--lizet-border); background: var(--lizet-bg) }
-    .beide .apt-who{ color:var(--beide); border-color: var(--beide-border); background: var(--beide-bg) }
-    .beide .apt-icon{ border-color: var(--beide-border); background: var(--beide-bg) }
-
-    .empty-state{
-      padding:26px 14px;
-      text-align:center;
-      color:var(--muted);
-      font-weight:900;
-    }
-    .empty-state .icon{
-      font-size:34px;
-      margin-bottom:8px;
-      opacity:.9;
-    }
-
-    .toast{
-      position:fixed;
-      left:50%;
-      bottom:18px;
-      transform: translateX(-50%);
-      background: rgba(18,26,42,.92);
-      border:1px solid var(--border);
-      color:var(--text);
-      padding:12px 14px;
-      border-radius:14px;
-      box-shadow: var(--shadow);
-      opacity:0;
-      pointer-events:none;
-      transition: opacity .25s ease;
-      z-index:10;
-      max-width: 92vw;
-      text-align:center;
-      font-weight:900;
-    }
+    .search button{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:0;background:transparent;color:var(--muted);cursor:pointer;font-size:18px;padding:6px 8px;border-radius:10px;font-weight:800;}
+    .toggle{display:flex;gap:8px;align-items:center;border:1px solid var(--border);background:rgba(255,255,255,.04);padding:8px 10px;border-radius:14px;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;font-size:.9rem;font-weight:800;}
+    .toggle .dot{width:10px;height:10px;border-radius:999px;background:var(--ok);box-shadow:0 0 0 6px rgba(85,240,166,.12);}
+    .toggle.off .dot{background:var(--danger);box-shadow:0 0 0 6px rgba(255,90,95,.12);}
+    .grid{display:grid;grid-template-columns:1.2fr .8fr;gap:14px;align-items:start;}
+    @media(max-width:860px){.grid{grid-template-columns:1fr}}
+    .card{border:1px solid var(--border);border-radius:18px;background:rgba(255,255,255,.03);overflow:hidden;}
+    .card h2{margin:0;padding:14px 14px 10px 14px;font-size:1rem;border-bottom:1px solid var(--border);color:rgba(233,238,252,.95);display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:900;}
+    .card .body{padding:14px;}
+    label{display:block;font-size:.85rem;color:var(--muted);margin-bottom:6px;margin-top:12px;font-weight:800;}
+    input[type="text"],input[type="date"],input[type="time"],textarea,select{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--text);border-radius:14px;padding:12px 12px;font-size:0.95rem;outline:none;-webkit-appearance:none;font-weight:700;}
+    textarea{min-height:90px;resize:vertical;font-weight:700;}
+    .row{display:flex;gap:10px;align-items:center;}
+    .row>*{flex:1}
+    .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;}
+    button.primary{flex:1;min-width:160px;border-radius:14px;padding:12px 14px;cursor:pointer;border:1px solid rgba(255,255,255,.18);background:linear-gradient(180deg,rgba(95,226,255,.22),rgba(95,226,255,.10));color:var(--text);font-weight:900;font-size:0.95rem;}
+    button.secondary{border-radius:14px;padding:12px 14px;cursor:pointer;border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--text);font-weight:900;font-size:0.95rem;}
+    .list{padding:12px 14px 14px 14px;}
+    .section-title{display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:900;margin:6px 0 10px 0;color:rgba(233,238,252,.95);}
+    .count-badge{font-size:.78rem;color:var(--muted);border:1px solid var(--border);padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.03);font-weight:900;}
+    .apt-card{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--border);border-radius:16px;padding:12px 12px;background:rgba(255,255,255,.03);margin-bottom:10px;}
+    .apt-icon{width:42px;height:42px;border-radius:14px;border:1px solid var(--border);display:grid;place-items:center;background:rgba(255,255,255,.03);font-size:18px;flex:0 0 42px;}
+    .apt-body{flex:1;min-width:0;}
+    .apt-who{font-weight:900;letter-spacing:.2px;font-size:.85rem;display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;margin-bottom:8px;border:1px solid var(--border);background:rgba(255,255,255,.03);}
+    .apt-desc{font-weight:900;margin-bottom:8px;line-height:1.25;word-wrap:break-word;}
+    .apt-meta{display:flex;gap:10px;flex-wrap:wrap;color:var(--muted);font-size:.85rem;font-weight:800;}
+    .apt-actions{display:flex;gap:8px;align-items:center;flex:0 0 auto;}
+    .apt-actions button{border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--text);cursor:pointer;padding:10px 10px;border-radius:12px;font-size:16px;-webkit-tap-highlight-color:transparent;font-weight:900;}
+    .rob .apt-who{color:var(--rob);border-color:var(--rob-border);background:var(--rob-bg)}
+    .rob .apt-icon{border-color:var(--rob-border);background:var(--rob-bg)}
+    .lizet .apt-who{color:var(--lizet);border-color:var(--lizet-border);background:var(--lizet-bg)}
+    .lizet .apt-icon{border-color:var(--lizet-border);background:var(--lizet-bg)}
+    .beide .apt-who{color:var(--beide);border-color:var(--beide-border);background:var(--beide-bg)}
+    .beide .apt-icon{border-color:var(--beide-border);background:var(--beide-bg)}
+    .empty-state{padding:26px 14px;text-align:center;color:var(--muted);font-weight:900;}
+    .empty-state .icon{font-size:34px;margin-bottom:8px;opacity:.9;}
+    .toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:rgba(18,26,42,.92);border:1px solid var(--border);color:var(--text);padding:12px 14px;border-radius:14px;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:10;max-width:92vw;text-align:center;font-weight:900;}
     .toast.show{opacity:1}
-
-    .footerbar{
-      display:flex;
-      gap:10px;
-      justify-content:space-between;
-      align-items:center;
-      margin-top:12px;
-      flex-wrap:wrap;
-    }
-
-    .footerbar .small{
-      color:var(--muted);
-      font-size:.82rem;
-      font-weight:800;
-    }
-
-    .exportbar{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top:10px;
-    }
-    .exportbar button{
-      border-radius:12px;
-      padding:10px 12px;
-      cursor:pointer;
-      border:1px solid var(--border);
-      background: rgba(255,255,255,.04);
-      color:var(--text);
-      font-weight:900;
-      font-size:.85rem;
-    }
-
-    .madeby{
-      color:rgba(159,176,208,.9);
-      font-size:.8rem;
-      margin-top:10px;
-      text-align:right;
-      padding-right:6px;
-      font-weight:800;
-    }
-
-    .cal-wrap{
-      border:1px solid var(--border);
-      border-radius:18px;
-      background: rgba(255,255,255,.03);
-      overflow:hidden;
-      margin-bottom:14px;
-    }
-
-    .cal-head{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      padding:12px 12px;
-      border-bottom:1px solid var(--border);
-      flex-wrap:wrap;
-    }
-
-    .cal-title{
-      font-weight:900;
-      letter-spacing:.2px;
-    }
-
-    .cal-nav{
-      display:flex;
-      gap:8px;
-      align-items:center;
-    }
-
-    .cal-nav button{
-      border:1px solid var(--border);
-      background: rgba(255,255,255,.04);
-      color:var(--text);
-      cursor:pointer;
-      padding:10px 12px;
-      border-radius:12px;
-      font-weight:900;
-    }
-
-    .cal-grid{
-      display:grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap:8px;
-      padding:12px;
-    }
-
-    .cal-dow{
-      color:var(--muted);
-      font-weight:900;
-      font-size:.78rem;
-      padding:0 6px 6px 6px;
-    }
-
-    .cal-cell{
-      border:1px solid var(--border);
-      background: rgba(255,255,255,.03);
-      border-radius:14px;
-      padding:10px 10px;
-      min-height:58px;
-      cursor:pointer;
-      user-select:none;
-      -webkit-tap-highlight-color: transparent;
-      position:relative;
-      overflow:hidden;
-    }
-
-    .cal-cell.dim{
-      opacity:.45;
-    }
-
-    .cal-cell.selected{
-      border-color: rgba(255,255,255,.18);
-      background: rgba(255,255,255,.08);
-    }
-
-    .cal-day{
-      font-weight:900;
-      font-size:.95rem;
-    }
-
-    .cal-badges{
-      display:flex;
-      gap:6px;
-      flex-wrap:wrap;
-      margin-top:6px;
-    }
-
-    .cal-badge{
-      font-size:.72rem;
-      font-weight:900;
-      padding:4px 8px;
-      border-radius:999px;
-      border:1px solid var(--border);
-      background: rgba(255,255,255,.03);
-      color:var(--muted);
-    }
+    .footerbar{display:flex;gap:10px;justify-content:space-between;align-items:center;margin-top:12px;flex-wrap:wrap;}
+    .footerbar .small{color:var(--muted);font-size:.82rem;font-weight:800;}
+    .exportbar{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;}
+    .exportbar button{border-radius:12px;padding:10px 12px;cursor:pointer;border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--text);font-weight:900;font-size:.85rem;}
+    .madeby{color:rgba(159,176,208,.9);font-size:.8rem;margin-top:10px;text-align:right;padding-right:6px;font-weight:800;}
+    .cal-wrap{border:1px solid var(--border);border-radius:18px;background:rgba(255,255,255,.03);overflow:hidden;margin-bottom:14px;}
+    .cal-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 12px;border-bottom:1px solid var(--border);flex-wrap:wrap;}
+    .cal-title{font-weight:900;letter-spacing:.2px;}
+    .cal-nav{display:flex;gap:8px;align-items:center;}
+    .cal-nav button{border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--text);cursor:pointer;padding:10px 12px;border-radius:12px;font-weight:900;}
+    .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;padding:12px;}
+    .cal-dow{color:var(--muted);font-weight:900;font-size:.78rem;padding:0 6px 6px 6px;}
+    .cal-cell{border:1px solid var(--border);background:rgba(255,255,255,.03);border-radius:14px;padding:10px 10px;min-height:58px;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;position:relative;overflow:hidden;}
+    .cal-cell.dim{opacity:.45;}
+    .cal-cell.selected{border-color:rgba(255,255,255,.18);background:rgba(255,255,255,.08);}
+    .cal-day{font-weight:900;font-size:.95rem;}
+    .cal-badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;}
+    .cal-badge{font-size:.72rem;font-weight:900;padding:4px 8px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.03);color:var(--muted);}
   </style>
 </head>
 <body>
- <div class="app">
-    <header>
-      <div class="topline">
-        <div class="brand">
-          <div class="logo"><span>📅</span></div>
-          <div>
-            <h1>Onze Agenda</h1>
-            <div class="subtitle">Rob &amp; Lizet, afspraken, export, herinneringen</div>
-          </div>
-        </div>
-
-        <div class="toggle" id="reminder-toggle" title="Herinneringen aan of uit">
-          <div class="dot"></div>
-          <div>Herinneringen</div>
+<div class="app">
+  <header>
+    <div class="topline">
+      <div class="brand">
+        <div class="logo"><span>&#128197;</span></div>
+        <div>
+          <h1>Onze Agenda</h1>
+          <div class="subtitle">Rob &amp; Lizet, afspraken, export, herinneringen</div>
         </div>
       </div>
-
-      <div class="tabs">
-        <button class="tab active" data-tab="alle">📅 Alle <span id="count-alle">(0)</span></button>
-        <button class="tab" data-tab="rob">👤 Rob <span id="count-rob">(0)</span></button>
-        <button class="tab" data-tab="lizet">👩 Lizet <span id="count-lizet">(0)</span></button>
-        <button class="tab" data-tab="verjaardagen">🎂 Verjaardagen <span id="count-bdays">(0)</span></button>
-        <button class="tab" data-tab="herinneringen">🕯️ Herinneringen <span id="count-mem">(0)</span></button>
-        <button class="tab" data-tab="kalender">🗓️ Kalender</button>
-      </div>
-
-      <div class="counts" id="summary-pills">
-        <div class="pill" id="pill-today">Vandaag: 0</div>
-        <div class="pill" id="pill-week">Deze week: 0</div>
-        <div class="pill" id="pill-total">Totaal: 0</div>
-      </div>
-    </header>
-
-    <div class="content">
-      <div class="controls">
-        <div class="search">
-          <input id="search-input" type="text" placeholder="Zoek in afspraken, verjaardagen, herinneringen..." autocomplete="off" />
-          <button id="search-clear" title="Wis">✕</button>
-        </div>
-      </div>
-
-      <div id="search-count"></div>
-
-      <div id="calendar-section" style="display:none;">
-        <div class="cal-wrap">
-          <div class="cal-head">
-            <div class="cal-title" id="cal-title">Kalender</div>
-            <div class="cal-nav">
-              <button id="cal-prev">◀</button>
-              <button id="cal-today">Vandaag</button>
-              <button id="cal-next">▶</button>
-            </div>
-          </div>
-
-          <div class="cal-grid" id="cal-dow">
-            <div class="cal-dow">Ma</div>
-            <div class="cal-dow">Di</div>
-            <div class="cal-dow">Wo</div>
-            <div class="cal-dow">Do</div>
-            <div class="cal-dow">Vr</div>
-            <div class="cal-dow">Za</div>
-            <div class="cal-dow">Zo</div>
-          </div>
-
-          <div class="cal-grid" id="cal-grid"></div>
-        </div>
-
-        <div class="card" style="margin-bottom:14px;">
-          <h2>
-            <span>Dagoverzicht</span>
-            <span id="cal-day-label" style="color:var(--muted); font-weight:800; font-size:.85rem;">...</span>
-          </h2>
-          <div class="list" id="cal-day-list"></div>
-        </div>
-      </div>
-     <div class="grid" id="main-grid">
-        <div class="card" id="left-card">
-          <h2>
-            <span>Nieuwe afspraak</span>
-            <span style="color:var(--muted); font-weight:800; font-size:.85rem;">snelle invoer</span>
-          </h2>
-          <div class="body">
-            <label>Voor wie</label>
-            <select id="who">
-              <option value="beide">Beide</option>
-              <option value="rob">Rob</option>
-              <option value="lizet">Lizet</option>
-            </select>
-
-            <div class="row">
-              <div>
-                <label>Datum</label>
-                <input id="date" type="date" />
-              </div>
-              <div>
-                <label>Tijd</label>
-                <input id="time" type="time" />
-              </div>
-            </div>
-
-            <label>Omschrijving</label>
-            <textarea id="desc" placeholder="Bijv. tandarts, etentje, controle..."></textarea>
-
-            <div class="btns">
-              <button class="primary" id="add-btn">Toevoegen</button>
-              <button class="secondary" id="reset-btn">Leegmaken</button>
-            </div>
-
-            <div class="madeby">made by Rob Borghouts 2026</div>
-          </div>
-        </div>
-
-        <div class="card" id="right-card">
-          <h2>
-            <span>Afspraken</span>
-            <span id="list-subtitle" style="color:var(--muted); font-weight:800; font-size:.85rem;">komende</span>
-          </h2>
-
-          <div class="list" id="apt-list"></div>
-
-          <div class="body">
-            <div class="exportbar" id="exportbar">
-              <button id="export-all">📤 Exporteer alles (.ics)</button>
-              <button id="export-tab">📤 Exporteer tab (.ics)</button>
-            </div>
-
-            <div class="footerbar">
-              <div class="small">Alles wordt lokaal opgeslagen op dit apparaat.</div>
-              <button class="secondary" id="clear-all">Alles wissen</button>
-            </div>
-          </div>
-        </div>
+      <div class="toggle" id="reminder-toggle" title="Herinneringen aan of uit">
+        <div class="dot"></div>
+        <div>Herinneringen</div>
       </div>
     </div>
+    <div class="tabs">
+      <button class="tab active" data-tab="alle">&#128197; Alle <span id="count-alle">(0)</span></button>
+      <button class="tab" data-tab="rob">&#128100; Rob <span id="count-rob">(0)</span></button>
+      <button class="tab" data-tab="lizet">&#128105; Lizet <span id="count-lizet">(0)</span></button>
+      <button class="tab" data-tab="verjaardagen">&#127874; Verjaardagen <span id="count-bdays">(0)</span></button>
+      <button class="tab" data-tab="herinneringen">&#128367; Herinneringen <span id="count-mem">(0)</span></button>
+      <button class="tab" data-tab="kalender">&#128467; Kalender</button>
+    </div>
+    <div class="counts" id="summary-pills">
+      <div class="pill" id="pill-today">Vandaag: 0</div>
+      <div class="pill" id="pill-week">Deze week: 0</div>
+      <div class="pill" id="pill-total">Totaal: 0</div>
+    </div>
+  </header>
 
-    <div class="toast" id="toast">...</div>
+  <div class="content">
+    <div class="controls">
+      <div class="search">
+        <input id="search-input" type="text" placeholder="Zoek in afspraken, verjaardagen, herinneringen..." autocomplete="off" />
+        <button id="search-clear" title="Wis">&#10005;</button>
+      </div>
+    </div>
+    <div id="search-count"></div>
+
+```
+<!-- VERJAARDAGEN SECTIE -->
+<div id="bday-section" style="display:none; margin-bottom:14px;">
+  <div class="card">
+    <h2><span>&#127874; Verjaardag toevoegen</span></h2>
+    <div class="body">
+      <label>Naam</label>
+      <input id="bday-name" type="text" placeholder="Bijv. Mama, Kevin..." />
+      <label>Datum</label>
+      <input id="bday-date" type="date" />
+      <div class="btns">
+        <button class="primary" id="bday-add">&#127874; Toevoegen</button>
+        <button class="secondary" id="bday-export">&#128228; Exporteer (.ics)</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HERINNERINGEN SECTIE -->
+<div id="mem-section" style="display:none; margin-bottom:14px;">
+  <div class="card">
+    <h2><span>&#128367; Herinnering toevoegen</span></h2>
+    <div class="body">
+      <label>Naam</label>
+      <input id="mem-name" type="text" placeholder="Bijv. Papa, Oma..." />
+      <label>Type</label>
+      <select id="mem-type">
+        <option value="Overlijden">Overlijden</option>
+        <option value="Herinnering">Herinnering</option>
+      </select>
+      <label>Datum</label>
+      <input id="mem-date" type="date" />
+      <label>Notitie (optioneel)</label>
+      <input id="mem-note" type="text" placeholder="Bijv. In ons hart..." />
+      <div class="btns">
+        <button class="primary" id="mem-add">&#128367; Toevoegen</button>
+        <button class="secondary" id="mem-export">&#128228; Exporteer (.ics)</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- KALENDER SECTIE -->
+<div id="calendar-section" style="display:none;">
+  <div class="cal-wrap">
+    <div class="cal-head">
+      <div class="cal-title" id="cal-title">Kalender</div>
+      <div class="cal-nav">
+        <button id="cal-prev">&#9664;</button>
+        <button id="cal-today">Vandaag</button>
+        <button id="cal-next">&#9654;</button>
+      </div>
+    </div>
+    <div class="cal-grid" id="cal-dow">
+      <div class="cal-dow">Ma</div><div class="cal-dow">Di</div><div class="cal-dow">Wo</div>
+      <div class="cal-dow">Do</div><div class="cal-dow">Vr</div><div class="cal-dow">Za</div>
+      <div class="cal-dow">Zo</div>
+    </div>
+    <div class="cal-grid" id="cal-grid"></div>
+  </div>
+  <div class="card" style="margin-bottom:14px;">
+    <h2><span>Dagoverzicht</span><span id="cal-day-label" style="color:var(--muted);font-weight:800;font-size:.85rem;">...</span></h2>
+    <div class="list" id="cal-day-list"></div>
+  </div>
+</div>
+
+<!-- HOOFD GRID -->
+<div class="grid" id="main-grid">
+  <div class="card" id="left-card">
+    <h2><span>Nieuwe afspraak</span><span style="color:var(--muted);font-weight:800;font-size:.85rem;">snelle invoer</span></h2>
+    <div class="body">
+      <label>Voor wie</label>
+      <select id="who">
+        <option value="beide">Beide</option>
+        <option value="rob">Rob</option>
+        <option value="lizet">Lizet</option>
+      </select>
+      <div class="row">
+        <div><label>Datum</label><input id="date" type="date" /></div>
+        <div><label>Tijd</label><input id="time" type="time" /></div>
+      </div>
+      <label>Omschrijving</label>
+      <textarea id="desc" placeholder="Bijv. tandarts, etentje, controle..."></textarea>
+      <div class="btns">
+        <button class="primary" id="add-btn">Toevoegen</button>
+        <button class="secondary" id="reset-btn">Leegmaken</button>
+      </div>
+      <div class="madeby">made by Rob Borghouts 2026</div>
+    </div>
   </div>
 
-  <script>
-   var STORAGE_KEY  = "afspraken_v3";
-    var REMIND_KEY   = "afspraken_reminders";
-    var appointments = [];
-
-    var BDAY_KEY     = "verjaardagen_v1";
-    var birthdays    = [];
-    try { birthdays = JSON.parse(localStorage.getItem(BDAY_KEY)) || []; } catch(e) {}
-    function saveBdays(){ try { localStorage.setItem(BDAY_KEY, JSON.stringify(birthdays)); } catch(e) {} }
-
-    var MEM_KEY  = "herinneringen_v1";
-    var memories = [];
-    try { memories = JSON.parse(localStorage.getItem(MEM_KEY)) || []; } catch(e) {}
-    function saveMem(){ try { localStorage.setItem(MEM_KEY, JSON.stringify(memories)); } catch(e) {} }
-
-    try { appointments = JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch(e) { appointments = []; }
-    function saveAppointments(){ try { localStorage.setItem(STORAGE_KEY, JSON.stringify(appointments)); } catch(e) {} }
-
-    function loadRemindersOn(){
-      try {
-        var v = localStorage.getItem(REMIND_KEY);
-        if (v === null) return true;
-        return v === "1";
-      } catch(e) { return true; }
-    }
-    function saveRemindersOn(on){ try { localStorage.setItem(REMIND_KEY, on ? "1" : "0"); } catch(e) {} }
-
-    var tabs         = Array.from(document.querySelectorAll(".tab"));
-    var whoSelect    = document.getElementById("who");
-    var dateInput    = document.getElementById("date");
-    var timeInput    = document.getElementById("time");
-    var descInput    = document.getElementById("desc");
-    var addBtn       = document.getElementById("add-btn");
-    var resetBtn     = document.getElementById("reset-btn");
-    var aptList      = document.getElementById("apt-list");
-    var exportAllBtn = document.getElementById("export-all");
-    var exportTabBtn = document.getElementById("export-tab");
-    var clearAllBtn  = document.getElementById("clear-all");
-
-    var searchInput  = document.getElementById("search-input");
-    var searchClear  = document.getElementById("search-clear");
-    var searchCount  = document.getElementById("search-count");
-
-    var bdaySection  = document.getElementById("bday-section");
-    var bdayName     = document.getElementById("bday-name");
-    var bdayDate     = document.getElementById("bday-date");
-    var bdayAdd      = document.getElementById("bday-add");
-    var bdayExport   = document.getElementById("bday-export");
-
-    var memSection   = document.getElementById("mem-section");
-    var memName      = document.getElementById("mem-name");
-    var memType      = document.getElementById("mem-type");
-    var memDate      = document.getElementById("mem-date");
-    var memNote      = document.getElementById("mem-note");
-    var memAdd       = document.getElementById("mem-add");
-    var memExport    = document.getElementById("mem-export");
-
-    var calSection   = document.getElementById("calendar-section");
-    var calTitle     = document.getElementById("cal-title");
-    var calGrid      = document.getElementById("cal-grid");
-    var calPrev      = document.getElementById("cal-prev");
-    var calNext      = document.getElementById("cal-next");
-    var calTodayBtn  = document.getElementById("cal-today");
-    var calDayLabel  = document.getElementById("cal-day-label");
-    var calDayList   = document.getElementById("cal-day-list");
-
-    var toast        = document.getElementById("toast");
-    var exportBar    = document.getElementById("exportbar");
-    var reminderToggle = document.getElementById("reminder-toggle");
-
-    var pillToday = document.getElementById("pill-today");
-    var pillWeek  = document.getElementById("pill-week");
-    var pillTotal = document.getElementById("pill-total");
-
-    var leftCard  = document.getElementById("left-card");
-    var rightCard = document.getElementById("right-card");
-    var mainGrid = document.getElementById("main-grid") || (leftCard ? leftCard.closest(".grid") : null);
-
-    var activeTab   = "alle";
-    var searchQuery = "";
-    var remindersOn = loadRemindersOn();
-
-    var calYear = (new Date()).getFullYear();
-    var calMonth = (new Date()).getMonth();
-    var calSelectedISO = null;
-
-    function showToast(msg){
-      toast.innerHTML = msg;
-      toast.classList.add("show");
-      clearTimeout(showToast._t);
-      showToast._t = setTimeout(function(){ toast.classList.remove("show"); }, 2200);
-    }
-
-    function pad2(n){ return (n<10?"0":"")+n; }
-
-    function dateToISO(d){
-      var yyyy = d.getFullYear();
-      var mm = pad2(d.getMonth()+1);
-      var dd = pad2(d.getDate());
-      return yyyy+"-"+mm+"-"+dd;
-    }
-
-    function isoToLocalDate(iso){
-      var p = String(iso||"").split("-");
-      var y = parseInt(p[0],10);
-      var m = parseInt(p[1],10);
-      var d = parseInt(p[2],10);
-      return new Date(y, m-1, d);
-    }
-
-    function escH(s){
-      return String(s||"").replace(/[&<>"']/g,function(m){
-        return ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" })[m];
-      });
-    }
-
-    function normalizeISO(iso){
-      if (!iso) return "";
-      if (/^\d{4}-\d{2}-\d{2}$/.test(iso)) return iso;
-      try{
-        var d = new Date(iso);
-        if (isNaN(d)) return "";
-        return dateToISO(new Date(d.getFullYear(), d.getMonth(), d.getDate()));
-      }catch(e){ return ""; }
-    }
-
-    function computeCounts(){
-      var today = new Date();
-      var todayISO = dateToISO(new Date(today.getFullYear(), today.getMonth(), today.getDate()));
-      var weekEnd = new Date(today.getFullYear(), today.getMonth(), today.getDate()+7);
-      var weekEndISO = dateToISO(weekEnd);
-
-      var list = appointments.slice();
-      var todayCount = 0;
-      var weekCount = 0;
-
-      list.forEach(function(a){
-        var d = normalizeISO(a.date);
-        if (!d) return;
-        if (d === todayISO) todayCount++;
-        if (d >= todayISO && d < weekEndISO) weekCount++;
-      });
-
-      pillToday.textContent = "Vandaag: " + todayCount;
-      pillWeek.textContent = "Deze week: " + weekCount;
-      pillTotal.textContent = "Totaal: " + list.length;
-    }
-
-    function filteredAppointments(){
-      var list = appointments.slice();
-
-      if (activeTab !== "alle"){
-        list = list.filter(function(a){ return a.who === activeTab; });
-      }
-
-      if (searchQuery){
-        var q = searchQuery.toLowerCase();
-        list = list.filter(function(a){
-          return (a.desc||"").toLowerCase().includes(q) ||
-                 (a.date||"").toLowerCase().includes(q) ||
-                 (a.time||"").toLowerCase().includes(q) ||
-                 (a.who||"").toLowerCase().includes(q);
-        });
-      }
-
-      list.sort(function(a,b){
-        var da = (a.date||"") + " " + (a.time||"");
-        var db = (b.date||"") + " " + (b.time||"");
-        return da.localeCompare(db);
-      });
-
-      return list;
-    }
-
-    function buildICS(apts){
-      var lines = [
-        "BEGIN:VCALENDAR",
-        "VERSION:2.0",
-        "PRODID:-//Rob Borghouts//Onze Agenda//NL",
-        "CALSCALE:GREGORIAN",
-        "METHOD:PUBLISH"
-      ];
-
-      apts.forEach(function(a){
-        var d = normalizeISO(a.date);
-        if (!d) return;
-        var dt = d.replace(/-/g,"");
-        var summary = (a.who==="rob"?"Rob":(a.who==="lizet"?"Lizet":"Beide")) + " - " + (a.desc||"");
-        lines.push("BEGIN:VEVENT");
-        lines.push("UID:apt-"+a.id+"@onze-agenda");
-        lines.push("DTSTAMP:"+new Date().toISOString().replace(/[-:.]/g,"").slice(0,15)+"Z");
-        if (a.time){
-          var tm = a.time.replace(":","");
-          lines.push("DTSTART:"+dt+"T"+tm+"00");
-          lines.push("DTEND:"+dt+"T"+tm+"00");
-        } else {
-          lines.push("DTSTART;VALUE=DATE:"+dt);
-        }
-        lines.push("SUMMARY:"+summary.replace(/\n/g," ").slice(0,160));
-        lines.push("END:VEVENT");
-      });
-
-      lines.push("END:VCALENDAR");
-      return lines.join("\r\n");
-    }
-
-    function downloadTextFile(filename, content, mime){
-      var blob = new Blob([content],{type:mime||"text/plain;charset=utf-8"});
-      var url = URL.createObjectURL(blob);
-      var a = document.createElement("a");
-      a.href = url;
-      a.download = filename;
-      a.click();
-      URL.revokeObjectURL(url);
-    }
-
-    function downloadICSFromList(list, filename){
-      if (!list.length){ showToast("Geen afspraken om te exporteren"); return; }
-      downloadTextFile(filename, buildICS(list), "text/calendar;charset=utf-8");
-    }
-   function nextBirthdayDateISO(mmdd) {
-      var now = new Date();
-      var y = now.getFullYear();
-      var m = parseInt(mmdd.slice(0,2),10);
-      var d = parseInt(mmdd.slice(3,5),10);
-
-      var dt = new Date(y, m-1, d);
-      dt.setHours(0,0,0,0);
-
-      var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-      if (dt.getTime() < today.getTime()) {
-        dt = new Date(y+1, m-1, d);
-        dt.setHours(0,0,0,0);
-      }
-
-      return dateToISO(dt);
-    }
-
-    function daysUntil(iso) {
-      var now = new Date();
-      var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-      var dt = isoToLocalDate(iso);
-      var diff = Math.round((dt.getTime() - today.getTime()) / 86400000);
-      return diff;
-    }
-
-    function buildBdayICS(list) {
-      var lines = ["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Rob Borghouts//Verjaardagen//NL","CALSCALE:GREGORIAN","METHOD:PUBLISH"];
-      list.forEach(function(b) {
-        if (!b.mmdd) return;
-        var year = (new Date()).getFullYear();
-        var m = b.mmdd.slice(0,2);
-        var d = b.mmdd.slice(3,5);
-        var dtstart = ""+year+m+d;
-        lines.push(
-          "BEGIN:VEVENT",
-          "UID:bday-"+b.id+"@onze-agenda",
-          "SUMMARY:🎂 Verjaardag "+(b.name||""),
-          "DTSTART;VALUE=DATE:"+dtstart,
-          "RRULE:FREQ=YEARLY",
-          "DTSTAMP:"+new Date().toISOString().replace(/[-:.]/g,"").slice(0,15)+"Z",
-          "END:VEVENT"
-        );
-      });
-      lines.push("END:VCALENDAR");
-      return lines.join("\r\n");
-    }
-
-    function downloadBdayICS() {
-      if (!birthdays.length) { alert("Geen verjaardagen."); return; }
-      var blob = new Blob([buildBdayICS(birthdays)],{type:"text/calendar;charset=utf-8"});
-      var url  = URL.createObjectURL(blob);
-      var a    = document.createElement("a"); a.href=url; a.download="verjaardagen.ics"; a.click();
-      URL.revokeObjectURL(url);
-    }
-
-    function buildMemICS(list){
-      var lines = ["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Rob Borghouts//Herinneringen//NL","CALSCALE:GREGORIAN","METHOD:PUBLISH"];
-      list.forEach(function(m){
-        if (!m.mmdd) return;
-        var year = (new Date()).getFullYear();
-        var dtstart = ""+year+m.mmdd.slice(0,2)+m.mmdd.slice(3,5);
-        var title = "🕯️ "+(m.type||"Herinnering")+": "+(m.name||"");
-        if (m.note) title += " - " + m.note;
-        lines.push(
-          "BEGIN:VEVENT",
-          "UID:mem-"+m.id+"@onze-agenda",
-          "SUMMARY:"+title.replace(/\n/g," ").slice(0,180),
-          "DTSTART;VALUE=DATE:"+dtstart,
-          "RRULE:FREQ=YEARLY",
-          "DTSTAMP:"+new Date().toISOString().replace(/[-:.]/g,"").slice(0,15)+"Z",
-          "END:VEVENT"
-        );
-      });
-      lines.push("END:VCALENDAR");
-      return lines.join("\r\n");
-    }
-
-    function downloadMemICS(){
-      if (!memories.length) { alert("Geen herinneringen."); return; }
-      var blob = new Blob([buildMemICS(memories)],{type:"text/calendar;charset=utf-8"});
-      var url  = URL.createObjectURL(blob);
-      var a    = document.createElement("a"); a.href=url; a.download="herinneringen.ics"; a.click();
-      URL.revokeObjectURL(url);
-    }
-
-    function renderBirthdays() {
-      document.getElementById("count-bdays").textContent = "("+birthdays.length+")";
-
-      var q = (searchQuery || "").trim().toLowerCase();
-      var list = birthdays.slice();
-
-      if (q) {
-        list = list.filter(function(b){
-          return (b.name||"").toLowerCase().includes(q);
-        });
-      }
-
-      list.forEach(function(b){
-        b.nextISO = nextBirthdayDateISO(b.mmdd);
-        b.daysLeft = daysUntil(b.nextISO);
-      });
-
-      list.sort(function(a,b){ return a.daysLeft - b.daysLeft; });
-
-      if (!list.length) {
-        aptList.innerHTML = q
-          ? '<div class="empty-state"><div class="icon">🔎</div><p>Geen verjaardagen gevonden.<br>Probeer een andere zoekterm.</p></div>'
-          : '<div class="empty-state"><div class="icon">🎂</div><p>Geen verjaardagen.<br>Voeg er eentje toe hierboven.</p></div>';
-        return;
-      }
-
-      var html = "";
-      html += '<div class="section-title">Verjaardagen<span class="count-badge">'+list.length+"</span></div>";
-
-      list.forEach(function(b){
-        var whenTxt = b.nextISO ? isoToLocalDate(b.nextISO).toLocaleDateString("nl-NL",{day:"numeric",month:"long",year:"numeric"}) : "";
-        var leftTxt = (b.daysLeft === 0) ? "Vandaag" : (b.daysLeft === 1 ? "Morgen" : "Over "+b.daysLeft+" dagen");
-
-        html += '<div class="apt-card beide" style="margin-bottom:8px">'
-          +'<div class="apt-icon">🎂</div>'
-          +'<div class="apt-body">'
-          +'<div class="apt-who beide">Verjaardag</div>'
-          +'<div class="apt-desc">'+escH(b.name||"")+'</div>'
-          +'<div class="apt-meta">'
-          +'<span>📅 '+escH(whenTxt)+'</span>'
-          +'<span>'+escH(leftTxt)+'</span>'
-          +'</div></div>'
-          +'<div class="apt-actions">'
-          +'<button class="bday-del-btn" data-bid="'+b.id+'" title="Verwijder">🗑️</button>'
-          +'</div>'
-          +'</div>';
-      });
-
-      aptList.innerHTML = html;
-    }
-
-    function renderMemories(){
-      document.getElementById("count-mem").textContent = "("+memories.length+")";
-
-      var q = (searchQuery || "").trim().toLowerCase();
-      var list = memories.slice();
-
-      if (q){
-        list = list.filter(function(m){
-          return (m.name||"").toLowerCase().includes(q) ||
-                 (m.type||"").toLowerCase().includes(q) ||
-                 (m.note||"").toLowerCase().includes(q);
-        });
-      }
-
-      list.forEach(function(m){
-        m.nextISO = nextBirthdayDateISO(m.mmdd);
-        m.daysLeft = daysUntil(m.nextISO);
-      });
-
-      list.sort(function(a,b){ return a.daysLeft - b.daysLeft; });
-
-      if (!list.length){
-        aptList.innerHTML = q
-          ? '<div class="empty-state"><div class="icon">🔎</div><p>Geen herinneringen gevonden.<br>Probeer een andere zoekterm.</p></div>'
-          : '<div class="empty-state"><div class="icon">🕯️</div><p>Geen herinneringen.<br>Voeg er eentje toe hierboven.</p></div>';
-        return;
-      }
-
-      var html = "";
-      html += '<div class="section-title">Herinneringen<span class="count-badge">'+list.length+"</span></div>";
-
-      list.forEach(function(m){
-        var whenTxt = m.nextISO ? isoToLocalDate(m.nextISO).toLocaleDateString("nl-NL",{day:"numeric",month:"long",year:"numeric"}) : "";
-        var leftTxt = (m.daysLeft === 0) ? "Vandaag" : (m.daysLeft === 1 ? "Morgen" : "Over "+m.daysLeft+" dagen");
-
-        var yearsTxt = "";
-        if (m.year){
-          var nowY = (new Date()).getFullYear();
-          var yrs = nowY - m.year;
-          if (yrs >= 0) yearsTxt = " , " + yrs + " jaar";
-        }
-
-        html += '<div class="apt-card beide" style="margin-bottom:8px">'
-          +'<div class="apt-icon">🕯️</div>'
-          +'<div class="apt-body">'
-          +'<div class="apt-who beide">'+escH(m.type||"Herinnering")+'</div>'
-          +'<div class="apt-desc">'+escH(m.name||"")+'</div>'
-          +'<div class="apt-meta">'
-          +'<span>📅 '+escH(whenTxt)+'</span>'
-          +'<span>'+escH(leftTxt + yearsTxt)+'</span>'
-          +(m.note ? '<span>📝 '+escH(m.note)+'</span>' : '')
-          +'</div></div>'
-          +'<div class="apt-actions">'
-          +'<button class="mem-del-btn" data-mid="'+m.id+'" title="Verwijder">🗑️</button>'
-          +'</div>'
-          +'</div>';
-      });
-
-      aptList.innerHTML = html;
-    }
-
-    function updateTabCounts(){
-      var all = appointments.length;
-      var rob = appointments.filter(function(a){return a.who==="rob";}).length;
-      var liz = appointments.filter(function(a){return a.who==="lizet";}).length;
-
-      document.getElementById("count-alle").textContent  = "("+all+")";
-      document.getElementById("count-rob").textContent   = "("+rob+")";
-      document.getElementById("count-lizet").textContent = "("+liz+")";
-      document.getElementById("count-bdays").textContent = "("+birthdays.length+")";
-      document.getElementById("count-mem").textContent   = "("+memories.length+")";
-    }
-
-    function monthNameNL(m){
-      return ["januari","februari","maart","april","mei","juni","juli","augustus","september","oktober","november","december"][m] || "";
-    }
-
-    function makeISO(y,m1,d){
-      var mm = pad2(m1);
-      var dd = pad2(d);
-      return y+"-"+mm+"-"+dd;
-    }
-
-    function isValidDate(y,m0,d){
-      var dt = new Date(y,m0,d);
-      return dt.getFullYear()===y && dt.getMonth()===m0 && dt.getDate()===d;
-    }
-
-    function collectEventsForISO(iso){
-      var out = [];
-      var d = normalizeISO(iso);
-
-      appointments.forEach(function(a){
-        var ad = normalizeISO(a.date);
-        if (ad && ad === d){
-          out.push({
-            kind:"apt",
-            who:a.who||"beide",
-            time:a.time||"",
-            title:a.desc||"Afspraak",
-            id:a.id
-          });
-        }
-      });
-
-      var y = parseInt(d.slice(0,4),10);
-      var mm = d.slice(5,7);
-      var dd = d.slice(8,10);
-      var mmdd = mm+"-"+dd;
-
-      birthdays.forEach(function(b){
-        if (b.mmdd === mmdd){
-          out.push({
-            kind:"bday",
-            who:"beide",
-            time:"",
-            title:"Verjaardag " + (b.name||""),
-            id:b.id
-          });
-        }
-      });
-
-      memories.forEach(function(m){
-        if (m.mmdd === mmdd){
-          var extra = "";
-          if (m.year){
-            var yrs = y - m.year;
-            if (yrs >= 0) extra = " , " + yrs + " jaar";
-          }
-          out.push({
-            kind:"mem",
-            who:"beide",
-            time:"",
-            title:(m.type||"Herinnering") + ": " + (m.name||"") + extra,
-            note:m.note||"",
-            id:m.id
-          });
-        }
-      });
-
-      out.sort(function(a,b){
-        return String(a.time||"").localeCompare(String(b.time||""));
-      });
-
-      return out;
-    }
-
-    function renderCalendar(){
-      calTitle.textContent = "Kalender, " + monthNameNL(calMonth) + " " + calYear;
-
-      var first = new Date(calYear, calMonth, 1);
-      var firstDowMon1 = (first.getDay() + 6) % 7;
-      var start = new Date(calYear, calMonth, 1 - firstDowMon1);
-
-      var grid = "";
-      var todayISO = dateToISO(new Date());
-
-      for (var i=0;i<42;i++){
-        var dt = new Date(start.getFullYear(), start.getMonth(), start.getDate()+i);
-        var inMonth = (dt.getMonth() === calMonth);
-        var iso = dateToISO(dt);
-        var ev = collectEventsForISO(iso);
-        var aptCount = 0, bCount = 0, mCount = 0;
-
-        ev.forEach(function(e){
-          if (e.kind==="apt") aptCount++;
-          if (e.kind==="bday") bCount++;
-          if (e.kind==="mem") mCount++;
-        });
-
-        var cls = "cal-cell" + (inMonth ? "" : " dim") + (calSelectedISO===iso ? " selected" : "");
-        var badges = "";
-        if (aptCount) badges += '<span class="cal-badge">📌 '+aptCount+'</span>';
-        if (bCount) badges += '<span class="cal-badge">🎂 '+bCount+'</span>';
-        if (mCount) badges += '<span class="cal-badge">🕯️ '+mCount+'</span>';
-
-        grid += '<div class="'+cls+'" data-iso="'+iso+'">'
-             +  '<div class="cal-day">'+dt.getDate()+'</div>'
-             +  (badges ? '<div class="cal-badges">'+badges+'</div>' : '')
-             +  '</div>';
-      }
-
-      calGrid.innerHTML = grid;
-
-      if (!calSelectedISO){
-        calSelectedISO = todayISO;
-      }
-
-      renderCalendarDay(calSelectedISO);
-    }
-
-    function renderCalendarDay(iso){
-      calSelectedISO = normalizeISO(iso);
-      var dt = isoToLocalDate(calSelectedISO);
-      calDayLabel.textContent = dt.toLocaleDateString("nl-NL",{day:"numeric",month:"long",year:"numeric"});
-
-      var ev = collectEventsForISO(calSelectedISO);
-
-      if (!ev.length){
-        calDayList.innerHTML = '<div class="empty-state"><div class="icon">🗓️</div><p>Geen items op deze dag.</p></div>';
-      } else {
-        var html = "";
-        html += '<div class="section-title">Items<span class="count-badge">'+ev.length+'</span></div>';
-
-        ev.forEach(function(e){
-          var icon = e.kind==="apt" ? "📌" : (e.kind==="bday" ? "🎂" : "🕯️");
-          var cls = (e.who==="rob" ? "rob" : (e.who==="lizet" ? "lizet" : "beide"));
-          var whoLabel = e.kind==="apt"
-            ? (e.who==="rob"?"Rob":(e.who==="lizet"?"Lizet":"Beide"))
-            : (e.kind==="bday" ? "Verjaardag" : "Herinnering");
-
-          var timeTxt = e.time ? ("⏰ "+e.time) : "";
-
-          html += '<div class="apt-card '+cls+'" style="margin-bottom:8px">'
-            +'<div class="apt-icon">'+icon+'</div>'
-            +'<div class="apt-body">'
-            +'<div class="apt-who '+cls+'">'+escH(whoLabel)+'</div>'
-            +'<div class="apt-desc">'+escH(e.title||"")+'</div>'
-            +'<div class="apt-meta">'
-            +(timeTxt ? '<span>'+escH(timeTxt)+'</span>' : '')
-            +(e.note ? '<span>📝 '+escH(e.note)+'</span>' : '')
-            +'</div></div>'
-            +'</div>';
-        });
-
-        calDayList.innerHTML = html;
-      }
-
-      var cells = Array.from(calGrid.querySelectorAll(".cal-cell"));
-      cells.forEach(function(c){
-        if (c.getAttribute("data-iso") === calSelectedISO) c.classList.add("selected");
-        else c.classList.remove("selected");
-      });
-    }
-
-    function showMainGrid(){
-  if (mainGrid) mainGrid.style.display = "";
-  if (leftCard) leftCard.style.display = "";
-  if (rightCard) rightCard.style.gridColumn = "";
+  <div class="card" id="right-card">
+    <h2><span>Afspraken</span><span id="list-subtitle" style="color:var(--muted);font-weight:800;font-size:.85rem;">komende</span></h2>
+    <div class="list" id="apt-list"></div>
+    <div class="body">
+      <div class="exportbar" id="exportbar">
+        <button id="export-all">&#128228; Exporteer alles (.ics)</button>
+        <button id="export-tab">&#128228; Exporteer tab (.ics)</button>
+      </div>
+      <div class="footerbar">
+        <div class="small">Alles wordt lokaal opgeslagen op dit apparaat.</div>
+        <button class="secondary" id="clear-all">Alles wissen</button>
+      </div>
+    </div>
+  </div>
+</div>
+```
+
+  </div>
+  <div class="toast" id="toast">...</div>
+</div>
+
+<script>
+var STORAGE_KEY="afspraken_v3";
+var REMIND_KEY="afspraken_reminders";
+var BDAY_KEY="verjaardagen_v1";
+var MEM_KEY="herinneringen_v1";
+var appointments=[];
+var birthdays=[];
+var memories=[];
+try{appointments=JSON.parse(localStorage.getItem(STORAGE_KEY))||[];}catch(e){}
+try{birthdays=JSON.parse(localStorage.getItem(BDAY_KEY))||[];}catch(e){}
+try{memories=JSON.parse(localStorage.getItem(MEM_KEY))||[];}catch(e){}
+function saveAppointments(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(appointments));}catch(e){}}
+function saveBdays(){try{localStorage.setItem(BDAY_KEY,JSON.stringify(birthdays));}catch(e){}}
+function saveMem(){try{localStorage.setItem(MEM_KEY,JSON.stringify(memories));}catch(e){}}
+function loadRemindersOn(){try{var v=localStorage.getItem(REMIND_KEY);if(v===null)return true;return v==="1";}catch(e){return true;}}
+function saveRemindersOn(on){try{localStorage.setItem(REMIND_KEY,on?"1":"0");}catch(e){}}
+
+var tabs=Array.from(document.querySelectorAll(".tab"));
+var whoSelect=document.getElementById("who");
+var dateInput=document.getElementById("date");
+var timeInput=document.getElementById("time");
+var descInput=document.getElementById("desc");
+var addBtn=document.getElementById("add-btn");
+var resetBtn=document.getElementById("reset-btn");
+var aptList=document.getElementById("apt-list");
+var exportAllBtn=document.getElementById("export-all");
+var exportTabBtn=document.getElementById("export-tab");
+var clearAllBtn=document.getElementById("clear-all");
+var searchInput=document.getElementById("search-input");
+var searchClear=document.getElementById("search-clear");
+var searchCount=document.getElementById("search-count");
+var bdaySection=document.getElementById("bday-section");
+var bdayName=document.getElementById("bday-name");
+var bdayDate=document.getElementById("bday-date");
+var bdayAdd=document.getElementById("bday-add");
+var bdayExport=document.getElementById("bday-export");
+var memSection=document.getElementById("mem-section");
+var memName=document.getElementById("mem-name");
+var memType=document.getElementById("mem-type");
+var memDate=document.getElementById("mem-date");
+var memNote=document.getElementById("mem-note");
+var memAdd=document.getElementById("mem-add");
+var memExport=document.getElementById("mem-export");
+var calSection=document.getElementById("calendar-section");
+var calTitle=document.getElementById("cal-title");
+var calGrid=document.getElementById("cal-grid");
+var calPrev=document.getElementById("cal-prev");
+var calNext=document.getElementById("cal-next");
+var calTodayBtn=document.getElementById("cal-today");
+var calDayLabel=document.getElementById("cal-day-label");
+var calDayList=document.getElementById("cal-day-list");
+var toast=document.getElementById("toast");
+var exportBar=document.getElementById("exportbar");
+var reminderToggle=document.getElementById("reminder-toggle");
+var pillToday=document.getElementById("pill-today");
+var pillWeek=document.getElementById("pill-week");
+var pillTotal=document.getElementById("pill-total");
+var leftCard=document.getElementById("left-card");
+var rightCard=document.getElementById("right-card");
+var mainGrid=document.getElementById("main-grid");
+var activeTab="alle";
+var searchQuery="";
+var remindersOn=loadRemindersOn();
+var calYear=(new Date()).getFullYear();
+var calMonth=(new Date()).getMonth();
+var calSelectedISO=null;
+
+function showToast(msg){toast.innerHTML=msg;toast.classList.add("show");clearTimeout(showToast._t);showToast._t=setTimeout(function(){toast.classList.remove("show");},2200);}
+function pad2(n){return(n<10?"0":"")+n;}
+function dateToISO(d){return d.getFullYear()+"-"+pad2(d.getMonth()+1)+"-"+pad2(d.getDate());}
+function isoToLocalDate(iso){var p=String(iso||"").split("-");return new Date(parseInt(p[0],10),parseInt(p[1],10)-1,parseInt(p[2],10));}
+function escH(s){return String(s||"").replace(/[&<>"']/g,function(m){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m];});}
+function normalizeISO(iso){if(!iso)return"";if(/^\d{4}-\d{2}-\d{2}$/.test(iso))return iso;try{var d=new Date(iso);if(isNaN(d))return"";return dateToISO(new Date(d.getFullYear(),d.getMonth(),d.getDate()));}catch(e){return"";}}
+function monthNameNL(m){return["januari","februari","maart","april","mei","juni","juli","augustus","september","oktober","november","december"][m]||"";}
+
+function computeCounts(){
+  var today=new Date();
+  var todayISO=dateToISO(new Date(today.getFullYear(),today.getMonth(),today.getDate()));
+  var weekEndISO=dateToISO(new Date(today.getFullYear(),today.getMonth(),today.getDate()+7));
+  var todayCount=0,weekCount=0;
+  appointments.forEach(function(a){var d=normalizeISO(a.date);if(!d)return;if(d===todayISO)todayCount++;if(d>=todayISO&&d<weekEndISO)weekCount++;});
+  pillToday.textContent="Vandaag: "+todayCount;
+  pillWeek.textContent="Deze week: "+weekCount;
+  pillTotal.textContent="Totaal: "+appointments.length;
 }
 
-function hideMainGrid(){
-  if (mainGrid) mainGrid.style.display = "none";
+function updateTabCounts(){
+  document.getElementById("count-alle").textContent="("+appointments.length+")";
+  document.getElementById("count-rob").textContent="("+appointments.filter(function(a){return a.who==="rob";}).length+")";
+  document.getElementById("count-lizet").textContent="("+appointments.filter(function(a){return a.who==="lizet";}).length+")";
+  document.getElementById("count-bdays").textContent="("+birthdays.length+")";
+  document.getElementById("count-mem").textContent="("+memories.length+")";
 }
-    
 
-    function render(){
-      updateTabCounts();
-      computeCounts();
+function filteredAppointments(){
+  var list=appointments.slice();
+  if(activeTab!=="alle")list=list.filter(function(a){return a.who===activeTab;});
+  if(searchQuery){var q=searchQuery.toLowerCase();list=list.filter(function(a){return(a.desc||"").toLowerCase().includes(q)||(a.date||"").toLowerCase().includes(q)||(a.who||"").toLowerCase().includes(q);});}
+  list.sort(function(a,b){return((a.date||"")+" "+(a.time||"")).localeCompare((b.date||"")+" "+(b.time||""));});
+  return list;
+}
 
-      var listSubtitle = document.getElementById("list-subtitle");
+function nextBirthdayDateISO(mmdd){
+  var now=new Date();var y=now.getFullYear();
+  var m=parseInt(mmdd.slice(0,2),10);var d=parseInt(mmdd.slice(3,5),10);
+  var dt=new Date(y,m-1,d);dt.setHours(0,0,0,0);
+  var today=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  if(dt.getTime()<today.getTime())dt=new Date(y+1,m-1,d);
+  return dateToISO(dt);
+}
 
-      if (activeTab === "kalender"){
-        calSection.style.display = "block";
-        bdaySection.style.display = "none";
-        memSection.style.display = "none";
-        hideMainGrid();
-        window.scrollTo({ top: 0, behavior: "smooth" });
-        renderCalendar();
-        return;
-      }
+function daysUntil(iso){
+  var today=new Date();today=new Date(today.getFullYear(),today.getMonth(),today.getDate());
+  var dt=isoToLocalDate(iso);
+  return Math.round((dt.getTime()-today.getTime())/86400000);
+}
 
-      calSection.style.display = "none";
-      showMainGrid();
-     if (activeTab === "verjaardagen") {
-        bdaySection.style.display = "block";
-        memSection.style.display = "none";
-        exportBar.style.display = "none";
+function renderBirthdays(){
+  document.getElementById("count-bdays").textContent="("+birthdays.length+")";
+  var q=(searchQuery||"").trim().toLowerCase();
+  var list=birthdays.slice();
+  if(q)list=list.filter(function(b){return(b.name||"").toLowerCase().includes(q);});
+  list.forEach(function(b){b.nextISO=nextBirthdayDateISO(b.mmdd);b.daysLeft=daysUntil(b.nextISO);});
+  list.sort(function(a,b){return a.daysLeft-b.daysLeft;});
+  if(!list.length){aptList.innerHTML='<div class="empty-state"><div class="icon">&#127874;</div><p>Geen verjaardagen.<br>Voeg er eentje toe hierboven.</p></div>';return;}
+  var html='<div class="section-title">Verjaardagen<span class="count-badge">'+list.length+"</span></div>";
+  list.forEach(function(b){
+    var whenTxt=b.nextISO?isoToLocalDate(b.nextISO).toLocaleDateString("nl-NL",{day:"numeric",month:"long",year:"numeric"}):"";
+    var leftTxt=b.daysLeft===0?"Vandaag":b.daysLeft===1?"Morgen":"Over "+b.daysLeft+" dagen";
+    html+='<div class="apt-card beide" style="margin-bottom:8px"><div class="apt-icon">&#127874;</div><div class="apt-body"><div class="apt-who beide">Verjaardag</div><div class="apt-desc">'+escH(b.name||"")+'</div><div class="apt-meta"><span>&#128197; '+escH(whenTxt)+'</span><span>'+escH(leftTxt)+'</span></div></div><div class="apt-actions"><button class="bday-del-btn" data-bid="'+b.id+'" title="Verwijder">&#128465;</button></div></div>';
+  });
+  aptList.innerHTML=html;
+}
 
-        leftCard.style.display = "none";
-        rightCard.style.gridColumn = "1 / -1";
-        window.scrollTo({ top: 0, behavior: "smooth" });
+function renderMemories(){
+  document.getElementById("count-mem").textContent="("+memories.length+")";
+  var q=(searchQuery||"").trim().toLowerCase();
+  var list=memories.slice();
+  if(q)list=list.filter(function(m){return(m.name||"").toLowerCase().includes(q)||(m.type||"").toLowerCase().includes(q)||(m.note||"").toLowerCase().includes(q);});
+  list.forEach(function(m){m.nextISO=nextBirthdayDateISO(m.mmdd);m.daysLeft=daysUntil(m.nextISO);});
+  list.sort(function(a,b){return a.daysLeft-b.daysLeft;});
+  if(!list.length){aptList.innerHTML='<div class="empty-state"><div class="icon">&#128367;</div><p>Geen herinneringen.<br>Voeg er eentje toe hierboven.</p></div>';return;}
+  var html='<div class="section-title">Herinneringen<span class="count-badge">'+list.length+"</span></div>";
+  list.forEach(function(m){
+    var whenTxt=m.nextISO?isoToLocalDate(m.nextISO).toLocaleDateString("nl-NL",{day:"numeric",month:"long",year:"numeric"}):"";
+    var leftTxt=m.daysLeft===0?"Vandaag":m.daysLeft===1?"Morgen":"Over "+m.daysLeft+" dagen";
+    var yearsTxt="";if(m.year){var yrs=(new Date()).getFullYear()-m.year;if(yrs>=0)yearsTxt=", "+yrs+" jaar";}
+    html+='<div class="apt-card beide" style="margin-bottom:8px"><div class="apt-icon">&#128367;</div><div class="apt-body"><div class="apt-who beide">'+escH(m.type||"Herinnering")+'</div><div class="apt-desc">'+escH(m.name||"")+'</div><div class="apt-meta"><span>&#128197; '+escH(whenTxt)+'</span><span>'+escH(leftTxt+yearsTxt)+'</span>'+(m.note?'<span>&#128221; '+escH(m.note)+'</span>':"")+'</div></div><div class="apt-actions"><button class="mem-del-btn" data-mid="'+m.id+'" title="Verwijder">&#128465;</button></div></div>';
+  });
+  aptList.innerHTML=html;
+}
 
-        renderBirthdays();
-        return;
-      }
+function collectEventsForISO(iso){
+  var out=[];var d=normalizeISO(iso);
+  appointments.forEach(function(a){if(normalizeISO(a.date)===d)out.push({kind:"apt",who:a.who||"beide",time:a.time||"",title:a.desc||"Afspraak",id:a.id});});
+  var mmdd=d.slice(5,7)+"-"+d.slice(8,10);
+  birthdays.forEach(function(b){if(b.mmdd===mmdd)out.push({kind:"bday",who:"beide",time:"",title:"Verjaardag "+(b.name||""),id:b.id});});
+  memories.forEach(function(m){if(m.mmdd===mmdd){var extra="";if(m.year){var yrs=parseInt(d.slice(0,4),10)-m.year;if(yrs>=0)extra=", "+yrs+" jaar";}out.push({kind:"mem",who:"beide",time:"",title:(m.type||"Herinnering")+": "+(m.name||"")+extra,note:m.note||"",id:m.id});}});
+  out.sort(function(a,b){return String(a.time||"").localeCompare(String(b.time||""));});
+  return out;
+}
 
-      if (activeTab === "herinneringen") {
-        bdaySection.style.display = "none";
-        memSection.style.display = "block";
-        exportBar.style.display = "none";
+function renderCalendar(){
+  calTitle.textContent="Kalender, "+monthNameNL(calMonth)+" "+calYear;
+  var first=new Date(calYear,calMonth,1);
+  var firstDowMon1=(first.getDay()+6)%7;
+  var start=new Date(calYear,calMonth,1-firstDowMon1);
+  var grid="";var todayISO=dateToISO(new Date());
+  for(var i=0;i<42;i++){
+    var dt=new Date(start.getFullYear(),start.getMonth(),start.getDate()+i);
+    var inMonth=(dt.getMonth()===calMonth);
+    var iso=dateToISO(dt);
+    var ev=collectEventsForISO(iso);
+    var aptCount=0,bCount=0,mCount=0;
+    ev.forEach(function(e){if(e.kind==="apt")aptCount++;if(e.kind==="bday")bCount++;if(e.kind==="mem")mCount++;});
+    var cls="cal-cell"+(inMonth?"":" dim")+(calSelectedISO===iso?" selected":"");
+    var badges="";
+    if(aptCount)badges+='<span class="cal-badge">&#128204; '+aptCount+"</span>";
+    if(bCount)badges+='<span class="cal-badge">&#127874; '+bCount+"</span>";
+    if(mCount)badges+='<span class="cal-badge">&#128367; '+mCount+"</span>";
+    grid+='<div class="'+cls+'" data-iso="'+iso+'"><div class="cal-day">'+dt.getDate()+"</div>"+(badges?'<div class="cal-badges">'+badges+"</div>":"")+"</div>";
+  }
+  calGrid.innerHTML=grid;
+  if(!calSelectedISO)calSelectedISO=todayISO;
+  renderCalendarDay(calSelectedISO);
+}
 
-        leftCard.style.display = "none";
-        rightCard.style.gridColumn = "1 / -1";
-        window.scrollTo({ top: 0, behavior: "smooth" });
+function renderCalendarDay(iso){
+  calSelectedISO=normalizeISO(iso);
+  var dt=isoToLocalDate(calSelectedISO);
+  calDayLabel.textContent=dt.toLocaleDateString("nl-NL",{day:"numeric",month:"long",year:"numeric"});
+  var ev=collectEventsForISO(calSelectedISO);
+  if(!ev.length){calDayList.innerHTML='<div class="empty-state"><div class="icon">&#128467;</div><p>Geen items op deze dag.</p></div>';return;}
+  var html='<div class="section-title">Items<span class="count-badge">'+ev.length+"</span></div>";
+  ev.forEach(function(e){
+    var icon=e.kind==="apt"?"&#128204;":(e.kind==="bday"?"&#127874;":"&#128367;");
+    var cls=e.who==="rob"?"rob":(e.who==="lizet"?"lizet":"beide");
+    var whoLabel=e.kind==="apt"?(e.who==="rob"?"Rob":(e.who==="lizet"?"Lizet":"Beide")):(e.kind==="bday"?"Verjaardag":"Herinnering");
+    html+='<div class="apt-card '+cls+'" style="margin-bottom:8px"><div class="apt-icon">'+icon+'</div><div class="apt-body"><div class="apt-who '+cls+'">'+escH(whoLabel)+'</div><div class="apt-desc">'+escH(e.title||"")+'</div><div class="apt-meta">'+(e.time?'<span>&#9200; '+escH(e.time)+"</span>":"")+(e.note?'<span>&#128221; '+escH(e.note)+"</span>":"")+'</div></div></div>';
+  });
+  calDayList.innerHTML=html;
+  Array.from(calGrid.querySelectorAll(".cal-cell")).forEach(function(c){
+    if(c.getAttribute("data-iso")===calSelectedISO)c.classList.add("selected");
+    else c.classList.remove("selected");
+  });
+}
 
-        renderMemories();
-        return;
-      }
+function showMainGrid(){if(mainGrid)mainGrid.style.display="";if(leftCard)leftCard.style.display="";if(rightCard)rightCard.style.gridColumn="";}
+function hideMainGrid(){if(mainGrid)mainGrid.style.display="none";}
 
-      bdaySection.style.display = "none";
-      memSection.style.display = "none";
-      exportBar.style.display = "";
+function render(){
+  updateTabCounts();computeCounts();
+  var listSubtitle=document.getElementById("list-subtitle");
+  if(activeTab==="kalender"){
+    calSection.style.display="block";bdaySection.style.display="none";memSection.style.display="none";hideMainGrid();
+    renderCalendar();return;
+  }
+  calSection.style.display="none";showMainGrid();
+  if(activeTab==="verjaardagen"){
+    bdaySection.style.display="block";memSection.style.display="none";exportBar.style.display="none";
+    leftCard.style.display="none";rightCard.style.gridColumn="1 / -1";
+    renderBirthdays();return;
+  }
+  if(activeTab==="herinneringen"){
+    bdaySection.style.display="none";memSection.style.display="block";exportBar.style.display="none";
+    leftCard.style.display="none";rightCard.style.gridColumn="1 / -1";
+    renderMemories();return;
+  }
+  bdaySection.style.display="none";memSection.style.display="none";exportBar.style.display="";
+  leftCard.style.display="";rightCard.style.gridColumn="";
+  var list=filteredAppointments();
+  searchCount.innerHTML=searchQuery?'<div class="pill">Zoekresultaten: '+list.length+"</div>":"";
+  if(!list.length){aptList.innerHTML=searchQuery?'<div class="empty-state"><div class="icon">&#128269;</div><p>Geen afspraken gevonden.</p></div>':'<div class="empty-state"><div class="icon">&#128197;</div><p>Geen afspraken.<br>Voeg er eentje toe links.</p></div>';if(listSubtitle)listSubtitle.textContent=searchQuery?"gevonden":"komende";return;}
+  if(listSubtitle)listSubtitle.textContent=searchQuery?"gevonden":"komende";
+  var html='<div class="section-title">Afspraken<span class="count-badge">'+list.length+"</span></div>";
+  list.forEach(function(a){
+    var whoLabel=a.who==="rob"?"Rob":(a.who==="lizet"?"Lizet":"Beide");
+    var cls=a.who||"beide";
+    var d=normalizeISO(a.date);
+    var dtTxt=d?isoToLocalDate(d).toLocaleDateString("nl-NL",{day:"numeric",month:"long",year:"numeric"}):"";
+    html+='<div class="apt-card '+cls+'" data-id="'+a.id+'"><div class="apt-icon">&#128204;</div><div class="apt-body"><div class="apt-who '+cls+'">'+whoLabel+'</div><div class="apt-desc">'+escH(a.desc||"")+'</div><div class="apt-meta"><span>&#128197; '+escH(dtTxt)+'</span>'+(a.time?'<span>&#9200; '+escH(a.time)+"</span>":"")+'</div></div><div class="apt-actions"><button class="apt-del-btn" data-id="'+a.id+'" title="Verwijder">&#128465;</button></div></div>';
+  });
+  aptList.innerHTML=html;
+}
 
-      leftCard.style.display = "";
-      rightCard.style.gridColumn = "";
+function buildICS(apts){
+  var lines=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Rob Borghouts//Onze Agenda//NL","CALSCALE:GREGORIAN","METHOD:PUBLISH"];
+  apts.forEach(function(a){
+    var d=normalizeISO(a.date);if(!d)return;var dt=d.replace(/-/g,"");
+    lines.push("BEGIN:VEVENT","UID:apt-"+a.id+"@onze-agenda","DTSTAMP:"+new Date().toISOString().replace(/[-:.]/g,"").slice(0,15)+"Z");
+    if(a.time){var tm=a.time.replace(":","");lines.push("DTSTART:"+dt+"T"+tm+"00","DTEND:"+dt+"T"+tm+"00");}
+    else lines.push("DTSTART;VALUE=DATE:"+dt);
+    lines.push("SUMMARY:"+((a.who==="rob"?"Rob":(a.who==="lizet"?"Lizet":"Beide"))+" - "+(a.desc||"")).slice(0,160),"END:VEVENT");
+  });
+  lines.push("END:VCALENDAR");return lines.join("\r\n");
+}
+function downloadICSFromList(list,filename){if(!list.length){showToast("Geen afspraken");return;}var blob=new Blob([buildICS(list)],{type:"text/calendar;charset=utf-8"});var url=URL.createObjectURL(blob);var a=document.createElement("a");a.href=url;a.download=filename;a.click();URL.revokeObjectURL(url);}
 
-      var list = filteredAppointments();
+function buildBdayICS(list){
+  var lines=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Rob Borghouts//Verjaardagen//NL","CALSCALE:GREGORIAN","METHOD:PUBLISH"];
+  list.forEach(function(b){if(!b.mmdd)return;var y=(new Date()).getFullYear();var m=b.mmdd.slice(0,2);var d=b.mmdd.slice(3,5);lines.push("BEGIN:VEVENT","UID:bday-"+b.id+"@onze-agenda","SUMMARY:Verjaardag "+(b.name||""),"DTSTART;VALUE=DATE:"+y+m+d,"RRULE:FREQ=YEARLY","DTSTAMP:"+new Date().toISOString().replace(/[-:.]/g,"").slice(0,15)+"Z","END:VEVENT");});
+  lines.push("END:VCALENDAR");return lines.join("\r\n");
+}
+function buildMemICS(list){
+  var lines=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Rob Borghouts//Herinneringen//NL","CALSCALE:GREGORIAN","METHOD:PUBLISH"];
+  list.forEach(function(m){if(!m.mmdd)return;var y=(new Date()).getFullYear();var dtstart=""+y+m.mmdd.slice(0,2)+m.mmdd.slice(3,5);lines.push("BEGIN:VEVENT","UID:mem-"+m.id+"@onze-agenda","SUMMARY:"+(m.type||"Herinnering")+": "+(m.name||""),"DTSTART;VALUE=DATE:"+dtstart,"RRULE:FREQ=YEARLY","DTSTAMP:"+new Date().toISOString().replace(/[-:.]/g,"").slice(0,15)+"Z","END:VEVENT");});
+  lines.push("END:VCALENDAR");return lines.join("\r\n");
+}
 
-      if (searchQuery){
-        searchCount.innerHTML = '<div class="pill">Zoekresultaten: '+list.length+'</div>';
-      } else {
-        searchCount.innerHTML = "";
-      }
+function scheduleNotification(a){
+  if(!remindersOn||!("Notification" in window))return;
+  var d=normalizeISO(a.date);if(!d)return;
+  var base=new Date(d+(a.time?"T"+a.time+":00":"T09:00:00"));
+  var when=base.getTime()-(15*60*1000);
+  if(when<=Date.now())return;
+  setTimeout(function(){try{new Notification("Afspraak",{body:(a.desc||"")+" ("+(a.who||"beide")+")"});}catch(e){}},when-Date.now());
+}
+function requestNotificationPermission(){if(!("Notification" in window))return;if(Notification.permission==="default")Notification.requestPermission();}
+function applyReminderToggleUI(){if(remindersOn)reminderToggle.classList.remove("off");else reminderToggle.classList.add("off");}
+function resetForm(){whoSelect.value="beide";dateInput.value=dateToISO(new Date());timeInput.value="";descInput.value="";}
 
-      if (!list.length){
-        aptList.innerHTML = searchQuery
-          ? '<div class="empty-state"><div class="icon">🔎</div><p>Geen afspraken gevonden.<br>Probeer een andere zoekterm.</p></div>'
-          : '<div class="empty-state"><div class="icon">📅</div><p>Geen afspraken.<br>Voeg er eentje toe links.</p></div>';
-        listSubtitle.textContent = searchQuery ? "gevonden" : "komende";
-        return;
-      }
+// EVENT LISTENERS
+tabs.forEach(function(btn){btn.addEventListener("click",function(){tabs.forEach(function(b){b.classList.remove("active");});btn.classList.add("active");activeTab=btn.getAttribute("data-tab");render();});});
+searchInput.addEventListener("input",function(){searchQuery=searchInput.value||"";render();});
+searchClear.addEventListener("click",function(){searchInput.value="";searchQuery="";render();});
+addBtn.addEventListener("click",function(){if(!dateInput.value)dateInput.value=dateToISO(new Date());var a={id:Date.now(),who:whoSelect.value,date:dateInput.value,time:timeInput.value,desc:(descInput.value||"").trim()||"Afspraak",createdAt:new Date().toISOString()};appointments.push(a);saveAppointments();if(remindersOn)scheduleNotification(a);showToast("&#10003; Afspraak toegevoegd");descInput.value="";timeInput.value="";render();});
+resetBtn.addEventListener("click",function(){resetForm();showToast("Formulier leeg");});
+clearAllBtn.addEventListener("click",function(){if(!confirm("Alles wissen?"))return;appointments=[];saveAppointments();showToast("Alles gewist");render();});
+exportAllBtn.addEventListener("click",function(){downloadICSFromList(appointments.slice(),"onze-agenda.ics");});
+exportTabBtn.addEventListener("click",function(){downloadICSFromList(filteredAppointments(),"onze-agenda-"+activeTab+".ics");});
 
-      listSubtitle.textContent = searchQuery ? "gevonden" : "komende";
+bdayAdd.addEventListener("click",function(){
+  var name=(bdayName.value||"").trim();var date=(bdayDate.value||"").trim();
+  if(!name||!date){showToast("Vul naam en datum in");return;}
+  var mmdd=date.slice(5,7)+"-"+date.slice(8,10);
+  birthdays.push({id:Date.now(),name:name,mmdd:mmdd,createdAt:new Date().toISOString()});
+  saveBdays();bdayName.value="";bdayDate.value="";showToast("&#127874; Verjaardag toegevoegd");render();
+});
+bdayExport.addEventListener("click",function(){if(!birthdays.length){alert("Geen verjaardagen.");return;}var blob=new Blob([buildBdayICS(birthdays)],{type:"text/calendar;charset=utf-8"});var url=URL.createObjectURL(blob);var a=document.createElement("a");a.href=url;a.download="verjaardagen.ics";a.click();URL.revokeObjectURL(url);});
 
-      var html = "";
-      html += '<div class="section-title">Afspraken<span class="count-badge">'+list.length+"</span></div>";
+memAdd.addEventListener("click",function(){
+  var name=(memName.value||"").trim();var date=(memDate.value||"").trim();
+  var type=(memType.value||"Herinnering").trim();var note=(memNote.value||"").trim();
+  if(!name||!date){showToast("Vul naam en datum in");return;}
+  var mmdd=date.slice(5,7)+"-"+date.slice(8,10);var year=parseInt(date.slice(0,4),10);
+  memories.push({id:Date.now(),name:name,type:type,note:note,mmdd:mmdd,year:year,createdAt:new Date().toISOString()});
+  saveMem();memName.value="";memDate.value="";memNote.value="";showToast("&#128367; Herinnering toegevoegd");render();
+});
+memExport.addEventListener("click",function(){if(!memories.length){alert("Geen herinneringen.");return;}var blob=new Blob([buildMemICS(memories)],{type:"text/calendar;charset=utf-8"});var url=URL.createObjectURL(blob);var a=document.createElement("a");a.href=url;a.download="herinneringen.ics";a.click();URL.revokeObjectURL(url);});
 
-      list.forEach(function(a){
-        var whoLabel = a.who==="rob" ? "Rob" : (a.who==="lizet" ? "Lizet" : "Beide");
-        var cls = a.who || "beide";
-        var d = normalizeISO(a.date);
-        var dtTxt = "";
-        if (d){
-          dtTxt = isoToLocalDate(d).toLocaleDateString("nl-NL",{day:"numeric",month:"long",year:"numeric"});
-        }
-        var tmTxt = a.time ? a.time : "Hele dag";
+aptList.addEventListener("click",function(e){
+  var del=e.target.closest(".apt-del-btn");
+  var bdel=e.target.closest(".bday-del-btn");
+  var mdel=e.target.closest(".mem-del-btn");
+  if(mdel&&mdel.dataset.mid){memories=memories.filter(function(m){return m.id!==parseInt(mdel.dataset.mid,10);});saveMem();showToast("&#128367; Herinnering verwijderd");render();return;}
+  if(bdel&&bdel.dataset.bid){birthdays=birthdays.filter(function(b){return b.id!==parseInt(bdel.dataset.bid,10);});saveBdays();showToast("&#127874; Verjaardag verwijderd");render();return;}
+  if(del&&del.dataset.id){appointments=appointments.filter(function(a){return a.id!==parseInt(del.dataset.id,10);});saveAppointments();showToast("&#128465; Verwijderd");render();}
+});
 
-        html += '<div class="apt-card '+cls+'" data-id="'+a.id+'">'
-          +'<div class="apt-icon">📌</div>'
-          +'<div class="apt-body">'
-          +'<div class="apt-who '+cls+'">'+whoLabel+'</div>'
-          +'<div class="apt-desc">'+escH(a.desc||"")+'</div>'
-          +'<div class="apt-meta">'
-          +'<span>📅 '+escH(dtTxt)+'</span>'
-          +'<span>⏰ '+escH(tmTxt)+'</span>'
-          +'</div></div>'
-          +'<div class="apt-actions">'
-          +'<button class="apt-del-btn" data-id="'+a.id+'" title="Verwijder">🗑️</button>'
-          +'</div>'
-          +'</div>';
-      });
+reminderToggle.addEventListener("click",function(){remindersOn=!remindersOn;saveRemindersOn(remindersOn);applyReminderToggleUI();if(remindersOn){requestNotificationPermission();appointments.forEach(scheduleNotification);showToast("Herinneringen aan");}else showToast("Herinneringen uit");});
+calPrev.addEventListener("click",function(){calMonth-=1;if(calMonth<0){calMonth=11;calYear-=1;}renderCalendar();});
+calNext.addEventListener("click",function(){calMonth+=1;if(calMonth>11){calMonth=0;calYear+=1;}renderCalendar();});
+calTodayBtn.addEventListener("click",function(){var now=new Date();calYear=now.getFullYear();calMonth=now.getMonth();calSelectedISO=dateToISO(now);renderCalendar();});
+calGrid.addEventListener("click",function(e){var cell=e.target.closest(".cal-cell");if(!cell)return;var iso=cell.getAttribute("data-iso");if(!iso)return;calSelectedISO=iso;renderCalendarDay(iso);});
 
-      aptList.innerHTML = html;
-    }
+(function init(){
+  applyReminderToggleUI();resetForm();
+  if(remindersOn){requestNotificationPermission();appointments.forEach(scheduleNotification);}
+  calSelectedISO=dateToISO(new Date());render();
+})();
+</script>
 
-    function resetForm(){
-      whoSelect.value = "beide";
-      var now = new Date();
-      dateInput.value = dateToISO(now);
-      timeInput.value = "";
-      descInput.value = "";
-    }
-
-    function ensureDefaultDate(){
-      if (!dateInput.value){
-        dateInput.value = dateToISO(new Date());
-      }
-    }
-
-    function scheduleNotification(a){
-      if (!remindersOn) return;
-      if (!("Notification" in window)) return;
-
-      var d = normalizeISO(a.date);
-      if (!d) return;
-
-      var hasTime = !!a.time;
-      var base = new Date(d + (hasTime ? "T"+a.time+":00" : "T09:00:00"));
-      var when = base.getTime() - (15 * 60 * 1000);
-      var now = Date.now();
-      if (when <= now) return;
-
-      var delay = when - now;
-      setTimeout(function(){
-        try{
-          new Notification("Afspraak", { body: (a.desc||"") + " ("+(a.who||"beide")+")" });
-        }catch(e){}
-      }, delay);
-    }
-
-    function requestNotificationPermission(){
-      if (!("Notification" in window)) return;
-      if (Notification.permission === "default"){
-        Notification.requestPermission().then(function(){});
-      }
-    }
-
-    function applyReminderToggleUI(){
-      if (remindersOn){
-        reminderToggle.classList.remove("off");
-      } else {
-        reminderToggle.classList.add("off");
-      }
-    }
-
-    tabs.forEach(function(btn){
-      btn.addEventListener("click", function(){
-        tabs.forEach(function(b){ b.classList.remove("active"); });
-        btn.classList.add("active");
-        activeTab = btn.getAttribute("data-tab");
-        render();
-      });
-    });
-
-    searchInput.addEventListener("input", function(){
-      searchQuery = searchInput.value || "";
-      render();
-    });
-
-    searchClear.addEventListener("click", function(){
-      searchInput.value = "";
-      searchQuery = "";
-      render();
-    });
-
-    addBtn.addEventListener("click", function(){
-      ensureDefaultDate();
-      var a = {
-        id: Date.now(),
-        who: whoSelect.value,
-        date: dateInput.value,
-        time: timeInput.value,
-        desc: (descInput.value||"").trim() || "Afspraak",
-        createdAt: new Date().toISOString()
-      };
-      appointments.push(a);
-      saveAppointments();
-      if (remindersOn) scheduleNotification(a);
-      showToast("✅ Afspraak toegevoegd");
-      descInput.value = "";
-      timeInput.value = "";
-      render();
-    });
-
-    resetBtn.addEventListener("click", function(){
-      resetForm();
-      showToast("Formulier leeg");
-    });
-
-    clearAllBtn.addEventListener("click", function(){
-      if (!confirm("Alles wissen?")) return;
-      appointments = [];
-      saveAppointments();
-      showToast("Alles gewist");
-      render();
-    });
-
-    exportAllBtn.addEventListener("click", function(){
-      downloadICSFromList(appointments.slice(), "onze-agenda.ics");
-    });
-
-    exportTabBtn.addEventListener("click", function(){
-      var list = filteredAppointments();
-      var name = activeTab === "alle" ? "alle" : activeTab;
-      downloadICSFromList(list, "onze-agenda-"+name+".ics");
-    });
-
-    aptList.addEventListener("click", function(e){
-      var del = e.target.closest(".apt-del-btn");
-      var bdel = e.target.closest(".bday-del-btn");
-      var mdel = e.target.closest(".mem-del-btn");
-
-      if (mdel && mdel.dataset.mid){
-        var mid = parseInt(mdel.dataset.mid,10);
-        memories = memories.filter(function(m){ return m.id !== mid; });
-        saveMem();
-        showToast("🕯️ Herinnering verwijderd");
-        render();
-        return;
-      }
-
-      if (bdel && bdel.dataset.bid){
-        var bid = parseInt(bdel.dataset.bid,10);
-        birthdays = birthdays.filter(function(b){ return b.id !== bid; });
-        saveBdays();
-        showToast("🎂 Verjaardag verwijderd");
-        render();
-        return;
-      }
-
-      if (del && del.dataset.id){
-        var id = parseInt(del.dataset.id,10);
-        appointments = appointments.filter(function(a){ return a.id !== id; });
-        saveAppointments();
-        showToast("🗑️ Verwijderd");
-        render();
-      }
-    });
-
-    reminderToggle.addEventListener("click", function(){
-      remindersOn = !remindersOn;
-      saveRemindersOn(remindersOn);
-      applyReminderToggleUI();
-      if (remindersOn){
-        requestNotificationPermission();
-        appointments.forEach(scheduleNotification);
-        showToast("Herinneringen aan");
-      } else {
-        showToast("Herinneringen uit");
-      }
-    });
-
-    bdayAdd.addEventListener("click", function(){
-      var name = (bdayName.value || "").trim();
-      var date = (bdayDate.value || "").trim();
-      if (!name || !date) { showToast("Vul naam en datum in"); return; }
-
-      var mmdd = date.slice(5,7)+"-"+date.slice(8,10);
-      var item = { id: Date.now(), name: name, mmdd: mmdd, createdAt: new Date().toISOString() };
-      birthdays.push(item);
-      saveBdays();
-      bdayName.value = "";
-      bdayDate.value = "";
-      showToast("🎂 Verjaardag toegevoegd");
-      render();
-    });
-
-    bdayExport.addEventListener("click", function(){
-      downloadBdayICS();
-    });
-
-    memAdd.addEventListener("click", function(){
-      var name = (memName.value || "").trim();
-      var date = (memDate.value || "").trim();
-      var type = (memType.value || "Herinnering").trim();
-      var note = (memNote.value || "").trim();
-
-      if (!name || !date) { showToast("Vul naam en datum in"); return; }
-
-      var mmdd = date.slice(5,7)+"-"+date.slice(8,10);
-      var year = parseInt(date.slice(0,4),10);
-
-      memories.push({ id: Date.now(), name:name, type:type, note:note, mmdd:mmdd, year:year, createdAt:new Date().toISOString() });
-      saveMem();
-
-      memName.value = "";
-      memDate.value = "";
-      memNote.value = "";
-      showToast("🕯️ Herinnering toegevoegd");
-      render();
-    });
-
-    memExport.addEventListener("click", function(){
-      downloadMemICS();
-    });
-
-    calPrev.addEventListener("click", function(){
-      calMonth -= 1;
-      if (calMonth < 0){ calMonth = 11; calYear -= 1; }
-      renderCalendar();
-    });
-
-    calNext.addEventListener("click", function(){
-      calMonth += 1;
-      if (calMonth > 11){ calMonth = 0; calYear += 1; }
-      renderCalendar();
-    });
-
-    calTodayBtn.addEventListener("click", function(){
-      var now = new Date();
-      calYear = now.getFullYear();
-      calMonth = now.getMonth();
-      calSelectedISO = dateToISO(now);
-      renderCalendar();
-    });
-
-    calGrid.addEventListener("click", function(e){
-      var cell = e.target.closest(".cal-cell");
-      if (!cell) return;
-      var iso = cell.getAttribute("data-iso");
-      if (!iso) return;
-      calSelectedISO = iso;
-      renderCalendarDay(iso);
-    });
-   (function init(){
-      applyReminderToggleUI();
-      resetForm();
-      ensureDefaultDate();
-
-      if (remindersOn){
-        requestNotificationPermission();
-        appointments.forEach(scheduleNotification);
-      }
-
-      calSelectedISO = dateToISO(new Date());
-      render();
-    })();
-  </script>
 </body>
 </html>
-
-
