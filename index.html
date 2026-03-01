@@ -6,196 +6,190 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <title>Onze Agenda &#8211; Rob &amp; Lizet</title>
+  <title>Onze Agenda – Rob &amp; Lizet</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
   <style>
     :root {
-      --bg:           #fdf8ee;
-      --surface:      #f5edda;
-      --card:         #ede0c4;
-      --rob:          #1a5fa8;
-      --rob-bg:       rgba(26,95,168,0.08);
-      --rob-border:   rgba(26,95,168,0.30);
-      --lizet:        #8b5e3c;
-      --lizet-bg:     rgba(139,94,60,0.08);
-      --lizet-border: rgba(139,94,60,0.30);
-      --beide:        #3a6b4a;
-      --beide-bg:     rgba(58,107,74,0.08);
-      --beide-border: rgba(58,107,74,0.30);
-      --bday:         #b45309;
-      --bday-bg:      rgba(180,83,9,0.08);
-      --bday-border:  rgba(180,83,9,0.30);
-      --mem:          #6b4fa8;
-      --mem-bg:       rgba(107,79,168,0.08);
-      --mem-border:   rgba(107,79,168,0.30);
-      --text:         #1c1917;
-      --muted:        #78716c;
-      --border:       rgba(0,0,0,0.10);
-      --green:        #2d7a46;
-      --yellow:       #b45309;
-      --red:          #dc2626;
-      --shadow:       rgba(0,0,0,0.07);
+      --bg:          #fdf8ee;
+      --surface:     #f5edda;
+      --card:        #ede0c4;
+      --rob:         #1a5fa8;
+      --rob-bg:      rgba(26,95,168,.08);
+      --rob-bd:      rgba(26,95,168,.30);
+      --lizet:       #8b5e3c;
+      --lizet-bg:    rgba(139,94,60,.08);
+      --lizet-bd:    rgba(139,94,60,.30);
+      --beide:       #3a6b4a;
+      --beide-bg:    rgba(58,107,74,.08);
+      --beide-bd:    rgba(58,107,74,.30);
+      --bday:        #b45309;
+      --bday-bg:     rgba(180,83,9,.08);
+      --bday-bd:     rgba(180,83,9,.30);
+      --mem:         #6b4fa8;
+      --mem-bg:      rgba(107,79,168,.08);
+      --mem-bd:      rgba(107,79,168,.30);
+      --text:        #1c1917;
+      --muted:       #78716c;
+      --border:      rgba(0,0,0,.10);
+      --green:       #2d7a46;
+      --yellow:      #b45309;
+      --red:         #dc2626;
+      --shadow:      rgba(0,0,0,.07);
     }
-    * { box-sizing:border-box; margin:0; padding:0; }
-    html,body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; min-height:100vh; -webkit-tap-highlight-color:transparent; }
-    #app { max-width:720px; margin:0 auto; padding:36px 20px 80px; }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;-webkit-tap-highlight-color:transparent;}
+    #app{max-width:720px;margin:0 auto;padding:36px 20px 80px;}
 
 ```
-/* ── Sync bar ── */
-#sync-bar { display:none; align-items:center; gap:10px; background:var(--beide-bg); border:1px solid var(--beide-border); border-radius:12px; padding:10px 14px; margin-bottom:20px; font-size:0.82rem; color:var(--beide); }
-#sync-bar.error { background:rgba(220,38,38,.07); border-color:rgba(220,38,38,.25); color:var(--red); }
-.sync-dot { width:8px; height:8px; border-radius:50%; background:var(--beide); flex-shrink:0; animation:pulse 2s infinite; }
-#sync-bar.error .sync-dot { background:var(--red); animation:none; }
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.35} }
+/* sync */
+#sync-bar{display:none;align-items:center;gap:10px;background:var(--beide-bg);border:1px solid var(--beide-bd);border-radius:12px;padding:10px 14px;margin-bottom:20px;font-size:.82rem;color:var(--beide);}
+#sync-bar.error{background:rgba(220,38,38,.07);border-color:rgba(220,38,38,.25);color:var(--red);}
+.sync-dot{width:8px;height:8px;border-radius:50%;background:var(--beide);flex-shrink:0;animation:pulse 2s infinite;}
+#sync-bar.error .sync-dot{background:var(--red);animation:none;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
 
-/* ── Notification banner ── */
-#notif-banner { display:none; align-items:center; gap:12px; background:var(--rob-bg); border:1px solid var(--rob-border); border-radius:14px; padding:14px 16px; margin-bottom:28px; }
-#notif-banner p { flex:1; font-size:0.83rem; color:var(--text); line-height:1.45; }
-#notif-banner p strong { display:block; margin-bottom:2px; color:var(--rob); }
-#notif-allow-btn { background:var(--rob-bg); border:1px solid var(--rob-border); color:var(--rob); border-radius:8px; padding:8px 14px; font-family:'DM Sans',sans-serif; font-size:0.82rem; font-weight:600; cursor:pointer; white-space:nowrap; flex-shrink:0; transition:all .2s; }
-#notif-allow-btn:hover { background:rgba(26,95,168,.15); }
-#notif-dismiss { background:none; border:none; color:var(--muted); cursor:pointer; font-size:1.1rem; flex-shrink:0; }
+/* notif */
+#notif-banner{display:none;align-items:center;gap:12px;background:var(--rob-bg);border:1px solid var(--rob-bd);border-radius:14px;padding:14px 16px;margin-bottom:28px;}
+#notif-banner p{flex:1;font-size:.83rem;line-height:1.45;}
+#notif-banner p strong{display:block;margin-bottom:2px;color:var(--rob);}
+#notif-allow-btn{background:var(--rob-bg);border:1px solid var(--rob-bd);color:var(--rob);border-radius:8px;padding:8px 14px;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;}
+#notif-dismiss{background:none;border:none;color:var(--muted);cursor:pointer;font-size:1.1rem;flex-shrink:0;}
 
-/* ── Toast ── */
-#toast { display:none; position:fixed; top:20px; left:50%; transform:translateX(-50%); background:var(--text); border-radius:12px; padding:12px 20px; font-size:0.85rem; color:var(--bg); box-shadow:0 8px 32px rgba(0,0,0,.18); z-index:999; white-space:nowrap; animation:toastIn .3s ease; }
-@keyframes toastIn { from{opacity:0;transform:translateX(-50%) translateY(-8px)} to{opacity:1;transform:translateX(-50%) translateY(0)} }
+/* toast */
+#toast{display:none;position:fixed;top:20px;left:50%;transform:translateX(-50%);background:var(--text);border-radius:12px;padding:12px 20px;font-size:.85rem;color:var(--bg);box-shadow:0 8px 32px rgba(0,0,0,.18);z-index:999;white-space:nowrap;animation:toastIn .3s ease;}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(-8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
 
-/* ── Header ── */
-.header { text-align:center; margin-bottom:40px; }
-.header h1 { font-family:'Playfair Display',serif; font-size:2.6rem; letter-spacing:-0.5px; background:linear-gradient(135deg,var(--rob) 0%,var(--lizet) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:10px; }
-.header-names { display:flex; justify-content:center; gap:14px; margin-bottom:8px; }
-.name-pill { padding:4px 16px; border-radius:20px; font-size:0.8rem; font-weight:600; }
-.name-pill.rob   { background:var(--rob-bg);   border:1px solid var(--rob-border);   color:var(--rob); }
-.name-pill.lizet { background:var(--lizet-bg); border:1px solid var(--lizet-border); color:var(--lizet); }
-.header p { color:var(--muted); font-size:0.85rem; font-weight:300; }
+/* header */
+.header{text-align:center;margin-bottom:40px;}
+.header h1{font-family:'Playfair Display',serif;font-size:2.6rem;background:linear-gradient(135deg,var(--rob),var(--lizet));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px;}
+.header-names{display:flex;justify-content:center;gap:14px;margin-bottom:8px;}
+.name-pill{padding:4px 16px;border-radius:20px;font-size:.8rem;font-weight:600;}
+.name-pill.rob{background:var(--rob-bg);border:1px solid var(--rob-bd);color:var(--rob);}
+.name-pill.lizet{background:var(--lizet-bg);border:1px solid var(--lizet-bd);color:var(--lizet);}
+.header p{color:var(--muted);font-size:.85rem;font-weight:300;}
 
-/* ── Mic section ── */
-.mic-section { display:flex; flex-direction:column; align-items:center; gap:18px; margin-bottom:36px; }
-.mic-ring { position:relative; width:100px; height:100px; flex-shrink:0; }
-.mic-ring::before { content:''; position:absolute; inset:-6px; border-radius:50%; background:conic-gradient(var(--rob),var(--lizet),var(--rob)); opacity:0; transition:opacity 0.4s; }
-.mic-ring.listening::before { opacity:1; animation:ringRotate 2s linear infinite; }
-.mic-ring::after { content:''; position:absolute; inset:-3px; border-radius:50%; background:var(--bg); opacity:0; transition:opacity 0.4s; }
-.mic-ring.listening::after { opacity:1; }
-@keyframes ringRotate { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
-#mic-btn { position:relative; z-index:1; width:100px; height:100px; border-radius:50%; border:2px solid var(--border); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:2rem; background:var(--surface); box-shadow:0 2px 12px var(--shadow); transition:all 0.3s ease; -webkit-appearance:none; }
-#mic-btn:hover  { transform:scale(1.05); border-color:var(--rob); }
-#mic-btn.active { background:linear-gradient(135deg,var(--rob-bg),var(--lizet-bg)); border-color:transparent; }
-#mic-btn.busy   { background:var(--beide-bg); border-color:var(--beide); animation:spinGlow 1.5s infinite; }
-@keyframes spinGlow { 0%,100%{box-shadow:0 0 20px rgba(58,107,74,.2)} 50%{box-shadow:0 0 40px rgba(58,107,74,.4)} }
-#status-text { font-size:0.85rem; color:var(--muted); text-align:center; min-height:20px; }
-#status-text.active     { color:var(--rob); }
-#status-text.processing { color:var(--beide); }
-#transcript-box { display:none; width:100%; background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:14px 18px; font-size:0.93rem; font-style:italic; color:var(--text); line-height:1.5; }
-.alert { display:none; width:100%; border-radius:12px; padding:13px 16px; font-size:0.83rem; line-height:1.55; }
-.alert.error { background:rgba(220,38,38,.07); border:1px solid rgba(220,38,38,.2); color:var(--red); text-align:center; }
-.alert.warn  { background:rgba(180,83,9,.07); border:1px solid rgba(180,83,9,.2); color:var(--yellow); }
-.alert.warn strong { font-weight:600; display:block; margin-bottom:4px; }
-#text-section { display:none; width:100%; flex-direction:column; gap:10px; }
-#text-section.visible { display:flex; animation:slideIn .3s ease; }
-#text-hint { font-size:0.8rem; color:var(--muted); text-align:center; }
-.text-row { display:flex; gap:8px; }
-#text-input { flex:1; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:12px 16px; font-family:'DM Sans',sans-serif; font-size:0.95rem; color:var(--text); outline:none; transition:border-color .2s; -webkit-appearance:none; }
-#text-input::placeholder { color:var(--muted); }
-#text-input:focus { border-color:var(--rob); }
-#text-submit { background:var(--rob-bg); border:1px solid var(--rob-border); color:var(--rob); border-radius:12px; padding:12px 18px; font-family:'DM Sans',sans-serif; font-size:1.1rem; cursor:pointer; transition:all .2s; flex-shrink:0; }
-#text-submit:disabled{ opacity:.4; cursor:not-allowed; }
-.mode-toggle { font-size:0.78rem; color:var(--muted); cursor:pointer; text-decoration:underline; text-underline-offset:3px; background:none; border:none; font-family:'DM Sans',sans-serif; padding:0; }
+/* mic */
+.mic-section{display:flex;flex-direction:column;align-items:center;gap:18px;margin-bottom:36px;}
+.mic-ring{position:relative;width:100px;height:100px;flex-shrink:0;}
+.mic-ring::before{content:'';position:absolute;inset:-6px;border-radius:50%;background:conic-gradient(var(--rob),var(--lizet),var(--rob));opacity:0;transition:opacity .4s;}
+.mic-ring.listening::before{opacity:1;animation:ringRot 2s linear infinite;}
+.mic-ring::after{content:'';position:absolute;inset:-3px;border-radius:50%;background:var(--bg);opacity:0;transition:opacity .4s;}
+.mic-ring.listening::after{opacity:1;}
+@keyframes ringRot{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+#mic-btn{position:relative;z-index:1;width:100px;height:100px;border-radius:50%;border:2px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:2rem;background:var(--surface);box-shadow:0 2px 12px var(--shadow);transition:all .3s;-webkit-appearance:none;}
+#mic-btn.active{background:linear-gradient(135deg,var(--rob-bg),var(--lizet-bg));border-color:transparent;}
+#mic-btn.busy{background:var(--beide-bg);border-color:var(--beide);animation:spinGlow 1.5s infinite;}
+@keyframes spinGlow{0%,100%{box-shadow:0 0 20px rgba(58,107,74,.2)}50%{box-shadow:0 0 40px rgba(58,107,74,.4)}}
+#status-text{font-size:.85rem;color:var(--muted);text-align:center;min-height:20px;}
+#status-text.active{color:var(--rob);}
+#status-text.processing{color:var(--beide);}
+#transcript-box{display:none;width:100%;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px 18px;font-size:.93rem;font-style:italic;line-height:1.5;}
+.alert{display:none;width:100%;border-radius:12px;padding:13px 16px;font-size:.83rem;line-height:1.55;}
+.alert.error{background:rgba(220,38,38,.07);border:1px solid rgba(220,38,38,.2);color:var(--red);text-align:center;}
+.alert.warn{background:rgba(180,83,9,.07);border:1px solid rgba(180,83,9,.2);color:var(--yellow);}
+.alert.warn strong{font-weight:600;display:block;margin-bottom:4px;}
 
-/* ── Camera scan ── */
-.scan-section { display:flex; flex-direction:column; align-items:center; gap:10px; margin-top:4px; }
-#scan-btn { display:flex; align-items:center; gap:8px; background:var(--lizet-bg); border:1px solid var(--lizet-border); color:var(--lizet); border-radius:12px; padding:10px 20px; font-family:'DM Sans',sans-serif; font-size:0.88rem; font-weight:600; cursor:pointer; transition:all .2s; -webkit-appearance:none; }
-#scan-btn:hover { background:rgba(139,94,60,.15); transform:translateY(-1px); }
-#scan-btn:disabled { opacity:.4; cursor:not-allowed; transform:none; }
-#scan-label { font-size:0.75rem; color:var(--muted); text-align:center; }
-#camera-input { display:none; }
-#scan-preview { display:none; width:100%; flex-direction:column; align-items:center; gap:12px; }
-#scan-preview.visible { display:flex; animation:slideIn .3s ease; }
-#preview-img { max-width:100%; max-height:200px; border-radius:12px; border:2px solid var(--lizet-border); object-fit:contain; }
-#scan-status { font-size:0.82rem; color:var(--muted); text-align:center; }
-#scan-status.scanning { color:var(--lizet); }
+/* text input */
+#text-section{display:none;width:100%;flex-direction:column;gap:10px;}
+#text-section.visible{display:flex;animation:slideIn .3s ease;}
+#text-hint{font-size:.8rem;color:var(--muted);text-align:center;}
+.text-row{display:flex;gap:8px;}
+#text-input{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 16px;font-family:'DM Sans',sans-serif;font-size:.95rem;color:var(--text);outline:none;-webkit-appearance:none;}
+#text-input::placeholder{color:var(--muted);}
+#text-input:focus{border-color:var(--rob);}
+#text-submit{background:var(--rob-bg);border:1px solid var(--rob-bd);color:var(--rob);border-radius:12px;padding:12px 18px;font-family:'DM Sans',sans-serif;font-size:1.1rem;cursor:pointer;flex-shrink:0;}
+#text-submit:disabled{opacity:.4;cursor:not-allowed;}
+.mode-toggle{font-size:.78rem;color:var(--muted);cursor:pointer;text-decoration:underline;text-underline-offset:3px;background:none;border:none;font-family:'DM Sans',sans-serif;padding:0;}
 
-/* ── Tabs ── */
-.tabs { display:flex; gap:5px; margin-bottom:16px; background:var(--surface); border-radius:14px; padding:5px; border:1px solid var(--border); box-shadow:0 1px 4px var(--shadow); flex-wrap:wrap; }
-.tab { flex:1; min-width:0; padding:9px 6px; border:1px solid transparent; border-radius:10px; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:0.8rem; font-weight:500; background:transparent; color:var(--muted); transition:all .22s; text-align:center; white-space:nowrap; }
-.tab:hover { color:var(--text); }
-.tab[data-tab="alle"].active   { background:var(--bg);       color:var(--text);   border-color:var(--border);      box-shadow:0 1px 4px var(--shadow); }
-.tab[data-tab="rob"].active    { background:var(--rob-bg);   color:var(--rob);    border-color:var(--rob-border); }
-.tab[data-tab="lizet"].active  { background:var(--lizet-bg); color:var(--lizet);  border-color:var(--lizet-border); }
-.tab[data-tab="bday"].active   { background:var(--bday-bg);  color:var(--bday);   border-color:var(--bday-border); }
-.tab[data-tab="mem"].active    { background:var(--mem-bg);   color:var(--mem);    border-color:var(--mem-border); }
+/* scan */
+.scan-section{display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:4px;}
+#scan-btn{display:flex;align-items:center;gap:8px;background:var(--lizet-bg);border:1px solid var(--lizet-bd);color:var(--lizet);border-radius:12px;padding:10px 20px;font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:600;cursor:pointer;transition:all .2s;-webkit-appearance:none;}
+#scan-btn:disabled{opacity:.4;cursor:not-allowed;}
+#scan-label{font-size:.75rem;color:var(--muted);text-align:center;}
+#camera-input{display:none;}
+#scan-preview{display:none;width:100%;flex-direction:column;align-items:center;gap:12px;}
+#scan-preview.visible{display:flex;animation:slideIn .3s ease;}
+#preview-img{max-width:100%;max-height:200px;border-radius:12px;border:2px solid var(--lizet-bd);object-fit:contain;}
+#scan-status{font-size:.82rem;color:var(--muted);text-align:center;}
+#scan-status.scanning{color:var(--lizet);}
 
-/* ── Search bar ── */
-#search-wrap { position:relative; margin-bottom:16px; }
-#search-input { width:100%; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:11px 38px 11px 40px; font-family:'DM Sans',sans-serif; font-size:0.9rem; color:var(--text); outline:none; transition:border-color .2s; -webkit-appearance:none; box-shadow:0 1px 4px var(--shadow); }
-#search-input::placeholder { color:var(--muted); }
-#search-input:focus { border-color:var(--rob); }
-#search-icon { position:absolute; left:13px; top:50%; transform:translateY(-50%); color:var(--muted); font-size:0.95rem; pointer-events:none; }
-#search-clear { display:none; position:absolute; right:10px; top:50%; transform:translateY(-50%); background:none; border:none; color:var(--muted); cursor:pointer; font-size:0.85rem; padding:4px 6px; border-radius:6px; }
-#search-count { display:none; font-size:0.75rem; color:var(--muted); text-align:right; margin-top:-10px; margin-bottom:10px; }
-mark { background:rgba(180,83,9,0.20); color:var(--text); border-radius:2px; padding:0 2px; font-weight:600; }
+/* tabs */
+.tabs{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-bottom:16px;background:var(--surface);border-radius:14px;padding:5px;border:1px solid var(--border);box-shadow:0 1px 4px var(--shadow);}
+.tab{padding:9px 4px;border:1px solid transparent;border-radius:10px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:500;background:transparent;color:var(--muted);transition:all .22s;text-align:center;}
+.tab[data-tab="alle"].active{background:var(--bg);color:var(--text);border-color:var(--border);box-shadow:0 1px 4px var(--shadow);}
+.tab[data-tab="rob"].active{background:var(--rob-bg);color:var(--rob);border-color:var(--rob-bd);}
+.tab[data-tab="lizet"].active{background:var(--lizet-bg);color:var(--lizet);border-color:var(--lizet-bd);}
+.tab[data-tab="bday"].active{background:var(--bday-bg);color:var(--bday);border-color:var(--bday-bd);}
+.tab[data-tab="mem"].active{background:var(--mem-bg);color:var(--mem);border-color:var(--mem-bd);}
 
-/* ── Export bar ── */
-#export-bar { display:none; align-items:center; justify-content:space-between; gap:12px; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:12px 16px; margin-bottom:16px; box-shadow:0 1px 4px var(--shadow); }
-#export-bar p { font-size:0.82rem; color:var(--muted); line-height:1.4; }
-#export-all-btn { background:var(--rob-bg); border:1px solid var(--rob-border); color:var(--rob); border-radius:8px; padding:8px 14px; font-family:'DM Sans',sans-serif; font-size:0.82rem; font-weight:600; cursor:pointer; white-space:nowrap; flex-shrink:0; transition:all .2s; }
-#export-all-btn:hover { background:rgba(26,95,168,.15); }
+/* search */
+#search-wrap{position:relative;margin-bottom:16px;}
+#search-input{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:11px 38px 11px 40px;font-family:'DM Sans',sans-serif;font-size:.9rem;color:var(--text);outline:none;-webkit-appearance:none;box-shadow:0 1px 4px var(--shadow);}
+#search-input::placeholder{color:var(--muted);}
+#search-input:focus{border-color:var(--rob);}
+#search-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:.95rem;pointer-events:none;}
+#search-clear{display:none;position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);cursor:pointer;font-size:.85rem;padding:4px 6px;border-radius:6px;}
+#search-count{display:none;font-size:.75rem;color:var(--muted);text-align:right;margin-top:-10px;margin-bottom:10px;}
+mark{background:rgba(180,83,9,.20);color:var(--text);border-radius:2px;padding:0 2px;font-weight:600;}
 
-/* ── Appointment cards ── */
-#apt-list { display:flex; flex-direction:column; gap:8px; }
-.section-title { font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); margin:24px 0 10px; display:flex; align-items:center; gap:10px; }
-.section-title::after { content:''; flex:1; height:1px; background:var(--border); }
-.count-badge { background:var(--card); border-radius:20px; padding:1px 9px; font-size:.75rem; font-weight:600; color:var(--muted); }
-.apt-card { border-radius:14px; padding:16px 18px; display:flex; align-items:flex-start; gap:14px; border:1px solid; transition:transform .2s,box-shadow .2s; animation:slideIn .3s ease; box-shadow:0 2px 8px var(--shadow); }
-.apt-card:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,.10); }
-.apt-card.rob    { background:#eaf0fb; border-color:var(--rob-border); }
-.apt-card.lizet  { background:#fdf5e4; border-color:var(--lizet-border); }
-.apt-card.beide  { background:#eaf5ec; border-color:var(--beide-border); }
-.apt-card.bday   { background:#fff4e6; border-color:var(--bday-border); }
-.apt-card.mem    { background:#f3f0fa; border-color:var(--mem-border); }
-@keyframes slideIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
-.apt-icon { font-size:1.3rem; flex-shrink:0; margin-top:2px; }
-.apt-body { flex:1; min-width:0; }
-.apt-who { font-size:.7rem; font-weight:700; text-transform:uppercase; letter-spacing:.1em; margin-bottom:4px; }
-.apt-who.rob   { color:var(--rob); }
-.apt-who.lizet { color:var(--lizet); }
-.apt-who.beide { color:var(--beide); }
-.apt-who.bday  { color:var(--bday); }
-.apt-who.mem   { color:var(--mem); }
-.apt-desc { font-size:.975rem; font-weight:500; margin-bottom:6px; line-height:1.4; color:var(--text); }
-.apt-meta { font-size:.78rem; color:var(--muted); display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
-.yearly-badge { display:inline-flex; align-items:center; gap:3px; background:var(--bday-bg); border:1px solid var(--bday-border); color:var(--bday); border-radius:20px; padding:1px 8px; font-size:.72rem; font-weight:600; }
-.yearly-badge.mem { background:var(--mem-bg); border-color:var(--mem-border); color:var(--mem); }
-.reminder-badge { display:inline-flex; align-items:center; gap:4px; background:rgba(180,83,9,0.10); border:1px solid rgba(180,83,9,0.25); color:var(--yellow); border-radius:20px; padding:1px 8px; font-size:.72rem; font-weight:600; }
-.apt-actions { display:flex; gap:4px; flex-shrink:0; align-items:flex-start; position:relative; }
-.apt-cal-btn,.apt-del-btn,.apt-bell-btn { background:none; border:none; cursor:pointer; font-size:.95rem; padding:4px 6px; border-radius:6px; transition:all .2s; opacity:.3; color:var(--muted); }
-.apt-card:hover .apt-cal-btn,
-.apt-card:hover .apt-del-btn,
-.apt-card:hover .apt-bell-btn { opacity:1; }
-.apt-cal-btn:hover  { background:var(--rob-bg); color:var(--rob); }
-.apt-cal-btn.done   { color:var(--green); opacity:1 !important; }
-.apt-del-btn:hover  { background:rgba(220,38,38,.08); color:var(--red); }
-.apt-bell-btn:hover { background:var(--bday-bg); color:var(--bday); }
-.apt-bell-btn.set   { color:var(--bday); opacity:1 !important; }
+/* export bar */
+#export-bar{display:none;align-items:center;justify-content:space-between;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:16px;box-shadow:0 1px 4px var(--shadow);}
+#export-bar p{font-size:.82rem;color:var(--muted);line-height:1.4;}
+#export-all-btn{background:var(--rob-bg);border:1px solid var(--rob-bd);color:var(--rob);border-radius:8px;padding:8px 14px;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;}
 
-/* ── Reminder popover ── */
-.reminder-popover { display:none; position:absolute; top:calc(100% + 6px); right:0; background:var(--bg); border:1px solid var(--border); border-radius:12px; padding:8px; z-index:100; min-width:200px; box-shadow:0 8px 24px rgba(0,0,0,.13); animation:slideIn .15s ease; }
-.reminder-popover.open { display:block; }
-.reminder-popover p { font-size:0.75rem; color:var(--muted); padding:4px 8px 6px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; }
-.reminder-opt { display:block; width:100%; text-align:left; background:none; border:none; color:var(--text); font-family:'DM Sans',sans-serif; font-size:0.85rem; padding:8px 10px; border-radius:8px; cursor:pointer; transition:background .15s; white-space:nowrap; }
-.reminder-opt:hover  { background:var(--surface); }
-.reminder-opt.active { color:var(--yellow); background:rgba(180,83,9,.07); font-weight:600; }
-.reminder-opt.cancel { color:var(--red); }
-.reminder-opt.cancel:hover { background:rgba(220,38,38,.07); }
+/* cards */
+#apt-list{display:flex;flex-direction:column;gap:8px;}
+.section-title{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:24px 0 10px;display:flex;align-items:center;gap:10px;}
+.section-title::after{content:'';flex:1;height:1px;background:var(--border);}
+.count-badge{background:var(--card);border-radius:20px;padding:1px 9px;font-size:.75rem;font-weight:600;color:var(--muted);}
+.apt-card{border-radius:14px;padding:16px 18px;display:flex;align-items:flex-start;gap:14px;border:1px solid;transition:transform .2s,box-shadow .2s;animation:slideIn .3s ease;box-shadow:0 2px 8px var(--shadow);}
+.apt-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.10);}
+.apt-card.rob{background:#eaf0fb;border-color:var(--rob-bd);}
+.apt-card.lizet{background:#fdf5e4;border-color:var(--lizet-bd);}
+.apt-card.beide{background:#eaf5ec;border-color:var(--beide-bd);}
+.apt-card.bday{background:#fff4e6;border-color:var(--bday-bd);}
+.apt-card.mem{background:#f3f0fa;border-color:var(--mem-bd);}
+@keyframes slideIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.apt-icon{font-size:1.3rem;flex-shrink:0;margin-top:2px;}
+.apt-body{flex:1;min-width:0;}
+.apt-who{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;}
+.apt-who.rob{color:var(--rob);}
+.apt-who.lizet{color:var(--lizet);}
+.apt-who.beide{color:var(--beide);}
+.apt-who.bday{color:var(--bday);}
+.apt-who.mem{color:var(--mem);}
+.apt-desc{font-size:.975rem;font-weight:500;margin-bottom:6px;line-height:1.4;}
+.apt-meta{font-size:.78rem;color:var(--muted);display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+.yearly-badge{display:inline-flex;align-items:center;gap:3px;background:var(--bday-bg);border:1px solid var(--bday-bd);color:var(--bday);border-radius:20px;padding:1px 8px;font-size:.72rem;font-weight:600;}
+.yearly-badge.mem{background:var(--mem-bg);border-color:var(--mem-bd);color:var(--mem);}
+.reminder-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(180,83,9,.10);border:1px solid rgba(180,83,9,.25);color:var(--yellow);border-radius:20px;padding:1px 8px;font-size:.72rem;font-weight:600;}
+.apt-actions{display:flex;gap:4px;flex-shrink:0;align-items:flex-start;position:relative;}
+.apt-cal-btn,.apt-del-btn,.apt-bell-btn{background:none;border:none;cursor:pointer;font-size:.95rem;padding:4px 6px;border-radius:6px;transition:all .2s;opacity:.3;color:var(--muted);}
+.apt-card:hover .apt-cal-btn,.apt-card:hover .apt-del-btn,.apt-card:hover .apt-bell-btn{opacity:1;}
+.apt-cal-btn:hover{background:var(--rob-bg);color:var(--rob);}
+.apt-cal-btn.done{color:var(--green);opacity:1!important;}
+.apt-del-btn:hover{background:rgba(220,38,38,.08);color:var(--red);}
+.apt-bell-btn:hover{background:var(--bday-bg);color:var(--bday);}
+.apt-bell-btn.set{color:var(--bday);opacity:1!important;}
 
-/* ── Empty / footer ── */
-.empty-state { text-align:center; padding:60px 20px; color:var(--muted); }
-.empty-state .icon { font-size:2.5rem; margin-bottom:12px; }
-.empty-state p { font-size:.88rem; line-height:1.6; }
-.footer { text-align:center; margin-top:56px; padding-top:20px; border-top:1px solid var(--border); font-size:.75rem; color:var(--muted); letter-spacing:.04em; }
-.footer span { background:linear-gradient(90deg,var(--rob),var(--lizet)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; font-weight:600; }
+/* popover */
+.reminder-popover{display:none;position:absolute;top:calc(100% + 6px);right:0;background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:8px;z-index:100;min-width:200px;box-shadow:0 8px 24px rgba(0,0,0,.13);animation:slideIn .15s ease;}
+.reminder-popover.open{display:block;}
+.reminder-popover p{font-size:.75rem;color:var(--muted);padding:4px 8px 6px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;}
+.reminder-opt{display:block;width:100%;text-align:left;background:none;border:none;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.85rem;padding:8px 10px;border-radius:8px;cursor:pointer;white-space:nowrap;}
+.reminder-opt:hover{background:var(--surface);}
+.reminder-opt.active{color:var(--yellow);background:rgba(180,83,9,.07);font-weight:600;}
+.reminder-opt.cancel{color:var(--red);}
+.reminder-opt.cancel:hover{background:rgba(220,38,38,.07);}
+
+.empty-state{text-align:center;padding:60px 20px;color:var(--muted);}
+.empty-state .icon{font-size:2.5rem;margin-bottom:12px;}
+.empty-state p{font-size:.88rem;line-height:1.6;}
+.footer{text-align:center;margin-top:56px;padding-top:20px;border-top:1px solid var(--border);font-size:.75rem;color:var(--muted);letter-spacing:.04em;}
+.footer span{background:linear-gradient(90deg,var(--rob),var(--lizet));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:600;}
 ```
 
   </style>
@@ -203,10 +197,7 @@ mark { background:rgba(180,83,9,0.20); color:var(--text); border-radius:2px; pad
 <body>
 <div id="app">
 
-  <div id="sync-bar">
-    <div class="sync-dot"></div>
-    <span id="sync-text">Verbonden &#8212; afspraken worden gedeeld met Lizet</span>
-  </div>
+  <div id="sync-bar"><div class="sync-dot"></div><span id="sync-text">Verbonden</span></div>
 
   <div id="notif-banner">
     <p><strong>&#128276; Meldingen inschakelen</strong>Ontvang herinneringen voor je afspraken.</p>
@@ -225,13 +216,13 @@ mark { background:rgba(180,83,9,0.20); color:var(--text); border-radius:2px; pad
 
   <div class="mic-section">
     <div class="mic-ring" id="mic-ring">
-      <button id="mic-btn" title="Start opname">&#127897;&#65039;</button>
+      <button id="mic-btn">&#127897;&#65039;</button>
     </div>
     <div id="status-text">Tik de microfoon om een afspraak in te spreken</div>
     <div id="transcript-box"></div>
     <div class="alert warn" id="alert-blocked">
       <strong>&#128274; Microfoon geblokkeerd</strong>
-      Ga naar <strong>Instellingen &rarr; Safari &rarr; Microfoon</strong> &rarr; Toestaan, herlaad de pagina.
+      Ga naar Instellingen &#8594; Safari &#8594; Microfoon &#8594; Toestaan, herlaad de pagina.
     </div>
     <div class="alert error" id="alert-error"></div>
 
@@ -248,9 +239,9 @@ mark { background:rgba(180,83,9,0.20); color:var(--text); border-radius:2px; pad
 </div>
 
 <div id="text-section">
-  <div id="text-hint">Typ je afspraak, verjaardag of herdenking in het Nederlands</div>
+  <div id="text-hint">Typ je afspraak, verjaardag of herdenking</div>
   <div class="text-row">
-    <input id="text-input" type="text" placeholder="Bv. verjaardag mama 12 april, of tandarts 3 maart 14:00 Rob" autocomplete="off" />
+    <input id="text-input" type="text" placeholder="Bv. tandarts Rob 3 maart 14:00 of verjaardag mama 12 april" autocomplete="off" />
     <button id="text-submit">&#10133;</button>
   </div>
   <div class="alert error" id="alert-text-error"></div>
@@ -260,14 +251,12 @@ mark { background:rgba(180,83,9,0.20); color:var(--text); border-radius:2px; pad
 
   </div>
 
-  <!-- Tabs: 5 stuks -->
-
   <div class="tabs">
-    <button class="tab active" data-tab="alle">&#128467; Alle <span id="count-alle">(0)</span></button>
-    <button class="tab" data-tab="rob">&#128100; Rob <span id="count-rob">(0)</span></button>
-    <button class="tab" data-tab="lizet">&#128105; Lizet <span id="count-lizet">(0)</span></button>
-    <button class="tab" data-tab="bday">&#127874; Verjaardagen <span id="count-bday">(0)</span></button>
-    <button class="tab" data-tab="mem">&#129559; Herdenkingen <span id="count-mem">(0)</span></button>
+    <button class="tab active" data-tab="alle">&#128467;<br>Alle <span id="count-alle"></span></button>
+    <button class="tab" data-tab="rob">&#128100;<br>Rob <span id="count-rob"></span></button>
+    <button class="tab" data-tab="lizet">&#128105;<br>Lizet <span id="count-lizet"></span></button>
+    <button class="tab" data-tab="bday">&#127874;<br>Jarig <span id="count-bday"></span></button>
+    <button class="tab" data-tab="mem">&#129559;<br>Herdenkingen <span id="count-mem"></span></button>
   </div>
 
   <div id="search-wrap">
@@ -278,7 +267,7 @@ mark { background:rgba(180,83,9,0.20); color:var(--text); border-radius:2px; pad
   <div id="search-count"></div>
 
   <div id="export-bar">
-    <p>&#128197; Exporteer als .ics &mdash; werkt met Apple Agenda, Google Agenda &amp; Outlook.</p>
+    <p>&#128197; Exporteer als .ics — werkt met Apple Agenda, Google Agenda &amp; Outlook.</p>
     <button id="export-all-btn">Alles exporteren</button>
   </div>
 
@@ -289,383 +278,199 @@ mark { background:rgba(180,83,9,0.20); color:var(--text); border-radius:2px; pad
   <div id="toast"></div>
   <div class="footer"><span>Made by Rob Borghouts</span> &middot; 2026</div>
 </div>
-
 <script>
-// ─── Firebase ────────────────────────────────────────────────────────────────
-var firebaseConfig = {
-  apiKey:            "AIzaSyDeGP5IIWaFoG4PuISUueeccexrZOIVwGY",
-  authDomain:        "agenda-roblizet.firebaseapp.com",
-  databaseURL:       "https://agenda-roblizet-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId:         "agenda-roblizet",
-  storageBucket:     "agenda-roblizet.firebasestorage.app",
-  messagingSenderId: "789902813974",
-  appId:             "1:789902813974:web:62231ad5f5f90b4a91fe37"
-};
+var firebaseConfig={apiKey:"AIzaSyDeGP5IIWaFoG4PuISUueeccexrZOIVwGY",authDomain:"agenda-roblizet.firebaseapp.com",databaseURL:"https://agenda-roblizet-default-rtdb.europe-west1.firebasedatabase.app",projectId:"agenda-roblizet",storageBucket:"agenda-roblizet.firebasestorage.app",messagingSenderId:"789902813974",appId:"1:789902813974:web:62231ad5f5f90b4a91fe37"};
 firebase.initializeApp(firebaseConfig);
-var db    = firebase.database();
-var dbRef = db.ref("appointments");
+var db=firebase.database(),dbRef=db.ref("appointments");
 
-// ─── State ───────────────────────────────────────────────────────────────────
-var REMIND_KEY   = "afspraken_reminders";
-var appointments = [];
-var reminders    = {};
-var timers       = {};
-var activeTab    = "alle";
-var searchQuery  = "";
-var textMode     = false;
-var listening    = false;
-var processing   = false;
-var recognition  = null;
-var finalText    = "";
-var exported     = {};
-var openPopover  = null;
-try { reminders = JSON.parse(localStorage.getItem(REMIND_KEY)) || {}; } catch(e) {}
+var REMIND_KEY=“afspraken_reminders”,appointments=[],reminders={},timers={},activeTab=“alle”,searchQuery=””,textMode=false,listening=false,processing=false,recognition=null,finalText=””,exported={},openPopover=null;
+try{reminders=JSON.parse(localStorage.getItem(REMIND_KEY))||{};}catch(e){}
 
-// ─── DOM ────────────────────────────────────────────────────────────────────
-var syncBar       = document.getElementById("sync-bar");
-var syncText      = document.getElementById("sync-text");
-var notifBanner   = document.getElementById("notif-banner");
-var notifAllowBtn = document.getElementById("notif-allow-btn");
-var notifDismiss  = document.getElementById("notif-dismiss");
-var micRing       = document.getElementById("mic-ring");
-var micBtn        = document.getElementById("mic-btn");
-var statusText    = document.getElementById("status-text");
-var transcriptBox = document.getElementById("transcript-box");
-var alertBlocked  = document.getElementById("alert-blocked");
-var alertError    = document.getElementById("alert-error");
-var scanBtn       = document.getElementById("scan-btn");
-var cameraInput   = document.getElementById("camera-input");
-var scanPreview   = document.getElementById("scan-preview");
-var previewImg    = document.getElementById("preview-img");
-var scanStatus    = document.getElementById("scan-status");
-var alertScanErr  = document.getElementById("alert-scan-error");
-var textSection   = document.getElementById("text-section");
-var textInput     = document.getElementById("text-input");
-var textSubmit    = document.getElementById("text-submit");
-var alertTextErr  = document.getElementById("alert-text-error");
-var modeToggle    = document.getElementById("mode-toggle");
-var searchInput   = document.getElementById("search-input");
-var searchClear   = document.getElementById("search-clear");
-var searchCount   = document.getElementById("search-count");
-var aptList       = document.getElementById("apt-list");
-var exportBar     = document.getElementById("export-bar");
-var exportAllBtn  = document.getElementById("export-all-btn");
-var toastEl       = document.getElementById("toast");
+var syncBar=document.getElementById(“sync-bar”),syncText=document.getElementById(“sync-text”),notifBanner=document.getElementById(“notif-banner”),notifAllowBtn=document.getElementById(“notif-allow-btn”),notifDismiss=document.getElementById(“notif-dismiss”),micRing=document.getElementById(“mic-ring”),micBtn=document.getElementById(“mic-btn”),statusText=document.getElementById(“status-text”),transcriptBox=document.getElementById(“transcript-box”),alertBlocked=document.getElementById(“alert-blocked”),alertError=document.getElementById(“alert-error”),scanBtn=document.getElementById(“scan-btn”),cameraInput=document.getElementById(“camera-input”),scanPreview=document.getElementById(“scan-preview”),previewImg=document.getElementById(“preview-img”),scanStatus=document.getElementById(“scan-status”),alertScanErr=document.getElementById(“alert-scan-error”),textSection=document.getElementById(“text-section”),textInput=document.getElementById(“text-input”),textSubmit=document.getElementById(“text-submit”),alertTextErr=document.getElementById(“alert-text-error”),modeToggle=document.getElementById(“mode-toggle”),searchInput=document.getElementById(“search-input”),searchClear=document.getElementById(“search-clear”),searchCount=document.getElementById(“search-count”),aptList=document.getElementById(“apt-list”),exportBar=document.getElementById(“export-bar”),exportAllBtn=document.getElementById(“export-all-btn”),toastEl=document.getElementById(“toast”);
 
-var MONTHS = {januari:0,februari:1,maart:2,april:3,mei:4,juni:5,juli:6,augustus:7,september:8,oktober:9,november:10,december:11};
+var MONTHS={januari:0,februari:1,maart:2,april:3,mei:4,juni:5,juli:6,augustus:7,september:8,oktober:9,november:10,december:11};
 
-// ─── Type helpers ────────────────────────────────────────────────────────────
-// type: "afspraak" | "verjaardag" | "herdenking"
-function typeLabel(type) {
-  if (type === "verjaardag") return "Verjaardag";
-  if (type === "herdenking") return "Herdenking";
-  return null;
-}
-function typeClass(type) {
-  if (type === "verjaardag") return "bday";
-  if (type === "herdenking") return "mem";
-  return null;
-}
+function saveReminders(){try{localStorage.setItem(REMIND_KEY,JSON.stringify(reminders));}catch(e){}}
+function showAlert(el,msg){el.innerHTML=msg||””;el.style.display=msg?“block”:“none”;}
+function clearAlerts(){showAlert(alertBlocked,””);showAlert(alertError,””);showAlert(alertTextErr,””);showAlert(alertScanErr,””);}
+function escH(s){return String(s).replace(/&/g,”&”).replace(/</g,”<”).replace(/>/g,”>”).replace(/”/g,”"”);}
+function highlight(t,q){if(!q)return escH(t);return escH(t).replace(new RegExp(”(”+q.replace(/[.*+?^${}()|[]\]/g,”\$&”)+”)”,“gi”),”<mark>$1</mark>”);}
+function aptSortKey(a){if(a.type===“verjaardag”||a.type===“herdenking”){return a.dateISO?“0000-”+a.dateISO.slice(5):“9999”;}if(a.dateISO)return a.dateISO+“T”+(a.time?a.time.replace(”:”,””):“0000”);return “9999-99-99T”+new Date(a.createdAt).getTime();}
 
-// ─── Helpers ────────────────────────────────────────────────────────────────
-function saveReminders() { try{localStorage.setItem(REMIND_KEY,JSON.stringify(reminders));}catch(e){} }
-function showAlert(el,msg){el.innerHTML=msg||"";el.style.display=msg?"block":"none";}
-function clearAlerts(){showAlert(alertBlocked,"");showAlert(alertError,"");showAlert(alertTextErr,"");showAlert(alertScanErr,"");}
-function escH(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
-function highlight(text,q){if(!q)return escH(text);return escH(text).replace(new RegExp("("+q.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+")","gi"),"<mark>$1</mark>");}
-
-function aptSortKey(a) {
-  // For yearly entries (birthday/memorial): sort by month-day only so they appear in calendar order
-  if ((a.type==="verjaardag"||a.type==="herdenking") && a.dateISO) {
-    return "0000-" + a.dateISO.slice(5); // month-day only
-  }
-  if (a.dateISO) return a.dateISO+"T"+(a.time?a.time.replace(":",""):"0000");
-  return "9999-99-99T"+new Date(a.createdAt).getTime();
-}
-
-// ─── Toast ───────────────────────────────────────────────────────────────────
 var toastTimer=null;
-function showToast(msg){toastEl.innerHTML=msg;toastEl.style.display="block";if(toastTimer)clearTimeout(toastTimer);toastTimer=setTimeout(function(){toastEl.style.display="none";},4000);}
+function showToast(msg){toastEl.innerHTML=msg;toastEl.style.display=“block”;if(toastTimer)clearTimeout(toastTimer);toastTimer=setTimeout(function(){toastEl.style.display=“none”;},4000);}
 
-// ─── Firebase ────────────────────────────────────────────────────────────────
-db.ref(".info/connected").on("value",function(snap){
-  var ok=snap.val()===true;
-  syncBar.style.display="flex";syncBar.className=ok?"":"error";
-  syncText.textContent=ok?"Verbonden \u2014 afspraken worden gedeeld met Lizet":"Geen verbinding \u2014 wordt gesynchroniseerd zodra je online bent";
-});
-dbRef.on("value",function(snap){
-  var data=snap.val();
-  appointments=data?Object.keys(data).map(function(k){var a=data[k];a.id=k;return a;}):[]; 
-  scheduleAllReminders();render();
-},function(err){syncBar.className="error";syncText.textContent="Verbindingsfout: "+err.message;});
+db.ref(”.info/connected”).on(“value”,function(snap){var ok=snap.val()===true;syncBar.style.display=“flex”;syncBar.className=ok?””:“error”;syncText.textContent=ok?“Verbonden \u2014 afspraken worden gedeeld met Lizet”:“Geen verbinding \u2014 wordt gesynchroniseerd zodra je online bent”;});
+dbRef.on(“value”,function(snap){var data=snap.val();appointments=data?Object.keys(data).map(function(k){var a=data[k];a.id=k;return a;}):[]; scheduleAllReminders();render();},function(err){syncBar.className=“error”;syncText.textContent=“Fout: “+err.message;});
 
-// ─── Notifications ───────────────────────────────────────────────────────────
-function notifSupported(){return "Notification" in window;}
-function checkNotifBanner(){if(!notifSupported())return;notifBanner.style.display=Notification.permission==="default"?"flex":"none";}
-function requestNotifPermission(){if(!notifSupported())return;Notification.requestPermission().then(function(r){notifBanner.style.display="none";if(r==="granted"){showToast("&#128276; Meldingen ingeschakeld!");scheduleAllReminders();render();}});}
+function notifSupported(){return “Notification” in window;}
+function checkNotifBanner(){if(!notifSupported())return;notifBanner.style.display=Notification.permission===“default”?“flex”:“none”;}
+function requestNotifPermission(){if(!notifSupported())return;Notification.requestPermission().then(function(r){notifBanner.style.display=“none”;if(r===“granted”){showToast(”\u{1F514} Meldingen ingeschakeld!”);scheduleAllReminders();render();}});}
 
-function aptDateTime(apt) {
-  if (!apt.dateISO) return null;
-  var d = new Date(apt.dateISO);
-  // For yearly types, use current or next year's occurrence
-  if (apt.type==="verjaardag"||apt.type==="herdenking") {
-    var now = new Date();
-    var thisYear = now.getFullYear();
-    d = new Date(thisYear+"-"+apt.dateISO.slice(5));
-    if (d < now) d = new Date((thisYear+1)+"-"+apt.dateISO.slice(5));
-  }
-  if (apt.time){var p=apt.time.split(":");d.setHours(parseInt(p[0]),parseInt(p[1]),0,0);}
-  else d.setHours(8,0,0,0);
-  return d;
+function aptDateTime(apt){
+if(!apt.dateISO)return null;
+var d;
+if(apt.type===“verjaardag”||apt.type===“herdenking”){
+var now=new Date(),yr=now.getFullYear();
+d=new Date(yr+”-”+apt.dateISO.slice(5));
+if(d<now)d=new Date((yr+1)+”-”+apt.dateISO.slice(5));
+}else{d=new Date(apt.dateISO);}
+if(apt.time){var p=apt.time.split(”:”);d.setHours(parseInt(p[0]),parseInt(p[1]),0,0);}else d.setHours(8,0,0,0);
+return d;
 }
-
-function scheduleReminder(apt){
-  var mins=reminders[apt.id];if(mins===undefined)return;
-  if(!notifSupported()||Notification.permission!=="granted")return;
-  if(timers[apt.id]){clearTimeout(timers[apt.id]);delete timers[apt.id];}
-  var dt=aptDateTime(apt);if(!dt)return;
-  var delay=dt.getTime()-mins*60000-Date.now();if(delay<0)return;
-  timers[apt.id]=setTimeout(function(){
-    var who=apt.person==="beide"?"Rob & Lizet":apt.person==="rob"?"Rob":"Lizet";
-    var label=apt.type==="verjaardag"?"&#127874; Verjaardag":apt.type==="herdenking"?"&#129559; Herdenking":"&#128197;";
-    try{new Notification(label+" "+apt.description,{body:(apt.date||apt.dateISO)+(apt.time?" om "+apt.time:"")+" \u2022 "+who});}
-    catch(e){showToast("&#128276; Herinnering: "+apt.description);}
-    delete timers[apt.id];
-  },delay);
-}
+function scheduleReminder(apt){var mins=reminders[apt.id];if(mins===undefined)return;if(!notifSupported()||Notification.permission!==“granted”)return;if(timers[apt.id]){clearTimeout(timers[apt.id]);delete timers[apt.id];}var dt=aptDateTime(apt);if(!dt)return;var delay=dt.getTime()-mins*60000-Date.now();if(delay<0)return;timers[apt.id]=setTimeout(function(){var who=apt.person===“beide”?“Rob & Lizet”:apt.person===“rob”?“Rob”:“Lizet”;try{new Notification((apt.type===“verjaardag”?”\u{1F382} “:apt.type===“herdenking”?”\u{1FAF7} “:””)+apt.description,{body:(apt.date||apt.dateISO)+(apt.time?” om “+apt.time:””)+” \u2022 “+who});}catch(e){showToast(”\u{1F514} “+apt.description);}delete timers[apt.id];},delay);}
 function scheduleAllReminders(){appointments.forEach(function(a){if(reminders[a.id]!==undefined)scheduleReminder(a);});}
 function cancelReminder(id){if(timers[id]){clearTimeout(timers[id]);delete timers[id];}delete reminders[id];saveReminders();}
 function setReminder(apt,mins){reminders[apt.id]=mins;saveReminders();scheduleReminder(apt);}
+var REM_OPTS=[{label:“15 minuten van tevoren”,mins:15},{label:“1 uur van tevoren”,mins:60},{label:“Ochtend van de dag”,mins:480},{label:“1 dag van tevoren”,mins:1440},{label:“1 week van tevoren”,mins:10080}];
+function remLabel(mins){var o=REM_OPTS.find(function(x){return x.mins===mins;});return o?o.label:mins+” min”;}
 
-var REMINDER_OPTIONS=[
-  {label:"15 minuten van tevoren",mins:15},
-  {label:"1 uur van tevoren",mins:60},
-  {label:"Ochtend van de dag",mins:480},
-  {label:"1 dag van tevoren",mins:1440},
-  {label:"1 week van tevoren",mins:10080}
-];
-function reminderLabel(mins){var o=REMINDER_OPTIONS.find(function(x){return x.mins===mins;});return o?o.label:mins+" min";}
-
-// ─── AI Parsers ──────────────────────────────────────────────────────────────
-function parseFallback(text) {
-  var lower=text.toLowerCase(),person="beide";
-  if(lower.includes("lizet")&&!lower.includes("rob"))person="lizet";
-  else if(lower.includes("rob")&&!lower.includes("lizet"))person="rob";
-  var type="afspraak";
-  if(lower.includes("verjaardag")||lower.includes("jarig"))type="verjaardag";
-  else if(lower.includes("overleed")||lower.includes("overlijden")||lower.includes("herdenk")||lower.includes("gestorven"))type="herdenking";
-  var dm=lower.match(/(\d{1,2})\s*(januari|februari|maart|april|mei|juni|juli|augustus|september|oktober|november|december)/);
-  var tm=lower.match(/(\d{1,2})[:.h](\d{2})/);
-  var dateStr=null,dateISO=null;
-  if(dm){var day=parseInt(dm[1]),month=MONTHS[dm[2]],year=new Date().getFullYear();
-    var d=new Date(year,month,day);
-    dateStr=d.toLocaleDateString("nl-NL",{day:"numeric",month:"long"});
-    // For yearly types, store without year
-    if(type==="verjaardag"||type==="herdenking"){
-      dateISO="2000-"+String(month+1).padStart(2,"0")+"-"+String(day).padStart(2,"0");
-    } else {
-      dateISO=year+"-"+String(month+1).padStart(2,"0")+"-"+String(day).padStart(2,"0");
-    }
-  }
-  var time=tm?String(tm[1]).padStart(2,"0")+":"+tm[2]:null;
-  var icon=type==="verjaardag"?"🎂":type==="herdenking"?"🕯️":"📅";
-  return {person:person,type:type,description:text,date:dateStr,dateISO:dateISO,time:time,icon:icon};
+function parseFallback(text){
+var lower=text.toLowerCase(),person=“beide”;
+if(lower.includes(“lizet”)&&!lower.includes(“rob”))person=“lizet”;
+else if(lower.includes(“rob”)&&!lower.includes(“lizet”))person=“rob”;
+var type=“afspraak”;
+if(lower.includes(“verjaardag”)||lower.includes(“jarig”))type=“verjaardag”;
+else if(lower.includes(“overleed”)||lower.includes(“overlijden”)||lower.includes(“herdenk”)||lower.includes(“gestorven”))type=“herdenking”;
+var dm=lower.match(/(\d{1,2})\s*(januari|februari|maart|april|mei|juni|juli|augustus|september|oktober|november|december)/);
+var tm=lower.match(/(\d{1,2})[:.h](\d{2})/);
+var dateStr=null,dateISO=null;
+if(dm){var day=parseInt(dm[1]),month=MONTHS[dm[2]],year=new Date().getFullYear();var d=new Date(year,month,day);dateStr=d.toLocaleDateString(“nl-NL”,{day:“numeric”,month:“long”});dateISO=(type===“verjaardag”||type===“herdenking”?“2000”:year)+”-”+String(month+1).padStart(2,“0”)+”-”+String(day).padStart(2,“0”);}
+var time=tm?String(tm[1]).padStart(2,“0”)+”:”+tm[2]:null;
+var icon=type===“verjaardag”?”\u{1F382}”:type===“herdenking”?”\u{1FAF7}”:”\u{1F4C5}”;
+return {person,type,description:text,date:dateStr,dateISO,time,icon};
 }
 
-async function parseWithAI(text) {
-  var today=new Date().toLocaleDateString("nl-NL",{weekday:"long",year:"numeric",month:"long",day:"numeric"});
-  var iso=new Date().toISOString().slice(0,10);
-  var system="Je bent een assistent die gesproken tekst omzet naar agenda-items. Vandaag is het "+today+" ("+iso+").\nDe gebruikers heten Rob en Lizet.\nGeef altijd JSON terug (geen markdown), met deze velden:\n- type: \"afspraak\", \"verjaardag\", of \"herdenking\"\n- person: \"rob\", \"lizet\", of \"beide\"\n- description: korte beschrijving (max 80 tekens)\n- date: datum als \"d MMMM\" in het Nederlands (zonder jaar voor verjaardagen/herdenkingen), of null\n- dateISO: voor afspraken \"YYYY-MM-DD\", voor verjaardagen/herdenkingen \"2000-MM-DD\" (altijd jaar 2000), of null\n- time: tijd als \"HH:mm\", of null (meestal null voor verjaardagen/herdenkingen)\n- icon: 1 passend emoji (🎂 voor verjaardag, 🕯️ voor herdenking, anders passend)\nGeef ALLEEN de JSON terug.";
-  var res=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,system:system,messages:[{role:"user",content:"Zet deze tekst om: \""+text+"\""}]})});
-  var data=await res.json();
-  var raw=data.content&&data.content[0]&&data.content[0].text;
-  if(!raw)throw new Error("geen response");
-  return JSON.parse(raw.replace(/```json|```/g,"").trim());
+async function parseWithAI(text){
+var today=new Date().toLocaleDateString(“nl-NL”,{weekday:“long”,year:“numeric”,month:“long”,day:“numeric”});
+var iso=new Date().toISOString().slice(0,10);
+var sys=“Je bent een assistent die tekst omzet naar agenda-items. Vandaag is “+today+” (”+iso+”).\nDe gebruikers heten Rob en Lizet.\nGeef JSON terug (geen markdown):\n- type: afspraak, verjaardag of herdenking\n- person: rob, lizet of beide\n- description: max 80 tekens\n- date: datum als ‘d MMMM’ (zonder jaar voor verjaardagen/herdenkingen)\n- dateISO: YYYY-MM-DD voor afspraken, 2000-MM-DD voor verjaardagen/herdenkingen\n- time: HH:mm of null\n- icon: 1 emoji (🎂 verjaardag, 🕯️ herdenking)\nAlleen JSON.”;
+var res=await fetch(“https://api.anthropic.com/v1/messages”,{method:“POST”,headers:{“Content-Type”:“application/json”},body:JSON.stringify({model:“claude-sonnet-4-20250514”,max_tokens:1000,system:sys,messages:[{role:“user”,content:“Zet om: "”+text+”"”}]})});
+var data=await res.json();var raw=data.content&&data.content[0]&&data.content[0].text;if(!raw)throw new Error(“leeg”);
+return JSON.parse(raw.replace(/`json|`/g,””).trim());
 }
 
-async function parseFromImage(base64,mimeType) {
-  var today=new Date().toLocaleDateString("nl-NL",{weekday:"long",year:"numeric",month:"long",day:"numeric"});
-  var iso=new Date().toISOString().slice(0,10);
-  var system="Je analyseert afbeeldingen van brieven, kaarten of uitnodigingen om agenda-items te herkennen. Vandaag is het "+today+" ("+iso+").\nGeef een JSON-array terug (geen markdown). Elk item heeft:\n- type: \"afspraak\", \"verjaardag\", of \"herdenking\"\n- person: \"rob\", \"lizet\", of \"beide\"\n- description: korte beschrijving (max 80 tekens)\n- date: datum als \"d MMMM\" of \"d MMMM yyyy\"\n- dateISO: voor afspraken \"YYYY-MM-DD\", voor verjaardagen/herdenkingen \"2000-MM-DD\"\n- time: \"HH:mm\" of null\n- icon: passend emoji\nGeef ALLEEN de JSON array terug.";
-  var res=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:2000,system:system,messages:[{role:"user",content:[{type:"image",source:{type:"base64",media_type:mimeType,data:base64}},{type:"text",text:"Haal alle agenda-items uit deze afbeelding."}]}]})});
-  var data=await res.json();
-  var raw=data.content&&data.content[0]&&data.content[0].text;
-  if(!raw)throw new Error("geen response");
-  var parsed=JSON.parse(raw.replace(/```json|```/g,"").trim());
-  return Array.isArray(parsed)?parsed:[parsed];
+async function parseFromImage(base64,mimeType){
+var today=new Date().toLocaleDateString(“nl-NL”,{weekday:“long”,year:“numeric”,month:“long”,day:“numeric”});
+var iso=new Date().toISOString().slice(0,10);
+var sys=“Je analyseert afbeeldingen van brieven/kaarten/uitnodigingen. Vandaag is “+today+” (”+iso+”).\nGeef een JSON-array terug:\n- type: afspraak, verjaardag of herdenking\n- person: rob, lizet of beide\n- description: max 80 tekens\n- date: ‘d MMMM’ of ‘d MMMM yyyy’\n- dateISO: YYYY-MM-DD of 2000-MM-DD\n- time: HH:mm of null\n- icon: passend emoji\nAlleen JSON array.”;
+var res=await fetch(“https://api.anthropic.com/v1/messages”,{method:“POST”,headers:{“Content-Type”:“application/json”},body:JSON.stringify({model:“claude-sonnet-4-20250514”,max_tokens:2000,system:sys,messages:[{role:“user”,content:[{type:“image”,source:{type:“base64”,media_type:mimeType,data:base64}},{type:“text”,text:“Haal alle agenda-items uit dit document.”}]}]})});
+var data=await res.json();var raw=data.content&&data.content[0]&&data.content[0].text;if(!raw)throw new Error(“leeg”);
+var p=JSON.parse(raw.replace(/`json|`/g,””).trim());return Array.isArray(p)?p:[p];
 }
 
-function fileToBase64(file){return new Promise(function(resolve,reject){var r=new FileReader();r.onload=function(e){var b=e.target.result.split(",")[1];resolve({base64:b,mimeType:file.type||"image/jpeg"});};r.onerror=reject;r.readAsDataURL(file);});}
+function fileToBase64(file){return new Promise(function(resolve,reject){var r=new FileReader();r.onload=function(e){resolve({base64:e.target.result.split(”,”)[1],mimeType:file.type||“image/jpeg”});};r.onerror=reject;r.readAsDataURL(file);});}
 
-async function handleScan(file) {
-  clearAlerts();
-  previewImg.src=URL.createObjectURL(file);
-  scanPreview.classList.add("visible");
-  scanStatus.className="scanning";
-  scanStatus.textContent="Brief wordt gelezen door AI\u2026";
-  scanBtn.disabled=true;
-  try {
-    var img=await fileToBase64(file);
-    var apts=await parseFromImage(img.base64,img.mimeType);
-    var count=0;
-    for(var i=0;i<apts.length;i++){
-      var p=apts[i];if(!p.description)continue;
-      var newRef=dbRef.push();
-      await newRef.set({type:p.type||"afspraak",person:p.person||"beide",description:p.description,date:p.date||null,dateISO:p.dateISO||null,time:p.time||null,icon:p.icon||"📅",createdAt:new Date().toISOString(),rawText:"Gescand"});
-      count++;
-    }
-    scanStatus.className="";
-    scanStatus.textContent=count>0?"\u2705 "+count+" item"+(count!==1?"s":"")+" toegevoegd!":"\u26a0\ufe0f Geen items gevonden.";
-    if(count>0)showToast("&#128247; "+count+" item"+(count!==1?"s":"")+" gescand!");
-    setTimeout(function(){scanPreview.classList.remove("visible");},4000);
-  }catch(e){scanStatus.className="";showAlert(alertScanErr,"Kon de brief niet lezen. Probeer een duidelijkere foto.");}
-  finally{scanBtn.disabled=false;cameraInput.value="";}
+async function handleScan(file){
+clearAlerts();previewImg.src=URL.createObjectURL(file);scanPreview.classList.add(“visible”);scanStatus.className=“scanning”;scanStatus.textContent=“Brief wordt gelezen\u2026”;scanBtn.disabled=true;
+try{var img=await fileToBase64(file);var apts=await parseFromImage(img.base64,img.mimeType);var count=0;
+for(var i=0;i<apts.length;i++){var p=apts[i];if(!p.description)continue;var newRef=dbRef.push();await newRef.set({type:p.type||“afspraak”,person:p.person||“beide”,description:p.description,date:p.date||null,dateISO:p.dateISO||null,time:p.time||null,icon:p.icon||”\u{1F4C5}”,createdAt:new Date().toISOString(),rawText:“Gescand”});count++;}
+scanStatus.className=””;scanStatus.textContent=count>0?”\u2705 “+count+” item”+(count!==1?“s”:””)+” toegevoegd!”:”\u26A0\uFE0F Geen items gevonden.”;
+if(count>0)showToast(”\u{1F4F7} “+count+” item”+(count!==1?“s”:””)+” gescand!”);
+setTimeout(function(){scanPreview.classList.remove(“visible”);},4000);
+}catch(e){scanStatus.className=””;showAlert(alertScanErr,“Kon de brief niet lezen. Probeer een duidelijkere foto.”);}
+finally{scanBtn.disabled=false;cameraInput.value=””;}
 }
 
-// ─── Process text ────────────────────────────────────────────────────────────
-async function processInput(text) {
-  if(!text.trim()||processing)return;
-  clearAlerts();setProcessingState(true);
-  try {
-    var parsed;try{parsed=await parseWithAI(text);}catch(e){parsed=parseFallback(text);}
-    var newRef=dbRef.push();
-    await newRef.set({type:parsed.type||"afspraak",person:parsed.person||"beide",description:parsed.description,date:parsed.date||null,dateISO:parsed.dateISO||null,time:parsed.time||null,icon:parsed.icon||"📅",createdAt:new Date().toISOString(),rawText:text});
-    transcriptBox.style.display="none";transcriptBox.textContent="";textInput.value="";finalText="";
-    if(notifSupported()&&Notification.permission==="default")notifBanner.style.display="flex";
-  }catch(e){if(textMode)showAlert(alertTextErr,"Kon niet verwerken.");else showAlert(alertError,"Kon niet verwerken.");}
-  finally{setProcessingState(false);}
+async function processInput(text){
+if(!text.trim()||processing)return;clearAlerts();setProcessingState(true);
+try{var parsed;try{parsed=await parseWithAI(text);}catch(e){parsed=parseFallback(text);}
+var newRef=dbRef.push();await newRef.set({type:parsed.type||“afspraak”,person:parsed.person||“beide”,description:parsed.description,date:parsed.date||null,dateISO:parsed.dateISO||null,time:parsed.time||null,icon:parsed.icon||”\u{1F4C5}”,createdAt:new Date().toISOString(),rawText:text});
+transcriptBox.style.display=“none”;transcriptBox.textContent=””;textInput.value=””;finalText=””;
+if(notifSupported()&&Notification.permission===“default”)notifBanner.style.display=“flex”;
+}catch(e){if(textMode)showAlert(alertTextErr,“Kon niet verwerken.”);else showAlert(alertError,“Kon niet verwerken.”);}
+finally{setProcessingState(false);}
 }
 
-// ─── Speech ──────────────────────────────────────────────────────────────────
-function setListeningState(val){listening=val;micRing.classList.toggle("listening",val);micBtn.classList.toggle("active",val);micBtn.textContent=val?"⏹":(processing?"⚙️":"🎙️");statusText.className=val?"active":(processing?"processing":"");statusText.textContent=val?"Luisteren\u2026":(processing?"Verwerken\u2026":"Tik de microfoon om een afspraak in te spreken");}
-function setProcessingState(val){processing=val;micBtn.classList.toggle("busy",val);textSubmit.disabled=val;if(!listening){micBtn.textContent=val?"⚙️":"🎙️";statusText.className=val?"processing":"";statusText.textContent=val?"Verwerken\u2026":"Tik de microfoon om een afspraak in te spreken";}}
-function startSpeech(){var SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){showAlert(alertError,"Niet ondersteund.");return;}clearAlerts();finalText="";recognition=new SR();recognition.lang="nl-NL";recognition.continuous=false;recognition.interimResults=true;recognition.onstart=function(){setListeningState(true);};recognition.onresult=function(e){var interim="";for(var i=e.resultIndex;i<e.results.length;i++){if(e.results[i].isFinal)finalText+=e.results[i][0].transcript;else interim+=e.results[i][0].transcript;}var disp=(finalText+interim).trim();if(disp){transcriptBox.textContent='"'+disp+'"';transcriptBox.style.display="block";}};recognition.onend=function(){setListeningState(false);if(finalText.trim())processInput(finalText.trim());};recognition.onerror=function(e){setListeningState(false);if(e.error==="not-allowed")alertBlocked.style.display="block";else if(e.error!=="no-speech"&&e.error!=="aborted")showAlert(alertError,"Fout: "+e.error);};recognition.start();}
+function setListeningState(v){listening=v;micRing.classList.toggle(“listening”,v);micBtn.classList.toggle(“active”,v);micBtn.textContent=v?”\u23F9”:(processing?”\u2699\uFE0F”:”\u{1F3979}\uFE0F”);statusText.className=v?“active”:(processing?“processing”:””);statusText.textContent=v?“Luisteren\u2026”:(processing?“Verwerken\u2026”:“Tik de microfoon om een afspraak in te spreken”);}
+function setProcessingState(v){processing=v;micBtn.classList.toggle(“busy”,v);textSubmit.disabled=v;if(!listening){micBtn.textContent=v?”\u2699\uFE0F”:”\u{1F3979}\uFE0F”;statusText.className=v?“processing”:””;statusText.textContent=v?“Verwerken\u2026”:“Tik de microfoon om een afspraak in te spreken”;}}
+function startSpeech(){var SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){showAlert(alertError,“Niet ondersteund.”);return;}clearAlerts();finalText=””;recognition=new SR();recognition.lang=“nl-NL”;recognition.continuous=false;recognition.interimResults=true;recognition.onstart=function(){setListeningState(true);};recognition.onresult=function(e){var interim=””;for(var i=e.resultIndex;i<e.results.length;i++){if(e.results[i].isFinal)finalText+=e.results[i][0].transcript;else interim+=e.results[i][0].transcript;}var d=(finalText+interim).trim();if(d){transcriptBox.textContent=’”’+d+’”’;transcriptBox.style.display=“block”;}};recognition.onend=function(){setListeningState(false);if(finalText.trim())processInput(finalText.trim());};recognition.onerror=function(e){setListeningState(false);if(e.error===“not-allowed”)alertBlocked.style.display=“block”;else if(e.error!==“no-speech”&&e.error!==“aborted”)showAlert(alertError,“Fout: “+e.error);};recognition.start();}
 function stopSpeech(){if(recognition)recognition.stop();}
 
-// ─── ICS ─────────────────────────────────────────────────────────────────────
-function toICSDate(iso,time){if(!iso)return null;var p=iso.split("-");if(time){var t=time.split(":");return p[0]+p[1]+p[2]+"T"+t[0]+t[1]+"00";}return p[0]+p[1]+p[2];}
+function toICSDate(iso,time){if(!iso)return null;var p=iso.split(”-”);if(time){var t=time.split(”:”);return p[0]+p[1]+p[2]+“T”+t[0]+t[1]+“00”;}return p[0]+p[1]+p[2];}
 function buildICS(apts){
-  var lines=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Rob Borghouts//Onze Agenda//NL","CALSCALE:GREGORIAN","METHOD:PUBLISH"];
-  apts.forEach(function(a){
-    var dt=toICSDate(a.dateISO,a.time);if(!dt)return;
-    var who=a.person==="beide"?"Rob & Lizet":a.person==="rob"?"Rob":"Lizet";
-    lines.push("BEGIN:VEVENT","UID:"+a.id+"@onze-agenda","SUMMARY:"+(a.icon||"")+" "+a.description,"DESCRIPTION:"+who);
-    // Yearly recurrence for birthdays/memorials
-    if(a.type==="verjaardag"||a.type==="herdenking"){
-      lines.push("DTSTART;VALUE=DATE:"+dt,"DTEND;VALUE=DATE:"+dt,"RRULE:FREQ=YEARLY");
-    } else if(!a.time){
-      lines.push("DTSTART;VALUE=DATE:"+dt);var nx=new Date(a.dateISO);nx.setDate(nx.getDate()+1);var np=nx.toISOString().slice(0,10).split("-");lines.push("DTEND;VALUE=DATE:"+np[0]+np[1]+np[2]);
-    } else {
-      lines.push("DTSTART:"+dt);var hp=a.time.split(":").map(Number),dp=a.dateISO.split("-");lines.push("DTEND:"+dp[0]+dp[1]+dp[2]+"T"+String(hp[0]+1).padStart(2,"0")+String(hp[1]).padStart(2,"0")+"00");
-    }
-    lines.push("DTSTAMP:"+new Date().toISOString().replace(/[-:.]/g,"").slice(0,15)+"Z","END:VEVENT");
-  });
-  lines.push("END:VCALENDAR");return lines.join("\r\n");
+var lines=[“BEGIN:VCALENDAR”,“VERSION:2.0”,“PRODID:-//Rob Borghouts//Onze Agenda//NL”,“CALSCALE:GREGORIAN”,“METHOD:PUBLISH”];
+apts.forEach(function(a){var dt=toICSDate(a.dateISO,a.time);if(!dt)return;var who=a.person===“beide”?“Rob & Lizet”:a.person===“rob”?“Rob”:“Lizet”;
+lines.push(“BEGIN:VEVENT”,“UID:”+a.id+”@onze-agenda”,“SUMMARY:”+(a.icon||””)+” “+a.description,“DESCRIPTION:”+who);
+if(a.type===“verjaardag”||a.type===“herdenking”){lines.push(“DTSTART;VALUE=DATE:”+dt,“DTEND;VALUE=DATE:”+dt,“RRULE:FREQ=YEARLY”);}
+else if(!a.time){lines.push(“DTSTART;VALUE=DATE:”+dt);var nx=new Date(a.dateISO);nx.setDate(nx.getDate()+1);var np=nx.toISOString().slice(0,10).split(”-”);lines.push(“DTEND;VALUE=DATE:”+np[0]+np[1]+np[2]);}
+else{lines.push(“DTSTART:”+dt);var hp=a.time.split(”:”).map(Number),dp=a.dateISO.split(”-”);lines.push(“DTEND:”+dp[0]+dp[1]+dp[2]+“T”+String(hp[0]+1).padStart(2,“0”)+String(hp[1]).padStart(2,“0”)+“00”);}
+lines.push(“DTSTAMP:”+new Date().toISOString().replace(/[-:.]/g,””).slice(0,15)+“Z”,“END:VEVENT”);});
+lines.push(“END:VCALENDAR”);return lines.join(”\r\n”);
 }
-function downloadICS(apts,name){var blob=new Blob([buildICS(apts)],{type:"text/calendar;charset=utf-8"});var url=URL.createObjectURL(blob);var a=document.createElement("a");a.href=url;a.download=name;a.click();URL.revokeObjectURL(url);}
+function downloadICS(apts,name){var blob=new Blob([buildICS(apts)],{type:“text/calendar;charset=utf-8”});var url=URL.createObjectURL(blob);var a=document.createElement(“a”);a.href=url;a.download=name;a.click();URL.revokeObjectURL(url);}
 
-// ─── Render ──────────────────────────────────────────────────────────────────
-function render() {
-  var bdayCount = appointments.filter(function(a){return a.type==="verjaardag";}).length;
-  var memCount  = appointments.filter(function(a){return a.type==="herdenking";}).length;
-  var afspCount = appointments.filter(function(a){return !a.type||a.type==="afspraak";}).length;
-  document.getElementById("count-alle").textContent  ="("+appointments.length+")";
-  document.getElementById("count-rob").textContent   ="("+appointments.filter(function(a){return a.person==="rob"&&(!a.type||a.type==="afspraak");}).length+")";
-  document.getElementById("count-lizet").textContent ="("+appointments.filter(function(a){return a.person==="lizet"&&(!a.type||a.type==="afspraak");}).length+")";
-  document.getElementById("count-bday").textContent  ="("+bdayCount+")";
-  document.getElementById("count-mem").textContent   ="("+memCount+")";
-  exportBar.style.display=appointments.length>0?"flex":"none";
-
-  var filtered;
-  if      (activeTab==="alle")  filtered=appointments.slice();
-  else if (activeTab==="bday")  filtered=appointments.filter(function(a){return a.type==="verjaardag";});
-  else if (activeTab==="mem")   filtered=appointments.filter(function(a){return a.type==="herdenking";});
-  else if (activeTab==="rob")   filtered=appointments.filter(function(a){return a.person==="rob"&&(!a.type||a.type==="afspraak");});
-  else if (activeTab==="lizet") filtered=appointments.filter(function(a){return a.person==="lizet"&&(!a.type||a.type==="afspraak");});
-  else filtered=appointments.slice();
-
-  var q=searchQuery.trim().toLowerCase();
-  if(q)filtered=filtered.filter(function(a){return(a.description||"").toLowerCase().includes(q)||(a.date||"").toLowerCase().includes(q)||(a.rawText||"").toLowerCase().includes(q);});
-  filtered.sort(function(a,b){var ka=aptSortKey(a),kb=aptSortKey(b);return ka<kb?-1:ka>kb?1:0;});
-
-  if(q){searchCount.style.display="block";searchCount.textContent=filtered.length===0?"Geen resultaten voor \u201C"+searchQuery+"\u201D":filtered.length+" resultaat"+(filtered.length!==1?"en":"")+" voor \u201C"+searchQuery+"\u201D";}
-  else searchCount.style.display="none";
-
-  if(filtered.length===0){
-    var msg=activeTab==="bday"?"&#127874; Nog geen verjaardagen. Voeg ze toe via spraak of tekst!":activeTab==="mem"?"&#129559; Nog geen herdenkingen.":"&#127897;&#65039; Geen afspraken.";
-    aptList.innerHTML='<div class="empty-state"><div class="icon">'+(activeTab==="bday"?"&#127874;":activeTab==="mem"?"&#129559;":"&#127897;&#65039;")+'</div><p>'+msg+'</p></div>';
-    return;
-  }
-
-  var canNotif=notifSupported()&&Notification.permission==="granted";
-  var html="",groupKeys=[],groups={};
-  filtered.forEach(function(a){
-    var k;
-    if((a.type==="verjaardag"||a.type==="herdenking")&&a.date){
-      k=a.date; // just "12 april" without year
-    } else {
-      k=a.date||"Geen datum";
-    }
-    if(!groups[k]){groups[k]=[];groupKeys.push(k);}groups[k].push(a);
-  });
-
-  groupKeys.forEach(function(date){
-    var apts=groups[date];
-    html+='<div class="section-title">'+escH(date)+'<span class="count-badge">'+apts.length+"</span></div>";
-    apts.forEach(function(a){
-      var atype=a.type||"afspraak";
-      var cardClass=atype==="verjaardag"?"bday":atype==="herdenking"?"mem":a.person;
-      var whoLabel=atype==="verjaardag"?"Verjaardag":atype==="herdenking"?"Herdenking":(a.person==="beide"?"Rob & Lizet":a.person==="rob"?"Rob":"Lizet");
-      var whoClass=atype==="verjaardag"?"bday":atype==="herdenking"?"mem":a.person;
-      var expDone=exported[a.id],hasRem=reminders[a.id]!==undefined;
-      var calBtn=a.dateISO?'<button class="apt-cal-btn'+(expDone?" done":"")+'" data-id="'+a.id+'">'+(expDone?"&#10003;":"&#128229;")+"</button>":"";
-      var bellBtn=a.dateISO&&canNotif?'<button class="apt-bell-btn'+(hasRem?" set":"")+'" data-id="'+a.id+'">&#128276;</button>':"";
-      var yearlyBadge=(atype==="verjaardag")?'<span class="yearly-badge">&#127874; Jaarlijks</span>':(atype==="herdenking")?'<span class="yearly-badge mem">&#129559; Jaarlijks</span>':"";
-      var remBadge=hasRem?'<span class="reminder-badge">&#128276; '+escH(reminderLabel(reminders[a.id]))+"</span>":"";
-      var popOpts="";
-      if(a.dateISO&&canNotif){REMINDER_OPTIONS.forEach(function(o){var act=reminders[a.id]===o.mins;popOpts+='<button class="reminder-opt'+(act?" active":"")+'" data-id="'+a.id+'" data-mins="'+o.mins+'">'+escH(o.label)+(act?" &#10003;":"")+"</button>";});if(hasRem)popOpts+='<button class="reminder-opt cancel" data-id="'+a.id+'" data-mins="cancel">&#10005; Herinnering verwijderen</button>';}
-      var pop=a.dateISO&&canNotif?'<div class="reminder-popover" id="pop-'+a.id+'"><p>Herinnering</p>'+popOpts+"</div>":"";
-      html+='<div class="apt-card '+cardClass+'" style="margin-bottom:8px" data-id="'+a.id+'">'
-        +'<div class="apt-icon">'+(a.icon||"&#128197;")+"</div>"
-        +'<div class="apt-body">'
-        +'<div class="apt-who '+whoClass+'">'+escH(whoLabel)+"</div>"
-        +'<div class="apt-desc">'+highlight(a.description,searchQuery.trim())+"</div>"
-        +'<div class="apt-meta">'+(a.time?'<span>&#128336; '+escH(a.time)+"</span>":"")+yearlyBadge+remBadge+"</div>"
-        +"</div>"
-        +'<div class="apt-actions">'+calBtn+bellBtn+pop+'<button class="apt-del-btn" data-id="'+a.id+'">&#128465;</button></div>'
-        +"</div>";
-    });
-  });
-  aptList.innerHTML=html;
-}
-
-// ─── Popovers ────────────────────────────────────────────────────────────────
-function closeAllPopovers(){document.querySelectorAll(".reminder-popover.open").forEach(function(p){p.classList.remove("open");});openPopover=null;}
-
-// ─── Events ──────────────────────────────────────────────────────────────────
-notifAllowBtn.addEventListener("click",requestNotifPermission);
-notifDismiss.addEventListener("click",function(){notifBanner.style.display="none";});
-micBtn.addEventListener("click",function(){if(processing)return;if(listening)stopSpeech();else startSpeech();});
-scanBtn.addEventListener("click",function(){cameraInput.click();});
-cameraInput.addEventListener("change",function(e){var f=e.target.files&&e.target.files[0];if(f)handleScan(f);});
-modeToggle.addEventListener("click",function(){textMode=!textMode;clearAlerts();if(textMode){textSection.classList.add("visible");modeToggle.textContent="&#127897;&#65039; Terug naar spraakopname";micRing.style.display="none";statusText.style.display="none";}else{textSection.classList.remove("visible");modeToggle.textContent="&#9000;&#65039; Liever typen? Gebruik tekstinvoer";micRing.style.display="";statusText.style.display="";}});
-textSubmit.addEventListener("click",function(){processInput(textInput.value);});
-textInput.addEventListener("keydown",function(e){if(e.key==="Enter")processInput(textInput.value);});
-searchInput.addEventListener("input",function(){searchQuery=searchInput.value;searchClear.style.display=searchQuery?"block":"none";render();});
-searchClear.addEventListener("click",function(){searchInput.value="";searchQuery="";searchClear.style.display="none";searchInput.focus();render();});
-document.querySelectorAll(".tab").forEach(function(btn){btn.addEventListener("click",function(){document.querySelectorAll(".tab").forEach(function(t){t.classList.remove("active");});btn.classList.add("active");activeTab=btn.dataset.tab;render();});});
-exportAllBtn.addEventListener("click",function(){var wd=appointments.filter(function(a){return a.dateISO;});if(!wd.length){alert("Geen items met een datum.");return;}downloadICS(wd,"onze-agenda.ics");});
-aptList.addEventListener("click",function(e){
-  var del=e.target.closest(".apt-del-btn"),cal=e.target.closest(".apt-cal-btn"),bell=e.target.closest(".apt-bell-btn"),opt=e.target.closest(".reminder-opt");
-  if(del){cancelReminder(del.dataset.id);dbRef.child(del.dataset.id).remove();return;}
-  if(cal){var apt=appointments.find(function(a){return a.id===cal.dataset.id;});if(!apt)return;downloadICS([apt],apt.description.slice(0,30).replace(/\s/g,"-")+".ics");exported[cal.dataset.id]=true;render();return;}
-  if(bell){e.stopPropagation();var pop=document.getElementById("pop-"+bell.dataset.id);if(!pop)return;if(pop.classList.contains("open")){pop.classList.remove("open");openPopover=null;}else{closeAllPopovers();pop.classList.add("open");openPopover=bell.dataset.id;}return;}
-  if(opt){e.stopPropagation();var apt2=appointments.find(function(a){return a.id===opt.dataset.id;});if(!apt2)return;closeAllPopovers();if(opt.dataset.mins==="cancel"){cancelReminder(opt.dataset.id);showToast("&#128276; Herinnering verwijderd");}else{setReminder(apt2,parseInt(opt.dataset.mins));showToast("&#128276; Herinnering ingesteld: "+reminderLabel(parseInt(opt.dataset.mins)));}render();return;}
-  closeAllPopovers();
+function render(){
+document.getElementById(“count-alle”).textContent=”(”+appointments.length+”)”;
+document.getElementById(“count-rob”).textContent=”(”+appointments.filter(function(a){return a.person===“rob”&&(!a.type||a.type===“afspraak”);}).length+”)”;
+document.getElementById(“count-lizet”).textContent=”(”+appointments.filter(function(a){return a.person===“lizet”&&(!a.type||a.type===“afspraak”);}).length+”)”;
+document.getElementById(“count-bday”).textContent=”(”+appointments.filter(function(a){return a.type===“verjaardag”;}).length+”)”;
+document.getElementById(“count-mem”).textContent=”(”+appointments.filter(function(a){return a.type===“herdenking”;}).length+”)”;
+exportBar.style.display=appointments.length>0?“flex”:“none”;
+var filtered;
+if(activeTab===“alle”)filtered=appointments.slice();
+else if(activeTab===“bday”)filtered=appointments.filter(function(a){return a.type===“verjaardag”;});
+else if(activeTab===“mem”)filtered=appointments.filter(function(a){return a.type===“herdenking”;});
+else if(activeTab===“rob”)filtered=appointments.filter(function(a){return a.person===“rob”&&(!a.type||a.type===“afspraak”);});
+else if(activeTab===“lizet”)filtered=appointments.filter(function(a){return a.person===“lizet”&&(!a.type||a.type===“afspraak”);});
+else filtered=appointments.slice();
+var q=searchQuery.trim().toLowerCase();
+if(q)filtered=filtered.filter(function(a){return(a.description||””).toLowerCase().includes(q)||(a.date||””).toLowerCase().includes(q)||(a.rawText||””).toLowerCase().includes(q);});
+filtered.sort(function(a,b){var ka=aptSortKey(a),kb=aptSortKey(b);return ka<kb?-1:ka>kb?1:0;});
+if(q){searchCount.style.display=“block”;searchCount.textContent=filtered.length===0?“Geen resultaten voor \u201C”+searchQuery+”\u201D”:filtered.length+” resultaat”+(filtered.length!==1?“en”:””)+” voor \u201C”+searchQuery+”\u201D”;}else searchCount.style.display=“none”;
+if(filtered.length===0){var icon=activeTab===“bday”?”🎂”:activeTab===“mem”?”🨗”:”🎙️”;var msg=activeTab===“bday”?“Nog geen verjaardagen. Voeg toe via spraak of tekst!”:activeTab===“mem”?“Nog geen herdenkingen.”:“Geen afspraken. Spreek, typ of scan!”;aptList.innerHTML=’<div class="empty-state"><div class="icon">’+icon+’</div><p>’+msg+’</p></div>’;return;}
+var canNotif=notifSupported()&&Notification.permission===“granted”;
+var html=””,groupKeys=[],groups={};
+filtered.forEach(function(a){var k=a.date||“Geen datum”;if(!groups[k]){groups[k]=[];groupKeys.push(k);}groups[k].push(a);});
+groupKeys.forEach(function(date){
+var apts=groups[date];html+=’<div class="section-title">’+escH(date)+’<span class="count-badge">’+apts.length+”</span></div>”;
+apts.forEach(function(a){
+var atype=a.type||“afspraak”;
+var cardClass=atype===“verjaardag”?“bday”:atype===“herdenking”?“mem”:a.person;
+var whoLabel=atype===“verjaardag”?“Verjaardag”:atype===“herdenking”?“Herdenking”:(a.person===“beide”?“Rob & Lizet”:a.person===“rob”?“Rob”:“Lizet”);
+var whoClass=atype===“verjaardag”?“bday”:atype===“herdenking”?“mem”:a.person;
+var expDone=exported[a.id],hasRem=reminders[a.id]!==undefined;
+var calBtn=a.dateISO?’<button class=“apt-cal-btn’+(expDone?” done”:””)+’” data-id=”’+a.id+’”>’+(expDone?”✓”:”📥”)+”</button>”:””;
+var bellBtn=a.dateISO&&canNotif?’<button class=“apt-bell-btn’+(hasRem?” set”:””)+’” data-id=”’+a.id+’”>🔔</button>’:””;
+var yearlyBadge=atype===“verjaardag”?’<span class="yearly-badge">🎂 Jaarlijks</span>’:atype===“herdenking”?’<span class="yearly-badge mem">🨗 Jaarlijks</span>’:””;
+var remBadge=hasRem?’<span class="reminder-badge">🔔 ‘+escH(remLabel(reminders[a.id]))+”</span>”:””;
+var popOpts=””;if(a.dateISO&&canNotif){REM_OPTS.forEach(function(o){var act=reminders[a.id]===o.mins;popOpts+=’<button class=“reminder-opt’+(act?” active”:””)+’” data-id=”’+a.id+’” data-mins=”’+o.mins+’”>’+escH(o.label)+(act?” ✓”:””)+”</button>”;});if(hasRem)popOpts+=’<button class="reminder-opt cancel" data-id="'+a.id+'" data-mins="cancel">✕ Verwijder herinnering</button>’;}
+var pop=a.dateISO&&canNotif?’<div class="reminder-popover" id="pop-'+a.id+'"><p>Herinnering</p>’+popOpts+”</div>”:””;
+html+=’<div class="apt-card '+cardClass+'" style="margin-bottom:8px" data-id="'+a.id+'">’
++’<div class="apt-icon">’+(a.icon||”📅”)+”</div>”
++’<div class="apt-body"><div class="apt-who '+whoClass+'">’+escH(whoLabel)+”</div>”
++’<div class="apt-desc">’+highlight(a.description,searchQuery.trim())+”</div>”
++’<div class="apt-meta">’+(a.time?’<span>🕐 ‘+escH(a.time)+”</span>”:””)+yearlyBadge+remBadge+”</div></div>”
++’<div class="apt-actions">’+calBtn+bellBtn+pop+’<button class="apt-del-btn" data-id="'+a.id+'">🗑</button></div></div>’;
 });
-document.addEventListener("click",function(e){if(!e.target.closest(".apt-actions"))closeAllPopovers();});
+});
+aptList.innerHTML=html;
+}
 
-// ─── Init ────────────────────────────────────────────────────────────────────
+function closeAllPopovers(){document.querySelectorAll(”.reminder-popover.open”).forEach(function(p){p.classList.remove(“open”);});openPopover=null;}
+
+notifAllowBtn.addEventListener(“click”,requestNotifPermission);
+notifDismiss.addEventListener(“click”,function(){notifBanner.style.display=“none”;});
+micBtn.addEventListener(“click”,function(){if(processing)return;if(listening)stopSpeech();else startSpeech();});
+scanBtn.addEventListener(“click”,function(){cameraInput.click();});
+cameraInput.addEventListener(“change”,function(e){var f=e.target.files&&e.target.files[0];if(f)handleScan(f);});
+modeToggle.addEventListener(“click”,function(){textMode=!textMode;clearAlerts();if(textMode){textSection.classList.add(“visible”);modeToggle.textContent=”\u{1F3979}\uFE0F Terug naar spraakopname”;micRing.style.display=“none”;statusText.style.display=“none”;}else{textSection.classList.remove(“visible”);modeToggle.textContent=”\u2B00\uFE0F Liever typen? Gebruik tekstinvoer”;micRing.style.display=””;statusText.style.display=””;}});
+textSubmit.addEventListener(“click”,function(){processInput(textInput.value);});
+textInput.addEventListener(“keydown”,function(e){if(e.key===“Enter”)processInput(textInput.value);});
+searchInput.addEventListener(“input”,function(){searchQuery=searchInput.value;searchClear.style.display=searchQuery?“block”:“none”;render();});
+searchClear.addEventListener(“click”,function(){searchInput.value=””;searchQuery=””;searchClear.style.display=“none”;searchInput.focus();render();});
+document.querySelectorAll(”.tab”).forEach(function(btn){btn.addEventListener(“click”,function(){document.querySelectorAll(”.tab”).forEach(function(t){t.classList.remove(“active”);});btn.classList.add(“active”);activeTab=btn.dataset.tab;render();});});
+exportAllBtn.addEventListener(“click”,function(){var wd=appointments.filter(function(a){return a.dateISO;});if(!wd.length){alert(“Geen items met datum.”);return;}downloadICS(wd,“onze-agenda.ics”);});
+aptList.addEventListener(“click”,function(e){
+var del=e.target.closest(”.apt-del-btn”),cal=e.target.closest(”.apt-cal-btn”),bell=e.target.closest(”.apt-bell-btn”),opt=e.target.closest(”.reminder-opt”);
+if(del){cancelReminder(del.dataset.id);dbRef.child(del.dataset.id).remove();return;}
+if(cal){var apt=appointments.find(function(a){return a.id===cal.dataset.id;});if(!apt)return;downloadICS([apt],apt.description.slice(0,30).replace(/\s/g,”-”)+”.ics”);exported[cal.dataset.id]=true;render();return;}
+if(bell){e.stopPropagation();var pop=document.getElementById(“pop-”+bell.dataset.id);if(!pop)return;if(pop.classList.contains(“open”)){pop.classList.remove(“open”);openPopover=null;}else{closeAllPopovers();pop.classList.add(“open”);openPopover=bell.dataset.id;}return;}
+if(opt){e.stopPropagation();var apt2=appointments.find(function(a){return a.id===opt.dataset.id;});if(!apt2)return;closeAllPopovers();if(opt.dataset.mins===“cancel”){cancelReminder(opt.dataset.id);showToast(”🔔 Herinnering verwijderd”);}else{setReminder(apt2,parseInt(opt.dataset.mins));showToast(”🔔 Herinnering ingesteld: “+remLabel(parseInt(opt.dataset.mins)));}render();return;}
+closeAllPopovers();
+});
+document.addEventListener(“click”,function(e){if(!e.target.closest(”.apt-actions”))closeAllPopovers();});
+
 checkNotifBanner();
 </script>
 
