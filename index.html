@@ -141,6 +141,7 @@
       <button class="tab" data-tab="verjaardagen">&#127874; Verjaardagen <span id="count-bdays">(0)</span></button>
       <button class="tab" data-tab="herinneringen">&#128367; Herinneringen <span id="count-mem">(0)</span></button>
       <button class="tab" data-tab="kalender">&#128467; Kalender</button>
+      <button class="tab" data-tab="meldingen">&#128276; Meldingen</button>
     </div>
     <div class="counts" id="summary-pills">
       <div class="pill" id="pill-today">Vandaag: 0</div>
@@ -197,6 +198,14 @@
         <button class="secondary" id="mem-export">&#128228; Exporteer (.ics)</button>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- MELDINGEN SECTIE -->
+<div id="meldingen-section" style="display:none; margin-bottom:14px;">
+  <div class="card">
+    <h2><span>&#128276; Geplande meldingen</span><span id="notif-status" style="color:var(--muted);font-weight:800;font-size:.85rem;">laden...</span></h2>
+    <div class="list" id="notif-list"></div>
   </div>
 </div>
 
@@ -477,17 +486,96 @@ function renderCalendarDay(iso){
   });
 }
 
+function renderMeldingen(){
+  var notifStatus = document.getElementById("notif-status");
+  var notifList = document.getElementById("notif-list");
+  if(!("Notification" in window)){
+    notifStatus.textContent = "niet ondersteund";
+    notifList.innerHTML = '<div class="empty-state"><div class="icon">&#10060;</div><p>Meldingen worden niet ondersteund in deze browser.</p></div>';
+    return;
+  }
+  var perm = Notification.permission;
+  notifStatus.textContent = perm === "granted" ? "&#10003; Toestemming gegeven" : perm === "denied" ? "&#10060; Geblokkeerd" : "Toestemming vereist";
+
+  var items = [];
+  var now = Date.now();
+
+  appointments.forEach(function(a){
+    var d = normalizeISO(a.date); if(!d) return;
+    var who = a.who==="rob"?"Rob":(a.who==="lizet"?"Lizet":"Rob & Lizet");
+    var desc = (a.desc||"Afspraak");
+    if(a.time){
+      var t15 = new Date(d+"T"+a.time+":00").getTime() - 15*60*1000;
+      if(t15 > now) items.push({when:t15, icon:"&#9201;", title:"15 min voor: "+desc, sub:who});
+    }
+    var morning = new Date(d+"T08:00:00").getTime();
+    if(morning > now) items.push({when:morning, icon:"&#127749;", title:"Ochtend: "+desc, sub:who});
+  });
+
+  birthdays.forEach(function(b){
+    var nextISO = nextBirthdayDateISO(b.mmdd); if(!nextISO) return;
+    var dayBefore = isoToLocalDate(nextISO); dayBefore.setDate(dayBefore.getDate()-1);
+    var t1 = new Date(dateToISO(dayBefore)+"T09:00:00").getTime();
+    var t2 = new Date(nextISO+"T08:00:00").getTime();
+    if(t1 > now) items.push({when:t1, icon:"&#127874;", title:"Morgen jarig: "+(b.name||""), sub:"dag ervoor"});
+    if(t2 > now) items.push({when:t2, icon:"&#127874;", title:"Vandaag jarig: "+(b.name||""), sub:"dag zelf"});
+  });
+
+  memories.forEach(function(m){
+    var nextISO = nextBirthdayDateISO(m.mmdd); if(!nextISO) return;
+    var dayBefore = isoToLocalDate(nextISO); dayBefore.setDate(dayBefore.getDate()-1);
+    var t1 = new Date(dateToISO(dayBefore)+"T09:00:00").getTime();
+    var t2 = new Date(nextISO+"T08:00:00").getTime();
+    if(t1 > now) items.push({when:t1, icon:"&#128367;", title:(m.type||"Herinnering")+" morgen: "+(m.name||""), sub:"dag ervoor"});
+    if(t2 > now) items.push({when:t2, icon:"&#128367;", title:(m.type||"Herinnering")+" vandaag: "+(m.name||""), sub:"dag zelf"});
+  });
+
+  items.sort(function(a,b){ return a.when - b.when; });
+
+  if(!remindersOn){
+    notifList.innerHTML = '<div class="empty-state"><div class="icon">&#128276;</div><p>Herinneringen zijn uitgeschakeld.<br>Zet ze aan via de knop rechtsboven.</p></div>';
+    return;
+  }
+  if(perm !== "granted"){
+    notifList.innerHTML = '<div class="empty-state"><div class="icon">&#128274;</div><p>Geef toestemming voor meldingen in Safari:<br>Instellingen &rarr; Safari &rarr; Meldingen &rarr; Toestaan</p></div>';
+    return;
+  }
+  if(!items.length){
+    notifList.innerHTML = '<div class="empty-state"><div class="icon">&#128276;</div><p>Geen geplande meldingen.<br>Voeg afspraken of verjaardagen toe.</p></div>';
+    return;
+  }
+
+  var html = '<div class="section-title">Gepland<span class="count-badge">'+items.length+'</span></div>';
+  items.forEach(function(item){
+    var dt = new Date(item.when);
+    var dtTxt = dt.toLocaleDateString("nl-NL",{day:"numeric",month:"long"}) + " om " + pad2(dt.getHours())+":"+pad2(dt.getMinutes());
+    html += '<div class="apt-card beide" style="margin-bottom:8px">'
+      +'<div class="apt-icon">'+item.icon+'</div>'
+      +'<div class="apt-body">'
+      +'<div class="apt-who beide">'+escH(item.sub)+'</div>'
+      +'<div class="apt-desc">'+escH(item.title)+'</div>'
+      +'<div class="apt-meta"><span>&#9200; '+escH(dtTxt)+'</span></div>'
+      +'</div></div>';
+  });
+  notifList.innerHTML = html;
+}
+
 function showMainGrid(){if(mainGrid)mainGrid.style.display="";if(leftCard)leftCard.style.display="";if(rightCard)rightCard.style.gridColumn="";}
 function hideMainGrid(){if(mainGrid)mainGrid.style.display="none";}
 
 function render(){
   updateTabCounts();computeCounts();
   var listSubtitle=document.getElementById("list-subtitle");
+  var meldingenSection = document.getElementById("meldingen-section");
   if(activeTab==="kalender"){
-    calSection.style.display="block";bdaySection.style.display="none";memSection.style.display="none";hideMainGrid();
+    calSection.style.display="block";bdaySection.style.display="none";memSection.style.display="none";if(meldingenSection)meldingenSection.style.display="none";hideMainGrid();
     renderCalendar();return;
   }
-  calSection.style.display="none";showMainGrid();
+  if(activeTab==="meldingen"){
+    calSection.style.display="none";bdaySection.style.display="none";memSection.style.display="none";if(meldingenSection)meldingenSection.style.display="block";hideMainGrid();
+    renderMeldingen();return;
+  }
+  calSection.style.display="none";if(meldingenSection)meldingenSection.style.display="none";showMainGrid();
   if(activeTab==="verjaardagen"){
     bdaySection.style.display="block";memSection.style.display="none";exportBar.style.display="none";
     leftCard.style.display="none";rightCard.style.gridColumn="1 / -1";
