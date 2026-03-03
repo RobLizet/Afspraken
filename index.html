@@ -11,24 +11,34 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
     :root{
-      --bg:#fdf8ee;
-      --surface:#f0e8d5;
-      --surface2:#e8dcc8;
-      --text:#1c1917;
-      --muted:#78716c;
-      --border:rgba(0,0,0,0.12);
-      --shadow: 0 14px 40px rgba(0,0,0,.10);
-      --rob:#1a5fa8;
-      --rob-bg:rgba(26,95,168,.10);
-      --rob-border:rgba(26,95,168,.35);
-      --lizet:#8b3a6b;
-      --lizet-bg:rgba(139,58,107,.10);
-      --lizet-border:rgba(139,58,107,.35);
-      --beide:#5a7a3a;
-      --beide-bg:rgba(90,122,58,.10);
-      --beide-border:rgba(90,122,58,.30);
-      --danger:#dc2626;
-      --ok:#2d7a46;
+      --bg:#0b1220;
+      --surface:#101a2f;
+      --surface2:#152244;
+      --text:#f2f4f8;
+      --muted:rgba(242,244,248,.70);
+      --border:rgba(242,244,248,.14);
+      --shadow: 0 18px 50px rgba(0,0,0,.35);
+
+      --accent:#4f8cff;
+      --accent-bg:rgba(79,140,255,.16);
+      --accent-border:rgba(79,140,255,.40);
+
+      --rob:#4f8cff;
+      --rob-bg:rgba(79,140,255,.16);
+      --rob-border:rgba(79,140,255,.40);
+
+      --lizet:#ff4fb1;
+      --lizet-bg:rgba(255,79,177,.16);
+      --lizet-border:rgba(255,79,177,.40);
+
+      --beide:#38d39f;
+      --beide-bg:rgba(56,211,159,.14);
+      --beide-border:rgba(56,211,159,.32);
+
+      --danger:#ff4d4d;
+      --ok:#38d39f;
+
+      --radius:22px;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -65,7 +75,19 @@
     .grid{display:grid;grid-template-columns:1.2fr .8fr;gap:14px;align-items:start;}
     @media(max-width:860px){.grid{grid-template-columns:1fr}}
     .card{border:1px solid var(--border);border-radius:18px;background:var(--bg);overflow:hidden;}
-    .card h2{margin:0;padding:14px 14px 10px 14px;font-size:1rem;border-bottom:1px solid var(--border);color:rgba(233,238,252,.95);display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:900;}
+    .card h2{
+      margin:0;
+      padding:14px 14px 12px 14px;
+      font-size:1rem;
+      border-bottom:1px solid var(--border);
+      color:var(--text);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      font-weight:900;
+      background:linear-gradient(135deg, rgba(79,140,255,.18), rgba(255,79,177,.14));
+    }
     .card .body{padding:14px;}
     label{display:block;font-size:.85rem;color:var(--muted);margin-bottom:6px;margin-top:12px;font-weight:800;}
     input[type="text"],input[type="date"],input[type="time"],textarea,select{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);border-radius:14px;padding:12px 12px;font-size:0.95rem;outline:none;-webkit-appearance:none;font-weight:700;}
@@ -76,7 +98,7 @@
     button.primary{flex:1;min-width:160px;border-radius:14px;padding:12px 14px;cursor:pointer;border:1px solid var(--rob-border);background:var(--rob-bg);color:var(--rob);font-weight:900;font-size:0.95rem;}
     button.secondary{border-radius:14px;padding:12px 14px;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--text);font-weight:900;font-size:0.95rem;}
     .list{padding:12px 14px 14px 14px;}
-    .section-title{display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:900;margin:6px 0 10px 0;color:rgba(233,238,252,.95);}
+    .section-title{display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:900;margin:6px 0 10px 0;color:var(--text);}
     .count-badge{font-size:.78rem;color:var(--muted);border:1px solid var(--border);padding:6px 10px;border-radius:999px;background:var(--surface);font-weight:900;}
     .apt-card{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--border);border-radius:16px;padding:12px 12px;background:var(--surface);margin-bottom:10px;}
     .apt-icon{width:42px;height:42px;border-radius:14px;border:1px solid var(--border);display:grid;place-items:center;background:var(--bg);font-size:18px;flex:0 0 42px;}
@@ -100,7 +122,7 @@
     .footerbar .small{color:var(--muted);font-size:.82rem;font-weight:800;}
     .exportbar{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;}
     .exportbar button{border-radius:12px;padding:10px 12px;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--text);font-weight:900;font-size:.85rem;}
-    .madeby{color:rgba(159,176,208,.9);font-size:.8rem;margin-top:10px;text-align:right;padding-right:6px;font-weight:800;}
+    .madeby{color:var(--muted);font-size:.8rem;margin-top:10px;text-align:right;padding-right:6px;font-weight:800;}
     .cal-wrap{border:1px solid var(--border);border-radius:18px;background:var(--bg);overflow:hidden;margin-bottom:14px;}
     .cal-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 12px;border-bottom:1px solid var(--border);flex-wrap:wrap;}
     .cal-title{font-weight:900;letter-spacing:.2px;}
@@ -108,15 +130,28 @@
     .cal-nav button{border:1px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;padding:10px 12px;border-radius:12px;font-weight:900;}
     .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;padding:12px;}
     .cal-dow{color:var(--muted);font-weight:900;font-size:.78rem;padding:0 6px 6px 6px;}
-    .cal-cell{border:1px solid var(--border);background:var(--surface);border-radius:14px;padding:10px 10px;min-height:58px;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;position:relative;overflow:hidden;}
+    .cal-cell{
+      border:1px solid var(--border);
+      background:var(--surface);
+      border-radius:14px;
+      padding:10px 10px;
+      min-height:64px;
+      cursor:pointer;
+      user-select:none;
+      -webkit-tap-highlight-color:transparent;
+      position:relative;
+      overflow:hidden;
+      transition:transform .06s ease, border-color .15s ease, background .15s ease;
+    }
+    .cal-cell:active{transform:scale(.985);}
+    .cal-cell.weekend{background:rgba(21,34,68,.65);}
+    .cal-cell.today{border-color:var(--accent-border);box-shadow:0 0 0 3px rgba(79,140,255,.18) inset;}
+    .cal-cell.selected{border-color:var(--accent);background:var(--accent-bg);}
     .cal-cell.dim{opacity:.45;}
-    .cal-cell.selected{border-color:var(--rob);background:var(--rob-bg);}
     .cal-day{font-weight:900;font-size:.95rem;}
     .cal-badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;}
-    .cal-badge{font-size:.72rem;font-weight:900;padding:4px 8px;border-radius:999px;border:1px solid var(--border);background:var(--bg);color:var(--muted);}
+    .cal-badge{font-size:.72rem;font-weight:900;padding:4px 8px;border-radius:999px;border:1px solid var(--border);background:var(--surface2);color:var(--text);opacity:.92;}
   </style>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 </head>
 <body>
 <div class="app">
@@ -280,57 +315,6 @@
 </div>
 
 <script>
-// Firebase configuratie
-var firebaseConfig = {
-  apiKey: "AIzaSyDeGP5IIWaFoG4PuISUueeccexrZOIVwGY",
-  authDomain: "agenda-roblizet.firebaseapp.com",
-  databaseURL: "https://agenda-roblizet-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "agenda-roblizet",
-  storageBucket: "agenda-roblizet.appspot.com"
-};
-firebase.initializeApp(firebaseConfig);
-var db = firebase.database();
-var fbConnected = false;
-
-// Sync status tonen
-var syncStatus = document.createElement("div");
-syncStatus.id = "sync-status";
-syncStatus.style.cssText = "position:fixed;top:10px;right:10px;font-size:.75rem;font-weight:800;padding:5px 10px;border-radius:20px;z-index:100;background:var(--surface);border:1px solid var(--border);color:var(--muted);";
-syncStatus.textContent = "⏳ Verbinden...";
-document.body.appendChild(syncStatus);
-
-function setSyncStatus(connected){
-  fbConnected = connected;
-  syncStatus.textContent = connected ? "🟢 Gesynchroniseerd" : "🔴 Offline";
-  syncStatus.style.color = connected ? "var(--ok)" : "var(--danger)";
-}
-
-db.ref(".info/connected").on("value", function(snap){
-  setSyncStatus(snap.val() === true);
-});
-
-// Firebase listeners
-function startFirebaseSync(){
-  db.ref("appointments").on("value", function(snap){
-    var data = snap.val();
-    appointments = data ? Object.values(data) : [];
-    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(appointments)); }catch(e){}
-    render();
-  });
-  db.ref("birthdays").on("value", function(snap){
-    var data = snap.val();
-    birthdays = data ? Object.values(data) : [];
-    try{ localStorage.setItem(BDAY_KEY, JSON.stringify(birthdays)); }catch(e){}
-    render();
-  });
-  db.ref("memories").on("value", function(snap){
-    var data = snap.val();
-    memories = data ? Object.values(data) : [];
-    try{ localStorage.setItem(MEM_KEY, JSON.stringify(memories)); }catch(e){}
-    render();
-  });
-}
-
 var STORAGE_KEY="afspraken_v3";
 var REMIND_KEY="afspraken_reminders";
 var BDAY_KEY="verjaardagen_v1";
@@ -341,21 +325,9 @@ var memories=[];
 try{appointments=JSON.parse(localStorage.getItem(STORAGE_KEY))||[];}catch(e){}
 try{birthdays=JSON.parse(localStorage.getItem(BDAY_KEY))||[];}catch(e){}
 try{memories=JSON.parse(localStorage.getItem(MEM_KEY))||[];}catch(e){}
-function saveAppointments(){
-  try{localStorage.setItem(STORAGE_KEY,JSON.stringify(appointments));}catch(e){}
-  var obj={};appointments.forEach(function(a){obj[a.id]=a;});
-  db.ref("appointments").set(obj).catch(function(){});
-}
-function saveBdays(){
-  try{localStorage.setItem(BDAY_KEY,JSON.stringify(birthdays));}catch(e){}
-  var obj={};birthdays.forEach(function(b){obj[b.id]=b;});
-  db.ref("birthdays").set(obj).catch(function(){});
-}
-function saveMem(){
-  try{localStorage.setItem(MEM_KEY,JSON.stringify(memories));}catch(e){}
-  var obj={};memories.forEach(function(m){obj[m.id]=m;});
-  db.ref("memories").set(obj).catch(function(){});
-}
+function saveAppointments(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(appointments));}catch(e){}}
+function saveBdays(){try{localStorage.setItem(BDAY_KEY,JSON.stringify(birthdays));}catch(e){}}
+function saveMem(){try{localStorage.setItem(MEM_KEY,JSON.stringify(memories));}catch(e){}}
 function loadRemindersOn(){try{var v=localStorage.getItem(REMIND_KEY);if(v===null)return true;return v==="1";}catch(e){return true;}}
 function saveRemindersOn(on){try{localStorage.setItem(REMIND_KEY,on?"1":"0");}catch(e){}}
 
@@ -517,7 +489,8 @@ function renderCalendar(){
     var ev=collectEventsForISO(iso);
     var aptCount=0,bCount=0,mCount=0;
     ev.forEach(function(e){if(e.kind==="apt")aptCount++;if(e.kind==="bday")bCount++;if(e.kind==="mem")mCount++;});
-    var cls="cal-cell"+(inMonth?"":" dim")+(calSelectedISO===iso?" selected":"");
+    var isWeekend=(dt.getDay()===0||dt.getDay()===6);
+    var cls="cal-cell"+(inMonth?"":" dim")+(isWeekend?" weekend":"")+(iso===todayISO?" today":"")+(calSelectedISO===iso?" selected":"");
     var badges="";
     if(aptCount)badges+='<span class="cal-badge">&#128204; '+aptCount+"</span>";
     if(bCount)badges+='<span class="cal-badge">&#127874; '+bCount+"</span>";
@@ -827,7 +800,7 @@ calGrid.addEventListener("click",function(e){var cell=e.target.closest(".cal-cel
 (function init(){
   applyReminderToggleUI();resetForm();
   if(remindersOn){requestNotificationPermission();appointments.forEach(scheduleNotification);scheduleBirthdayNotifications();scheduleMemoryNotifications();}
-  calSelectedISO=dateToISO(new Date());startFirebaseSync();render();
+  calSelectedISO=dateToISO(new Date());render();
 })();
 </script>
 
