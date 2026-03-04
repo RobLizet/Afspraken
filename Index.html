@@ -493,7 +493,122 @@
     }
 
     hr.sep{ border:none; border-top: 1px solid rgba(255,255,255,.12); margin: 14px 0; }
-  </style>
+  
+  /* =========================
+     Fresh soft theme overrides
+     ========================= */
+  body{
+    background:
+      radial-gradient(900px 520px at 15% 10%, rgba(196,155,255,.28), transparent 60%),
+      radial-gradient(900px 520px at 85% 30%, rgba(122,167,255,.26), transparent 60%),
+      radial-gradient(900px 520px at 55% 95%, rgba(46,229,157,.14), transparent 60%),
+      linear-gradient(180deg, rgba(21,26,58,1), rgba(11,16,38,1));
+  }
+
+  .shell{
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.10);
+    box-shadow:0 22px 60px rgba(0,0,0,.30);
+  }
+
+  .topbar{
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.10);
+  }
+
+  .chip, .btn, .pill, .tab{
+    border-color:rgba(255,255,255,.14);
+    background:rgba(255,255,255,.07);
+  }
+  .btn.primary{
+    background:linear-gradient(90deg, rgba(196,155,255,.95), rgba(122,167,255,.95));
+    border-color:rgba(255,255,255,.16);
+  }
+
+  /* Calendar: softer tiles, clearer selected day */
+  .day{
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.10);
+  }
+  .day:hover{ background:rgba(255,255,255,.085); }
+  .day.selected{
+    background:
+      radial-gradient(240px 160px at 30% 30%, rgba(196,155,255,.25), transparent 60%),
+      radial-gradient(240px 160px at 70% 70%, rgba(122,167,255,.22), transparent 60%),
+      rgba(255,255,255,.08);
+    border-color:rgba(122,167,255,.22);
+  }
+  .dot{
+    box-shadow:0 0 0 5px rgba(46,229,157,.10);
+  }
+
+  /* List and afspraak cards: bigger, fresher */
+  .items{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    padding-bottom:8px;
+  }
+  .item{
+    padding:16px 16px;
+    border-radius:22px;
+    background:
+      radial-gradient(520px 220px at 18% 0%, rgba(196,155,255,.18), transparent 55%),
+      radial-gradient(520px 220px at 92% 110%, rgba(122,167,255,.16), transparent 60%),
+      rgba(255,255,255,.075);
+    border:1px solid rgba(255,255,255,.12);
+    box-shadow:0 18px 48px rgba(0,0,0,.22);
+  }
+  .item .title{
+    font-size:18px;
+    font-weight:900;
+    letter-spacing:.2px;
+  }
+  .item .meta{
+    margin-top:10px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  .meta .chip{
+    padding:8px 12px;
+    border-radius:999px;
+    font-size:13px;
+  }
+  .item .actions .btn{
+    padding:10px 12px;
+    border-radius:14px;
+  }
+
+  /* Bigger day popup */
+  .daySheet{
+    border-radius:26px;
+    background:
+      radial-gradient(900px 520px at 10% 0%, rgba(196,155,255,.22), transparent 60%),
+      radial-gradient(900px 520px at 90% 100%, rgba(122,167,255,.18), transparent 60%),
+      rgba(20,24,52,.82);
+    border:1px solid rgba(255,255,255,.12);
+    box-shadow:0 28px 80px rgba(0,0,0,.40);
+  }
+  .daySheet h3{
+    font-size:18px;
+  }
+  .daySheet .dayItems .item{
+    background:rgba(255,255,255,.07);
+  }
+
+  /* Bottom tabs: clearer active */
+  .tabs{
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.10);
+  }
+  .tab.active{
+    background:
+      linear-gradient(90deg, rgba(196,155,255,.28), rgba(122,167,255,.22));
+    border-color:rgba(255,255,255,.16);
+  }
+
+</style>
 
 </head>
 
