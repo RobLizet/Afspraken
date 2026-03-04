@@ -1,6 +1,3 @@
-
-
-
 <!doctype html>
 
 <html lang="nl">
@@ -14,685 +11,918 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800&amp;display=swap">
   <style>
     :root{
-      --bg0:#070a18;
-      --bg1:#0b1230;
-      --text:rgba(255,255,255,.92);
-      --muted:rgba(255,255,255,.66);
-      --muted2:rgba(255,255,255,.45);
-      --accent:#60a5fa;
-      --accent2:#a78bfa;
-      --ok:#22c55e;
-      --warn:#f59e0b;
-      --bad:#ef4444;
-      --shadow:0 18px 50px rgba(0,0,0,.45);
-    }
-    *{ box-sizing:border-box; }
-    html,body{ height:100%; }
-    body{
-      margin:0;
-      font-family:"DM Sans", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      color:var(--text);
-      background:
-        radial-gradient(900px 520px at 14% 10%, rgba(167,139,250,.26), transparent 60%),
-        radial-gradient(900px 520px at 86% 18%, rgba(96,165,250,.24), transparent 58%),
-        radial-gradient(760px 520px at 50% 92%, rgba(34,197,94,.10), transparent 60%),
-        linear-gradient(180deg, var(--bg0), var(--bg1));
-      overflow-x:hidden;
-    }
-    .app{
-      min-height:100%;
-      display:flex;
-      flex-direction:column;
-      padding:18px 16px 90px;
-      max-width:860px;
-      margin:0 auto;
-    }
-    .topbar{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      padding:10px 8px 16px;
-    }
-    .brand{ display:flex; gap:12px; align-items:center; min-width:0; }
-    .logo{
-      width:44px; height:44px;
-      border-radius:14px;
-      background:linear-gradient(135deg, rgba(167,139,250,.95), rgba(96,165,250,.95));
-      box-shadow:0 10px 30px rgba(96,165,250,.20);
-      border:1px solid rgba(255,255,255,.18);
-      flex:0 0 auto;
-    }
-    .brandText{ min-width:0; }
-    .brandTitle{
-      font-weight:800;
-      font-size:22px;
-      letter-spacing:.2px;
-      line-height:1.05;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-      max-width:48vw;
-    }
-    .brandSub{
-      font-weight:600;
-      font-size:13px;
-      color:var(--muted);
-      margin-top:2px;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-      max-width:52vw;
-    }
-    .statusPill{
-      display:flex;
-      align-items:center;
-      gap:8px;
-      padding:8px 12px;
-      border-radius:999px;
-      background:rgba(255,255,255,.08);
-      border:1px solid rgba(255,255,255,.10);
-      box-shadow:0 10px 28px rgba(0,0,0,.18);
-      flex:0 0 auto;
-    }
-    .dot{
-      width:10px; height:10px;
-      border-radius:999px;
-      background:var(--ok);
-      box-shadow:0 0 0 4px rgba(34,197,94,.18);
-    }
-    .statusLabel{ font-size:12.5px; color:var(--muted); font-weight:700; }
-    .statusValue{ font-size:12.5px; font-weight:800; color:var(--text); }
-    .btn{
-      appearance:none;
-      border:none;
-      outline:none;
-      cursor:pointer;
-      border-radius:999px;
-      padding:10px 14px;
-      font-weight:800;
-      font-size:14px;
-      color:var(--text);
-      background:rgba(255,255,255,.08);
-      border:1px solid rgba(255,255,255,.10);
-      box-shadow:0 10px 28px rgba(0,0,0,.18);
-      transition:transform .06s ease, background .2s ease, border-color .2s ease;
-    }
-    .btn:active{ transform:scale(.98); }
-    .btnPrimary{
-      background:linear-gradient(135deg, rgba(167,139,250,.92), rgba(96,165,250,.92));
-      border:1px solid rgba(255,255,255,.16);
-      box-shadow:0 16px 40px rgba(96,165,250,.20);
-    }
-    .btnGhost{ background:rgba(255,255,255,.06); }
-    .btnSmall{ padding:8px 12px; font-size:13px; }
-    .btnWide{ width:100%; }
-    .panel{
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.10);
-      border-radius:22px;
-      box-shadow:var(--shadow);
-      overflow:hidden;
-    }
-    .content{ padding:14px; }
-    .grid2{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:12px;
-    }
-    @media (max-width:520px){
-      .grid2{ grid-template-columns:1fr; }
-      .brandTitle{ max-width:64vw; }
-    }
-    .tile{
-      padding:14px;
-      border-radius:18px;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.10);
-    }
-    .tileTitle{
-      font-weight:800;
-      font-size:13px;
-      color:var(--muted);
-      margin-bottom:6px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-    }
-    .tileValue{ font-weight:900; font-size:26px; letter-spacing:.2px; }
-    .tileHint{ margin-top:6px; font-size:12.5px; color:var(--muted2); line-height:1.3; }
-    .seg{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      justify-content:space-between;
-      padding:12px 14px;
-      background:rgba(255,255,255,.05);
-      border:1px solid rgba(255,255,255,.10);
-      border-radius:18px;
-      margin-top:12px;
-    }
-    .segLeft{ min-width:0; }
-    .segTitle{ font-weight:900; font-size:14px; letter-spacing:.15px; }
-    .segSub{
-      margin-top:2px;
-      font-size:12.5px;
-      color:var(--muted);
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-      max-width:58vw;
-    }
-    .list{ margin-top:12px; }
-    .item{
-      display:flex;
-      gap:12px;
-      align-items:flex-start;
-      padding:12px 12px;
-      border-radius:16px;
-      background:rgba(255,255,255,.05);
-      border:1px solid rgba(255,255,255,.08);
-      margin-bottom:10px;
-    }
-    .badge{
-      flex:0 0 auto;
-      width:42px;
-      height:42px;
-      border-radius:16px;
-      background:rgba(96,165,250,.18);
-      border:1px solid rgba(96,165,250,.22);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-weight:900;
-      color:rgba(255,255,255,.95);
-    }
-    .itemBody{ min-width:0; flex:1; }
-    .itemTop{
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      align-items:flex-start;
-    }
-    .itemTitle{
-      font-weight:900;
-      font-size:15px;
-      line-height:1.2;
-      word-break:break-word;
-    }
-    .itemMeta{
-      margin-top:4px;
-      font-size:12.5px;
-      color:var(--muted);
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-    }
-    .chip{
-      padding:6px 10px;
-      border-radius:999px;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.10);
-      font-size:12px;
-      color:var(--muted);
-      font-weight:800;
-    }
-    .formRow{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top:10px;
-    }
-    .input{
-      width:100%;
-      padding:12px 14px;
-      border-radius:16px;
-      border:1px solid rgba(255,255,255,.12);
-      background:rgba(0,0,0,.18);
-      color:var(--text);
-      font-size:15px;
-      outline:none;
-    }
-    .input::placeholder{ color:rgba(255,255,255,.40); }
-    .inputSm{ width:calc(50% - 5px); }
-    @media (max-width:520px){
-      .inputSm{ width:100%; }
-    }
-    select.input{
-      appearance:none;
-      background-image:
-        linear-gradient(45deg, transparent 50%, rgba(255,255,255,.7) 50%),
-        linear-gradient(135deg, rgba(255,255,255,.7) 50%, transparent 50%);
-      background-position:
-        calc(100% - 18px) 50%,
-        calc(100% - 12px) 50%;
-      background-size:6px 6px, 6px 6px;
-      background-repeat:no-repeat;
-      padding-right:36px;
-    }
-    .tabs{
-      position:fixed;
-      left:0; right:0; bottom:0;
-      padding:10px 12px 12px;
-      background:linear-gradient(180deg, rgba(7,10,24,0), rgba(7,10,24,.65) 25%, rgba(7,10,24,.92));
-      backdrop-filter:blur(14px);
-    }
-    .tabsInner{
-      max-width:860px;
-      margin:0 auto;
-      display:flex;
-      gap:10px;
-      justify-content:space-between;
-      padding:10px;
-      border-radius:22px;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.10);
-      box-shadow:0 18px 50px rgba(0,0,0,.35);
-    }
-    .tab{
-      flex:1;
-      padding:10px 10px;
-      border-radius:18px;
-      text-align:center;
-      color:var(--muted);
-      font-weight:900;
-      font-size:12.5px;
-      border:1px solid transparent;
-      background:transparent;
-      cursor:pointer;
-    }
-    .tab.active{
-      color:var(--text);
-      background:linear-gradient(135deg, rgba(167,139,250,.20), rgba(96,165,250,.18));
-      border:1px solid rgba(255,255,255,.12);
-    }
-    .hidden{ display:none !important; }
-    .modalWrap{
-      position:fixed;
-      left:0; top:0; right:0; bottom:0;
-      display:flex;
-      align-items:flex-end;
-      justify-content:center;
-      padding:14px;
-      background:rgba(0,0,0,.55);
-      backdrop-filter:blur(10px);
-      z-index:50;
-    }
-    .modal{
-      width:100%;
-      max-width:720px;
-      border-radius:26px;
-      background:rgba(18,26,60,.94);
-      border:1px solid rgba(255,255,255,.14);
-      box-shadow:0 22px 60px rgba(0,0,0,.55);
-      overflow:hidden;
-    }
-    .modalHeader{
-      padding:14px 16px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      border-bottom:1px solid rgba(255,255,255,.10);
-    }
-    .modalHeader h3{
-      margin:0;
-      font-size:16px;
-      font-weight:900;
-      letter-spacing:.2px;
-    }
-    .modalBody{ padding:14px 16px; }
-    .modalFooter{
-      padding:14px 16px;
-      border-top:1px solid rgba(255,255,255,.10);
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      justify-content:flex-end;
-    }
-    .help{ font-size:12.5px; color:var(--muted); line-height:1.35; }
-    .smallHelp{ font-size:12.5px; color:rgba(255,255,255,.52); line-height:1.35; }
-    .mt10{ margin-top:10px; }
-    .mt14{ margin-top:14px; }
-    .mt18{ margin-top:18px; }
-    .toast{
-      position:fixed;
-      left:50%;
-      bottom:96px;
-      transform:translateX(-50%);
-      padding:10px 14px;
-      border-radius:999px;
-      background:rgba(0,0,0,.62);
-      border:1px solid rgba(255,255,255,.10);
-      color:rgba(255,255,255,.92);
-      font-weight:900;
-      font-size:13px;
-      z-index:80;
-      opacity:0;
-      pointer-events:none;
-      transition:opacity .18s ease, transform .18s ease;
-    }
-    .toast.show{
-      opacity:1;
-      transform:translateX(-50%) translateY(-6px);
-    }
-    .kicker{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      margin-top:14px;
-    }
-    .kickerTitle{ font-weight:900; font-size:16px; letter-spacing:.15px; }
-    .kickerRight{ display:flex; gap:10px; align-items:center; }
-    .calendarWrap{
-      margin-top:12px;
-      padding:12px;
-      border-radius:22px;
-      background:rgba(255,255,255,.05);
-      border:1px solid rgba(255,255,255,.10);
-    }
-    .calTop{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      margin-bottom:10px;
-    }
-    .calMonth{ font-weight:900; letter-spacing:.2px; font-size:16px; }
-    .calGrid{
-      display:grid;
-      grid-template-columns:repeat(7, 1fr);
-      gap:8px;
-    }
-    .dow{
-      text-align:center;
-      font-size:11px;
-      font-weight:900;
-      color:rgba(255,255,255,.55);
-      padding:6px 0;
-    }
-    .day{
-      border-radius:16px;
-      padding:10px 0;
-      text-align:center;
-      font-weight:900;
-      cursor:pointer;
-      user-select:none;
-      background:rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.07);
-      color:rgba(255,255,255,.82);
-    }
-    .day.muted{ opacity:.45; }
-    .day.today{
-      border-color:rgba(96,165,250,.30);
-      box-shadow:0 0 0 4px rgba(96,165,250,.12);
-    }
-    .day.selected{
-      background:linear-gradient(135deg, rgba(167,139,250,.22), rgba(96,165,250,.18));
-      border-color:rgba(255,255,255,.12);
-      color:rgba(255,255,255,.95);
-    }
-    .day.has{ position:relative; }
-.day .dots{ position:absolute; left:50%; bottom:6px; transform:translateX(-50%); display:flex; gap:4px; }
-.day .dotMini{ width:6px; height:6px; border-radius:99px; }
-.dotAppt{ background:rgba(96,165,250,.98); box-shadow:0 0 0 3px rgba(96,165,250,.16); }
-.dotBday{ background:rgba(244,114,182,.98); box-shadow:0 0 0 3px rgba(244,114,182,.16); }
-.dotMem{ background:rgba(167,139,250,.98); box-shadow:0 0 0 3px rgba(167,139,250,.16); }
-    .divider{ margin-top:14px; height:1px; background:rgba(255,255,255,.10); }
-    .footerNote{
-      margin-top:18px;
-      font-size:12px;
-      color:rgba(255,255,255,.45);
-      text-align:center;
-      padding-bottom:6px;
-    }
-  
-  .chipBtn{
-    cursor:pointer;
-    -webkit-appearance:none;
-    appearance:none;
-  }
-  .chipBtn:active{ transform: translateY(1px); }
+      --bg1:#fff7f0;
+      --bg2:#f4f1ff;
+      --bg3:#eef7ff;
+      --ink:#1d2330;
+      --muted:#5a6578;
+      --card:rgba(255,255,255,0.72);
+      --card2:rgba(255,255,255,0.55);
+      --stroke:rgba(28,35,48,0.10);
+      --shadow:0 18px 50px rgba(12,18,30,0.10);
+      --shadow2:0 10px 30px rgba(12,18,30,0.08);
+      --pill:rgba(255,255,255,0.65);
+      --good:#2ecc71;
+      --warn:#ff9f43;
 
 
-  .versionBadge{
-    display:inline-flex;align-items:center;gap:8px;
-    padding:8px 12px;border-radius:999px;
-    background:linear-gradient(90deg, rgba(255,156,207,.55), rgba(106,168,255,.45));
-    border:1px solid rgba(23,32,61,.12);
-    color:rgba(18,22,34,.92);
-    font-weight:900;font-size:12px;letter-spacing:.6px;text-transform:uppercase;
-    box-shadow:0 10px 22px rgba(23,32,61,.10);
-  }
-  .versionBadge .dotV{width:10px;height:10px;border-radius:50%;
-    background:linear-gradient(135deg, rgba(255,156,207,1), rgba(106,168,255,1));
-    box-shadow:0 0 0 5px rgba(106,168,255,.12);
-  }
+  --dotA:#6bb6ff;
+  --dotB:#ff9ac1;
+  --dotM:#a7a2ff;
 
+  --accent1:#ffd7e6;
+  --accent2:#d6f0ff;
+  --accent3:#efe4ff;
+}
 
-  .modalOverlay{
-    position:fixed; inset:0; display:none;
-    background:rgba(15,18,28,.38);
-    padding:18px;
-    z-index:50;
-  }
-  .modalOverlay.show{ display:flex; align-items:flex-end; justify-content:center; }
-  .modalCard{
-    width:min(720px, 100%);
-    background:linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.84));
-    border:1px solid rgba(23,32,61,.12);
-    border-radius:22px;
-    box-shadow:0 30px 80px rgba(23,32,61,.18);
-    overflow:hidden;
-  }
-  .modalHead{
-    padding:14px 16px;
-    display:flex; align-items:center; justify-content:space-between; gap:12px;
-    border-bottom:1px solid rgba(23,32,61,.10);
-    background:linear-gradient(90deg, rgba(255,156,207,.18), rgba(106,168,255,.16));
-  }
-  .modalKicker{ font-size:12px; font-weight:900; letter-spacing:.5px; text-transform:uppercase; color:rgba(18,22,34,.62); }
-  .modalTitle{ font-size:18px; font-weight:950; color:rgba(18,22,34,.92); }
-  .modalBody{ padding:14px 16px 10px; max-height:55vh; overflow:auto; }
-  .modalEmpty{
-    padding:16px;
-    border-radius:16px;
-    background:rgba(255,255,255,.70);
-    border:1px solid rgba(23,32,61,.08);
-    color:rgba(18,22,34,.65);
-    font-weight:800;
-    display:none;
-  }
-  .modalList{ display:flex; flex-direction:column; gap:10px; }
-  .modalRow{
-    border-radius:18px;
-    background:rgba(255,255,255,.72);
-    border:1px solid rgba(23,32,61,.10);
-    padding:12px;
-    display:flex; gap:12px; align-items:flex-start;
-  }
-  .typePill{
-    display:inline-flex; align-items:center; gap:8px;
-    padding:8px 10px; border-radius:999px;
-    border:1px solid rgba(23,32,61,.10);
-    background:rgba(255,255,255,.70);
-    font-weight:900;
-    color:rgba(18,22,34,.80);
-    flex:0 0 auto;
-  }
-  .typePill .miniDot{ width:10px; height:10px; border-radius:99px; }
-  .miniDotAppt{ background:rgba(96,165,250,.98); box-shadow:0 0 0 4px rgba(96,165,250,.14); }
-  .miniDotBday{ background:rgba(244,114,182,.98); box-shadow:0 0 0 4px rgba(244,114,182,.14); }
-  .miniDotMem{ background:rgba(167,139,250,.98); box-shadow:0 0 0 4px rgba(167,139,250,.14); }
-  .modalRowMain{ flex:1 1 auto; }
-  .rowTitle{ font-size:16px; font-weight:950; color:rgba(18,22,34,.92); }
-  .rowMeta{ margin-top:6px; display:flex; gap:8px; flex-wrap:wrap; }
-  .metaChip{
-    padding:6px 10px; border-radius:999px;
-    border:1px solid rgba(23,32,61,.10);
-    background:rgba(255,255,255,.65);
-    font-weight:900;
-    color:rgba(18,22,34,.72);
-    font-size:13px;
-  }
-  .modalFoot{
-    padding:12px 16px 16px;
-    border-top:1px solid rgba(23,32,61,.10);
-    display:flex; justify-content:flex-end;
-  }
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:"DM Sans",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(1200px 700px at 20% -10%, rgba(255, 168, 217, 0.35), transparent 55%),
+    radial-gradient(1000px 650px at 85% 5%, rgba(143, 209, 255, 0.35), transparent 60%),
+    radial-gradient(900px 700px at 40% 120%, rgba(191, 164, 255, 0.35), transparent 60%),
+    linear-gradient(180deg, var(--bg1), var(--bg2) 55%, var(--bg3));
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  overflow-x:hidden;
+}
 
-</style>
+.app{
+  max-width:560px;
+  margin:0 auto;
+  padding:16px 14px 110px;
+}
+
+.topbar{
+  display:flex;
+  gap:12px;
+  align-items:center;
+  justify-content:space-between;
+  padding:10px 8px 14px;
+  position:sticky;
+  top:0;
+  z-index:50;
+  background:linear-gradient(180deg, rgba(255,247,240,0.80), rgba(255,247,240,0.30), transparent);
+  backdrop-filter: blur(10px);
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-width:0;
+}
+
+.avatar{
+  width:44px;height:44px;
+  border-radius:14px;
+  background:linear-gradient(135deg, rgba(255,154,193,0.9), rgba(107,182,255,0.9));
+  box-shadow:0 10px 30px rgba(0,0,0,0.08);
+  border:1px solid rgba(255,255,255,0.8);
+  flex:0 0 auto;
+}
+
+.brandText{
+  min-width:0;
+  line-height:1.05;
+}
+
+.brandTitle{
+  font-weight:800;
+  font-size:15px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.brandSub{
+  font-size:12px;
+  color:var(--muted);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.statusPill{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:10px 12px;
+  border-radius:999px;
+  background:var(--pill);
+  border:1px solid var(--stroke);
+  box-shadow:var(--shadow2);
+  white-space:nowrap;
+  font-weight:700;
+  font-size:12px;
+  user-select:none;
+}
+
+.dot{
+  width:10px;height:10px;border-radius:50%;
+  background:var(--good);
+  box-shadow:0 0 0 5px rgba(46,204,113,0.15);
+}
+.dot.off{
+  background:#b2becd;
+  box-shadow:0 0 0 5px rgba(178,190,205,0.18);
+}
+
+.badge{
+  padding:10px 12px;
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,0.65);
+  background:linear-gradient(135deg, rgba(255,215,230,0.85), rgba(214,240,255,0.85), rgba(239,228,255,0.85));
+  box-shadow:var(--shadow2);
+  font-weight:900;
+  font-size:12px;
+  letter-spacing:0.6px;
+  text-align:center;
+  line-height:1.05;
+  user-select:none;
+}
+
+.btn{
+  appearance:none;
+  border:0;
+  background:var(--pill);
+  border:1px solid var(--stroke);
+  color:var(--ink);
+  padding:10px 14px;
+  border-radius:999px;
+  font-weight:800;
+  box-shadow:var(--shadow2);
+  cursor:pointer;
+}
+.btn:active{transform:scale(0.99)}
+.btn.primary{
+  background:linear-gradient(135deg, rgba(255,154,193,0.35), rgba(107,182,255,0.35));
+}
+.btn.small{padding:8px 12px;font-size:12px}
+.btn.ghost{background:transparent}
+
+.panel{
+  background:var(--card);
+  border:1px solid var(--stroke);
+  border-radius:26px;
+  padding:16px 16px 14px;
+  box-shadow:var(--shadow);
+  backdrop-filter: blur(14px);
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:14px;
+}
+
+.row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+h2{
+  margin:0;
+  font-size:20px;
+  letter-spacing:-0.2px;
+}
+
+.sub{
+  margin:2px 0 0;
+  color:var(--muted);
+  font-size:13px;
+}
+
+.calendarHeader{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-top:12px;
+}
+
+.monthTitle{
+  font-size:20px;
+  font-weight:900;
+  letter-spacing:-0.2px;
+  text-transform:lowercase;
+}
+
+.navBtns{
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+
+.calWrap{
+  margin-top:12px;
+  background:var(--card2);
+  border:1px solid var(--stroke);
+  border-radius:22px;
+  padding:12px;
+  box-shadow:var(--shadow2);
+}
+
+.dow{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:8px;
+  padding:6px 4px 10px;
+  color:var(--muted);
+  font-size:12px;
+  font-weight:800;
+  text-align:center;
+}
+
+.days{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:8px;
+  padding:2px 4px 6px;
+}
+
+.day{
+  position:relative;
+  height:44px;
+  border-radius:16px;
+  border:1px solid rgba(28,35,48,0.10);
+  background:rgba(255,255,255,0.55);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:900;
+  color:var(--ink);
+  box-shadow:0 8px 18px rgba(12,18,30,0.06);
+  cursor:pointer;
+  user-select:none;
+  overflow:hidden;
+}
+
+.day.muted{
+  opacity:0.40;
+  cursor:default;
+}
+
+.day.today{
+  outline:2px solid rgba(107,182,255,0.55);
+  background:linear-gradient(180deg, rgba(214,240,255,0.65), rgba(255,255,255,0.55));
+}
+
+.day.selected{
+  outline:2px solid rgba(255,154,193,0.55);
+  background:linear-gradient(180deg, rgba(255,215,230,0.65), rgba(255,255,255,0.55));
+}
+
+.dots{
+  position:absolute;
+  left:50%;
+  bottom:7px;
+  transform:translateX(-50%);
+  display:flex;
+  gap:4px;
+  align-items:center;
+  justify-content:center;
+  pointer-events:none;
+}
+
+.d{
+  width:8px;height:8px;border-radius:50%;
+  box-shadow:0 0 0 4px rgba(0,0,0,0.04);
+  opacity:0.95;
+}
+.d.a{background:var(--dotA); box-shadow:0 0 0 4px rgba(107,182,255,0.18)}
+.d.b{background:var(--dotB); box-shadow:0 0 0 4px rgba(255,154,193,0.18)}
+.d.m{background:var(--dotM); box-shadow:0 0 0 4px rgba(167,162,255,0.18)}
+
+.selectedBox{
+  margin-top:14px;
+  background:rgba(255,255,255,0.58);
+  border:1px solid var(--stroke);
+  border-radius:22px;
+  padding:14px;
+  box-shadow:var(--shadow2);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.selectedTitle{
+  font-weight:900;
+  font-size:16px;
+  margin:0;
+}
+
+.selectedText{
+  margin:2px 0 0;
+  color:var(--muted);
+  font-size:13px;
+}
+
+.tabs{
+  position:fixed;
+  left:0; right:0; bottom:0;
+  padding:10px 12px 18px;
+  z-index:60;
+  background:linear-gradient(180deg, transparent, rgba(255,247,240,0.50) 30%, rgba(255,247,240,0.92));
+  backdrop-filter: blur(18px);
+}
+
+.tabbar{
+  max-width:560px;
+  margin:0 auto;
+  background:rgba(255,255,255,0.72);
+  border:1px solid rgba(28,35,48,0.12);
+  border-radius:22px;
+  box-shadow:0 18px 55px rgba(12,18,30,0.14);
+  display:flex;
+  gap:6px;
+  padding:8px;
+}
+
+.tab{
+  flex:1;
+  border:0;
+  background:transparent;
+  border-radius:16px;
+  padding:10px 10px;
+  font-weight:900;
+  color:var(--muted);
+  cursor:pointer;
+}
+
+.tab.active{
+  color:var(--ink);
+  background:linear-gradient(135deg, rgba(255,215,230,0.65), rgba(214,240,255,0.65), rgba(239,228,255,0.65));
+  border:1px solid rgba(255,255,255,0.7);
+  box-shadow:0 10px 30px rgba(12,18,30,0.10);
+}
+
+.screen{display:none}
+.screen.active{display:block}
+
+.listCards{
+  display:grid;
+  gap:14px;
+}
+
+.statCard{
+  background:rgba(255,255,255,0.70);
+  border:1px solid var(--stroke);
+  border-radius:26px;
+  padding:16px;
+  box-shadow:var(--shadow);
+  backdrop-filter: blur(14px);
+}
+
+.statTop{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.statTitle{
+  margin:0;
+  font-weight:900;
+  font-size:16px;
+}
+
+.statValue{
+  font-size:44px;
+  font-weight:900;
+  letter-spacing:-1px;
+  margin:6px 0 6px;
+}
+
+.statHint{
+  color:var(--muted);
+  font-size:13px;
+  margin:0;
+}
+
+.itemCard{
+  background:rgba(255,255,255,0.75);
+  border:1px solid rgba(28,35,48,0.10);
+  border-radius:26px;
+  padding:14px;
+  box-shadow:var(--shadow2);
+}
+
+.itemRow{
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+  justify-content:space-between;
+}
+
+.iconDate{
+  width:44px;height:44px;
+  border-radius:16px;
+  background:linear-gradient(135deg, rgba(214,240,255,0.9), rgba(239,228,255,0.9));
+  border:1px solid rgba(255,255,255,0.8);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  line-height:1;
+  font-weight:900;
+  box-shadow:0 10px 25px rgba(12,18,30,0.10);
+  flex:0 0 auto;
+}
+.iconDate .m{font-size:10px;opacity:0.75}
+.iconDate .d{font-size:16px}
+
+.itemMain{
+  flex:1;
+  min-width:0;
+}
+
+.itemTitle{
+  margin:0;
+  font-size:18px;
+  font-weight:900;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.chips{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:8px;
+}
+
+.chip{
+  padding:8px 10px;
+  border-radius:999px;
+  background:rgba(255,255,255,0.65);
+  border:1px solid rgba(28,35,48,0.10);
+  font-weight:900;
+  font-size:12px;
+  color:var(--ink);
+}
+
+.chip.muted{color:var(--muted); font-weight:800}
+.chip.a{background:rgba(214,240,255,0.75)}
+.chip.b{background:rgba(255,215,230,0.75)}
+.chip.m{background:rgba(239,228,255,0.75)}
+
+.formCard{
+  background:rgba(255,255,255,0.78);
+  border:1px solid rgba(28,35,48,0.10);
+  border-radius:26px;
+  padding:16px;
+  box-shadow:var(--shadow);
+}
+
+.field{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  margin-top:12px;
+}
+
+label{
+  font-size:13px;
+  font-weight:900;
+  color:var(--muted);
+}
+
+input,select,textarea{
+  font:inherit;
+  padding:12px 14px;
+  border-radius:18px;
+  border:1px solid rgba(28,35,48,0.10);
+  background:rgba(255,255,255,0.70);
+  outline:none;
+  box-shadow:0 10px 25px rgba(12,18,30,0.06);
+}
+textarea{min-height:90px;resize:vertical}
+
+.actions{
+  display:flex;
+  gap:10px;
+  margin-top:14px;
+  flex-wrap:wrap;
+}
+
+.hr{
+  height:1px;
+  background:rgba(28,35,48,0.08);
+  margin:14px 0;
+  border:0;
+}
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:92px;
+  transform:translateX(-50%);
+  max-width:560px;
+  width:calc(100% - 28px);
+  background:rgba(20,24,34,0.88);
+  color:#fff;
+  border-radius:18px;
+  padding:12px 14px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.20);
+  z-index:80;
+  display:none;
+  font-weight:800;
+  backdrop-filter: blur(12px);
+}
+.toast.show{display:block}
+
+.modalOverlay{
+  position:fixed;
+  inset:0;
+  display:none;
+  z-index:90;
+  background:rgba(15,18,28,0.25);
+  backdrop-filter: blur(8px);
+  padding:18px 12px 120px;
+  overflow:auto;
+}
+.modalOverlay.open{display:block}
+
+.modalCard{
+  max-width:560px;
+  margin:0 auto;
+  border-radius:28px;
+  border:1px solid rgba(255,255,255,0.55);
+  background:linear-gradient(180deg, rgba(255,255,255,0.88), rgba(255,255,255,0.78));
+  box-shadow:0 30px 90px rgba(0,0,0,0.22);
+  padding:16px;
+}
+
+.modalTop{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:10px;
+}
+
+.modalTitle{
+  margin:0;
+  font-weight:900;
+  font-size:13px;
+  letter-spacing:1px;
+  color:var(--muted);
+  text-transform:uppercase;
+}
+
+.modalDate{
+  font-weight:900;
+  font-size:28px;
+  letter-spacing:-0.6px;
+  margin:2px 0 0;
+}
+
+.modalClose{
+  appearance:none;
+  border:0;
+  background:rgba(20,24,34,0.85);
+  color:#fff;
+  font-weight:900;
+  padding:12px 16px;
+  border-radius:16px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.25);
+  cursor:pointer;
+  flex:0 0 auto;
+}
+.modalClose:active{transform:scale(0.98)}
+
+.modalList{
+  display:grid;
+  gap:10px;
+  margin-top:12px;
+}
+
+.modalEmpty{
+  color:var(--muted);
+  font-weight:800;
+  padding:10px 2px;
+}
+
+.miniRow{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:10px;
+}
+
+.legend{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+.legItem{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-weight:900;
+  font-size:12px;
+  color:var(--muted);
+  background:rgba(255,255,255,0.55);
+  border:1px solid rgba(28,35,48,0.10);
+  border-radius:999px;
+  padding:8px 10px;
+}
+.legDot{
+  width:10px;height:10px;border-radius:50%;
+  box-shadow:0 0 0 5px rgba(0,0,0,0.04);
+}
+.legDot.a{background:var(--dotA); box-shadow:0 0 0 5px rgba(107,182,255,0.16)}
+.legDot.b{background:var(--dotB); box-shadow:0 0 0 5px rgba(255,154,193,0.16)}
+.legDot.m{background:var(--dotM); box-shadow:0 0 0 5px rgba(167,162,255,0.16)}
+
+.authBox{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  justify-content:flex-end;
+  flex-wrap:wrap;
+}
+
+.settingsCard{
+  background:rgba(255,255,255,0.80);
+  border:1px solid rgba(28,35,48,0.10);
+  border-radius:26px;
+  padding:16px;
+  box-shadow:var(--shadow);
+}
+
+.note{
+  margin:10px 0 0;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.4;
+}
+
+  </style>
 </head>
 
 
 <body>
-  <div class="app">
-    <div class="topbar">
-      <div class="brand">
-        <div class="logo" aria-hidden="true"></div>
-        <div class="brandText">
-          <div class="brandTitle">Onze Agenda</div>
-          <div class="brandSub">Rob en Lizet</div>
-        </div>
+  <div class="topbar">
+    <div class="brand">
+      <div class="avatar"></div>
+      <div class="brandText">
+        <div class="brandTitle">Onze Agenda</div>
+        <div class="brandSub">Rob en Lizet</div>
       </div>
-
-
-  <div style="display:flex; gap:10px; align-items:center;">
-    <div class="statusPill" title="Sync status">
-      <span class="dot" id="syncDot"></span>
-      <span class="statusLabel">Status</span>
-      <span class="statusValue" id="syncState">Lokaal</span>
     </div>
-    <div class="versionBadge"><span class="dotV"></span>PASTEL FIREBASE V3 DOTS</div>
-    <button class="btn btnGhost" id="btnSettings" type="button">Instellingen</button>
+
+
+<div class="statusPill" id="statusPill" title="Sync status">
+  <span class="dot" id="statusDot"></span>
+  <span>Status</span>
+  <span id="statusText" style="font-weight:900">Lokaal</span>
+</div>
+
+<div class="badge" id="versionBadge">PASTEL<br>FIREBASE<br>V3 DOTS</div>
+
+<button class="btn" id="openSettings">Instellingen</button>
+
+  </div>
+
+
+  <div class="app">
+    <div id="screenCalendar" class="screen active">
+      <div class="panel">
+        <div class="row">
+          <div>
+            <h2>Kalender</h2>
+            <p class="sub">Tik een dag om activiteiten te zien</p>
+          </div>
+          <div class="navBtns">
+            <button class="btn" id="prevMonth">Vorige</button>
+            <button class="btn" id="nextMonth">Volgende</button>
+          </div>
+        </div>
+
+
+    <div class="miniRow">
+      <div class="legend">
+        <div class="legItem"><span class="legDot a"></span>Afspraak</div>
+        <div class="legItem"><span class="legDot b"></span>Verjaardag</div>
+        <div class="legItem"><span class="legDot m"></span>Herinnering</div>
+      </div>
+      <button class="btn small" id="tapHint">Tik een dag</button>
+    </div>
+
+    <div class="calendarHeader" style="margin-top:10px">
+      <div class="monthTitle" id="monthTitle">Maand</div>
+      <div style="display:flex; gap:10px; align-items:center">
+        <button class="btn small ghost" id="goToday">Vandaag</button>
+      </div>
+    </div>
+
+    <div class="calWrap">
+      <div class="dow">
+        <div>Ma</div><div>Di</div><div>Wo</div><div>Do</div><div>Vr</div><div>Za</div><div>Zo</div>
+      </div>
+      <div class="days" id="daysGrid"></div>
+    </div>
+
+    <div class="selectedBox">
+      <div>
+        <p class="selectedTitle" id="selectedTitle">Afspraken op geselecteerde dag</p>
+        <p class="selectedText" id="selectedText">Kies eerst een dag in de kalender</p>
+      </div>
+      <button class="btn" id="goListFromSelected">Lijst</button>
+    </div>
   </div>
 </div>
 
-<div class="panel">
-  <div class="content">
-
-    <div id="viewCalendar">
-      <div class="kicker">
-        <div class="kickerTitle">Kalender</div>
-        <div class="kickerRight">
-          <button class="btn btnGhost btnSmall" id="btnPrev" type="button">Vorige</button>
-          <button class="btn btnGhost btnSmall" id="btnNext" type="button">Volgende</button>
+<div id="screenList" class="screen">
+  <div class="grid">
+    <div class="statCard">
+      <div class="statTop">
+        <div>
+          <p class="statTitle">Deze maand</p>
+          <p class="statHint">Aantal afspraken in deze maand.</p>
         </div>
+        <button class="btn small" data-quick="month">Snel zien</button>
       </div>
+      <div class="statValue" id="statMonth">0</div>
+    </div>
 
-      <div class="calendarWrap">
-        <div class="calTop">
-          <div class="calMonth" id="calMonth">Maand</div>
-          <div class="chip" id="calHint">Tik een dag</div>
+    <div class="statCard">
+      <div class="statTop">
+        <div>
+          <p class="statTitle">Vandaag</p>
+          <p class="statHint">Aantal afspraken vandaag.</p>
         </div>
-        <div class="calGrid" id="calGrid"></div>
+        <button class="btn small" data-quick="today">Snel zien</button>
       </div>
+      <div class="statValue" id="statToday">0</div>
+    </div>
 
-      <div class="seg">
-        <div class="segLeft">
-          <div class="segTitle">Afspraken op geselecteerde dag</div>
-          <div class="segSub" id="daySummary">Kies eerst een dag in de kalender</div>
+    <div class="statCard">
+      <div class="statTop">
+        <div>
+          <p class="statTitle">Verjaardagen</p>
+          <p class="statHint">Aantal verjaardagen opgeslagen.</p>
         </div>
-        <button class="btn btnGhost" id="btnGoList" type="button">Lijst</button>
+        <button class="btn small" data-quick="birthdays">Overzicht</button>
+      </div>
+      <div class="statValue" id="statBirthdays">0</div>
+    </div>
+
+    <div class="itemCard" id="listHintCard">
+      <div class="row">
+        <div>
+          <p class="statTitle" style="margin:0">Kies een dag in de kalender</p>
+          <p class="sub" style="margin:4px 0 0">Privé</p>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center">
+          <button class="btn" id="exportBtn">Export</button>
+          <button class="btn" id="importBtn">Import</button>
+        </div>
       </div>
     </div>
 
-    <div id="viewList" class="hidden">
-      <div class="kicker">
-        <div class="kickerTitle">Lijst</div>
-        <div class="kickerRight">
-          <button class="btn btnGhost btnSmall" id="btnBackFromList" type="button">Terug</button>
-        </div>
-      </div>
+    <div class="listCards" id="listCards"></div>
 
-      <div class="grid2 mt14">
-        <div class="tile">
-          <div class="tileTitle"><span>Deze maand</span> <button class="chip chipBtn" id="btnQuickMonth" type="button">Snel zien</button></div>
-          <div class="tileValue" id="countMonth">0</div>
-          <div class="tileHint">Aantal afspraken in deze maand.</div>
-        </div>
-        <div class="tile">
-          <div class="tileTitle"><span>Vandaag</span> <button class="chip chipBtn" id="btnQuickToday" type="button">Snel zien</button></div>
-          <div class="tileValue" id="countToday">0</div>
-          <div class="tileHint">Aantal afspraken vandaag.</div>
-        </div>
-        <div class="tile" style="grid-column:1/-1;">
-          <div class="tileTitle"><span>Verjaardagen</span> <button class="chip chipBtn" id="btnQuickBday" type="button">Overzicht</button></div>
-          <div class="tileValue" id="countBirthdays">0</div>
-          <div class="tileHint">Aantal verjaardagen opgeslagen.</div>
-        </div>
-      </div>
+    <button class="btn" id="backToCalendar" style="width:100%">Terug</button>
+  </div>
+</div>
 
-      <div class="seg mt14">
-        <div class="segLeft">
-          <div class="segTitle">Kies een dag in de kalender</div>
-          <div class="segSub" id="listHint">Privé</div>
-        </div>
-        <div style="display:flex; gap:10px;">
-          <button class="btn btnGhost" id="btnExport" type="button">Export</button>
-          <button class="btn btnGhost" id="btnImport" type="button">Import</button>
-        </div>
-      </div>
-
-      <div class="divider"></div>
-      <div class="list mt14" id="listItems"></div>
-    </div>
-
-    <div id="viewAdd" class="hidden">
-      <div class="kicker">
-        <div class="kickerTitle">Toevoegen</div>
-        <div class="kickerRight">
-          <button class="btn btnGhost btnSmall" id="btnBackFromAdd" type="button">Terug</button>
-        </div>
-      </div>
-
-      <div class="tile mt14">
-        <div class="tileTitle"><span>Type</span><span class="chip">Kies</span></div>
-        <select class="input" id="typeSelect">
-          <option value="shared">Afspraak</option>
-          <option value="bday">Verjaardag</option>
-          <option value="note">Notitie</option>
-        </select>
-
-        <div class="formRow">
-          <input class="input inputSm" id="dateInput" type="date">
-          <input class="input inputSm" id="timeInput" type="time">
-        </div>
-
-        <div class="formRow">
-          <input class="input" id="titleInput" type="text" placeholder="Titel">
-        </div>
-
-        <div class="formRow">
-          <input class="input" id="locInput" type="text" placeholder="Locatie">
-        </div>
-
-        <div class="formRow">
-          <input class="input" id="noteInput" type="text" placeholder="Notitie">
-        </div>
-
-        <div class="formRow">
-          <button class="btn btnPrimary btnWide" id="btnSaveItem" type="button">Opslaan</button>
-          <button class="btn btnGhost btnWide" id="btnDeleteItem" type="button">Verwijderen</button>
-        </div>
-
-        <div class="smallHelp mt10">Tip, kies eerst een datum, daarna titel.</div>
+<div id="screenAdd" class="screen">
+  <div class="formCard">
+    <div class="row">
+      <div>
+        <h2>Toevoegen</h2>
+        <p class="sub">Sla alles op, lokaal of in Firebase</p>
       </div>
     </div>
 
-    <div id="viewInfo" class="hidden">
-      <div class="kicker">
-        <div class="kickerTitle">Info</div>
-      </div>
-      <div class="tile mt14">
-        <div class="tileTitle"><span>Gebruik</span><span class="chip">Kort</span></div>
-        <div class="help">Privé is bewerken. Gastmodus is alleen kijken. Sync op Firebase laat jou en Lizet dezelfde data zien, met dezelfde login.</div>
-        <div class="footerNote mt18">Made by Rob Borghouts 2026</div>
-      </div>
+    <div class="field">
+      <label for="typeSelect">Soort</label>
+      <select id="typeSelect">
+        <option value="appointment">Afspraak</option>
+        <option value="birthday">Verjaardag</option>
+        <option value="memory">Herinnering</option>
+      </select>
     </div>
 
+    <div class="field">
+      <label for="titleInput">Titel</label>
+      <input id="titleInput" placeholder="Bijv. Etentje Theo">
+    </div>
+
+    <div class="field">
+      <label for="dateInput">Datum</label>
+      <input id="dateInput" type="date">
+    </div>
+
+    <div class="field" id="timeField">
+      <label for="timeInput">Tijd</label>
+      <input id="timeInput" type="time">
+    </div>
+
+    <div class="field">
+      <label for="descInput">Beschrijving</label>
+      <textarea id="descInput" placeholder="Extra info"></textarea>
+    </div>
+
+    <div class="field">
+      <label for="whoSelect">Wie</label>
+      <select id="whoSelect">
+        <option value="rob">Rob</option>
+        <option value="lizet">Lizet</option>
+        <option value="samen">Samen</option>
+      </select>
+    </div>
+
+    <div class="actions">
+      <button class="btn primary" id="saveBtn">Opslaan</button>
+      <button class="btn" id="clearBtn">Leegmaken</button>
+    </div>
+
+    <hr class="hr">
+
+    <p class="note">
+      Tips.
+      Titel is verplicht.
+      Voor afspraken is datum verplicht.
+    </p>
+  </div>
+</div>
+
+<div id="screenInfo" class="screen">
+  <div class="settingsCard">
+    <div class="row">
+      <div>
+        <h2>Info</h2>
+        <p class="sub">Made by Rob Borghouts 2026</p>
+      </div>
+    </div>
+    <p class="note" id="infoText">
+      Gebruik de tabs onderin.
+      Kies Sync in instellingen.
+    </p>
+  </div>
+</div>
+
+<div id="screenSettings" class="screen">
+  <div class="settingsCard">
+    <div class="row">
+      <div>
+        <h2>Instellingen</h2>
+        <p class="sub">Privé is bewerken. Gastmodus is alleen kijken.</p>
+      </div>
+      <button class="btn" id="closeSettings">Sluiten</button>
+    </div>
+
+    <hr class="hr">
+
+    <div class="row">
+      <button class="btn primary" id="unlockBtn">Ontgrendel met code</button>
+      <button class="btn" id="guestBtn">Zet gastmodus</button>
+    </div>
+
+    <div class="field">
+      <label for="newCode">Code wijzigen</label>
+      <input id="newCode" placeholder="Nieuwe code">
+    </div>
+    <div class="actions">
+      <button class="btn" id="saveCode">Code opslaan</button>
+    </div>
+
+    <hr class="hr">
+
+    <div class="field">
+      <label for="syncSelect">Sync</label>
+      <select id="syncSelect">
+        <option value="local">Lokaal</option>
+        <option value="firebase">Firebase</option>
+      </select>
+    </div>
+
+    <p class="note">
+      Delen met Lizet werkt via Firebase, of anders via export en import.
+    </p>
+
+    <hr class="hr">
+
+    <div class="authBox">
+      <button class="btn" id="loginBtn">Inloggen</button>
+      <button class="btn" id="logoutBtn">Uitloggen</button>
+    </div>
+
+    <p class="note" id="authNote"></p>
   </div>
 </div>
 
@@ -700,1041 +930,975 @@
 
 
   <div class="tabs">
-    <div class="tabsInner">
-      <button class="tab active" data-view="calendar" id="tabCalendar" type="button">Kalender</button>
-      <button class="tab" data-view="list" id="tabList" type="button">Lijst</button>
-      <button class="tab" data-view="add" id="tabAdd" type="button">Toevoegen</button>
-      <button class="tab" data-view="info" id="tabInfo" type="button">Info</button>
+    <div class="tabbar">
+      <button class="tab active" data-tab="calendar">Kalender</button>
+      <button class="tab" data-tab="list">Lijst</button>
+      <button class="tab" data-tab="add">Toevoegen</button>
+      <button class="tab" data-tab="info">Info</button>
     </div>
   </div>
 
 
-  <div class="modalWrap hidden" id="settingsOverlay">
-    <div class="modal">
-      <div class="modalHeader">
-        <h3>Instellingen</h3>
-        <div class="statusPill" style="box-shadow:none;">
-          <span class="dot" id="lockDot"></span>
-          <span class="statusValue" id="lockState">Ontgrendeld</span>
+  <div class="toast" id="toast"></div>
+
+
+  <div class="modalOverlay" id="dayModal" aria-hidden="true">
+    <div class="modalCard" role="dialog" aria-modal="true" aria-labelledby="modalHead">
+      <div class="modalTop">
+        <div>
+          <p class="modalTitle" id="modalHead">Activiteiten</p>
+          <div class="modalDate" id="modalDate">0000-00-00</div>
         </div>
+        <button class="modalClose" data-close-modal>Sluiten</button>
       </div>
-
-
-  <div class="modalBody">
-    <div class="help">Privé is bewerken. Gastmodus is alleen kijken.</div>
-
-    <div class="formRow mt14">
-      <button class="btn btnPrimary btnWide" id="btnUnlock" type="button">Ontgrendel met code</button>
-      <button class="btn btnGhost btnWide" id="btnGuest" type="button">Zet gastmodus</button>
-    </div>
-
-    <div class="kicker mt18"><div class="kickerTitle">Code wijzigen</div></div>
-    <div class="formRow mt10">
-      <input class="input" id="newPin" type="password" placeholder="Nieuwe code" inputmode="numeric">
-      <button class="btn btnGhost btnWide" id="btnSavePin" type="button">Code opslaan</button>
-    </div>
-
-    <div class="kicker mt18"><div class="kickerTitle">Sync</div></div>
-    <div class="formRow mt10">
-      <select class="input" id="syncSelect">
-        <option value="local">Lokaal</option>
-        <option value="manual">Handmatig</option>
-        <option value="firebase">Firebase</option>
-      </select>
-    </div>
-
-    <div class="smallHelp mt10">Delen met Lizet werkt het makkelijkst via Firebase, of anders via export en import.</div>
-  </div>
-
-  <div class="modalFooter">
-    <button class="btn btnGhost btnWide" id="btnLogout" type="button">Uitloggen</button>
-    <button class="btn btnGhost btnWide" id="btnCloseSettings" type="button">Sluiten</button>
-  </div>
-</div>
-
-  </div>
-
-
-  <div class="modalWrap hidden" id="importOverlay">
-    <div class="modal">
-      <div class="modalHeader">
-        <h3>Import</h3>
-        <button class="btn btnGhost btnSmall" id="btnCloseImport" type="button">Sluiten</button>
-      </div>
-      <div class="modalBody">
-        <div class="help">Plak hier je export tekst. Daarna importeren.</div>
-        <div class="mt10">
-          <textarea class="input" id="importText" rows="8" placeholder="Plak export tekst"></textarea>
-        </div>
-      </div>
-      <div class="modalFooter">
-        <button class="btn btnPrimary btnWide" id="btnDoImport" type="button">Importeren</button>
+      <div class="modalList" id="modalList"></div>
+      <div class="modalEmpty" id="modalEmpty" style="display:none">Geen items op deze dag.</div>
+      <div style="margin-top:10px; display:flex; justify-content:flex-end">
+        <button class="btn" id="modalGoList">Naar lijst</button>
       </div>
     </div>
   </div>
 
 
-  <div class="toast" id="toast">Ok</div>
-
-
-  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
-
-
-  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
-
-
-  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
-
-
-  <script>
-    window.firebaseConfig = {
-      apiKey: "AIzaSyDeGP5IIWaFoG4PuISUueeccexrZOIVwGY",
-      authDomain: "agenda-roblizet.firebaseapp.com",
-      databaseURL: "https://agenda-roblizet-default-rtdb.europe-west1.firebasedatabase.app",
-      projectId: "agenda-roblizet",
-      storageBucket: "agenda-roblizet.firebasestorage.app",
-      messagingSenderId: "789902813974",
-      appId: "1:789902813974:web:62231ad5f5f90b4a91fe37"
+  <script type="module">
+    const state = {
+      syncMode: localStorage.getItem("rb_syncMode") || "local",
+      unlocked: localStorage.getItem("rb_unlocked") === "1",
+      code: localStorage.getItem("rb_code") || "1234",
+      selectedDate: null,
+      viewYear: null,
+      viewMonth: null,
+      firebaseReady: false,
+      user: null
     };
-  </script>
 
+    const els = {
+      statusDot: document.getElementById("statusDot"),
+      statusText: document.getElementById("statusText"),
+      toast: document.getElementById("toast"),
+      monthTitle: document.getElementById("monthTitle"),
+      daysGrid: document.getElementById("daysGrid"),
+      selectedTitle: document.getElementById("selectedTitle"),
+      selectedText: document.getElementById("selectedText"),
+      listCards: document.getElementById("listCards"),
+      statMonth: document.getElementById("statMonth"),
+      statToday: document.getElementById("statToday"),
+      statBirthdays: document.getElementById("statBirthdays"),
+      syncSelect: document.getElementById("syncSelect"),
+      authNote: document.getElementById("authNote"),
+      dayModal: document.getElementById("dayModal"),
+      modalDate: document.getElementById("modalDate"),
+      modalList: document.getElementById("modalList"),
+      modalEmpty: document.getElementById("modalEmpty")
+    };
 
-  <script>
-    (function(){
-      function $(id){ return document.getElementById(id); }
+    function toast(msg){
+      els.toast.textContent = msg;
+      els.toast.classList.add("show");
+      setTimeout(()=>els.toast.classList.remove("show"), 2200);
+    }
 
-      var storeKey = "agenda_v5_data";
-      var pinKey = "agenda_v5_pin";
-      var modeKey = "agenda_v5_mode";
-      var syncKey = "agenda_v5_sync";
-      var defaultPin = "1234";
+    function pad(n){ return String(n).padStart(2,"0"); }
+    function isoDate(d){
+      const y = d.getFullYear();
+      const m = pad(d.getMonth()+1);
+      const da = pad(d.getDate());
+      return `${y}-${m}-${da}`;
+    }
+    function parseISO(s){
+      const [y,m,d] = s.split("-").map(Number);
+      return new Date(y, m-1, d);
+    }
 
-      var monthsNL = ["januari","februari","maart","april","mei","juni","juli","augustus","september","oktober","november","december"];
-      var dows = ["Ma","Di","Wo","Do","Vr","Za","Zo"];
+    function monthLabel(y,m){
+      const names = ["januari","februari","maart","april","mei","juni","juli","augustus","september","oktober","november","december"];
+      return `${names[m]} ${y}`;
+    }
 
-      var state = {
-        mode: "locked",
-        sync: "local",
-        view: "calendar",
-        year: 0,
-        month: 0,
-        selectedDate: null,
-        listMode: 'day',
-        editingId: null,
-        data: []
+    function setStatus(mode){
+      if(mode === "firebase"){
+        els.statusDot.classList.remove("off");
+        els.statusText.textContent = "Online";
+      }else{
+        els.statusDot.classList.remove("off");
+        els.statusText.textContent = "Lokaal";
+      }
+    }
+
+    function setScreen(name){
+      document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+      document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+
+      if(name === "calendar"){
+        document.getElementById("screenCalendar").classList.add("active");
+        document.querySelector('.tab[data-tab="calendar"]').classList.add("active");
+      }
+      if(name === "list"){
+        document.getElementById("screenList").classList.add("active");
+        document.querySelector('.tab[data-tab="list"]').classList.add("active");
+      }
+      if(name === "add"){
+        document.getElementById("screenAdd").classList.add("active");
+        document.querySelector('.tab[data-tab="add"]').classList.add("active");
+      }
+      if(name === "info"){
+        document.getElementById("screenInfo").classList.add("active");
+        document.querySelector('.tab[data-tab="info"]').classList.add("active");
+      }
+      if(name === "settings"){
+        document.getElementById("screenSettings").classList.add("active");
+      }
+    }
+
+    function getLocalData(){
+      const raw = localStorage.getItem("rb_data_v3");
+      if(!raw) return {appointments:{}, birthdays:{}, memories:{}};
+      try{
+        const j = JSON.parse(raw);
+        return {
+          appointments: j.appointments || {},
+          birthdays: j.birthdays || {},
+          memories: j.memories || {}
+        };
+      }catch(e){
+        return {appointments:{}, birthdays:{}, memories:{}};
+      }
+    }
+
+    function setLocalData(data){
+      localStorage.setItem("rb_data_v3", JSON.stringify(data));
+    }
+
+    function uidEmailSafe(email){
+      return email.replace(/[^a-zA-Z0-9]/g,"_");
+    }
+
+    function nowId(){
+      return String(Date.now());
+    }
+
+    let fb = null;
+
+    async function initFirebase(){
+      try{
+        const firebaseConfig = {
+          apiKey: "AIzaSyDeGP5IIWaFoG4PuISUueeccexrZOIVwGY",
+          authDomain: "agenda-roblizet.firebaseapp.com",
+          databaseURL: "https://agenda-roblizet-default-rtdb.europe-west1.firebasedatabase.app",
+          projectId: "agenda-roblizet",
+          storageBucket: "agenda-roblizet.firebasestorage.app",
+          messagingSenderId: "789902813974",
+          appId: "1:789902813974:web:62231ad5f5f90b4a91fe37"
+        };
+
+        const appMod = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");
+        const authMod = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js");
+        const dbMod = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js");
+
+        const app = appMod.initializeApp(firebaseConfig);
+        const auth = authMod.getAuth(app);
+        const db = dbMod.getDatabase(app);
+
+        fb = {app, auth, db, authMod, dbMod};
+
+        authMod.onAuthStateChanged(auth, (user)=>{
+          state.user = user || null;
+          renderAuthState();
+          if(state.syncMode === "firebase"){
+            refreshAll();
+          }
+        });
+
+        state.firebaseReady = true;
+        renderAuthState();
+      }catch(e){
+        state.firebaseReady = false;
+        renderAuthState();
+      }
+    }
+
+    function renderAuthState(){
+      const btnLogin = document.getElementById("loginBtn");
+      const btnLogout = document.getElementById("logoutBtn");
+
+      if(state.syncMode !== "firebase"){
+        els.authNote.textContent = "Firebase staat uit. Zet Sync op Firebase om in te loggen.";
+        btnLogin.disabled = true;
+        btnLogout.disabled = true;
+        return;
+      }
+
+      if(!state.firebaseReady){
+        els.authNote.textContent = "Firebase laadt niet. Check internet, en ververs.";
+        btnLogin.disabled = true;
+        btnLogout.disabled = true;
+        return;
+      }
+
+      if(state.user){
+        els.authNote.textContent = `Ingelogd als ${state.user.email || "gebruiker"}.`;
+        btnLogin.disabled = true;
+        btnLogout.disabled = false;
+      }else{
+        els.authNote.textContent = "Niet ingelogd. Tik op Inloggen.";
+        btnLogin.disabled = false;
+        btnLogout.disabled = true;
+      }
+    }
+
+    function basePath(){
+      if(state.syncMode !== "firebase") return null;
+      if(!state.user || !state.user.email) return null;
+      const u = uidEmailSafe(state.user.email);
+      return `users/${u}`;
+    }
+
+    async function fbGetAll(){
+      const p = basePath();
+      if(!p) return null;
+      const snap = await fb.dbMod.get(fb.dbMod.ref(fb.db, `${p}/data`));
+      if(!snap.exists()) return {appointments:{}, birthdays:{}, memories:{}};
+      const v = snap.val() || {};
+      return {
+        appointments: v.appointments || {},
+        birthdays: v.birthdays || {},
+        memories: v.memories || {}
       };
+    }
 
-      var fb = { enabled:false, user:null };
+    async function fbSetAll(data){
+      const p = basePath();
+      if(!p) throw new Error("not logged in");
+      await fb.dbMod.set(fb.dbMod.ref(fb.db, `${p}/data`), data);
+    }
 
-      function toast(msg){
-        var t = $("toast");
-        t.textContent = msg;
-        t.classList.add("show");
-        clearTimeout(toast._tm);
-        toast._tm = setTimeout(function(){ t.classList.remove("show"); }, 1400);
-      }
-
-      function pad2(n){ n = String(n); return n.length === 1 ? "0"+n : n; }
-      function ymd(d){ return d.getFullYear()+"-"+pad2(d.getMonth()+1)+"-"+pad2(d.getDate()); }
-      function todayYMD(){ return ymd(new Date()); }
-
-      function uid(){
-        return Math.random().toString(16).slice(2) + (new Date().getTime()).toString(16);
-      }
-
-      function safeText(v){ return (v === null || v === undefined) ? "" : String(v); }
-
-      function normalizeOne(it){
-        if(!it) it = {};
-        if(!safeText(it.id).trim()) it.id = uid();
-        if(!safeText(it.type).trim()) it.type = "shared";
-        it.date = safeText(it.date).trim();
-        it.time = safeText(it.time).trim();
-        it.location = safeText(it.location).trim();
-        it.note = safeText(it.note).trim();
-        it.desc = safeText(it.desc).trim(); // legacy compat
-        it.title = safeText(it.title).trim();
-
-        // legacy: some old items used 'desc' instead of 'title'
-        if(!it.title){
-          it.title = it.desc || it.location || it.note || "(zonder titel)";
-        }
-        return it;
-      }
-
-      function normalizeAll(){
-        if(!Array.isArray(state.data)) state.data = [];
-        state.data = state.data.map(normalizeOne);
-      }
-
-      function fbInit(){
+    async function getAll(){
+      if(state.syncMode === "firebase"){
+        if(!state.firebaseReady || !state.user) return getLocalData();
         try{
-          if(!window.firebaseConfig) return false;
-          if(!firebase || !firebase.initializeApp) return false;
-          if(!firebase.apps.length) firebase.initializeApp(window.firebaseConfig);
-          fb.enabled = true;
-          return true;
+          const d = await fbGetAll();
+          return d || getLocalData();
         }catch(e){
-          fb.enabled = false;
-          return false;
+          return getLocalData();
         }
       }
+      return getLocalData();
+    }
 
-      function fbBasePath(){ return "agenda/shared"; }
-
-      function fbSetOnlineUI(){
-        $("syncDot").style.background = "var(--accent)";
-        $("syncDot").style.boxShadow = "0 0 0 4px rgba(56,189,248,.18)";
-        $("syncState").textContent = "Online";
-      }
-
-      function fbEnsureLogin(done){
-        if(!fbInit()){ toast("Firebase niet actief"); done(false); return; }
-        firebase.auth().onAuthStateChanged(function(u){
-          fb.user = u || null;
-          if(fb.user){ done(true); return; }
-
-          var email = prompt("Email voor agenda login");
-          if(email === null){ done(false); return; }
-          var pass = prompt("Wachtwoord");
-          if(pass === null){ done(false); return; }
-
-          firebase.auth().signInWithEmailAndPassword(String(email).trim(), String(pass))
-            .then(function(){ done(true); })
-            .catch(function(){ toast("Login fout"); done(false); });
-        });
-      }
-
-      function fbSaveAll(){
-        if(state.sync !== "firebase") return;
-        fbEnsureLogin(function(ok){
-          if(!ok) return;
-          normalizeAll();
-          var base = fbBasePath();
-          firebase.database().ref(base + "/data").set(state.data)
-            .then(function(){ fbSetOnlineUI(); })
-            .catch(function(){ toast("Firebase opslaan fout"); });
-        });
-      }
-
-      function fbLoadAll(done){
-        fbEnsureLogin(function(ok){
-          if(!ok){ done(false); return; }
-
-          var base = fbBasePath();
-          firebase.database().ref(base + "/data").once("value")
-            .then(function(snap){
-              var v = snap.val();
-              if(Array.isArray(v)){
-                state.data = v;
-                normalizeAll();
-                localStorage.setItem(storeKey, JSON.stringify(state.data));
-                fbSetOnlineUI();
-                renderAll();
-                done(true);
-                return;
-              }
-              fbImportLegacy(function(imported){
-                fbSetOnlineUI();
-                renderAll();
-                done(!!imported);
-              });
-            })
-            .catch(function(){
-              toast("Firebase lezen fout");
-              done(false);
-            });
-        });
-      }
-
-      function pickTitle(obj){
-        return safeText(obj.title).trim()
-          || safeText(obj.name).trim()
-          || safeText(obj.subject).trim()
-          || safeText(obj.onderwerp).trim()
-          || safeText(obj.titel).trim()
-          || safeText(obj.omschrijving).trim()
-          || safeText(obj.description).trim()
-          || safeText(obj.desc).trim()
-          || safeText(obj.text).trim()
-          || safeText(obj.location).trim()
-          || safeText(obj.note).trim()
-          || "(zonder titel)";
-      }
-
-      function fbImportLegacy(done){
-        var root = firebase.database().ref("/");
-        Promise.all([
-          root.child("appointments").once("value"),
-          root.child("birthdays").once("value"),
-          root.child("memories").once("value")
-        ]).then(function(res){
-          var apps = res[0].val() || {};
-          var bds = res[1].val() || {};
-          var mem = res[2].val() || {};
-          var out = [];
-
-          Object.keys(apps).forEach(function(k){
-            var a = apps[k] || {};
-            out.push(normalizeOne({
-              id: String(k),
-              type: a.type || "shared",
-              date: a.date || "",
-              time: a.time || "",
-              location: a.location || a.place || "",
-              title: pickTitle(a),
-              desc: a.desc || a.omschrijving || a.description || a.text || "",
-              note: a.note || ""
-            }));
-          });
-
-          Object.keys(bds).forEach(function(k){
-            var b = bds[k] || {};
-            out.push(normalizeOne({
-              id: String(k),
-              type: "bday",
-              date: b.date || "",
-              time: "",
-              location: "",
-              title: pickTitle(b),
-              desc: b.desc || b.omschrijving || b.description || "",
-              note: b.note || ""
-            }));
-          });
-
-          Object.keys(mem).forEach(function(k){
-            var m = mem[k] || {};
-            out.push(normalizeOne({
-              id: String(k),
-              type: "note",
-              date: m.date || "",
-              time: m.time || "",
-              location: m.location || "",
-              title: pickTitle(m),
-              desc: m.desc || m.omschrijving || m.description || m.text || "",
-              note: m.note || ""
-            }));
-          });
-
-          if(!out.length){ done(false); return; }
-
-          out.sort(byDateTime);
-          state.data = out;
-          localStorage.setItem(storeKey, JSON.stringify(state.data));
-
-          var base = fbBasePath();
-          firebase.database().ref(base + "/data").set(state.data)
-            .then(function(){ done(true); })
-            .catch(function(){ done(true); });
-        }).catch(function(){
-          done(false);
-        });
-      }
-
-      function getPin(){ return localStorage.getItem(pinKey) || defaultPin; }
-      function setPin(p){ localStorage.setItem(pinKey, p); }
-
-      function getMode(){ return localStorage.getItem(modeKey) || "locked"; }
-      function setMode(m){
-        localStorage.setItem(modeKey, m);
-        state.mode = m;
-        renderLockUI();
-      }
-
-      function getSync(){ return localStorage.getItem(syncKey) || "local"; }
-      function setSync(v){
-        localStorage.setItem(syncKey, v);
-        state.sync = v;
-        renderSyncUI();
-        if(state.sync === "firebase"){ fbLoadAll(function(){}); }
-      }
-
-      function load(){
+    async function setAll(data){
+      setLocalData(data);
+      if(state.syncMode === "firebase"){
+        if(!state.firebaseReady || !state.user) return;
         try{
-          var raw = localStorage.getItem(storeKey);
-          state.data = raw ? JSON.parse(raw) : [];
-        }catch(e){
-          state.data = [];
-        }
-        normalizeAll();
-        if(state.sync === "firebase"){ fbLoadAll(function(){}); }
+          await fbSetAll(data);
+        }catch(e){}
       }
+    }
 
-      function save(){
-        normalizeAll();
-        localStorage.setItem(storeKey, JSON.stringify(state.data));
-        fbSaveAll();
-        renderAll();
-      }
+    function isEditAllowed(){
+      return state.unlocked;
+    }
 
-      function initMonth(){
-        var d = new Date();
-        state.year = d.getFullYear();
-        state.month = d.getMonth();
-      }
+    function updateEditUI(){
+      document.getElementById("saveBtn").disabled = !isEditAllowed();
+      document.getElementById("clearBtn").disabled = !isEditAllowed();
+      document.getElementById("unlockBtn").textContent = state.unlocked ? "Ontgrendeld" : "Ontgrendel met code";
+      document.getElementById("guestBtn").textContent = state.unlocked ? "Zet gastmodus" : "Gastmodus";
+    }
 
-      function renderLockUI(){
-        var locked = state.mode !== "private";
-        $("lockState").textContent = locked ? "Gastmodus" : "Ontgrendeld";
-        $("lockDot").style.background = locked ? "var(--warn)" : "var(--ok)";
-        $("lockDot").style.boxShadow = locked ? "0 0 0 4px rgba(245,158,11,.18)" : "0 0 0 4px rgba(34,197,94,.18)";
-      }
-
-      function renderSyncUI(){
-        if(state.sync === "local"){
-          $("syncDot").style.background = "var(--ok)";
-          $("syncDot").style.boxShadow = "0 0 0 4px rgba(34,197,94,.18)";
-          $("syncState").textContent = "Lokaal";
-        }else if(state.sync === "manual"){
-          $("syncDot").style.background = "var(--accent)";
-          $("syncDot").style.boxShadow = "0 0 0 4px rgba(56,189,248,.18)";
-          $("syncState").textContent = "Handmatig";
-        }else{
-          $("syncDot").style.background = "var(--accent)";
-          $("syncDot").style.boxShadow = "0 0 0 4px rgba(56,189,248,.18)";
-          $("syncState").textContent = "Online";
-        }
-        $("syncSelect").value = state.sync;
-      }
-
-      function setView(view){
-        state.view = view;
-
-        var tabs = document.querySelectorAll(".tab");
-        for(var i=0;i<tabs.length;i++){
-          tabs[i].classList.toggle("active", tabs[i].getAttribute("data-view") === view);
-        }
-
-        $("viewCalendar").classList.toggle("hidden", view !== "calendar");
-        $("viewList").classList.toggle("hidden", view !== "list");
-        $("viewAdd").classList.toggle("hidden", view !== "add");
-        $("viewInfo").classList.toggle("hidden", view !== "info");
-
-        if(view === "add"){
-          state.editingId = null;
-          clearForm();
-          updateDeleteBtn();
-        }
-        if(view === "list"){
-          renderList();
-          renderCounts();
-        }
-        if(view === "calendar"){
-          renderCalendar();
-          renderDaySummary();
-        }
-      }
-
-      function clearForm(){
-        $("typeSelect").value = "shared";
-        $("dateInput").value = state.selectedDate || "";
-        $("timeInput").value = "";
-        $("titleInput").value = "";
-        $("locInput").value = "";
-        $("noteInput").value = "";
-      }
-
-      function updateDeleteBtn(){
-        var canEdit = state.mode === "private";
-        var show = canEdit && !!state.editingId;
-        $("btnDeleteItem").style.display = show ? "block" : "none";
-      }
-
-      function iconFor(item){
-        if(item.type === "bday") return "🎂";
-        if(item.type === "note") return "📝";
-        return "📅";
-      }
-
-      function labelFor(item){
-        if(item.type === "bday") return "Bday";
-        if(item.type === "note") return "Note";
-        return "Afspraak";
-      }
-
-      function byDateTime(a,b){
-        var ad = a.date || "";
-        var bd = b.date || "";
-        if(ad !== bd) return ad < bd ? -1 : 1;
-        var at = a.time || "";
-        var bt = b.time || "";
-        if(at !== bt) return at < bt ? -1 : 1;
-        return (a.title||"").localeCompare(b.title||"");
-      }
-
-      function itemsOnDate(dateStr){
-        return state.data.filter(function(it){ return it.date === dateStr; }).sort(byDateTime);
-      }
-
-      function renderCalendar(){
-        $("calMonth").textContent = monthsNL[state.month] + " " + state.year;
-        var grid = $("calGrid");
-        grid.innerHTML = "";
-
-        for(var i=0;i<7;i++){
-          var el = document.createElement("div");
-          el.className = "dow";
-          el.textContent = dows[i];
-          grid.appendChild(el);
-        }
-
-        var first = new Date(state.year, state.month, 1);
-        var firstDow = first.getDay();
-        var offset = (firstDow + 6) % 7;
-
-        for(var c=0;c<42;c++){
-          var dayNum = c - offset + 1;
-          var d = new Date(state.year, state.month, dayNum);
-          var dateStr = ymd(d);
-
-          var btn = document.createElement("div");
-          btn.className = "day";
-          btn.textContent = String(d.getDate());
-
-          var inMonth = d.getMonth() === state.month;
-          if(!inMonth) btn.classList.add("muted");
-
-          if(dateStr === todayYMD()) btn.classList.add("today");
-          if(state.selectedDate && dateStr === state.selectedDate) btn.classList.add("selected");
-          
-          var dayItems = itemsOnDate(dateStr);
-          if(dayItems.length) btn.classList.add("has");
-
-          if(dayItems.length){
-            var hasB = dayItems.some(function(it){ return it.type === "bday"; });
-            var hasM = dayItems.some(function(it){ return it.type === "note"; });
-            var hasA = dayItems.some(function(it){ return it.type !== "bday" && it.type !== "note"; });
-
-            var dots = document.createElement("div");
-            dots.className = "dots";
-            if(hasA){ var da=document.createElement("span"); da.className="dotMini dotAppt"; dots.appendChild(da); }
-            if(hasB){ var db=document.createElement("span"); db.className="dotMini dotBday"; dots.appendChild(db); }
-            if(hasM){ var dm=document.createElement("span"); dm.className="dotMini dotMem"; dots.appendChild(dm); }
-            btn.appendChild(dots);
-          }
-btn.addEventListener("click", (function(ds){
-            return function(){
-              state.selectedDate = ds;
-              state.listMode = 'day';
-              if(state.view === "calendar"){ renderCalendar(); renderDaySummary(); openDayModal(ds); }
-              if(state.view === "list"){ renderList(); renderCounts(); }
-              $("dateInput").value = ds;
-            };
-          })(dateStr));
-
-          grid.appendChild(btn);
-        }
-      }
-
-      function renderDaySummary(){
-        if(!state.selectedDate){
-          $("daySummary").textContent = "Kies eerst een dag in de kalender";
-          return;
-        }
-        var list = itemsOnDate(state.selectedDate);
-        if(!list.length){
-          $("daySummary").textContent = "Geen afspraken op " + state.selectedDate;
-          return;
-        }
-        var txt = list.slice(0,3).map(function(it){
-          var t = it.time ? it.time + " " : "";
-          var name = it.title || it.location || it.note || "(zonder titel)";
-          return t + name;
-        }).join(", ");
-        if(list.length > 3) txt += ", +" + (list.length-3);
-        $("daySummary").textContent = txt;
-      }
-
-      function renderList(){
-        var host = $("listItems");
-        host.innerHTML = "";
-
-        var list = state.data.slice().sort(byDateTime);
-
-        if(state.listMode === "today"){
-          var t = todayYMD();
-          list = list.filter(function(it){ return it.date === t; });
-        } else if(state.listMode === "month"){
-          var pref = state.year + "-" + pad2(state.month + 1) + "-";
-          list = list.filter(function(it){ return (it.date || "").indexOf(pref) === 0; });
-        } else if(state.listMode === "bday"){
-          list = list.filter(function(it){ return it.type === "bday"; });
-        } else if(state.selectedDate){
-          list = list.filter(function(it){ return it.date === state.selectedDate; });
-        }
-
-        if(!list.length){
-          var empty = document.createElement("div");
-          empty.className = "tile mt14";
-          empty.innerHTML = '<div class="tileTitle"><span>Geen items</span><span class="chip">Tip</span></div><div class="help">Voeg iets toe via Toevoegen.</div>';
-          host.appendChild(empty);
-          return;
-        }
-
-        list.forEach(function(it){
-          var row = document.createElement("div");
-          row.className = "item";
-
-          var b = document.createElement("div");
-          b.className = "badge";
-          b.textContent = iconFor(it);
-
-          var body = document.createElement("div");
-          body.className = "itemBody";
-
-          var top = document.createElement("div");
-          top.className = "itemTop";
-
-          var title = document.createElement("div");
-          title.className = "itemTitle";
-          title.textContent = it.title || it.location || it.note || "(zonder titel)";
-
-          var chip = document.createElement("div");
-          chip.className = "chip";
-          chip.textContent = labelFor(it);
-
-          top.appendChild(title);
-          top.appendChild(chip);
-
-          var meta = document.createElement("div");
-          meta.className = "itemMeta";
-
-          var c1 = document.createElement("div");
-          c1.className = "chip";
-          c1.textContent = it.date || "";
-
-          var c2 = document.createElement("div");
-          c2.className = "chip";
-          c2.textContent = it.time || "--:--";
-
-          var c3 = document.createElement("div");
-          c3.className = "chip";
-          c3.textContent = it.location || "Geen locatie";
-
-          meta.appendChild(c1);
-          meta.appendChild(c2);
-          meta.appendChild(c3);
-
-          body.appendChild(top);
-          body.appendChild(meta);
-
-          if(it.note){
-            var note = document.createElement("div");
-            note.className = "tileHint";
-            note.textContent = it.note;
-            body.appendChild(note);
-          }
-
-          row.appendChild(b);
-          row.appendChild(body);
-
-          row.addEventListener("click", function(){
-            if(state.mode !== "private"){ toast("Gastmodus"); return; }
-            state.editingId = it.id;
-            $("typeSelect").value = it.type || "shared";
-            $("dateInput").value = it.date || "";
-            $("timeInput").value = it.time || "";
-            $("titleInput").value = it.title || "";
-            $("locInput").value = it.location || "";
-            $("noteInput").value = it.note || "";
-            updateDeleteBtn();
-            setView("add");
-          });
-
-          host.appendChild(row);
+    function openModal(dateStr, items){
+      els.modalDate.textContent = dateStr;
+      els.modalList.innerHTML = "";
+      if(!items || items.length === 0){
+        els.modalEmpty.style.display = "block";
+      }else{
+        els.modalEmpty.style.display = "none";
+        items.forEach(it=>{
+          const card = document.createElement("div");
+          card.className = "itemCard";
+          card.innerHTML = `
+            <div class="itemRow">
+              <div class="itemMain">
+                <div class="row" style="align-items:flex-start">
+                  <div style="min-width:0">
+                    <p class="itemTitle" style="margin:0 0 6px">${escapeHtml(it.title || "(zonder titel)")}</p>
+                    <div class="chips">
+                      <span class="chip ${it.kindChip}">${it.kindLabel}</span>
+                      ${it.date ? `<span class="chip">${it.date}</span>` : ""}
+                      ${it.time ? `<span class="chip">${it.time}</span>` : ""}
+                      ${it.who ? `<span class="chip muted">${escapeHtml(it.who)}</span>` : ""}
+                    </div>
+                    ${it.desc ? `<p class="sub" style="margin:10px 0 0">${escapeHtml(it.desc)}</p>` : ""}
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+          els.modalList.appendChild(card);
         });
       }
+      els.dayModal.classList.add("open");
+      els.dayModal.setAttribute("aria-hidden","false");
+      document.body.style.overflow = "hidden";
+    }
 
-      function countMonthItems(){
-        var m = state.month + 1;
-        var y = state.year;
-        var pref = y + "-" + pad2(m) + "-";
-        var c = 0;
-        for(var i=0;i<state.data.length;i++){
-          if((state.data[i].date || "").indexOf(pref) === 0) c++;
+    function closeModal(){
+      els.dayModal.classList.remove("open");
+      els.dayModal.setAttribute("aria-hidden","true");
+      document.body.style.overflow = "";
+    }
+
+    function escapeHtml(s){
+      return String(s)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    async function dayItems(dateStr){
+      const data = await getAll();
+      const items = [];
+
+      Object.values(data.appointments || {}).forEach(a=>{
+        if(a && a.date === dateStr){
+          items.push({
+            type:"appointment",
+            kindLabel:"Afspraak",
+            kindChip:"a",
+            title: a.desc || a.title || "(zonder titel)",
+            date: a.date,
+            time: a.time || "",
+            who: a.who || "",
+            desc: a.location ? `Locatie: ${a.location}` : ""
+          });
         }
-        return c;
-      }
+      });
 
-      function countTodayItems(){
-        var t = todayYMD();
-        var c = 0;
-        for(var i=0;i<state.data.length;i++){
-          if(state.data[i].date === t) c++;
+      Object.values(data.birthdays || {}).forEach(b=>{
+        if(b && b.date === dateStr){
+          items.push({
+            type:"birthday",
+            kindLabel:"Verjaardag",
+            kindChip:"b",
+            title: b.name || b.title || "(verjaardag)",
+            date: b.date,
+            time: "",
+            who: b.who || "",
+            desc: b.note || ""
+          });
         }
-        return c;
-      }
+      });
 
-      function countBirthdays(){
-        var c = 0;
-        for(var i=0;i<state.data.length;i++){
-          if(state.data[i].type === "bday") c++;
+      Object.values(data.memories || {}).forEach(m=>{
+        if(m && m.date === dateStr){
+          items.push({
+            type:"memory",
+            kindLabel:"Herinnering",
+            kindChip:"m",
+            title: m.title || m.desc || "(herinnering)",
+            date: m.date,
+            time: m.time || "",
+            who: m.who || "",
+            desc: m.desc || ""
+          });
         }
-        return c;
+      });
+
+      items.sort((x,y)=>{
+        const tx = x.time || "99:99";
+        const ty = y.time || "99:99";
+        return tx.localeCompare(ty);
+      });
+
+      return items;
+    }
+
+    async function renderCalendar(){
+      const now = new Date();
+      if(state.viewYear === null){
+        state.viewYear = now.getFullYear();
+        state.viewMonth = now.getMonth();
       }
 
-      function renderCounts(){
-        $("countMonth").textContent = String(countMonthItems());
-        $("countToday").textContent = String(countTodayItems());
-        $("countBirthdays").textContent = String(countBirthdays());
-      }
+      els.monthTitle.textContent = monthLabel(state.viewYear, state.viewMonth);
 
-      function renderAll(){
-        renderLockUI();
-        renderSyncUI();
-        if(state.view === "calendar"){ renderCalendar(); renderDaySummary(); }
-        if(state.view === "list"){ renderList(); renderCounts(); }
-        if(state.view === "add"){ updateDeleteBtn(); }
-      }
+      const first = new Date(state.viewYear, state.viewMonth, 1);
+      const last = new Date(state.viewYear, state.viewMonth+1, 0);
 
-      function addOrUpdateFromForm(){
-        if(state.mode !== "private"){ toast("Gastmodus"); return; }
+      let startDow = first.getDay();
+      startDow = startDow === 0 ? 7 : startDow;
+      const leading = startDow - 1;
 
-        var type = $("typeSelect").value || "shared";
-        var date = ($("dateInput").value || "").trim();
-        var time = ($("timeInput").value || "").trim();
-        var title = ($("titleInput").value || "").trim();
-        var location = ($("locInput").value || "").trim();
-        var note = ($("noteInput").value || "").trim();
+      const totalDays = last.getDate();
+      els.daysGrid.innerHTML = "";
 
-        if(!date){ toast("Kies datum"); return; }
-        if(!title){ title = location || note || "(zonder titel)"; }
+      const data = await getAll();
 
-        var id = state.editingId || uid();
-        var idx = -1;
-        for(var i=0;i<state.data.length;i++){
-          if(state.data[i].id === id){ idx = i; break; }
+      const hasA = {};
+      const hasB = {};
+      const hasM = {};
+
+      Object.values(data.appointments || {}).forEach(a=>{
+        if(a && a.date){
+          const [y,mo] = a.date.split("-").map(Number);
+          if(y === state.viewYear && (mo-1) === state.viewMonth) hasA[a.date] = true;
         }
+      });
+      Object.values(data.birthdays || {}).forEach(b=>{
+        if(b && b.date){
+          const [y,mo] = b.date.split("-").map(Number);
+          if(y === state.viewYear && (mo-1) === state.viewMonth) hasB[b.date] = true;
+        }
+      });
+      Object.values(data.memories || {}).forEach(m=>{
+        if(m && m.date){
+          const [y,mo] = m.date.split("-").map(Number);
+          if(y === state.viewYear && (mo-1) === state.viewMonth) hasM[m.date] = true;
+        }
+      });
 
-        var obj = normalizeOne({ id:id, type:type, date:date, time:time, title:title, location:location, note:note });
-
-        if(idx >= 0) state.data[idx] = obj;
-        else state.data.push(obj);
-
-        state.data.sort(byDateTime);
-        state.selectedDate = date;
-        state.editingId = null;
-
-        save();
-        clearForm();
-        updateDeleteBtn();
-        toast("Opgeslagen");
-        setView("calendar");
+      for(let i=0;i<leading;i++){
+        const d = document.createElement("div");
+        d.className = "day muted";
+        d.textContent = "";
+        d.dataset.date = "";
+        els.daysGrid.appendChild(d);
       }
 
-      function deleteEditing(){
-        if(state.mode !== "private"){ toast("Gastmodus"); return; }
-        if(!state.editingId){ toast("Niets gekozen"); return; }
+      for(let day=1; day<=totalDays; day++){
+        const d = document.createElement("div");
+        d.className = "day";
+        d.textContent = String(day);
 
-        var id = state.editingId;
-        state.data = state.data.filter(function(it){ return it.id !== id; });
-        state.editingId = null;
+        const ds = `${state.viewYear}-${pad(state.viewMonth+1)}-${pad(day)}`;
+        d.dataset.date = ds;
 
-        save();
-        clearForm();
-        updateDeleteBtn();
-        toast("Verwijderd");
-        setView("calendar");
+        if(ds === isoDate(now)) d.classList.add("today");
+        if(state.selectedDate === ds) d.classList.add("selected");
+
+        const dots = document.createElement("div");
+        dots.className = "dots";
+
+        if(hasA[ds]){ const s = document.createElement("span"); s.className="d a"; dots.appendChild(s); }
+        if(hasB[ds]){ const s = document.createElement("span"); s.className="d b"; dots.appendChild(s); }
+        if(hasM[ds]){ const s = document.createElement("span"); s.className="d m"; dots.appendChild(s); }
+
+        if(dots.childNodes.length>0) d.appendChild(dots);
+
+        els.daysGrid.appendChild(d);
       }
 
-      function exportData(){
-        try{ return btoa(unescape(encodeURIComponent(JSON.stringify(state.data)))); }
-        catch(e){ return ""; }
+      const filled = leading + totalDays;
+      const remainder = filled % 7 === 0 ? 0 : (7 - (filled % 7));
+      for(let i=0;i<remainder;i++){
+        const d = document.createElement("div");
+        d.className = "day muted";
+        d.textContent = "";
+        d.dataset.date = "";
+        els.daysGrid.appendChild(d);
       }
 
-      function importData(txt){
+      updateSelectedBox();
+      updateStats();
+      renderList();
+    }
+
+    async function updateSelectedBox(){
+      if(!state.selectedDate){
+        els.selectedText.textContent = "Kies eerst een dag in de kalender";
+        return;
+      }
+      const items = await dayItems(state.selectedDate);
+      if(items.length === 0){
+        els.selectedText.textContent = "Geen activiteiten op deze dag";
+      }else{
+        const first = items[0];
+        let line = "";
+        if(first.kindLabel) line += `${first.kindLabel} `;
+        if(first.title) line += `${first.title}`;
+        if(first.time) line += `, ${first.time}`;
+        els.selectedText.textContent = line;
+      }
+    }
+
+    async function updateStats(){
+      const data = await getAll();
+      const now = new Date();
+      const ym = `${now.getFullYear()}-${pad(now.getMonth()+1)}`;
+      const today = isoDate(now);
+
+      let monthCount = 0;
+      Object.values(data.appointments || {}).forEach(a=>{
+        if(a && a.date && a.date.startsWith(ym)) monthCount++;
+      });
+
+      let todayCount = 0;
+      Object.values(data.appointments || {}).forEach(a=>{
+        if(a && a.date === today) todayCount++;
+      });
+
+      const bCount = Object.keys(data.birthdays || {}).length;
+
+      els.statMonth.textContent = String(monthCount);
+      els.statToday.textContent = String(todayCount);
+      els.statBirthdays.textContent = String(bCount);
+    }
+
+    function iconFromDate(dateStr){
+      const d = parseISO(dateStr);
+      const months = ["JAN","FEB","MRT","APR","MEI","JUN","JUL","AUG","SEP","OKT","NOV","DEC"];
+      return {m: months[d.getMonth()], d: pad(d.getDate())};
+    }
+
+    async function renderList(filter){
+      const data = await getAll();
+      const cards = els.listCards;
+      cards.innerHTML = "";
+
+      let items = [];
+
+      Object.values(data.appointments || {}).forEach(a=>{
+        if(!a) return;
+        items.push({
+          type:"appointment",
+          kindLabel:"Afspraak",
+          kindChip:"a",
+          title: a.desc || a.title || "(zonder titel)",
+          date: a.date || "",
+          time: a.time || "",
+          who: a.who || "",
+          desc: a.location || ""
+        });
+      });
+
+      Object.values(data.birthdays || {}).forEach(b=>{
+        if(!b) return;
+        items.push({
+          type:"birthday",
+          kindLabel:"Verjaardag",
+          kindChip:"b",
+          title: b.name || b.title || "(verjaardag)",
+          date: b.date || "",
+          time: "",
+          who: b.who || "",
+          desc: b.note || ""
+        });
+      });
+
+      Object.values(data.memories || {}).forEach(m=>{
+        if(!m) return;
+        items.push({
+          type:"memory",
+          kindLabel:"Herinnering",
+          kindChip:"m",
+          title: m.title || m.desc || "(herinnering)",
+          date: m.date || "",
+          time: m.time || "",
+          who: m.who || "",
+          desc: m.desc || ""
+        });
+      });
+
+      const now = new Date();
+      const today = isoDate(now);
+      const ym = `${now.getFullYear()}-${pad(now.getMonth()+1)}`;
+
+      if(filter === "today"){
+        items = items.filter(i=>i.date === today);
+      }
+      if(filter === "month"){
+        items = items.filter(i=>i.type==="appointment" && i.date && i.date.startsWith(ym));
+      }
+      if(filter === "birthdays"){
+        items = items.filter(i=>i.type==="birthday");
+      }
+
+      items.sort((a,b)=>{
+        const da = a.date || "9999-99-99";
+        const db = b.date || "9999-99-99";
+        if(da !== db) return da.localeCompare(db);
+        return (a.time||"99:99").localeCompare(b.time||"99:99");
+      });
+
+      items.forEach(it=>{
+        const card = document.createElement("div");
+        card.className = "itemCard";
+
+        const ic = it.date ? iconFromDate(it.date) : {m:"",d:""};
+        card.innerHTML = `
+          <div class="itemRow">
+            <div class="iconDate">
+              <div class="m">${ic.m}</div>
+              <div class="d">${ic.d}</div>
+            </div>
+            <div class="itemMain">
+              <div class="row" style="align-items:flex-start">
+                <div style="min-width:0">
+                  <p class="itemTitle">${escapeHtml(it.title)}</p>
+                  <div class="chips">
+                    <span class="chip ${it.kindChip}">${it.kindLabel}</span>
+                    ${it.date ? `<span class="chip">${it.date}</span>` : ""}
+                    ${it.time ? `<span class="chip">${it.time}</span>` : ""}
+                    ${it.desc ? `<span class="chip muted">${escapeHtml(it.desc)}</span>` : `<span class="chip muted">Geen locatie</span>`}
+                  </div>
+                </div>
+                <div style="display:flex; gap:10px; align-items:center">
+                  <button class="btn small" data-open-date="${it.date || ""}">Open</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+
+        cards.appendChild(card);
+      });
+    }
+
+    async function refreshAll(){
+      setStatus(state.syncMode);
+      els.syncSelect.value = state.syncMode;
+      updateEditUI();
+      await renderCalendar();
+      renderAuthState();
+    }
+
+    function requireTitle(){
+      const t = document.getElementById("titleInput").value.trim();
+      if(!t){
+        toast("Titel is verplicht");
+        return null;
+      }
+      return t;
+    }
+
+    function readForm(){
+      const type = document.getElementById("typeSelect").value;
+      const title = requireTitle();
+      if(!title) return null;
+
+      const date = document.getElementById("dateInput").value;
+      const time = document.getElementById("timeInput").value;
+      const desc = document.getElementById("descInput").value.trim();
+      const who = document.getElementById("whoSelect").value;
+
+      if(type === "appointment" && !date){
+        toast("Datum is verplicht");
+        return null;
+      }
+
+      return {type, title, date, time, desc, who};
+    }
+
+    function clearForm(){
+      document.getElementById("titleInput").value = "";
+      document.getElementById("dateInput").value = "";
+      document.getElementById("timeInput").value = "";
+      document.getElementById("descInput").value = "";
+      document.getElementById("whoSelect").value = "rob";
+      document.getElementById("typeSelect").value = "appointment";
+      toggleTimeField();
+    }
+
+    function toggleTimeField(){
+      const type = document.getElementById("typeSelect").value;
+      const tf = document.getElementById("timeField");
+      tf.style.display = (type === "birthday") ? "none" : "block";
+    }
+
+    async function saveItem(){
+      if(!isEditAllowed()){
+        toast("Gastmodus, bewerken uit");
+        return;
+      }
+      const f = readForm();
+      if(!f) return;
+
+      const data = await getAll();
+      const id = nowId();
+
+      if(f.type === "appointment"){
+        data.appointments[id] = {
+          id: Number(id),
+          date: f.date,
+          time: f.time || "",
+          desc: f.title,
+          who: f.who,
+          createdAt: new Date().toISOString()
+        };
+      }
+
+      if(f.type === "birthday"){
+        data.birthdays[id] = {
+          id: Number(id),
+          date: f.date,
+          name: f.title,
+          who: f.who,
+          note: f.desc,
+          createdAt: new Date().toISOString()
+        };
+      }
+
+      if(f.type === "memory"){
+        data.memories[id] = {
+          id: Number(id),
+          date: f.date,
+          time: f.time || "",
+          title: f.title,
+          desc: f.desc,
+          who: f.who,
+          createdAt: new Date().toISOString()
+        };
+      }
+
+      await setAll(data);
+
+      toast("Opgeslagen");
+      clearForm();
+      await refreshAll();
+      setScreen("calendar");
+    }
+
+    function exportData(){
+      const data = getLocalData();
+      const blob = new Blob([JSON.stringify(data,null,2)], {type:"application/json"});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "agenda_roblizet_export.json";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      toast("Export gemaakt");
+    }
+
+    function importData(){
+      const input = document.createElement("input");
+      input.type = "file";
+      input.accept = "application/json";
+      input.onchange = async ()=>{
+        const file = input.files[0];
+        if(!file) return;
+        const text = await file.text();
         try{
-          var data = JSON.parse(decodeURIComponent(escape(atob(txt))));
-          if(Array.isArray(data)){
-            state.data = data;
-            normalizeAll();
-            state.data.sort(byDateTime);
-            save();
-            return true;
-          }
-          return false;
+          const j = JSON.parse(text);
+          const data = {
+            appointments: j.appointments || {},
+            birthdays: j.birthdays || {},
+            memories: j.memories || {}
+          };
+          await setAll(data);
+          toast("Import klaar");
+          await refreshAll();
         }catch(e){
-          return false;
+          toast("Import fout");
+        }
+      };
+      input.click();
+    }
+
+    async function doLogin(){
+      if(!fb || !state.firebaseReady) return toast("Firebase niet klaar");
+      const email = prompt("Email voor agenda login");
+      if(!email) return;
+      const password = prompt("Wachtwoord");
+      if(!password) return;
+
+      try{
+        await fb.authMod.signInWithEmailAndPassword(fb.auth, email, password);
+        toast("Ingelogd");
+        state.syncMode = "firebase";
+        localStorage.setItem("rb_syncMode","firebase");
+        await refreshAll();
+      }catch(e){
+        try{
+          await fb.authMod.createUserWithEmailAndPassword(fb.auth, email, password);
+          toast("Account gemaakt en ingelogd");
+          state.syncMode = "firebase";
+          localStorage.setItem("rb_syncMode","firebase");
+          await refreshAll();
+        }catch(err){
+          toast("Login fout");
         }
       }
+    }
 
-      function openOverlay(id){ $(id).classList.remove("hidden"); }
-      function closeOverlay(id){ $(id).classList.add("hidden"); }
-
-      function typeLabel(it){
-        if(it.type === "bday") return "Verjaardag";
-        if(it.type === "note") return "Herinnering";
-        return "Afspraak";
+    async function doLogout(){
+      if(!fb || !state.firebaseReady) return;
+      try{
+        await fb.authMod.signOut(fb.auth);
+        toast("Uitgelogd");
+        await refreshAll();
+      }catch(e){
+        toast("Uitloggen fout");
       }
-      function typeDotClass(it){
-        if(it.type === "bday") return "miniDotBday";
-        if(it.type === "note") return "miniDotMem";
-        return "miniDotAppt";
+    }
+
+    function unlock(){
+      const c = prompt("Code");
+      if(c === null) return;
+      if(c === state.code){
+        state.unlocked = true;
+        localStorage.setItem("rb_unlocked","1");
+        toast("Ontgrendeld");
+      }else{
+        toast("Foute code");
       }
+      updateEditUI();
+    }
 
-      function openDayModal(dateStr){
-        var overlay = $("dayModalOverlay");
-        if(!overlay) return;
+    function guest(){
+      state.unlocked = false;
+      localStorage.setItem("rb_unlocked","0");
+      toast("Gastmodus aan");
+      updateEditUI();
+    }
 
-        var list = itemsOnDate(dateStr);
-        $("dayModalTitle").textContent = dateStr;
-
-        var holder = $("dayModalList");
-        var empty = $("dayModalEmpty");
-        holder.innerHTML = "";
-
-        if(!list.length){
-          empty.style.display = "block";
-        }else{
-          empty.style.display = "none";
-          list.forEach(function(it){
-            var row = document.createElement("div");
-            row.className = "modalRow";
-
-            var pill = document.createElement("div");
-            pill.className = "typePill";
-            var d = document.createElement("span");
-            d.className = "miniDot " + typeDotClass(it);
-            pill.appendChild(d);
-            var t = document.createElement("span");
-            t.textContent = typeLabel(it);
-            pill.appendChild(t);
-
-            var main = document.createElement("div");
-            main.className = "modalRowMain";
-
-            var title = document.createElement("div");
-            title.className = "rowTitle";
-            title.textContent = it.title || "(zonder titel)";
-
-            var meta = document.createElement("div");
-            meta.className = "rowMeta";
-
-            if(it.time){
-              var c1 = document.createElement("span");
-              c1.className = "metaChip";
-              c1.textContent = it.time;
-              meta.appendChild(c1);
-            }
-            if(it.location){
-              var c2 = document.createElement("span");
-              c2.className = "metaChip";
-              c2.textContent = it.location;
-              meta.appendChild(c2);
-            }
-            if(it.desc){
-              var c3 = document.createElement("span");
-              c3.className = "metaChip";
-              c3.textContent = it.desc;
-              meta.appendChild(c3);
-            }
-
-            main.appendChild(title);
-            main.appendChild(meta);
-
-            row.appendChild(pill);
-            row.appendChild(main);
-            holder.appendChild(row);
-          });
-        }
-
-        overlay.classList.add("show");
-        overlay.setAttribute("aria-hidden","false");
+    function saveCode(){
+      const n = document.getElementById("newCode").value.trim();
+      if(!n){
+        toast("Vul nieuwe code in");
+        return;
       }
+      state.code = n;
+      localStorage.setItem("rb_code", n);
+      document.getElementById("newCode").value = "";
+      toast("Code opgeslagen");
+    }
 
-      function closeDayModal(){
-        var overlay = $("dayModalOverlay");
-        if(!overlay) return;
-        overlay.classList.remove("show");
-        overlay.setAttribute("aria-hidden","true");
+    function openDateFromList(dateStr){
+      if(!dateStr) return;
+      state.selectedDate = dateStr;
+      setScreen("calendar");
+      renderCalendar().then(async ()=>{
+        const items = await dayItems(dateStr);
+        openModal(dateStr, items);
+      });
+    }
+
+    document.querySelectorAll(".tab").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const t = btn.dataset.tab;
+        if(t === "calendar") setScreen("calendar");
+        if(t === "list") { setScreen("list"); renderList(); }
+        if(t === "add") setScreen("add");
+        if(t === "info") setScreen("info");
+      });
+    });
+
+    document.getElementById("openSettings").addEventListener("click", ()=>setScreen("settings"));
+    document.getElementById("closeSettings").addEventListener("click", ()=>setScreen("calendar"));
+    document.getElementById("prevMonth").addEventListener("click", async ()=>{
+      state.viewMonth--;
+      if(state.viewMonth < 0){ state.viewMonth = 11; state.viewYear--; }
+      await renderCalendar();
+    });
+    document.getElementById("nextMonth").addEventListener("click", async ()=>{
+      state.viewMonth++;
+      if(state.viewMonth > 11){ state.viewMonth = 0; state.viewYear++; }
+      await renderCalendar();
+    });
+    document.getElementById("goToday").addEventListener("click", async ()=>{
+      const now = new Date();
+      state.viewYear = now.getFullYear();
+      state.viewMonth = now.getMonth();
+      state.selectedDate = isoDate(now);
+      await renderCalendar();
+      const items = await dayItems(state.selectedDate);
+      openModal(state.selectedDate, items);
+    });
+
+    document.getElementById("tapHint").addEventListener("click", async ()=>{
+      toast("Tik een dag met stipjes");
+    });
+
+    document.getElementById("goListFromSelected").addEventListener("click", ()=>{
+      setScreen("list");
+      renderList();
+    });
+
+    document.getElementById("backToCalendar").addEventListener("click", ()=>{
+      setScreen("calendar");
+    });
+
+    document.getElementById("typeSelect").addEventListener("change", toggleTimeField);
+
+    document.getElementById("saveBtn").addEventListener("click", saveItem);
+    document.getElementById("clearBtn").addEventListener("click", ()=>{
+      if(!isEditAllowed()){ toast("Gastmodus"); return; }
+      clearForm();
+      toast("Leeg");
+    });
+
+    document.getElementById("exportBtn").addEventListener("click", exportData);
+    document.getElementById("importBtn").addEventListener("click", importData);
+
+    document.getElementById("unlockBtn").addEventListener("click", unlock);
+    document.getElementById("guestBtn").addEventListener("click", guest);
+    document.getElementById("saveCode").addEventListener("click", saveCode);
+
+    els.syncSelect.addEventListener("change", async ()=>{
+      state.syncMode = els.syncSelect.value;
+      localStorage.setItem("rb_syncMode", state.syncMode);
+      if(state.syncMode === "firebase"){
+        await initFirebase();
       }
+      await refreshAll();
+    });
 
+    document.getElementById("loginBtn").addEventListener("click", doLogin);
+    document.getElementById("logoutBtn").addEventListener("click", doLogout);
 
-      function wire(){
-        $("btnSettings").addEventListener("click", function(){
-          renderLockUI();
-          renderSyncUI();
-          openOverlay("settingsOverlay");
-        });
-
-        $("btnCloseSettings").addEventListener("click", function(){ closeOverlay("settingsOverlay"); });
-
-        $("btnLogout").addEventListener("click", function(){
-          if(state.sync !== "firebase"){ toast("Niet in Firebase sync"); return; }
-          if(!fbInit()){ toast("Firebase niet actief"); return; }
-          firebase.auth().signOut()
-            .then(function(){ fb.user = null; toast("Uitgelogd"); setTimeout(function(){ location.reload(); }, 500); })
-            .catch(function(){ toast("Uitloggen fout"); });
-        });
-
-        $("btnUnlock").addEventListener("click", function(){
-          var p = prompt("Code");
-          if(p === null) return;
-          if(String(p) === getPin()){
-            setMode("private");
-            toast("Ontgrendeld");
-          }else{
-            toast("Foute code");
-          }
-        });
-
-        $("btnGuest").addEventListener("click", function(){ setMode("locked"); toast("Gastmodus"); });
-
-        $("btnSavePin").addEventListener("click", function(){
-          var p = ($("newPin").value || "").trim();
-          if(p.length < 3){ toast("Code te kort"); return; }
-          setPin(p);
-          $("newPin").value = "";
-          toast("Code opgeslagen");
-        });
-
-        $("syncSelect").addEventListener("change", function(){
-          setSync($("syncSelect").value);
-          toast("Sync opgeslagen");
-        });
-
-        $("btnExport").addEventListener("click", function(){
-          var txt = exportData();
-          if(!txt){ toast("Export fout"); return; }
-          if(navigator.clipboard && navigator.clipboard.writeText){
-            navigator.clipboard.writeText(txt).then(function(){ toast("Export gekopieerd"); }).catch(function(){ prompt("Kopieer dit", txt); });
-          }else{
-            prompt("Kopieer dit", txt);
-          }
-        });
-
-        $("btnImport").addEventListener("click", function(){
-          $("importText").value = "";
-          openOverlay("importOverlay");
-        });
-
-        $("btnCloseImport").addEventListener("click", function(){ closeOverlay("importOverlay"); });
-
-        $("btnDoImport").addEventListener("click", function(){
-          var t = ($("importText").value || "").trim();
-          if(!t){ toast("Plak export"); return; }
-          if(importData(t)){ closeOverlay("importOverlay"); toast("Geïmporteerd"); }
-          else{ toast("Import fout"); }
-        });
-
-        $("btnPrev").addEventListener("click", function(){
-          state.month--;
-          if(state.month < 0){ state.month = 11; state.year--; }
-          renderCalendar();
-          renderDaySummary();
-        });
-
-        $("btnNext").addEventListener("click", function(){
-          state.month++;
-          if(state.month > 11){ state.month = 0; state.year++; }
-          renderCalendar();
-          renderDaySummary();
-        });
-
-        $("btnGoList").addEventListener("click", function(){ setView("list"); });
-        $("btnBackFromList").addEventListener("click", function(){ setView("calendar"); });
-        $("btnBackFromAdd").addEventListener("click", function(){ setView("calendar"); });
-
-        $("btnSaveItem").addEventListener("click", function(){ addOrUpdateFromForm(); });
-        $("btnDeleteItem").addEventListener("click", function(){ deleteEditing(); });
-
-        $("tabCalendar").addEventListener("click", function(){ setView("calendar"); });
-        $("tabList").addEventListener("click", function(){ setView("list"); });
-        $("tabAdd").addEventListener("click", function(){ setView("add"); });
-        $("tabInfo").addEventListener("click", function(){ setView("info"); });
-
-        // Quick buttons (event delegation, survives re-render)
-        if(!window.__quickBtnsBound){
-          window.__quickBtnsBound = true;
-          document.addEventListener("click", function(e){
-            var el = e.target && e.target.closest ? e.target.closest("#btnQuickMonth,#btnQuickToday,#btnQuickBday") : null;
-            if(!el) return;
-            e.preventDefault(); e.stopPropagation();
-
-            if(el.id === "btnQuickMonth"){
-              state.listMode = "month";
-              state.selectedDate = null;
-              setView("list");
-              renderAll();
-              return;
-            }
-            if(el.id === "btnQuickToday"){
-              state.listMode = "today";
-              state.selectedDate = todayYMD();
-              setView("list");
-              renderAll();
-              return;
-            }
-            if(el.id === "btnQuickBday"){
-              state.listMode = "bday";
-              state.selectedDate = null;
-              setView("list");
-              renderAll();
-              return;
-            }
-          }, true);
-
-        // Day modal close / navigation
-        var mdClose = $("btnDayModalClose");
-        if(mdClose){ mdClose.addEventListener("click", function(e){ e.preventDefault(); closeDayModal(); }); }
-
-        var mdToList = $("btnDayModalToList");
-        if(mdToList){ mdToList.addEventListener("click", function(e){
-          e.preventDefault();
-          closeDayModal();
-          setView("list");
-          renderAll();
-        }); }
-
-        var mdOverlay = $("dayModalOverlay");
-        if(mdOverlay){ mdOverlay.addEventListener("click", function(e){
-          if(e.target && e.target.id === "dayModalOverlay"){ closeDayModal(); }
-        }); }
-
-        document.addEventListener("keydown", function(e){
-          if(e.key === "Escape"){ closeDayModal(); }
-        });
-
-        }
+    document.addEventListener("click", async (e)=>{
+      const day = e.target.closest(".day");
+      if(day && day.dataset.date){
+        const ds = day.dataset.date;
+        state.selectedDate = ds;
+        await renderCalendar();
+        const items = await dayItems(ds);
+        openModal(ds, items);
       }
 
-
-      function boot(){
-        initMonth();
-        state.mode = getMode();
-        state.sync = getSync();
-        wire();
-        renderSyncUI();
-        load();
-        setView("calendar");
-        renderAll();
+      const quick = e.target.closest("[data-quick]");
+      if(quick){
+        const f = quick.dataset.quick;
+        setScreen("list");
+        await renderList(f);
       }
 
-      boot();
+      const openBtn = e.target.closest("[data-open-date]");
+      if(openBtn){
+        openDateFromList(openBtn.dataset.openDate);
+      }
+
+      if(e.target && e.target.matches("[data-close-modal]")) closeModal();
+      if(e.target && e.target.id === "dayModal") closeModal();
+    });
+
+    document.addEventListener("keydown", (e)=>{
+      if(e.key === "Escape") closeModal();
+    });
+
+    document.getElementById("modalGoList").addEventListener("click", ()=>{
+      closeModal();
+      setScreen("list");
+      renderList();
+    });
+
+    (async ()=>{
+      els.syncSelect.value = state.syncMode;
+      setStatus(state.syncMode);
+      updateEditUI();
+      toggleTimeField();
+      if(state.syncMode === "firebase"){
+        await initFirebase();
+      }
+      await refreshAll();
     })();
   </script>
 
-
-
-  <!-- Day popup -->
-  <div class="modalOverlay" id="dayModalOverlay" aria-hidden="true">
-    <div class="modalCard" role="dialog" aria-modal="true" aria-labelledby="dayModalTitle">
-      <div class="modalHead">
-        <div>
-          <div class="modalKicker">Activiteiten</div>
-          <div class="modalTitle" id="dayModalTitle">Dag</div>
-        </div>
-        <button class="btn ghost" type="button" id="btnDayModalClose">Sluiten</button>
-      </div>
-      <div class="modalBody">
-        <div class="modalEmpty" id="dayModalEmpty">Geen items.</div>
-        <div class="modalList" id="dayModalList"></div>
-      </div>
-      <div class="modalFoot">
-        <button class="btn" type="button" id="btnDayModalToList">Naar lijst</button>
-      </div>
-    </div>
-  </div>
 
 </body>
 </html>
