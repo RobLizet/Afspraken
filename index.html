@@ -1851,16 +1851,27 @@ textarea{min-height:90px;resize:vertical}
     document.getElementById("loginBtn").addEventListener("click", doLogin);
     document.getElementById("logoutBtn").addEventListener("click", doLogout);
 
-    document.addEventListener("click", async (e)=>{
-      const day = e.target.closest(".day");
-      if(day && day.dataset.date){
-        const ds = day.dataset.date;
-        state.selectedDate = ds;
-        await renderCalendar();
-        const items = await dayItems(ds);
-        openModal(ds, items);
-      }
 
+    // Dag tikken, iOS proof. Bind direct op het kalendergrid.
+    const handleDayTap = async (e)=>{
+      const dayEl = e.target.closest(".day");
+      if(!dayEl) return;
+      const ds = dayEl.dataset.date;
+      if(!ds) return;
+
+      state.selectedDate = ds;
+      await renderCalendar();
+      const items = await dayItems(ds);
+      openModal(ds, items);
+    };
+
+    if(els.daysGrid){
+      els.daysGrid.addEventListener("click", handleDayTap);
+      els.daysGrid.addEventListener("pointerup", handleDayTap);
+      els.daysGrid.addEventListener("touchend", handleDayTap, {passive:true});
+    }
+
+    document.addEventListener("click", async (e)=>{
       const quick = e.target.closest("[data-quick]");
       if(quick){
         const f = quick.dataset.quick;
