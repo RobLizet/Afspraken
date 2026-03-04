@@ -760,10 +760,12 @@
         it.time = safeText(it.time).trim();
         it.location = safeText(it.location).trim();
         it.note = safeText(it.note).trim();
+        it.desc = safeText(it.desc).trim(); // legacy compat
         it.title = safeText(it.title).trim();
 
+        // legacy: some old items used 'desc' instead of 'title'
         if(!it.title){
-          it.title = it.location || it.note || "(zonder titel)";
+          it.title = it.desc || it.location || it.note || "(zonder titel)";
         }
         return it;
       }
@@ -889,7 +891,8 @@
               time: a.time || "",
               location: a.location || a.place || "",
               title: pickTitle(a),
-              note: a.note || a.omschrijving || a.description || a.text || ""
+              desc: a.desc || a.omschrijving || a.description || a.text || "",
+              note: a.note || ""
             }));
           });
 
@@ -902,6 +905,7 @@
               time: "",
               location: "",
               title: pickTitle(b),
+              desc: b.desc || b.omschrijving || b.description || "",
               note: b.note || ""
             }));
           });
@@ -915,7 +919,8 @@
               time: m.time || "",
               location: m.location || "",
               title: pickTitle(m),
-              note: m.note || m.text || ""
+              desc: m.desc || m.omschrijving || m.description || m.text || "",
+              note: m.note || ""
             }));
           });
 
