@@ -435,17 +435,11 @@
       color:rgba(255,255,255,.95);
     }
     .day.has{ position:relative; }
-    .day.has:after{
-      content:"";
-      position:absolute;
-      left:50%;
-      bottom:7px;
-      transform:translateX(-50%);
-      width:6px; height:6px;
-      border-radius:99px;
-      background:rgba(34,197,94,.95);
-      box-shadow:0 0 0 3px rgba(34,197,94,.14);
-    }
+.day .dots{ position:absolute; left:50%; bottom:6px; transform:translateX(-50%); display:flex; gap:4px; }
+.day .dotMini{ width:6px; height:6px; border-radius:99px; }
+.dotAppt{ background:rgba(96,165,250,.98); box-shadow:0 0 0 3px rgba(96,165,250,.16); }
+.dotBday{ background:rgba(244,114,182,.98); box-shadow:0 0 0 3px rgba(244,114,182,.16); }
+.dotMem{ background:rgba(167,139,250,.98); box-shadow:0 0 0 3px rgba(167,139,250,.16); }
     .divider{ margin-top:14px; height:1px; background:rgba(255,255,255,.10); }
     .footerNote{
       margin-top:18px;
@@ -477,6 +471,78 @@
     box-shadow:0 0 0 5px rgba(106,168,255,.12);
   }
 
+
+  .modalOverlay{
+    position:fixed; inset:0; display:none;
+    background:rgba(15,18,28,.38);
+    padding:18px;
+    z-index:50;
+  }
+  .modalOverlay.show{ display:flex; align-items:flex-end; justify-content:center; }
+  .modalCard{
+    width:min(720px, 100%);
+    background:linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.84));
+    border:1px solid rgba(23,32,61,.12);
+    border-radius:22px;
+    box-shadow:0 30px 80px rgba(23,32,61,.18);
+    overflow:hidden;
+  }
+  .modalHead{
+    padding:14px 16px;
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    border-bottom:1px solid rgba(23,32,61,.10);
+    background:linear-gradient(90deg, rgba(255,156,207,.18), rgba(106,168,255,.16));
+  }
+  .modalKicker{ font-size:12px; font-weight:900; letter-spacing:.5px; text-transform:uppercase; color:rgba(18,22,34,.62); }
+  .modalTitle{ font-size:18px; font-weight:950; color:rgba(18,22,34,.92); }
+  .modalBody{ padding:14px 16px 10px; max-height:55vh; overflow:auto; }
+  .modalEmpty{
+    padding:16px;
+    border-radius:16px;
+    background:rgba(255,255,255,.70);
+    border:1px solid rgba(23,32,61,.08);
+    color:rgba(18,22,34,.65);
+    font-weight:800;
+    display:none;
+  }
+  .modalList{ display:flex; flex-direction:column; gap:10px; }
+  .modalRow{
+    border-radius:18px;
+    background:rgba(255,255,255,.72);
+    border:1px solid rgba(23,32,61,.10);
+    padding:12px;
+    display:flex; gap:12px; align-items:flex-start;
+  }
+  .typePill{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:8px 10px; border-radius:999px;
+    border:1px solid rgba(23,32,61,.10);
+    background:rgba(255,255,255,.70);
+    font-weight:900;
+    color:rgba(18,22,34,.80);
+    flex:0 0 auto;
+  }
+  .typePill .miniDot{ width:10px; height:10px; border-radius:99px; }
+  .miniDotAppt{ background:rgba(96,165,250,.98); box-shadow:0 0 0 4px rgba(96,165,250,.14); }
+  .miniDotBday{ background:rgba(244,114,182,.98); box-shadow:0 0 0 4px rgba(244,114,182,.14); }
+  .miniDotMem{ background:rgba(167,139,250,.98); box-shadow:0 0 0 4px rgba(167,139,250,.14); }
+  .modalRowMain{ flex:1 1 auto; }
+  .rowTitle{ font-size:16px; font-weight:950; color:rgba(18,22,34,.92); }
+  .rowMeta{ margin-top:6px; display:flex; gap:8px; flex-wrap:wrap; }
+  .metaChip{
+    padding:6px 10px; border-radius:999px;
+    border:1px solid rgba(23,32,61,.10);
+    background:rgba(255,255,255,.65);
+    font-weight:900;
+    color:rgba(18,22,34,.72);
+    font-size:13px;
+  }
+  .modalFoot{
+    padding:12px 16px 16px;
+    border-top:1px solid rgba(23,32,61,.10);
+    display:flex; justify-content:flex-end;
+  }
+
 </style>
 </head>
 
@@ -499,7 +565,7 @@
       <span class="statusLabel">Status</span>
       <span class="statusValue" id="syncState">Lokaal</span>
     </div>
-    <div class="versionBadge"><span class="dotV"></span>PASTEL FIREBASE QUICKFIX 2</div>
+    <div class="versionBadge"><span class="dotV"></span>PASTEL FIREBASE V3 DOTS</div>
     <button class="btn btnGhost" id="btnSettings" type="button">Instellingen</button>
   </div>
 </div>
@@ -1130,12 +1196,27 @@
 
           if(dateStr === todayYMD()) btn.classList.add("today");
           if(state.selectedDate && dateStr === state.selectedDate) btn.classList.add("selected");
-          if(itemsOnDate(dateStr).length) btn.classList.add("has");
+          
+          var dayItems = itemsOnDate(dateStr);
+          if(dayItems.length) btn.classList.add("has");
 
-          btn.addEventListener("click", (function(ds){
+          if(dayItems.length){
+            var hasB = dayItems.some(function(it){ return it.type === "bday"; });
+            var hasM = dayItems.some(function(it){ return it.type === "note"; });
+            var hasA = dayItems.some(function(it){ return it.type !== "bday" && it.type !== "note"; });
+
+            var dots = document.createElement("div");
+            dots.className = "dots";
+            if(hasA){ var da=document.createElement("span"); da.className="dotMini dotAppt"; dots.appendChild(da); }
+            if(hasB){ var db=document.createElement("span"); db.className="dotMini dotBday"; dots.appendChild(db); }
+            if(hasM){ var dm=document.createElement("span"); dm.className="dotMini dotMem"; dots.appendChild(dm); }
+            btn.appendChild(dots);
+          }
+btn.addEventListener("click", (function(ds){
             return function(){
               state.selectedDate = ds;
-              if(state.view === "calendar"){ renderCalendar(); renderDaySummary(); }
+              state.listMode = 'day';
+              if(state.view === "calendar"){ renderCalendar(); renderDaySummary(); openDayModal(ds); }
               if(state.view === "list"){ renderList(); renderCounts(); }
               $("dateInput").value = ds;
             };
@@ -1380,6 +1461,95 @@
       function openOverlay(id){ $(id).classList.remove("hidden"); }
       function closeOverlay(id){ $(id).classList.add("hidden"); }
 
+      function typeLabel(it){
+        if(it.type === "bday") return "Verjaardag";
+        if(it.type === "note") return "Herinnering";
+        return "Afspraak";
+      }
+      function typeDotClass(it){
+        if(it.type === "bday") return "miniDotBday";
+        if(it.type === "note") return "miniDotMem";
+        return "miniDotAppt";
+      }
+
+      function openDayModal(dateStr){
+        var overlay = $("dayModalOverlay");
+        if(!overlay) return;
+
+        var list = itemsOnDate(dateStr);
+        $("dayModalTitle").textContent = dateStr;
+
+        var holder = $("dayModalList");
+        var empty = $("dayModalEmpty");
+        holder.innerHTML = "";
+
+        if(!list.length){
+          empty.style.display = "block";
+        }else{
+          empty.style.display = "none";
+          list.forEach(function(it){
+            var row = document.createElement("div");
+            row.className = "modalRow";
+
+            var pill = document.createElement("div");
+            pill.className = "typePill";
+            var d = document.createElement("span");
+            d.className = "miniDot " + typeDotClass(it);
+            pill.appendChild(d);
+            var t = document.createElement("span");
+            t.textContent = typeLabel(it);
+            pill.appendChild(t);
+
+            var main = document.createElement("div");
+            main.className = "modalRowMain";
+
+            var title = document.createElement("div");
+            title.className = "rowTitle";
+            title.textContent = it.title || "(zonder titel)";
+
+            var meta = document.createElement("div");
+            meta.className = "rowMeta";
+
+            if(it.time){
+              var c1 = document.createElement("span");
+              c1.className = "metaChip";
+              c1.textContent = it.time;
+              meta.appendChild(c1);
+            }
+            if(it.location){
+              var c2 = document.createElement("span");
+              c2.className = "metaChip";
+              c2.textContent = it.location;
+              meta.appendChild(c2);
+            }
+            if(it.desc){
+              var c3 = document.createElement("span");
+              c3.className = "metaChip";
+              c3.textContent = it.desc;
+              meta.appendChild(c3);
+            }
+
+            main.appendChild(title);
+            main.appendChild(meta);
+
+            row.appendChild(pill);
+            row.appendChild(main);
+            holder.appendChild(row);
+          });
+        }
+
+        overlay.classList.add("show");
+        overlay.setAttribute("aria-hidden","false");
+      }
+
+      function closeDayModal(){
+        var overlay = $("dayModalOverlay");
+        if(!overlay) return;
+        overlay.classList.remove("show");
+        overlay.setAttribute("aria-hidden","true");
+      }
+
+
       function wire(){
         $("btnSettings").addEventListener("click", function(){
           renderLockUI();
@@ -1523,6 +1693,27 @@
     })();
   </script>
 
+
+
+  <!-- Day popup -->
+  <div class="modalOverlay" id="dayModalOverlay" aria-hidden="true">
+    <div class="modalCard" role="dialog" aria-modal="true" aria-labelledby="dayModalTitle">
+      <div class="modalHead">
+        <div>
+          <div class="modalKicker">Activiteiten</div>
+          <div class="modalTitle" id="dayModalTitle">Dag</div>
+        </div>
+        <button class="btn ghost" type="button" id="btnDayModalClose">Sluiten</button>
+      </div>
+      <div class="modalBody">
+        <div class="modalEmpty" id="dayModalEmpty">Geen items.</div>
+        <div class="modalList" id="dayModalList"></div>
+      </div>
+      <div class="modalFoot">
+        <button class="btn" type="button" id="btnDayModalToList">Naar lijst</button>
+      </div>
+    </div>
+  </div>
 
 </body>
 </html>
