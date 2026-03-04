@@ -1673,8 +1673,29 @@ btn.addEventListener("click", (function(ds){
               return;
             }
           }, true);
-        }
 
+        // Day modal close / navigation
+        var mdClose = $("btnDayModalClose");
+        if(mdClose){ mdClose.addEventListener("click", function(e){ e.preventDefault(); closeDayModal(); }); }
+
+        var mdToList = $("btnDayModalToList");
+        if(mdToList){ mdToList.addEventListener("click", function(e){
+          e.preventDefault();
+          closeDayModal();
+          setView("list");
+          renderAll();
+        }); }
+
+        var mdOverlay = $("dayModalOverlay");
+        if(mdOverlay){ mdOverlay.addEventListener("click", function(e){
+          if(e.target && e.target.id === "dayModalOverlay"){ closeDayModal(); }
+        }); }
+
+        document.addEventListener("keydown", function(e){
+          if(e.key === "Escape"){ closeDayModal(); }
+        });
+
+        }
       }
 
 
