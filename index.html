@@ -1,5 +1,6 @@
 
 
+
 <!doctype html>
 
 <html lang="nl">
@@ -11,15 +12,10 @@
   <title>Onze Agenda - Rob &amp; Lizet</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800&amp;display=swap">
-
-
   <style>
     :root{
       --bg0:#070a18;
       --bg1:#0b1230;
-      --card:rgba(255,255,255,.08);
-      --card2:rgba(255,255,255,.06);
-      --stroke:rgba(255,255,255,.10);
       --text:rgba(255,255,255,.92);
       --muted:rgba(255,255,255,.66);
       --muted2:rgba(255,255,255,.45);
@@ -29,9 +25,6 @@
       --warn:#f59e0b;
       --bad:#ef4444;
       --shadow:0 18px 50px rgba(0,0,0,.45);
-      --r12:12px;
-      --r16:16px;
-      --r20:20px;
     }
     *{ box-sizing:border-box; }
     html,body{ height:100%; }
@@ -61,12 +54,7 @@
       gap:12px;
       padding:10px 8px 16px;
     }
-    .brand{
-      display:flex;
-      gap:12px;
-      align-items:center;
-      min-width:0;
-    }
+    .brand{ display:flex; gap:12px; align-items:center; min-width:0; }
     .logo{
       width:44px; height:44px;
       border-radius:14px;
@@ -113,16 +101,8 @@
       background:var(--ok);
       box-shadow:0 0 0 4px rgba(34,197,94,.18);
     }
-    .statusLabel{
-      font-size:12.5px;
-      color:var(--muted);
-      font-weight:700;
-    }
-    .statusValue{
-      font-size:12.5px;
-      font-weight:800;
-      color:var(--text);
-    }
+    .statusLabel{ font-size:12.5px; color:var(--muted); font-weight:700; }
+    .statusValue{ font-size:12.5px; font-weight:800; color:var(--text); }
     .btn{
       appearance:none;
       border:none;
@@ -180,17 +160,8 @@
       justify-content:space-between;
       gap:10px;
     }
-    .tileValue{
-      font-weight:900;
-      font-size:26px;
-      letter-spacing:.2px;
-    }
-    .tileHint{
-      margin-top:6px;
-      font-size:12.5px;
-      color:var(--muted2);
-      line-height:1.3;
-    }
+    .tileValue{ font-weight:900; font-size:26px; letter-spacing:.2px; }
+    .tileHint{ margin-top:6px; font-size:12.5px; color:var(--muted2); line-height:1.3; }
     .seg{
       display:flex;
       gap:10px;
@@ -356,11 +327,6 @@
       border:1px solid rgba(255,255,255,.14);
       box-shadow:0 22px 60px rgba(0,0,0,.55);
       overflow:hidden;
-      animation:pop .12s ease-out;
-    }
-    @keyframes pop{
-      from{ transform:translateY(10px); opacity:.92; }
-      to{ transform:translateY(0); opacity:1; }
     }
     .modalHeader{
       padding:14px 16px;
@@ -418,16 +384,8 @@
       gap:10px;
       margin-top:14px;
     }
-    .kickerTitle{
-      font-weight:900;
-      font-size:16px;
-      letter-spacing:.15px;
-    }
-    .kickerRight{
-      display:flex;
-      gap:10px;
-      align-items:center;
-    }
+    .kickerTitle{ font-weight:900; font-size:16px; letter-spacing:.15px; }
+    .kickerRight{ display:flex; gap:10px; align-items:center; }
     .calendarWrap{
       margin-top:12px;
       padding:12px;
@@ -442,11 +400,7 @@
       gap:10px;
       margin-bottom:10px;
     }
-    .calMonth{
-      font-weight:900;
-      letter-spacing:.2px;
-      font-size:16px;
-    }
+    .calMonth{ font-weight:900; letter-spacing:.2px; font-size:16px; }
     .calGrid{
       display:grid;
       grid-template-columns:repeat(7, 1fr);
@@ -492,11 +446,7 @@
       background:rgba(34,197,94,.95);
       box-shadow:0 0 0 3px rgba(34,197,94,.14);
     }
-    .divider{
-      margin-top:14px;
-      height:1px;
-      background:rgba(255,255,255,.10);
-    }
+    .divider{ margin-top:14px; height:1px; background:rgba(255,255,255,.10); }
     .footerNote{
       margin-top:18px;
       font-size:12px;
@@ -505,8 +455,6 @@
       padding-bottom:6px;
     }
   </style>
-
-
 </head>
 
 
@@ -571,28 +519,17 @@
 
       <div class="grid2 mt14">
         <div class="tile">
-          <div class="tileTitle">
-            <span>Deze maand</span>
-            <span class="chip">Snel zien</span>
-          </div>
+          <div class="tileTitle"><span>Deze maand</span><span class="chip">Snel zien</span></div>
           <div class="tileValue" id="countMonth">0</div>
           <div class="tileHint">Aantal afspraken in deze maand.</div>
         </div>
-
         <div class="tile">
-          <div class="tileTitle">
-            <span>Vandaag</span>
-            <span class="chip">Snel zien</span>
-          </div>
+          <div class="tileTitle"><span>Vandaag</span><span class="chip">Snel zien</span></div>
           <div class="tileValue" id="countToday">0</div>
           <div class="tileHint">Aantal afspraken vandaag.</div>
         </div>
-
         <div class="tile" style="grid-column:1/-1;">
-          <div class="tileTitle">
-            <span>Verjaardagen</span>
-            <span class="chip">Overzicht</span>
-          </div>
+          <div class="tileTitle"><span>Verjaardagen</span><span class="chip">Overzicht</span></div>
           <div class="tileValue" id="countBirthdays">0</div>
           <div class="tileHint">Aantal verjaardagen opgeslagen.</div>
         </div>
@@ -610,7 +547,6 @@
       </div>
 
       <div class="divider"></div>
-
       <div class="list mt14" id="listItems"></div>
     </div>
 
@@ -623,10 +559,7 @@
       </div>
 
       <div class="tile mt14">
-        <div class="tileTitle">
-          <span>Type</span>
-          <span class="chip">Kies</span>
-        </div>
+        <div class="tileTitle"><span>Type</span><span class="chip">Kies</span></div>
         <select class="input" id="typeSelect">
           <option value="shared">Afspraak</option>
           <option value="bday">Verjaardag</option>
@@ -634,8 +567,8 @@
         </select>
 
         <div class="formRow">
-          <input class="input inputSm" id="dateInput" type="date" placeholder="Datum">
-          <input class="input inputSm" id="timeInput" type="time" placeholder="Tijd">
+          <input class="input inputSm" id="dateInput" type="date">
+          <input class="input inputSm" id="timeInput" type="time">
         </div>
 
         <div class="formRow">
@@ -663,15 +596,9 @@
       <div class="kicker">
         <div class="kickerTitle">Info</div>
       </div>
-
       <div class="tile mt14">
-        <div class="tileTitle">
-          <span>Gebruik</span>
-          <span class="chip">Kort</span>
-        </div>
-        <div class="help">
-          Privé is bewerken. Gastmodus is alleen kijken. Sync op Firebase laat jou en Lizet dezelfde data zien, met dezelfde login.
-        </div>
+        <div class="tileTitle"><span>Gebruik</span><span class="chip">Kort</span></div>
+        <div class="help">Privé is bewerken. Gastmodus is alleen kijken. Sync op Firebase laat jou en Lizet dezelfde data zien, met dezelfde login.</div>
         <div class="footerNote mt18">Made by Rob Borghouts 2026</div>
       </div>
     </div>
@@ -711,19 +638,13 @@
       <button class="btn btnGhost btnWide" id="btnGuest" type="button">Zet gastmodus</button>
     </div>
 
-    <div class="kicker mt18">
-      <div class="kickerTitle">Code wijzigen</div>
-    </div>
-
+    <div class="kicker mt18"><div class="kickerTitle">Code wijzigen</div></div>
     <div class="formRow mt10">
       <input class="input" id="newPin" type="password" placeholder="Nieuwe code" inputmode="numeric">
       <button class="btn btnGhost btnWide" id="btnSavePin" type="button">Code opslaan</button>
     </div>
 
-    <div class="kicker mt18">
-      <div class="kickerTitle">Sync</div>
-    </div>
-
+    <div class="kicker mt18"><div class="kickerTitle">Sync</div></div>
     <div class="formRow mt10">
       <select class="input" id="syncSelect">
         <option value="local">Lokaal</option>
@@ -813,11 +734,50 @@
 
       var fb = { enabled:false, user:null };
 
+      function toast(msg){
+        var t = $("toast");
+        t.textContent = msg;
+        t.classList.add("show");
+        clearTimeout(toast._tm);
+        toast._tm = setTimeout(function(){ t.classList.remove("show"); }, 1400);
+      }
+
+      function pad2(n){ n = String(n); return n.length === 1 ? "0"+n : n; }
+      function ymd(d){ return d.getFullYear()+"-"+pad2(d.getMonth()+1)+"-"+pad2(d.getDate()); }
+      function todayYMD(){ return ymd(new Date()); }
+
+      function uid(){
+        return Math.random().toString(16).slice(2) + (new Date().getTime()).toString(16);
+      }
+
+      function safeText(v){ return (v === null || v === undefined) ? "" : String(v); }
+
+      function normalizeOne(it){
+        if(!it) it = {};
+        if(!safeText(it.id).trim()) it.id = uid();
+        if(!safeText(it.type).trim()) it.type = "shared";
+        it.date = safeText(it.date).trim();
+        it.time = safeText(it.time).trim();
+        it.location = safeText(it.location).trim();
+        it.note = safeText(it.note).trim();
+        it.title = safeText(it.title).trim();
+
+        if(!it.title){
+          it.title = it.location || it.note || "(zonder titel)";
+        }
+        return it;
+      }
+
+      function normalizeAll(){
+        if(!Array.isArray(state.data)) state.data = [];
+        state.data = state.data.map(normalizeOne);
+      }
+
       function fbInit(){
         try{
-          if(!window.firebaseConfig){ return false; }
-          if(!firebase || !firebase.initializeApp){ return false; }
-          if(!firebase.apps.length){ firebase.initializeApp(window.firebaseConfig); }
+          if(!window.firebaseConfig) return false;
+          if(!firebase || !firebase.initializeApp) return false;
+          if(!firebase.apps.length) firebase.initializeApp(window.firebaseConfig);
           fb.enabled = true;
           return true;
         }catch(e){
@@ -826,13 +786,16 @@
         }
       }
 
-      function fbBasePath(){
-        return "agenda/shared";
+      function fbBasePath(){ return "agenda/shared"; }
+
+      function fbSetOnlineUI(){
+        $("syncDot").style.background = "var(--accent)";
+        $("syncDot").style.boxShadow = "0 0 0 4px rgba(56,189,248,.18)";
+        $("syncState").textContent = "Online";
       }
 
       function fbEnsureLogin(done){
         if(!fbInit()){ toast("Firebase niet actief"); done(false); return; }
-
         firebase.auth().onAuthStateChanged(function(u){
           fb.user = u || null;
           if(fb.user){ done(true); return; }
@@ -848,16 +811,11 @@
         });
       }
 
-      function fbSetOnlineUI(){
-        $("syncDot").style.background = "var(--accent)";
-        $("syncDot").style.boxShadow = "0 0 0 4px rgba(56,189,248,.18)";
-        $("syncState").textContent = "Online";
-      }
-
       function fbSaveAll(){
-        if(state.sync !== "firebase"){ return; }
+        if(state.sync !== "firebase") return;
         fbEnsureLogin(function(ok){
-          if(!ok){ return; }
+          if(!ok) return;
+          normalizeAll();
           var base = fbBasePath();
           firebase.database().ref(base + "/data").set(state.data)
             .then(function(){ fbSetOnlineUI(); })
@@ -875,6 +833,7 @@
               var v = snap.val();
               if(Array.isArray(v)){
                 state.data = v;
+                normalizeAll();
                 localStorage.setItem(storeKey, JSON.stringify(state.data));
                 fbSetOnlineUI();
                 renderAll();
@@ -894,6 +853,21 @@
         });
       }
 
+      function pickTitle(obj){
+        return safeText(obj.title).trim()
+          || safeText(obj.name).trim()
+          || safeText(obj.subject).trim()
+          || safeText(obj.onderwerp).trim()
+          || safeText(obj.titel).trim()
+          || safeText(obj.omschrijving).trim()
+          || safeText(obj.description).trim()
+          || safeText(obj.desc).trim()
+          || safeText(obj.text).trim()
+          || safeText(obj.location).trim()
+          || safeText(obj.note).trim()
+          || "(zonder titel)";
+      }
+
       function fbImportLegacy(done){
         var root = firebase.database().ref("/");
         Promise.all([
@@ -904,54 +878,50 @@
           var apps = res[0].val() || {};
           var bds = res[1].val() || {};
           var mem = res[2].val() || {};
-
           var out = [];
 
           Object.keys(apps).forEach(function(k){
             var a = apps[k] || {};
-            out.push({
+            out.push(normalizeOne({
               id: String(k),
               type: a.type || "shared",
               date: a.date || "",
               time: a.time || "",
-              location: a.location || "",
-              title: a.title || a.name || "",
-              note: a.note || ""
-            });
+              location: a.location || a.place || "",
+              title: pickTitle(a),
+              note: a.note || a.omschrijving || a.description || a.text || ""
+            }));
           });
 
           Object.keys(bds).forEach(function(k){
             var b = bds[k] || {};
-            out.push({
+            out.push(normalizeOne({
               id: String(k),
               type: "bday",
               date: b.date || "",
               time: "",
               location: "",
-              title: b.title || b.name || "",
+              title: pickTitle(b),
               note: b.note || ""
-            });
+            }));
           });
 
           Object.keys(mem).forEach(function(k){
             var m = mem[k] || {};
-            out.push({
+            out.push(normalizeOne({
               id: String(k),
               type: "note",
               date: m.date || "",
               time: m.time || "",
               location: m.location || "",
-              title: m.title || m.name || "",
+              title: pickTitle(m),
               note: m.note || m.text || ""
-            });
+            }));
           });
 
           if(!out.length){ done(false); return; }
 
-          out.sort(function(a,b){
-            return (a.date || "").localeCompare(b.date || "") || (a.time || "").localeCompare(b.time || "");
-          });
-
+          out.sort(byDateTime);
           state.data = out;
           localStorage.setItem(storeKey, JSON.stringify(state.data));
 
@@ -964,39 +934,22 @@
         });
       }
 
-      function pad2(n){ n = String(n); return n.length === 1 ? "0"+n : n; }
-      function ymd(d){
-        if(!d) return "";
-        return d.getFullYear()+"-"+pad2(d.getMonth()+1)+"-"+pad2(d.getDate());
-      }
-      function todayYMD(){ return ymd(new Date()); }
-
-      function toast(msg){
-        var t = $("toast");
-        t.textContent = msg;
-        t.classList.add("show");
-        clearTimeout(toast._tm);
-        toast._tm = setTimeout(function(){ t.classList.remove("show"); }, 1400);
-      }
-
       function getPin(){ return localStorage.getItem(pinKey) || defaultPin; }
       function setPin(p){ localStorage.setItem(pinKey, p); }
+
       function getMode(){ return localStorage.getItem(modeKey) || "locked"; }
       function setMode(m){
         localStorage.setItem(modeKey, m);
         state.mode = m;
         renderLockUI();
       }
+
       function getSync(){ return localStorage.getItem(syncKey) || "local"; }
       function setSync(v){
         localStorage.setItem(syncKey, v);
         state.sync = v;
         renderSyncUI();
         if(state.sync === "firebase"){ fbLoadAll(function(){}); }
-      }
-
-      function uid(){
-        return Math.random().toString(16).slice(2) + (new Date().getTime()).toString(16);
       }
 
       function load(){
@@ -1006,12 +959,12 @@
         }catch(e){
           state.data = [];
         }
-        if(state.sync === "firebase"){
-          fbLoadAll(function(){});
-        }
+        normalizeAll();
+        if(state.sync === "firebase"){ fbLoadAll(function(){}); }
       }
 
       function save(){
+        normalizeAll();
         localStorage.setItem(storeKey, JSON.stringify(state.data));
         fbSaveAll();
         renderAll();
@@ -1049,10 +1002,12 @@
 
       function setView(view){
         state.view = view;
+
         var tabs = document.querySelectorAll(".tab");
         for(var i=0;i<tabs.length;i++){
           tabs[i].classList.toggle("active", tabs[i].getAttribute("data-view") === view);
         }
+
         $("viewCalendar").classList.toggle("hidden", view !== "calendar");
         $("viewList").classList.toggle("hidden", view !== "list");
         $("viewAdd").classList.toggle("hidden", view !== "add");
@@ -1088,18 +1043,15 @@
         $("btnDeleteItem").style.display = show ? "block" : "none";
       }
 
-      function isBirthday(item){ return item && item.type === "bday"; }
-      function isNote(item){ return item && item.type === "note"; }
-
       function iconFor(item){
-        if(isBirthday(item)) return "🎂";
-        if(isNote(item)) return "📝";
+        if(item.type === "bday") return "🎂";
+        if(item.type === "note") return "📝";
         return "📅";
       }
 
       function labelFor(item){
-        if(isBirthday(item)) return "Bday";
-        if(isNote(item)) return "Note";
+        if(item.type === "bday") return "Bday";
+        if(item.type === "note") return "Note";
         return "Afspraak";
       }
 
@@ -1133,9 +1085,7 @@
         var firstDow = first.getDay();
         var offset = (firstDow + 6) % 7;
 
-        var total = 42;
-
-        for(var c=0;c<total;c++){
+        for(var c=0;c<42;c++){
           var dayNum = c - offset + 1;
           var d = new Date(state.year, state.month, dayNum);
           var dateStr = ymd(d);
@@ -1149,7 +1099,6 @@
 
           if(dateStr === todayYMD()) btn.classList.add("today");
           if(state.selectedDate && dateStr === state.selectedDate) btn.classList.add("selected");
-
           if(itemsOnDate(dateStr).length) btn.classList.add("has");
 
           btn.addEventListener("click", (function(ds){
@@ -1176,8 +1125,9 @@
           return;
         }
         var txt = list.slice(0,3).map(function(it){
-          var t = (it.time ? it.time + " " : "");
-          return t + (it.title || "");
+          var t = it.time ? it.time + " " : "";
+          var name = it.title || it.location || it.note || "(zonder titel)";
+          return t + name;
         }).join(", ");
         if(list.length > 3) txt += ", +" + (list.length-3);
         $("daySummary").textContent = txt;
@@ -1216,7 +1166,7 @@
 
           var title = document.createElement("div");
           title.className = "itemTitle";
-          title.textContent = it.title || "(zonder titel)";
+          title.textContent = it.title || it.location || it.note || "(zonder titel)";
 
           var chip = document.createElement("div");
           chip.className = "chip";
@@ -1244,15 +1194,15 @@
           meta.appendChild(c2);
           meta.appendChild(c3);
 
+          body.appendChild(top);
+          body.appendChild(meta);
+
           if(it.note){
             var note = document.createElement("div");
             note.className = "tileHint";
             note.textContent = it.note;
             body.appendChild(note);
           }
-
-          body.appendChild(top);
-          body.appendChild(meta);
 
           row.appendChild(b);
           row.appendChild(body);
@@ -1311,21 +1261,13 @@
       function renderAll(){
         renderLockUI();
         renderSyncUI();
-
-        if(state.view === "calendar"){
-          renderCalendar();
-          renderDaySummary();
-        }else if(state.view === "list"){
-          renderList();
-          renderCounts();
-        }else if(state.view === "add"){
-          updateDeleteBtn();
-        }
+        if(state.view === "calendar"){ renderCalendar(); renderDaySummary(); }
+        if(state.view === "list"){ renderList(); renderCounts(); }
+        if(state.view === "add"){ updateDeleteBtn(); }
       }
 
       function addOrUpdateFromForm(){
-        var canEdit = state.mode === "private";
-        if(!canEdit){ toast("Gastmodus"); return; }
+        if(state.mode !== "private"){ toast("Gastmodus"); return; }
 
         var type = $("typeSelect").value || "shared";
         var date = ($("dateInput").value || "").trim();
@@ -1335,18 +1277,17 @@
         var note = ($("noteInput").value || "").trim();
 
         if(!date){ toast("Kies datum"); return; }
-        if(!title){ toast("Titel leeg"); return; }
+        if(!title){ title = location || note || "(zonder titel)"; }
 
         var id = state.editingId || uid();
-
-        var existingIndex = -1;
+        var idx = -1;
         for(var i=0;i<state.data.length;i++){
-          if(state.data[i].id === id){ existingIndex = i; break; }
+          if(state.data[i].id === id){ idx = i; break; }
         }
 
-        var obj = { id:id, type:type, date:date, time:time, title:title, location:location, note:note };
+        var obj = normalizeOne({ id:id, type:type, date:date, time:time, title:title, location:location, note:note });
 
-        if(existingIndex >= 0) state.data[existingIndex] = obj;
+        if(idx >= 0) state.data[idx] = obj;
         else state.data.push(obj);
 
         state.data.sort(byDateTime);
@@ -1361,8 +1302,7 @@
       }
 
       function deleteEditing(){
-        var canEdit = state.mode === "private";
-        if(!canEdit){ toast("Gastmodus"); return; }
+        if(state.mode !== "private"){ toast("Gastmodus"); return; }
         if(!state.editingId){ toast("Niets gekozen"); return; }
 
         var id = state.editingId;
@@ -1386,6 +1326,7 @@
           var data = JSON.parse(decodeURIComponent(escape(atob(txt))));
           if(Array.isArray(data)){
             state.data = data;
+            normalizeAll();
             state.data.sort(byDateTime);
             save();
             return true;
@@ -1406,9 +1347,7 @@
           openOverlay("settingsOverlay");
         });
 
-        $("btnCloseSettings").addEventListener("click", function(){
-          closeOverlay("settingsOverlay");
-        });
+        $("btnCloseSettings").addEventListener("click", function(){ closeOverlay("settingsOverlay"); });
 
         $("btnUnlock").addEventListener("click", function(){
           var p = prompt("Code");
@@ -1421,10 +1360,7 @@
           }
         });
 
-        $("btnGuest").addEventListener("click", function(){
-          setMode("locked");
-          toast("Gastmodus");
-        });
+        $("btnGuest").addEventListener("click", function(){ setMode("locked"); toast("Gastmodus"); });
 
         $("btnSavePin").addEventListener("click", function(){
           var p = ($("newPin").value || "").trim();
@@ -1442,13 +1378,8 @@
         $("btnExport").addEventListener("click", function(){
           var txt = exportData();
           if(!txt){ toast("Export fout"); return; }
-
           if(navigator.clipboard && navigator.clipboard.writeText){
-            navigator.clipboard.writeText(txt).then(function(){
-              toast("Export gekopieerd");
-            }).catch(function(){
-              prompt("Kopieer dit", txt);
-            });
+            navigator.clipboard.writeText(txt).then(function(){ toast("Export gekopieerd"); }).catch(function(){ prompt("Kopieer dit", txt); });
           }else{
             prompt("Kopieer dit", txt);
           }
@@ -1459,19 +1390,13 @@
           openOverlay("importOverlay");
         });
 
-        $("btnCloseImport").addEventListener("click", function(){
-          closeOverlay("importOverlay");
-        });
+        $("btnCloseImport").addEventListener("click", function(){ closeOverlay("importOverlay"); });
 
         $("btnDoImport").addEventListener("click", function(){
           var t = ($("importText").value || "").trim();
           if(!t){ toast("Plak export"); return; }
-          if(importData(t)){
-            closeOverlay("importOverlay");
-            toast("Geïmporteerd");
-          }else{
-            toast("Import fout");
-          }
+          if(importData(t)){ closeOverlay("importOverlay"); toast("Geïmporteerd"); }
+          else{ toast("Import fout"); }
         });
 
         $("btnPrev").addEventListener("click", function(){
@@ -1503,7 +1428,6 @@
 
       function boot(){
         initMonth();
-		
         state.mode = getMode();
         state.sync = getSync();
         wire();
@@ -1520,6 +1444,3 @@
 
 </body>
 </html>
-
-
-
