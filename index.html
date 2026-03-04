@@ -499,7 +499,7 @@
       <span class="statusLabel">Status</span>
       <span class="statusValue" id="syncState">Lokaal</span>
     </div>
-    <div class="versionBadge"><span class="dotV"></span>PASTEL FIREBASE QUICKFIX</div>
+    <div class="versionBadge"><span class="dotV"></span>PASTEL FIREBASE QUICKFIX 2</div>
     <button class="btn btnGhost" id="btnSettings" type="button">Instellingen</button>
   </div>
 </div>
@@ -1472,7 +1472,41 @@
         $("tabList").addEventListener("click", function(){ setView("list"); });
         $("tabAdd").addEventListener("click", function(){ setView("add"); });
         $("tabInfo").addEventListener("click", function(){ setView("info"); });
+
+        // Quick buttons (event delegation, survives re-render)
+        if(!window.__quickBtnsBound){
+          window.__quickBtnsBound = true;
+          document.addEventListener("click", function(e){
+            var el = e.target && e.target.closest ? e.target.closest("#btnQuickMonth,#btnQuickToday,#btnQuickBday") : null;
+            if(!el) return;
+            e.preventDefault(); e.stopPropagation();
+
+            if(el.id === "btnQuickMonth"){
+              state.listMode = "month";
+              state.selectedDate = null;
+              setView("list");
+              renderAll();
+              return;
+            }
+            if(el.id === "btnQuickToday"){
+              state.listMode = "today";
+              state.selectedDate = todayYMD();
+              setView("list");
+              renderAll();
+              return;
+            }
+            if(el.id === "btnQuickBday"){
+              state.listMode = "bday";
+              state.selectedDate = null;
+              setView("list");
+              renderAll();
+              return;
+            }
+          }, true);
+        }
+
       }
+
 
       function boot(){
         initMonth();
