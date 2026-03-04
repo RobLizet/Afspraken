@@ -274,8 +274,14 @@ h2{
 }
 
 .day.selected{
-  outline:2px solid rgba(255,154,193,0.55);
-  background:linear-gradient(180deg, rgba(255,215,230,0.65), rgba(255,255,255,0.55));
+  outline:2px solid rgba(255,154,193,0.70);
+  border-color:rgba(255,154,193,0.55);
+  background:linear-gradient(180deg, rgba(255,215,230,0.70), rgba(255,255,255,0.60));
+  box-shadow:0 14px 32px rgba(255,154,193,0.16);
+  transform:translateY(-1px);
+}
+.day:active{
+  transform:scale(0.99);
 }
 
 .dots{
@@ -1851,27 +1857,16 @@ textarea{min-height:90px;resize:vertical}
     document.getElementById("loginBtn").addEventListener("click", doLogin);
     document.getElementById("logoutBtn").addEventListener("click", doLogout);
 
-
-    // Dag tikken, iOS proof. Bind direct op het kalendergrid.
-    const handleDayTap = async (e)=>{
-      const dayEl = e.target.closest(".day");
-      if(!dayEl) return;
-      const ds = dayEl.dataset.date;
-      if(!ds) return;
-
-      state.selectedDate = ds;
-      await renderCalendar();
-      const items = await dayItems(ds);
-      openModal(ds, items);
-    };
-
-    if(els.daysGrid){
-      els.daysGrid.addEventListener("click", handleDayTap);
-      els.daysGrid.addEventListener("pointerup", handleDayTap);
-      els.daysGrid.addEventListener("touchend", handleDayTap, {passive:true});
-    }
-
     document.addEventListener("click", async (e)=>{
+      const day = e.target.closest(".day");
+      if(day && day.dataset.date){
+        const ds = day.dataset.date;
+        state.selectedDate = ds;
+        await renderCalendar();
+        const items = await dayItems(ds);
+        openModal(ds, items);
+      }
+
       const quick = e.target.closest("[data-quick]");
       if(quick){
         const f = quick.dataset.quick;
