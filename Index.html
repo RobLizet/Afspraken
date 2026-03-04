@@ -12,17 +12,17 @@
 
  <style>
     :root{
-      --bg0:#0b1026;
-      --bg1:#151a3a;
-      --text:rgba(255,255,255,.92);
-      --muted:rgba(255,255,255,.70);
-      --muted2:rgba(255,255,255,.52);
-      --accent:#7aa7ff;
-      --accent2:#c49bff;
-      --ok:#2ee59d;
-      --warn:#ffb020;
+      --bg0:#fff7f2;
+      --bg1:#f3f7ff;
+      --text:rgba(18,22,34,.92);
+      --muted:rgba(18,22,34,.68);
+      --muted2:rgba(18,22,34,.52);
+      --accent:#6aa8ff;
+      --accent2:#ff9ccf;
+      --ok:#26c281;
+      --warn:#f6a623;
       --bad:#ff5a73;
-      --shadow:0 18px 50px rgba(0,0,0,.35);
+      --shadow:0 18px 50px rgba(23,32,61,.14);
     }
 
     *{ box-sizing:border-box; }
@@ -495,117 +495,125 @@
     hr.sep{ border:none; border-top: 1px solid rgba(255,255,255,.12); margin: 14px 0; }
   
   /* =========================
-     Fresh soft theme overrides
+     Pastel Light Theme (creme / roze / lichtblauw)
      ========================= */
+  html, body{ background:#fff7f2; color:var(--text); }
   body{
     background:
-      radial-gradient(900px 520px at 15% 10%, rgba(196,155,255,.28), transparent 60%),
-      radial-gradient(900px 520px at 85% 30%, rgba(122,167,255,.26), transparent 60%),
-      radial-gradient(900px 520px at 55% 95%, rgba(46,229,157,.14), transparent 60%),
-      linear-gradient(180deg, rgba(21,26,58,1), rgba(11,16,38,1));
+      radial-gradient(900px 520px at 15% 10%, rgba(255,156,207,.28), transparent 60%),
+      radial-gradient(900px 520px at 85% 22%, rgba(106,168,255,.26), transparent 60%),
+      radial-gradient(900px 520px at 50% 95%, rgba(246,166,35,.10), transparent 60%),
+      linear-gradient(180deg, #fff7f2, #f3f7ff);
   }
 
+  /* Glass cards become light */
   .shell{
-    background:rgba(255,255,255,.06);
-    border:1px solid rgba(255,255,255,.10);
-    box-shadow:0 22px 60px rgba(0,0,0,.30);
+    background:rgba(255,255,255,.70);
+    border:1px solid rgba(23,32,61,.10);
+    box-shadow:0 22px 60px rgba(23,32,61,.14);
+    backdrop-filter: blur(14px);
   }
 
-  .topbar{
-    background:rgba(255,255,255,.05);
-    border:1px solid rgba(255,255,255,.10);
+  .topbar, .tabs{
+    background:rgba(255,255,255,.62);
+    border:1px solid rgba(23,32,61,.10);
+    box-shadow:0 12px 28px rgba(23,32,61,.10);
   }
 
-  .chip, .btn, .pill, .tab{
-    border-color:rgba(255,255,255,.14);
-    background:rgba(255,255,255,.07);
+  .title, h1, h2, h3{ color:var(--text); }
+  .muted{ color:var(--muted); }
+  .statusPill{
+    background:rgba(23,32,61,.06);
+    border:1px solid rgba(23,32,61,.10);
+    color:var(--muted);
   }
+
+  .btn, .chip, .pill, .tab{
+    background:rgba(23,32,61,.04);
+    border:1px solid rgba(23,32,61,.10);
+    color:var(--text);
+  }
+  .btn:hover, .chip:hover, .tab:hover{
+    background:rgba(23,32,61,.06);
+  }
+
   .btn.primary{
-    background:linear-gradient(90deg, rgba(196,155,255,.95), rgba(122,167,255,.95));
-    border-color:rgba(255,255,255,.16);
+    background:linear-gradient(90deg, rgba(255,156,207,.95), rgba(106,168,255,.95));
+    border-color:rgba(23,32,61,.08);
+    color:#101423;
   }
 
-  /* Calendar: softer tiles, clearer selected day */
-  .day{
-    background:rgba(255,255,255,.06);
-    border:1px solid rgba(255,255,255,.10);
+  /* Calendar tiles */
+  .calCard{
+    background:rgba(255,255,255,.58);
+    border:1px solid rgba(23,32,61,.10);
   }
-  .day:hover{ background:rgba(255,255,255,.085); }
+  .dow{ color:rgba(18,22,34,.58); }
+  .day{
+    background:rgba(255,255,255,.68);
+    border:1px solid rgba(23,32,61,.10);
+    color:rgba(18,22,34,.88);
+  }
+  .day.dim{ opacity:.55; }
+  .day:hover{ background:rgba(255,255,255,.82); }
   .day.selected{
     background:
-      radial-gradient(240px 160px at 30% 30%, rgba(196,155,255,.25), transparent 60%),
-      radial-gradient(240px 160px at 70% 70%, rgba(122,167,255,.22), transparent 60%),
-      rgba(255,255,255,.08);
-    border-color:rgba(122,167,255,.22);
+      radial-gradient(240px 160px at 30% 30%, rgba(255,156,207,.22), transparent 60%),
+      radial-gradient(240px 160px at 70% 70%, rgba(106,168,255,.20), transparent 60%),
+      rgba(255,255,255,.80);
+    border-color:rgba(106,168,255,.28);
+    box-shadow:0 14px 28px rgba(23,32,61,.10);
   }
   .dot{
-    box-shadow:0 0 0 5px rgba(46,229,157,.10);
+    background:linear-gradient(135deg, rgba(38,194,129,1), rgba(106,168,255,.95));
+    box-shadow:0 0 0 5px rgba(38,194,129,.12);
   }
 
-  /* List and afspraak cards: bigger, fresher */
-  .items{
-    display:flex;
-    flex-direction:column;
-    gap:12px;
-    padding-bottom:8px;
+  /* Day panel bottom */
+  .dayPanel{
+    background:rgba(255,255,255,.58);
+    border:1px solid rgba(23,32,61,.10);
   }
+
+  /* List cards bigger and colorful */
   .item{
-    padding:16px 16px;
-    border-radius:22px;
     background:
-      radial-gradient(520px 220px at 18% 0%, rgba(196,155,255,.18), transparent 55%),
-      radial-gradient(520px 220px at 92% 110%, rgba(122,167,255,.16), transparent 60%),
-      rgba(255,255,255,.075);
-    border:1px solid rgba(255,255,255,.12);
-    box-shadow:0 18px 48px rgba(0,0,0,.22);
+      radial-gradient(520px 220px at 18% 0%, rgba(255,156,207,.18), transparent 60%),
+      radial-gradient(520px 220px at 92% 110%, rgba(106,168,255,.16), transparent 65%),
+      rgba(255,255,255,.70);
+    border:1px solid rgba(23,32,61,.10);
+    box-shadow:0 18px 48px rgba(23,32,61,.12);
   }
-  .item .title{
-    font-size:18px;
-    font-weight:900;
-    letter-spacing:.2px;
-  }
-  .item .meta{
-    margin-top:10px;
-    display:flex;
-    flex-wrap:wrap;
-    gap:10px;
-  }
-  .meta .chip{
-    padding:8px 12px;
-    border-radius:999px;
-    font-size:13px;
-  }
-  .item .actions .btn{
-    padding:10px 12px;
-    border-radius:14px;
+  .itemTitle{ color:var(--text); }
+  .itemMeta .chip{
+    background:rgba(255,255,255,.72);
   }
 
-  /* Bigger day popup */
-  .daySheet{
-    border-radius:26px;
+  /* Popups */
+  .modalBack{
+    background:rgba(23,32,61,.28);
+  }
+  .modal, .daySheet{
     background:
-      radial-gradient(900px 520px at 10% 0%, rgba(196,155,255,.22), transparent 60%),
-      radial-gradient(900px 520px at 90% 100%, rgba(122,167,255,.18), transparent 60%),
-      rgba(20,24,52,.82);
-    border:1px solid rgba(255,255,255,.12);
-    box-shadow:0 28px 80px rgba(0,0,0,.40);
+      radial-gradient(900px 520px at 12% 0%, rgba(255,156,207,.22), transparent 60%),
+      radial-gradient(900px 520px at 90% 100%, rgba(106,168,255,.18), transparent 60%),
+      rgba(255,255,255,.86);
+    border:1px solid rgba(23,32,61,.10);
+    box-shadow:0 30px 90px rgba(23,32,61,.18);
+    color:var(--text);
   }
-  .daySheet h3{
-    font-size:18px;
+  input, select, textarea{
+    background:rgba(255,255,255,.80);
+    border:1px solid rgba(23,32,61,.12);
+    color:var(--text);
   }
-  .daySheet .dayItems .item{
-    background:rgba(255,255,255,.07);
-  }
+  input::placeholder, textarea::placeholder{ color:rgba(18,22,34,.45); }
 
-  /* Bottom tabs: clearer active */
-  .tabs{
-    background:rgba(255,255,255,.05);
-    border:1px solid rgba(255,255,255,.10);
-  }
+  /* Tabs active */
   .tab.active{
     background:
-      linear-gradient(90deg, rgba(196,155,255,.28), rgba(122,167,255,.22));
-    border-color:rgba(255,255,255,.16);
+      linear-gradient(90deg, rgba(255,156,207,.35), rgba(106,168,255,.28));
+    border-color:rgba(106,168,255,.22);
   }
 
 </style>
