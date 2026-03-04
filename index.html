@@ -657,6 +657,7 @@
   </div>
 
   <div class="modalFooter">
+    <button class="btn btnGhost btnWide" id="btnLogout" type="button">Uitloggen</button>
     <button class="btn btnGhost btnWide" id="btnCloseSettings" type="button">Sluiten</button>
   </div>
 </div>
@@ -1353,6 +1354,14 @@
         });
 
         $("btnCloseSettings").addEventListener("click", function(){ closeOverlay("settingsOverlay"); });
+
+        $("btnLogout").addEventListener("click", function(){
+          if(state.sync !== "firebase"){ toast("Niet in Firebase sync"); return; }
+          if(!fbInit()){ toast("Firebase niet actief"); return; }
+          firebase.auth().signOut()
+            .then(function(){ fb.user = null; toast("Uitgelogd"); setTimeout(function(){ location.reload(); }, 500); })
+            .catch(function(){ toast("Uitloggen fout"); });
+        });
 
         $("btnUnlock").addEventListener("click", function(){
           var p = prompt("Code");
