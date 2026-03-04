@@ -1,8 +1,5 @@
 
-
-
 <!doctype html>
-
 <html lang="nl">
 <head>
   <meta charset="utf-8">
@@ -12,693 +9,891 @@
   <title>Onze Agenda - Rob &amp; Lizet</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800&amp;display=swap">
-  <style>
+
+ <style>
     :root{
-      --bg0:#070a18;
-      --bg1:#0b1230;
+      --bg0:#0b1026;
+      --bg1:#151a3a;
       --text:rgba(255,255,255,.92);
-      --muted:rgba(255,255,255,.66);
-      --muted2:rgba(255,255,255,.45);
-      --accent:#60a5fa;
-      --accent2:#a78bfa;
-      --ok:#22c55e;
-      --warn:#f59e0b;
-      --bad:#ef4444;
-      --shadow:0 18px 50px rgba(0,0,0,.45);
+      --muted:rgba(255,255,255,.70);
+      --muted2:rgba(255,255,255,.52);
+      --accent:#7aa7ff;
+      --accent2:#c49bff;
+      --ok:#2ee59d;
+      --warn:#ffb020;
+      --bad:#ff5a73;
+      --shadow:0 18px 50px rgba(0,0,0,.35);
     }
+
     *{ box-sizing:border-box; }
     html,body{ height:100%; }
     body{
       margin:0;
-      font-family:"DM Sans", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-family: "DM Sans", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       color:var(--text);
       background:
-        radial-gradient(900px 520px at 14% 10%, rgba(167,139,250,.26), transparent 60%),
-        radial-gradient(900px 520px at 86% 18%, rgba(96,165,250,.24), transparent 58%),
-        radial-gradient(760px 520px at 50% 92%, rgba(34,197,94,.10), transparent 60%),
-        linear-gradient(180deg, var(--bg0), var(--bg1));
-      overflow-x:hidden;
+        radial-gradient(900px 700px at 10% 0%, rgba(124,58,237,.45), transparent 60%),
+        radial-gradient(900px 700px at 100% 10%, rgba(56,189,248,.28), transparent 55%),
+        radial-gradient(900px 700px at 40% 120%, rgba(124,58,237,.18), transparent 55%),
+        linear-gradient(180deg, #060814 0%, #0b1020 45%, #070914 100%);
+      padding-top: calc(var(--safeTop) + 10px);
+      padding-bottom: calc(var(--safeBottom) + 92px);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
-    .app{
-      min-height:100%;
-      display:flex;
-      flex-direction:column;
-      padding:18px 16px 90px;
-      max-width:860px;
-      margin:0 auto;
+
+    .container{
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 10px 14px 26px;
     }
+
     .topbar{
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap:12px;
-      padding:10px 8px 16px;
+      padding: 6px 2px 12px;
     }
-    .brand{ display:flex; gap:12px; align-items:center; min-width:0; }
-    .logo{
-      width:44px; height:44px;
-      border-radius:14px;
-      background:linear-gradient(135deg, rgba(167,139,250,.95), rgba(96,165,250,.95));
-      box-shadow:0 10px 30px rgba(96,165,250,.20);
-      border:1px solid rgba(255,255,255,.18);
-      flex:0 0 auto;
-    }
-    .brandText{ min-width:0; }
-    .brandTitle{
-      font-weight:800;
-      font-size:22px;
-      letter-spacing:.2px;
-      line-height:1.05;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-      max-width:48vw;
-    }
-    .brandSub{
-      font-weight:600;
-      font-size:13px;
-      color:var(--muted);
-      margin-top:2px;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-      max-width:52vw;
-    }
-    .statusPill{
+
+    .brand{
       display:flex;
       align-items:center;
+      gap:12px;
+      min-width:0;
+    }
+
+    .logo{
+      width:44px;
+      height:44px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(124,58,237,1) 0%, rgba(56,189,248,1) 100%);
+      box-shadow: 0 16px 30px rgba(124,58,237,.25);
+      position:relative;
+      overflow:hidden;
+      flex: 0 0 auto;
+    }
+    .logo:before{
+      content:"";
+      position:absolute;
+      inset:-20%;
+      background: radial-gradient(circle at 30% 20%, rgba(255,255,255,.60), transparent 55%);
+      transform: rotate(12deg);
+    }
+
+    .brandText{ display:flex; flex-direction:column; min-width:0; }
+    .brandText .title{
+      font-weight: 900;
+      font-size: 16px;
+      line-height: 1.1;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      letter-spacing:.2px;
+    }
+    .brandText .subtitle{
+      font-size: 12px;
+      color: var(--muted);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .pillRow{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end; }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
       gap:8px;
-      padding:8px 12px;
-      border-radius:999px;
-      background:rgba(255,255,255,.08);
-      border:1px solid rgba(255,255,255,.10);
-      box-shadow:0 10px 28px rgba(0,0,0,.18);
-      flex:0 0 auto;
+      padding:10px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.14);
+      box-shadow: var(--shadow2);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      font-size: 12px;
+      color: var(--muted);
     }
-    .dot{
-      width:10px; height:10px;
+    .pill strong{ color: var(--text); font-weight:900; }
+
+    .badgeDot{
+      width:10px;
+      height:10px;
       border-radius:999px;
-      background:var(--ok);
-      box-shadow:0 0 0 4px rgba(34,197,94,.18);
+      background: var(--ok);
+      box-shadow: 0 0 0 4px rgba(34,197,94,.18);
     }
-    .statusLabel{ font-size:12.5px; color:var(--muted); font-weight:700; }
-    .statusValue{ font-size:12.5px; font-weight:800; color:var(--text); }
+
     .btn{
-      appearance:none;
       border:none;
       outline:none;
       cursor:pointer;
-      border-radius:999px;
-      padding:10px 14px;
-      font-weight:800;
-      font-size:14px;
-      color:var(--text);
-      background:rgba(255,255,255,.08);
-      border:1px solid rgba(255,255,255,.10);
-      box-shadow:0 10px 28px rgba(0,0,0,.18);
-      transition:transform .06s ease, background .2s ease, border-color .2s ease;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+      font-family:inherit;
+      font-weight:900;
+      border-radius: var(--radius2);
+      padding: 12px 14px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      transition: transform .06s ease, opacity .2s ease, filter .2s ease;
     }
-    .btn:active{ transform:scale(.98); }
+    .btn:active{ transform: scale(.98); }
+    .btn[disabled]{ opacity:.55; cursor:not-allowed; }
+
     .btnPrimary{
-      background:linear-gradient(135deg, rgba(167,139,250,.92), rgba(96,165,250,.92));
-      border:1px solid rgba(255,255,255,.16);
-      box-shadow:0 16px 40px rgba(96,165,250,.20);
+      background: linear-gradient(135deg, rgba(124,58,237,1) 0%, rgba(56,189,248,1) 100%);
+      color:#06101a;
+      filter: saturate(1.05);
     }
-    .btnGhost{ background:rgba(255,255,255,.06); }
-    .btnSmall{ padding:8px 12px; font-size:13px; }
+    .btnGhost{
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.14);
+      color: var(--text);
+      box-shadow: var(--shadow2);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .btnDanger{
+      background: rgba(239,68,68,.14);
+      border: 1px solid rgba(239,68,68,.28);
+      color: #fecaca;
+    }
+    .btnSmall{ padding:10px 12px; border-radius: 12px; font-size: 13px; }
     .btnWide{ width:100%; }
-    .panel{
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.10);
-      border-radius:22px;
-      box-shadow:var(--shadow);
+
+    .grid{ display:grid; grid-template-columns: 1fr; gap: 14px; }
+    @media (min-width: 920px){
+      .grid{ grid-template-columns: 1.25fr .75fr; align-items:start; }
+    }
+
+    .card{
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
       overflow:hidden;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
     }
-    .content{ padding:14px; }
-    .grid2{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:12px;
-    }
-    @media (max-width:520px){
-      .grid2{ grid-template-columns:1fr; }
-      .brandTitle{ max-width:64vw; }
-    }
-    .tile{
-      padding:14px;
-      border-radius:18px;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.10);
-    }
-    .tileTitle{
-      font-weight:800;
-      font-size:13px;
-      color:var(--muted);
-      margin-bottom:6px;
+    .cardHeader{
+      padding: 14px 14px 12px;
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap:10px;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+      background: linear-gradient(180deg, rgba(255,255,255,.10) 0%, rgba(255,255,255,.06) 100%);
     }
-    .tileValue{ font-weight:900; font-size:26px; letter-spacing:.2px; }
-    .tileHint{ margin-top:6px; font-size:12.5px; color:var(--muted2); line-height:1.3; }
-    .seg{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      justify-content:space-between;
-      padding:12px 14px;
-      background:rgba(255,255,255,.05);
-      border:1px solid rgba(255,255,255,.10);
-      border-radius:18px;
-      margin-top:12px;
+    .cardHeader h2{ margin:0; font-size: 14px; letter-spacing:.2px; }
+    .cardHeader .hint{ font-size: 12px; color: var(--muted); }
+    .cardBody{ padding: 14px; }
+
+    .notice{
+      padding: 12px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.12);
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
     }
-    .segLeft{ min-width:0; }
-    .segTitle{ font-weight:900; font-size:14px; letter-spacing:.15px; }
-    .segSub{
-      margin-top:2px;
-      font-size:12.5px;
-      color:var(--muted);
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-      max-width:58vw;
-    }
-    .list{ margin-top:12px; }
-    .item{
-      display:flex;
-      gap:12px;
-      align-items:flex-start;
-      padding:12px 12px;
-      border-radius:16px;
-      background:rgba(255,255,255,.05);
-      border:1px solid rgba(255,255,255,.08);
-      margin-bottom:10px;
-    }
-    .badge{
-      flex:0 0 auto;
-      width:42px;
-      height:42px;
-      border-radius:16px;
-      background:rgba(96,165,250,.18);
-      border:1px solid rgba(96,165,250,.22);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-weight:900;
-      color:rgba(255,255,255,.95);
-    }
-    .itemBody{ min-width:0; flex:1; }
-    .itemTop{
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      align-items:flex-start;
-    }
-    .itemTitle{
-      font-weight:900;
-      font-size:15px;
-      line-height:1.2;
-      word-break:break-word;
-    }
-    .itemMeta{
-      margin-top:4px;
-      font-size:12.5px;
-      color:var(--muted);
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-    }
-    .chip{
-      padding:6px 10px;
-      border-radius:999px;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.10);
-      font-size:12px;
-      color:var(--muted);
-      font-weight:800;
-    }
-    .formRow{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top:10px;
-    }
-    .input{
-      width:100%;
-      padding:12px 14px;
-      border-radius:16px;
-      border:1px solid rgba(255,255,255,.12);
-      background:rgba(0,0,0,.18);
-      color:var(--text);
-      font-size:15px;
-      outline:none;
-    }
-    .input::placeholder{ color:rgba(255,255,255,.40); }
-    .inputSm{ width:calc(50% - 5px); }
-    @media (max-width:520px){
-      .inputSm{ width:100%; }
-    }
-    select.input{
-      appearance:none;
-      background-image:
-        linear-gradient(45deg, transparent 50%, rgba(255,255,255,.7) 50%),
-        linear-gradient(135deg, rgba(255,255,255,.7) 50%, transparent 50%);
-      background-position:
-        calc(100% - 18px) 50%,
-        calc(100% - 12px) 50%;
-      background-size:6px 6px, 6px 6px;
-      background-repeat:no-repeat;
-      padding-right:36px;
-    }
-    .tabs{
-      position:fixed;
-      left:0; right:0; bottom:0;
-      padding:10px 12px 12px;
-      background:linear-gradient(180deg, rgba(7,10,24,0), rgba(7,10,24,.65) 25%, rgba(7,10,24,.92));
-      backdrop-filter:blur(14px);
-    }
-    .tabsInner{
-      max-width:860px;
-      margin:0 auto;
-      display:flex;
-      gap:10px;
-      justify-content:space-between;
-      padding:10px;
-      border-radius:22px;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.10);
-      box-shadow:0 18px 50px rgba(0,0,0,.35);
-    }
-    .tab{
-      flex:1;
-      padding:10px 10px;
-      border-radius:18px;
-      text-align:center;
-      color:var(--muted);
-      font-weight:900;
-      font-size:12.5px;
-      border:1px solid transparent;
-      background:transparent;
-      cursor:pointer;
-    }
-    .tab.active{
-      color:var(--text);
-      background:linear-gradient(135deg, rgba(167,139,250,.20), rgba(96,165,250,.18));
-      border:1px solid rgba(255,255,255,.12);
-    }
-    .hidden{ display:none !important; }
-    .modalWrap{
-      position:fixed;
-      left:0; top:0; right:0; bottom:0;
-      display:flex;
-      align-items:flex-end;
-      justify-content:center;
-      padding:14px;
-      background:rgba(0,0,0,.55);
-      backdrop-filter:blur(10px);
-      z-index:50;
-    }
-    .modal{
-      width:100%;
-      max-width:720px;
-      border-radius:26px;
-      background:rgba(18,26,60,.94);
-      border:1px solid rgba(255,255,255,.14);
-      box-shadow:0 22px 60px rgba(0,0,0,.55);
-      overflow:hidden;
-    }
-    .modalHeader{
-      padding:14px 16px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      border-bottom:1px solid rgba(255,255,255,.10);
-    }
-    .modalHeader h3{
-      margin:0;
-      font-size:16px;
-      font-weight:900;
-      letter-spacing:.2px;
-    }
-    .modalBody{ padding:14px 16px; }
-    .modalFooter{
-      padding:14px 16px;
-      border-top:1px solid rgba(255,255,255,.10);
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      justify-content:flex-end;
-    }
-    .help{ font-size:12.5px; color:var(--muted); line-height:1.35; }
-    .smallHelp{ font-size:12.5px; color:rgba(255,255,255,.52); line-height:1.35; }
+
+    .row{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
+    .rowWrap{ flex-wrap:wrap; }
     .mt10{ margin-top:10px; }
     .mt14{ margin-top:14px; }
     .mt18{ margin-top:18px; }
-    .toast{
-      position:fixed;
-      left:50%;
-      bottom:96px;
-      transform:translateX(-50%);
-      padding:10px 14px;
-      border-radius:999px;
-      background:rgba(0,0,0,.62);
-      border:1px solid rgba(255,255,255,.10);
-      color:rgba(255,255,255,.92);
-      font-weight:900;
-      font-size:13px;
-      z-index:80;
-      opacity:0;
-      pointer-events:none;
-      transition:opacity .18s ease, transform .18s ease;
+    .mb6{ margin-bottom:6px; }
+    .hidden{ display:none !important; }
+
+    .field{ display:flex; flex-direction:column; gap:8px; }
+    label{ font-size: 12px; color: var(--muted); font-weight: 900; }
+
+    input, textarea, select{
+      width:100%;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(10,14,30,.55);
+      padding: 12px 12px;
+      font-size: 15px;
+      outline:none;
+      color: var(--text);
+      box-shadow: 0 10px 22px rgba(0,0,0,.20);
     }
-    .toast.show{
-      opacity:1;
-      transform:translateX(-50%) translateY(-6px);
+    textarea{ min-height: 96px; resize: vertical; }
+    input:focus, textarea:focus, select:focus{
+      border-color: rgba(56,189,248,.55);
+      box-shadow: 0 0 0 4px rgba(56,189,248,.16), 0 10px 22px rgba(0,0,0,.20);
     }
-    .kicker{
+
+    .split{ display:grid; grid-template-columns: 1fr; gap: 12px; }
+    @media (min-width: 560px){ .split{ grid-template-columns: 1fr 1fr; } }
+
+    .sectionTitle{
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 900;
+      letter-spacing:.35px;
+      text-transform: uppercase;
+      margin: 0 0 10px;
+    }
+
+    .calendarWrap{ display:flex; flex-direction:column; gap: 10px; }
+    .calTop{ display:flex; align-items:center; justify-content:space-between; gap: 10px; flex-wrap:wrap; }
+    .monthTitle{ font-weight: 900; font-size: 16px; letter-spacing:.2px; }
+    .smallHelp{ font-size: 12px; color: var(--muted); line-height:1.35; }
+
+    .calNav{ display:flex; align-items:center; gap: 8px; }
+    .iconBtn{
+      width:44px;
+      height:44px;
+      border-radius: 14px;
       display:flex;
       align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      margin-top:14px;
-    }
-    .kickerTitle{ font-weight:900; font-size:16px; letter-spacing:.15px; }
-    .kickerRight{ display:flex; gap:10px; align-items:center; }
-    .calendarWrap{
-      margin-top:12px;
-      padding:12px;
-      border-radius:22px;
-      background:rgba(255,255,255,.05);
-      border:1px solid rgba(255,255,255,.10);
-    }
-    .calTop{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      margin-bottom:10px;
-    }
-    .calMonth{ font-weight:900; letter-spacing:.2px; font-size:16px; }
-    .calGrid{
-      display:grid;
-      grid-template-columns:repeat(7, 1fr);
-      gap:8px;
-    }
-    .dow{
-      text-align:center;
-      font-size:11px;
-      font-weight:900;
-      color:rgba(255,255,255,.55);
-      padding:6px 0;
-    }
-    .day{
-      border-radius:16px;
-      padding:10px 0;
-      text-align:center;
-      font-weight:900;
+      justify-content:center;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.08);
+      box-shadow: var(--shadow2);
       cursor:pointer;
       user-select:none;
-      background:rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.07);
-      color:rgba(255,255,255,.82);
+      -webkit-tap-highlight-color: transparent;
     }
-    .day.muted{ opacity:.45; }
+    .iconBtn:active{ transform: scale(.98); }
+    .iconBtn svg{ width:22px; height:22px; opacity:.95; color: var(--text); }
+
+    .weekdays, .days{
+      display:grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+    }
+    .weekdays div{
+      text-align:center;
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 900;
+      letter-spacing:.25px;
+    }
+
+    .day{
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 16px;
+      box-shadow: 0 8px 18px rgba(0,0,0,.20);
+      min-height: 54px;
+      padding: 8px 8px 10px;
+      display:flex;
+      flex-direction:column;
+      gap: 6px;
+      cursor:pointer;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+      overflow:hidden;
+      position:relative;
+    }
+    .day:active{ transform: scale(.99); }
+    .day.disabled{ opacity: .45; }
+    .day .dNum{ font-weight: 900; font-size: 13px; }
+    .day .mini{
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.1;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
     .day.today{
-      border-color:rgba(96,165,250,.30);
-      box-shadow:0 0 0 4px rgba(96,165,250,.12);
+      border-color: rgba(56,189,248,.70);
+      box-shadow: 0 0 0 4px rgba(56,189,248,.16), 0 8px 18px rgba(0,0,0,.20);
     }
     .day.selected{
-      background:linear-gradient(135deg, rgba(167,139,250,.22), rgba(96,165,250,.18));
-      border-color:rgba(255,255,255,.12);
-      color:rgba(255,255,255,.95);
+      border-color: rgba(124,58,237,.80);
+      box-shadow: 0 0 0 4px rgba(124,58,237,.16), 0 8px 18px rgba(0,0,0,.20);
     }
-    .day.has{ position:relative; }
-    .day.has:after{
-      content:"";
-      position:absolute;
-      left:50%;
-      bottom:7px;
-      transform:translateX(-50%);
-      width:6px; height:6px;
-      border-radius:99px;
-      background:rgba(34,197,94,.95);
-      box-shadow:0 0 0 3px rgba(34,197,94,.14);
+    .day.weekend{
+      background: rgba(124,58,237,.10);
+      border-color: rgba(124,58,237,.22);
     }
-    .divider{ margin-top:14px; height:1px; background:rgba(255,255,255,.10); }
-    .footerNote{
-      margin-top:18px;
-      font-size:12px;
-      color:rgba(255,255,255,.45);
+
+    .dotRow{ display:flex; gap:4px; flex-wrap:wrap; }
+    .dot{ width:8px; height:8px; border-radius:999px; background: rgba(56,189,248,.55); }
+    .dot.personal{ background: rgba(124,58,237,.85); }
+    .dot.shared{ background: rgba(56,189,248,.85); }
+    .dot.bday{ background: rgba(245,158,11,.90); }
+
+    .list{ display:flex; flex-direction:column; gap: 10px; }
+    .item{
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.08);
+      box-shadow: 0 10px 22px rgba(0,0,0,.20);
+      padding: 12px;
+      display:flex;
+      flex-direction:column;
+      gap: 8px;
+    }
+    .itemTop{ display:flex; align-items:flex-start; justify-content:space-between; gap:10px; }
+    .itemTitle{ font-weight: 900; font-size: 15px; line-height:1.15; }
+    .itemMeta{ font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .tagRow{ display:flex; gap:6px; flex-wrap:wrap; }
+    .tag{
+      font-size: 11px;
+      font-weight: 900;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: var(--muted);
+    }
+    .tag.blue{ background: rgba(56,189,248,.14); border-color: rgba(56,189,248,.24); color: #bae6fd; }
+    .tag.purple{ background: rgba(124,58,237,.14); border-color: rgba(124,58,237,.24); color: #ddd6fe; }
+    .tag.orange{ background: rgba(245,158,11,.16); border-color: rgba(245,158,11,.26); color: #fde68a; }
+    .itemActions{ display:flex; gap:8px; flex-wrap:wrap; }
+    .itemActions .btn{ flex:1 1 120px; }
+
+    .kpiRow{ display:flex; gap:10px; flex-wrap:wrap; }
+    .kpi{
+      flex:1 1 160px;
+      min-width: 150px;
+      background: rgba(56,189,248,.10);
+      border: 1px solid rgba(56,189,248,.18);
+      border-radius: 16px;
+      padding: 12px;
+    }
+    .kpi .kLabel{ font-size: 12px; color: var(--muted); }
+    .kpi .kValue{ margin-top: 4px; font-size: 18px; font-weight: 900; letter-spacing:.2px; }
+
+    .footerNote{ padding: 10px 2px 0; text-align:center; color: var(--muted); font-size: 12px; }
+
+    .tabbar{
+      position:fixed;
+      left:0;
+      right:0;
+      bottom:0;
+      padding: 10px 12px calc(var(--safeBottom) + 10px);
+      background: rgba(6,8,20,.55);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-top: 1px solid rgba(255,255,255,.12);
+    }
+    .tabs{
+      max-width: 980px;
+      margin: 0 auto;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.14);
+      box-shadow: var(--shadow);
+      border-radius: 22px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding: 8px;
+      gap: 6px;
+    }
+    .tab{
+      flex:1 1 0;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap: 6px;
+      padding: 10px 6px;
+      border-radius: 16px;
+      cursor:pointer;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+      color: rgba(238,242,255,.70);
+      font-weight: 900;
+      font-size: 11px;
+      letter-spacing:.2px;
+    }
+    .tab svg{ width:20px; height:20px; opacity:.90; }
+    .tab.active{
+      background: linear-gradient(135deg, rgba(124,58,237,.30) 0%, rgba(56,189,248,.22) 100%);
+      color: var(--text);
+    }
+    .tab.active svg{ opacity:1; }
+
+    .overlay{
+      position:fixed;
+      inset:0;
+      background: rgba(2,6,23,.62);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 18px;
+      z-index: 9999;
+    }
+    .modal{
+      width: min(520px, 100%);
+      background: rgba(10,14,30,.85);
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 22px;
+      box-shadow: 0 28px 60px rgba(0,0,0,.55);
+      overflow:hidden;
+    }
+    .modalHeader{
+      padding: 14px 16px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+      background: linear-gradient(180deg, rgba(255,255,255,.08) 0%, rgba(255,255,255,.05) 100%);
+    }
+    .modalHeader h3{ margin:0; font-size: 14px; letter-spacing:.2px; }
+    .modalBody{ padding: 16px; }
+    .modalFooter{
+      padding: 14px 16px;
+      border-top: 1px solid rgba(255,255,255,.12);
+      display:flex;
+      gap: 10px;
+      flex-wrap:wrap;
+    }
+    .modalFooter .btn{ flex:1 1 140px; }
+
+    .toast{
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: calc(var(--safeBottom) + 110px);
+      background: rgba(238,242,255,.92);
+      color: #060814;
+      padding: 10px 12px;
+      border-radius: 14px;
+      box-shadow: 0 18px 34px rgba(0,0,0,.35);
+      font-size: 13px;
+      z-index: 99999;
+      opacity: 0;
+      pointer-events:none;
+      transition: opacity .25s ease;
+      max-width: min(520px, calc(100% - 24px));
       text-align:center;
-      padding-bottom:6px;
+      font-weight: 900;
     }
+    .toast.show{ opacity: 1; }
+
+    .readOnly{ position:relative; }
+    .readOnly:after{
+      content:"Gastmodus";
+      position:absolute;
+      top: 12px;
+      right: 12px;
+      font-size: 11px;
+      font-weight: 900;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(245,158,11,.16);
+      border: 1px solid rgba(245,158,11,.30);
+      color: #fde68a;
+    }
+
+    hr.sep{ border:none; border-top: 1px solid rgba(255,255,255,.12); margin: 14px 0; }
   
-  .chipBtn{
-    cursor:pointer;
-    -webkit-appearance:none;
-    appearance:none;
+  /* =========================
+     Fresh soft theme overrides
+     ========================= */
+  body{
+    background:
+      radial-gradient(900px 520px at 15% 10%, rgba(196,155,255,.28), transparent 60%),
+      radial-gradient(900px 520px at 85% 30%, rgba(122,167,255,.26), transparent 60%),
+      radial-gradient(900px 520px at 55% 95%, rgba(46,229,157,.14), transparent 60%),
+      linear-gradient(180deg, rgba(21,26,58,1), rgba(11,16,38,1));
   }
-  .chipBtn:active{ transform: translateY(1px); }
 
-
-  .versionBadge{
-    display:inline-flex;align-items:center;gap:8px;
-    padding:8px 12px;border-radius:999px;
-    background:linear-gradient(90deg, rgba(255,156,207,.55), rgba(106,168,255,.45));
-    border:1px solid rgba(23,32,61,.12);
-    color:rgba(18,22,34,.92);
-    font-weight:900;font-size:12px;letter-spacing:.6px;text-transform:uppercase;
-    box-shadow:0 10px 22px rgba(23,32,61,.10);
+  .shell{
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.10);
+    box-shadow:0 22px 60px rgba(0,0,0,.30);
   }
-  .versionBadge .dotV{width:10px;height:10px;border-radius:50%;
-    background:linear-gradient(135deg, rgba(255,156,207,1), rgba(106,168,255,1));
-    box-shadow:0 0 0 5px rgba(106,168,255,.12);
+
+  .topbar{
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.10);
+  }
+
+  .chip, .btn, .pill, .tab{
+    border-color:rgba(255,255,255,.14);
+    background:rgba(255,255,255,.07);
+  }
+  .btn.primary{
+    background:linear-gradient(90deg, rgba(196,155,255,.95), rgba(122,167,255,.95));
+    border-color:rgba(255,255,255,.16);
+  }
+
+  /* Calendar: softer tiles, clearer selected day */
+  .day{
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.10);
+  }
+  .day:hover{ background:rgba(255,255,255,.085); }
+  .day.selected{
+    background:
+      radial-gradient(240px 160px at 30% 30%, rgba(196,155,255,.25), transparent 60%),
+      radial-gradient(240px 160px at 70% 70%, rgba(122,167,255,.22), transparent 60%),
+      rgba(255,255,255,.08);
+    border-color:rgba(122,167,255,.22);
+  }
+  .dot{
+    box-shadow:0 0 0 5px rgba(46,229,157,.10);
+  }
+
+  /* List and afspraak cards: bigger, fresher */
+  .items{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    padding-bottom:8px;
+  }
+  .item{
+    padding:16px 16px;
+    border-radius:22px;
+    background:
+      radial-gradient(520px 220px at 18% 0%, rgba(196,155,255,.18), transparent 55%),
+      radial-gradient(520px 220px at 92% 110%, rgba(122,167,255,.16), transparent 60%),
+      rgba(255,255,255,.075);
+    border:1px solid rgba(255,255,255,.12);
+    box-shadow:0 18px 48px rgba(0,0,0,.22);
+  }
+  .item .title{
+    font-size:18px;
+    font-weight:900;
+    letter-spacing:.2px;
+  }
+  .item .meta{
+    margin-top:10px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  .meta .chip{
+    padding:8px 12px;
+    border-radius:999px;
+    font-size:13px;
+  }
+  .item .actions .btn{
+    padding:10px 12px;
+    border-radius:14px;
+  }
+
+  /* Bigger day popup */
+  .daySheet{
+    border-radius:26px;
+    background:
+      radial-gradient(900px 520px at 10% 0%, rgba(196,155,255,.22), transparent 60%),
+      radial-gradient(900px 520px at 90% 100%, rgba(122,167,255,.18), transparent 60%),
+      rgba(20,24,52,.82);
+    border:1px solid rgba(255,255,255,.12);
+    box-shadow:0 28px 80px rgba(0,0,0,.40);
+  }
+  .daySheet h3{
+    font-size:18px;
+  }
+  .daySheet .dayItems .item{
+    background:rgba(255,255,255,.07);
+  }
+
+  /* Bottom tabs: clearer active */
+  .tabs{
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.10);
+  }
+  .tab.active{
+    background:
+      linear-gradient(90deg, rgba(196,155,255,.28), rgba(122,167,255,.22));
+    border-color:rgba(255,255,255,.16);
   }
 
 </style>
+
 </head>
 
-
 <body>
-  <div class="app">
+  <div class="overlay" id="loginOverlay">
+    <div class="modal">
+      <div class="modalHeader">
+        <h3>Inloggen</h3>
+        <div class="pill"><span class="badgeDot" id="modeDot"></span><span id="modeLabel">Privé</span></div>
+      </div>
+      <div class="modalBody">
+        <div class="notice">Code is nodig om te wijzigen of te wissen. Gastmodus is alleen kijken.</div>
+        <div class="field mt14">
+          <label>Code</label>
+          <input id="pinInput" inputmode="numeric" maxlength="12" placeholder="Voer code in" type="password">
+        </div>
+        <div class="split mt14">
+          <button class="btn btnPrimary btnWide" id="btnLogin" type="button">Inloggen</button>
+          <button class="btn btnGhost btnWide" id="btnGuest" type="button">Gastmodus</button>
+        </div>
+        <div class="smallHelp mt14">Standaard code is 1234. In gastmodus kan Lizet alles bekijken zonder iets te kunnen aanpassen.</div>
+      </div>
+      <div class="modalFooter">
+        <button class="btn btnGhost btnWide" id="btnForgot" type="button">Code vergeten</button>
+      </div>
+    </div>
+  </div>
+
+ 
+  <div class="overlay hidden" id="dayOverlay">
+    <div class="modal" style="max-width:780px;">
+      <div class="modalHeader" style="background:linear-gradient(135deg, rgba(96,165,250,.18), rgba(167,139,250,.22)); border-bottom:1px solid rgba(255,255,255,.12);">
+        <h3 id="dayTitle">Dag</h3>
+        <button class="btn btnGhost btnSmall" id="btnCloseDay" type="button">Sluiten</button>
+      </div>
+      <div class="modalBody" style="padding-top:18px;">
+        <div class="notice" id="daySub">Kies een dag</div>
+        <div class="list mt14" id="dayList"></div>
+      </div>
+      <div class="modalFooter" style="display:flex; gap:12px;">
+        <button class="btn btnPrimary btnWide" id="btnAddOnDay" type="button">Toevoegen</button>
+        <button class="btn btnGhost btnWide" id="btnGoListDay" type="button">Naar lijst</button>
+      </div>
+    </div>
+  </div>
+
+<div class="toast" id="toast"></div>
+
+ <div class="container" id="appRoot">
     <div class="topbar">
       <div class="brand">
-        <div class="logo" aria-hidden="true"></div>
+        <div class="logo"></div>
         <div class="brandText">
-          <div class="brandTitle">Onze Agenda</div>
-          <div class="brandSub">Rob en Lizet</div>
+          <div class="title">Onze Agenda</div>
+          <div class="subtitle">Rob en Lizet</div>
         </div>
       </div>
 
-
-  <div style="display:flex; gap:10px; align-items:center;">
-    <div class="statusPill" title="Sync status">
-      <span class="dot" id="syncDot"></span>
-      <span class="statusLabel">Status</span>
-      <span class="statusValue" id="syncState">Lokaal</span>
+ <div class="pillRow">
+    <div class="pill">
+      <span class="badgeDot" id="syncDot"></span>
+      <span>Status <strong id="syncState">Lokaal</strong></span>
     </div>
-    <div class="versionBadge"><span class="dotV"></span>PASTEL FIREBASE QUICKFIX</div>
-    <button class="btn btnGhost" id="btnSettings" type="button">Instellingen</button>
+    <button class="btn btnGhost btnSmall" id="btnSettings" type="button">Instellingen</button>
   </div>
 </div>
 
-<div class="panel">
-  <div class="content">
+<div class="grid">
+  <div class="card" id="cardMain">
+    <div class="cardHeader">
+      <h2 id="mainTitle">Kalender</h2>
+      <div class="hint" id="mainHint">Tik op een dag</div>
+    </div>
 
-    <div id="viewCalendar">
-      <div class="kicker">
-        <div class="kickerTitle">Kalender</div>
-        <div class="kickerRight">
-          <button class="btn btnGhost btnSmall" id="btnPrev" type="button">Vorige</button>
-          <button class="btn btnGhost btnSmall" id="btnNext" type="button">Volgende</button>
-        </div>
-      </div>
-
+    <div class="cardBody" id="viewCalendar">
       <div class="calendarWrap">
         <div class="calTop">
-          <div class="calMonth" id="calMonth">Maand</div>
-          <div class="chip" id="calHint">Tik een dag</div>
-        </div>
-        <div class="calGrid" id="calGrid"></div>
-      </div>
+          <div>
+            <div class="monthTitle" id="monthTitle"></div>
+            <div class="smallHelp" id="selLabel">Geen dag gekozen</div>
+          </div>
 
-      <div class="seg">
-        <div class="segLeft">
-          <div class="segTitle">Afspraken op geselecteerde dag</div>
-          <div class="segSub" id="daySummary">Kies eerst een dag in de kalender</div>
-        </div>
-        <button class="btn btnGhost" id="btnGoList" type="button">Lijst</button>
-      </div>
-    </div>
-
-    <div id="viewList" class="hidden">
-      <div class="kicker">
-        <div class="kickerTitle">Lijst</div>
-        <div class="kickerRight">
-          <button class="btn btnGhost btnSmall" id="btnBackFromList" type="button">Terug</button>
-        </div>
-      </div>
-
-      <div class="grid2 mt14">
-        <div class="tile">
-          <div class="tileTitle"><span>Deze maand</span> <button class="chip chipBtn" id="btnQuickMonth" type="button">Snel zien</button></div>
-          <div class="tileValue" id="countMonth">0</div>
-          <div class="tileHint">Aantal afspraken in deze maand.</div>
-        </div>
-        <div class="tile">
-          <div class="tileTitle"><span>Vandaag</span> <button class="chip chipBtn" id="btnQuickToday" type="button">Snel zien</button></div>
-          <div class="tileValue" id="countToday">0</div>
-          <div class="tileHint">Aantal afspraken vandaag.</div>
-        </div>
-        <div class="tile" style="grid-column:1/-1;">
-          <div class="tileTitle"><span>Verjaardagen</span> <button class="chip chipBtn" id="btnQuickBday" type="button">Overzicht</button></div>
-          <div class="tileValue" id="countBirthdays">0</div>
-          <div class="tileHint">Aantal verjaardagen opgeslagen.</div>
-        </div>
-      </div>
-
-      <div class="seg mt14">
-        <div class="segLeft">
-          <div class="segTitle">Kies een dag in de kalender</div>
-          <div class="segSub" id="listHint">Privé</div>
-        </div>
-        <div style="display:flex; gap:10px;">
-          <button class="btn btnGhost" id="btnExport" type="button">Export</button>
-          <button class="btn btnGhost" id="btnImport" type="button">Import</button>
-        </div>
-      </div>
-
-      <div class="divider"></div>
-      <div class="list mt14" id="listItems"></div>
-    </div>
-
-    <div id="viewAdd" class="hidden">
-      <div class="kicker">
-        <div class="kickerTitle">Toevoegen</div>
-        <div class="kickerRight">
-          <button class="btn btnGhost btnSmall" id="btnBackFromAdd" type="button">Terug</button>
-        </div>
-      </div>
-
-      <div class="tile mt14">
-        <div class="tileTitle"><span>Type</span><span class="chip">Kies</span></div>
-        <select class="input" id="typeSelect">
-          <option value="shared">Afspraak</option>
-          <option value="bday">Verjaardag</option>
-          <option value="note">Notitie</option>
-        </select>
-
-        <div class="formRow">
-          <input class="input inputSm" id="dateInput" type="date">
-          <input class="input inputSm" id="timeInput" type="time">
+          <div class="calNav">
+            <div class="iconBtn" id="prevMonth" title="Vorige maand" role="button" tabindex="0">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </div>
+            <div class="iconBtn" id="todayBtn" title="Vandaag" role="button" tabindex="0">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M8 7V3M16 7V3M4 11h16M6 5h12a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path></svg>
+            </div>
+            <div class="iconBtn" id="nextMonth" title="Volgende maand" role="button" tabindex="0">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </div>
+          </div>
         </div>
 
-        <div class="formRow">
-          <input class="input" id="titleInput" type="text" placeholder="Titel">
+        <div class="weekdays">
+          <div>Ma</div><div>Di</div><div>Wo</div><div>Do</div><div>Vr</div><div>Za</div><div>Zo</div>
         </div>
 
-        <div class="formRow">
-          <input class="input" id="locInput" type="text" placeholder="Locatie">
+        <div class="days" id="daysGrid"></div>
+
+        <hr class="sep">
+
+        <div class="row rowWrap">
+          <button class="btn btnPrimary" id="btnAddEvent" type="button">Afspraak toevoegen</button>
+          <button class="btn btnGhost" id="btnAddBday" type="button">Verjaardag toevoegen</button>
         </div>
 
-        <div class="formRow">
-          <input class="input" id="noteInput" type="text" placeholder="Notitie">
-        </div>
-
-        <div class="formRow">
-          <button class="btn btnPrimary btnWide" id="btnSaveItem" type="button">Opslaan</button>
-          <button class="btn btnGhost btnWide" id="btnDeleteItem" type="button">Verwijderen</button>
-        </div>
-
-        <div class="smallHelp mt10">Tip, kies eerst een datum, daarna titel.</div>
+        <div class="notice mt10" id="modeNotice"></div>
       </div>
     </div>
 
-    <div id="viewInfo" class="hidden">
-      <div class="kicker">
-        <div class="kickerTitle">Info</div>
+    <div class="cardBody hidden" id="viewList">
+      <div class="row rowWrap mb6">
+        <div>
+          <div class="sectionTitle">Afspraken op geselecteerde dag</div>
+          <div class="smallHelp" id="listSub">Kies eerst een dag</div>
+        </div>
+        <button class="btn btnGhost btnSmall" id="btnBackToCal" type="button">Terug</button>
       </div>
-      <div class="tile mt14">
-        <div class="tileTitle"><span>Gebruik</span><span class="chip">Kort</span></div>
-        <div class="help">Privé is bewerken. Gastmodus is alleen kijken. Sync op Firebase laat jou en Lizet dezelfde data zien, met dezelfde login.</div>
-        <div class="footerNote mt18">Made by Rob Borghouts 2026</div>
+      <div class="list" id="itemsList"></div>
+    </div>
+
+    <div class="cardBody hidden" id="viewAdd">
+      <div class="row rowWrap mb6">
+        <div>
+          <div class="sectionTitle" id="formTitle">Nieuwe afspraak</div>
+          <div class="smallHelp" id="formSub">Wordt opgeslagen op je toestel</div>
+        </div>
+        <button class="btn btnGhost btnSmall" id="btnCancelForm" type="button">Annuleren</button>
+      </div>
+
+      <div class="split">
+        <div class="field">
+          <label>Type</label>
+          <select id="typeSelect">
+            <option value="shared">Samen</option>
+            <option value="personal">Privé</option>
+            <option value="bday">Verjaardag</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Datum</label>
+          <input id="dateInput" type="date">
+        </div>
+      </div>
+
+      <div class="split mt14">
+        <div class="field">
+          <label>Tijd</label>
+          <input id="timeInput" type="time">
+        </div>
+        <div class="field">
+          <label>Locatie</label>
+          <input id="locInput" placeholder="Bijv. thuis, ziekenhuis, Venlo" type="text">
+        </div>
+      </div>
+
+      <div class="field mt14">
+        <label>Titel</label>
+        <input id="titleInput" placeholder="Bijv. huisarts, etentje, VVV" type="text">
+      </div>
+
+      <div class="field mt14">
+        <label>Notities</label>
+        <textarea id="noteInput" placeholder="Extra info"></textarea>
+      </div>
+
+      <div class="row rowWrap mt14">
+        <button class="btn btnPrimary btnWide" id="btnSave" type="button">Opslaan</button>
+        <button class="btn btnDanger btnWide" id="btnDelete" type="button" style="display:none;">Verwijderen</button>
       </div>
     </div>
 
+    <div class="cardBody hidden" id="viewHelp">
+      <div class="notice">Zo werkt het. Tik op een dag in de kalender. Ga naar Lijst om afspraken van die dag te zien. Ga naar Toevoegen om een afspraak of verjaardag te maken.</div>
+      <div class="notice mt10">Gastmodus. Alles bekijken. Niets aanpassen of wissen.</div>
+      <div class="notice mt10">Delen met Lizet. Gebruik Export op jouw telefoon. Plak Import op Lizet haar telefoon.</div>
+    </div>
+  </div>
+
+  <div class="card" id="cardSide">
+    <div class="cardHeader">
+      <h2>Overzicht</h2>
+      <div class="hint">Snel zien</div>
+    </div>
+    <div class="cardBody">
+      <div class="kpiRow">
+        <div class="kpi"><div class="kLabel">Deze maand</div><div class="kValue" id="kMonth">0</div></div>
+        <div class="kpi"><div class="kLabel">Vandaag</div><div class="kValue" id="kToday">0</div></div>
+        <div class="kpi"><div class="kLabel">Verjaardagen</div><div class="kValue" id="kBday">0</div></div>
+      </div>
+
+      <div class="notice mt14" id="quickInfo"></div>
+
+      <div class="row rowWrap mt14">
+        <button class="btn btnGhost btnWide" id="btnExport" type="button">Export</button>
+        <button class="btn btnGhost btnWide" id="btnImport" type="button">Import</button>
+      </div>
+
+      <div class="row rowWrap mt10">
+        <button class="btn btnGhost btnWide" id="btnClear" type="button">Alles wissen</button>
+      </div>
+
+      <div class="footerNote mt18">made by Rob Borghouts 2026</div>
+    </div>
   </div>
 </div>
+ </div>
 
-  </div>
-
-
-  <div class="tabs">
-    <div class="tabsInner">
-      <button class="tab active" data-view="calendar" id="tabCalendar" type="button">Kalender</button>
-      <button class="tab" data-view="list" id="tabList" type="button">Lijst</button>
-      <button class="tab" data-view="add" id="tabAdd" type="button">Toevoegen</button>
-      <button class="tab" data-view="info" id="tabInfo" type="button">Info</button>
+ <div class="tabbar">
+    <div class="tabs">
+      <div class="tab active" data-tab="calendar">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M8 7V3M16 7V3M4 11h16M6 5h12a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path></svg>
+        Kalender
+      </div>
+      <div class="tab" data-tab="list">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path></svg>
+        Lijst
+      </div>
+      <div class="tab" data-tab="add">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path></svg>
+        Toevoegen
+      </div>
+      <div class="tab" data-tab="help">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M9.09 9a3 3 0 0 1 5.82 1c0 2-3 2-3 4M12 17h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path></svg>
+        Info
+      </div>
     </div>
   </div>
 
-
-  <div class="modalWrap hidden" id="settingsOverlay">
+ <div class="overlay hidden" id="settingsOverlay">
     <div class="modal">
       <div class="modalHeader">
         <h3>Instellingen</h3>
-        <div class="statusPill" style="box-shadow:none;">
-          <span class="dot" id="lockDot"></span>
-          <span class="statusValue" id="lockState">Ontgrendeld</span>
-        </div>
+        <div class="pill"><span class="badgeDot" id="lockDot"></span><span id="lockLabel">Vergrendeld</span></div>
       </div>
+      <div class="modalBody">
+        <div class="notice">Privé is bewerken. Gastmodus is alleen kijken.</div>
 
-
-  <div class="modalBody">
-    <div class="help">Privé is bewerken. Gastmodus is alleen kijken.</div>
-
-    <div class="formRow mt14">
+   <div class="row rowWrap mt14">
       <button class="btn btnPrimary btnWide" id="btnUnlock" type="button">Ontgrendel met code</button>
-      <button class="btn btnGhost btnWide" id="btnGuest" type="button">Zet gastmodus</button>
+      <button class="btn btnGhost btnWide" id="btnLock" type="button">Zet gastmodus</button>
     </div>
 
-    <div class="kicker mt18"><div class="kickerTitle">Code wijzigen</div></div>
-    <div class="formRow mt10">
-      <input class="input" id="newPin" type="password" placeholder="Nieuwe code" inputmode="numeric">
+    <hr class="sep">
+
+    <div class="field">
+      <label>Code wijzigen</label>
+      <input id="newPin" inputmode="numeric" placeholder="Nieuwe code" type="password">
+    </div>
+    <div class="row rowWrap mt10">
       <button class="btn btnGhost btnWide" id="btnSavePin" type="button">Code opslaan</button>
     </div>
 
-    <div class="kicker mt18"><div class="kickerTitle">Sync</div></div>
-    <div class="formRow mt10">
-      <select class="input" id="syncSelect">
+    <hr class="sep">
+
+    <div class="field">
+      <label>Sync</label>
+      <select id="syncSelect">
         <option value="local">Lokaal</option>
         <option value="manual">Handmatig</option>
-        <option value="firebase">Firebase</option>
       </select>
     </div>
 
-    <div class="smallHelp mt10">Delen met Lizet werkt het makkelijkst via Firebase, of anders via export en import.</div>
+    <div class="smallHelp mt10">Delen met Lizet werkt het makkelijkst via export en import.</div>
   </div>
 
   <div class="modalFooter">
-    <button class="btn btnGhost btnWide" id="btnLogout" type="button">Uitloggen</button>
     <button class="btn btnGhost btnWide" id="btnCloseSettings" type="button">Sluiten</button>
   </div>
 </div>
+ </div>
 
-  </div>
-
-
-  <div class="modalWrap hidden" id="importOverlay">
+ <div class="overlay hidden" id="importOverlay">
     <div class="modal">
       <div class="modalHeader">
         <h3>Import</h3>
         <button class="btn btnGhost btnSmall" id="btnCloseImport" type="button">Sluiten</button>
       </div>
       <div class="modalBody">
-        <div class="help">Plak hier je export tekst. Daarna importeren.</div>
-        <div class="mt10">
-          <textarea class="input" id="importText" rows="8" placeholder="Plak export tekst"></textarea>
+        <div class="notice">Plak hier export data, dan importeer je alles.</div>
+        <div class="field mt14">
+          <label>Import data</label>
+          <textarea id="importText" placeholder="Plak hier"></textarea>
         </div>
       </div>
       <div class="modalFooter">
@@ -707,33 +902,7 @@
     </div>
   </div>
 
-
-  <div class="toast" id="toast">Ok</div>
-
-
-  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
-
-
-  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
-
-
-  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
-
-
-  <script>
-    window.firebaseConfig = {
-      apiKey: "AIzaSyDeGP5IIWaFoG4PuISUueeccexrZOIVwGY",
-      authDomain: "agenda-roblizet.firebaseapp.com",
-      databaseURL: "https://agenda-roblizet-default-rtdb.europe-west1.firebasedatabase.app",
-      projectId: "agenda-roblizet",
-      storageBucket: "agenda-roblizet.firebasestorage.app",
-      messagingSenderId: "789902813974",
-      appId: "1:789902813974:web:62231ad5f5f90b4a91fe37"
-    };
-  </script>
-
-
-  <script>
+ <script>
     (function(){
       function $(id){ return document.getElementById(id); }
 
@@ -744,7 +913,7 @@
       var defaultPin = "1234";
 
       var monthsNL = ["januari","februari","maart","april","mei","juni","juli","augustus","september","oktober","november","december"];
-      var dows = ["Ma","Di","Wo","Do","Vr","Za","Zo"];
+      var weekdaysNL = ["zondag","maandag","dinsdag","woensdag","donderdag","vrijdag","zaterdag"];
 
       var state = {
         mode: "locked",
@@ -753,234 +922,55 @@
         year: 0,
         month: 0,
         selectedDate: null,
-        listMode: 'day',
         editingId: null,
         data: []
       };
 
-      var fb = { enabled:false, user:null };
-
-      function toast(msg){
-        var t = $("toast");
-        t.textContent = msg;
-        t.classList.add("show");
-        clearTimeout(toast._tm);
-        toast._tm = setTimeout(function(){ t.classList.remove("show"); }, 1400);
-      }
-
       function pad2(n){ n = String(n); return n.length === 1 ? "0"+n : n; }
-      function ymd(d){ return d.getFullYear()+"-"+pad2(d.getMonth()+1)+"-"+pad2(d.getDate()); }
-      function todayYMD(){ return ymd(new Date()); }
+      function ymd(d){ return d.getFullYear() + "-" + pad2(d.getMonth()+1) + "-" + pad2(d.getDate()); }
+      function parseYMD(s){
+        var parts = (s || "").split("-");
+        var y = parseInt(parts[0],10);
+        var m = parseInt(parts[1],10);
+        var dd = parseInt(parts[2],10);
+        return new Date(y, m-1, dd, 12, 0, 0, 0);
+      }
+      function isSameDay(a,b){
+        return a && b && a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate();
+      }
+      function isWeekend(d){
+        var wd = d.getDay();
+        return wd === 0 || wd === 6;
+      }
+      function mondayIndex(jsDay){ return (jsDay + 6) % 7; }
 
-      function uid(){
-        return Math.random().toString(16).slice(2) + (new Date().getTime()).toString(16);
+      function escapeHTML(s){
+        s = String(s || "");
+        s = s.replace(/&/g,"&amp;");
+        s = s.replace(/</g,"&lt;");
+        s = s.replace(/>/g,"&gt;");
+        s = s.replace(/"/g,"&quot;");
+        s = s.replace(/'/g,"&#039;");
+        return s;
       }
 
-      function safeText(v){ return (v === null || v === undefined) ? "" : String(v); }
-
-      function normalizeOne(it){
-        if(!it) it = {};
-        if(!safeText(it.id).trim()) it.id = uid();
-        if(!safeText(it.type).trim()) it.type = "shared";
-        it.date = safeText(it.date).trim();
-        it.time = safeText(it.time).trim();
-        it.location = safeText(it.location).trim();
-        it.note = safeText(it.note).trim();
-        it.desc = safeText(it.desc).trim(); // legacy compat
-        it.title = safeText(it.title).trim();
-
-        // legacy: some old items used 'desc' instead of 'title'
-        if(!it.title){
-          it.title = it.desc || it.location || it.note || "(zonder titel)";
-        }
-        return it;
-      }
-
-      function normalizeAll(){
-        if(!Array.isArray(state.data)) state.data = [];
-        state.data = state.data.map(normalizeOne);
-      }
-
-      function fbInit(){
-        try{
-          if(!window.firebaseConfig) return false;
-          if(!firebase || !firebase.initializeApp) return false;
-          if(!firebase.apps.length) firebase.initializeApp(window.firebaseConfig);
-          fb.enabled = true;
-          return true;
-        }catch(e){
-          fb.enabled = false;
-          return false;
-        }
-      }
-
-      function fbBasePath(){ return "agenda/shared"; }
-
-      function fbSetOnlineUI(){
-        $("syncDot").style.background = "var(--accent)";
-        $("syncDot").style.boxShadow = "0 0 0 4px rgba(56,189,248,.18)";
-        $("syncState").textContent = "Online";
-      }
-
-      function fbEnsureLogin(done){
-        if(!fbInit()){ toast("Firebase niet actief"); done(false); return; }
-        firebase.auth().onAuthStateChanged(function(u){
-          fb.user = u || null;
-          if(fb.user){ done(true); return; }
-
-          var email = prompt("Email voor agenda login");
-          if(email === null){ done(false); return; }
-          var pass = prompt("Wachtwoord");
-          if(pass === null){ done(false); return; }
-
-          firebase.auth().signInWithEmailAndPassword(String(email).trim(), String(pass))
-            .then(function(){ done(true); })
-            .catch(function(){ toast("Login fout"); done(false); });
-        });
-      }
-
-      function fbSaveAll(){
-        if(state.sync !== "firebase") return;
-        fbEnsureLogin(function(ok){
-          if(!ok) return;
-          normalizeAll();
-          var base = fbBasePath();
-          firebase.database().ref(base + "/data").set(state.data)
-            .then(function(){ fbSetOnlineUI(); })
-            .catch(function(){ toast("Firebase opslaan fout"); });
-        });
-      }
-
-      function fbLoadAll(done){
-        fbEnsureLogin(function(ok){
-          if(!ok){ done(false); return; }
-
-          var base = fbBasePath();
-          firebase.database().ref(base + "/data").once("value")
-            .then(function(snap){
-              var v = snap.val();
-              if(Array.isArray(v)){
-                state.data = v;
-                normalizeAll();
-                localStorage.setItem(storeKey, JSON.stringify(state.data));
-                fbSetOnlineUI();
-                renderAll();
-                done(true);
-                return;
-              }
-              fbImportLegacy(function(imported){
-                fbSetOnlineUI();
-                renderAll();
-                done(!!imported);
-              });
-            })
-            .catch(function(){
-              toast("Firebase lezen fout");
-              done(false);
-            });
-        });
-      }
-
-      function pickTitle(obj){
-        return safeText(obj.title).trim()
-          || safeText(obj.name).trim()
-          || safeText(obj.subject).trim()
-          || safeText(obj.onderwerp).trim()
-          || safeText(obj.titel).trim()
-          || safeText(obj.omschrijving).trim()
-          || safeText(obj.description).trim()
-          || safeText(obj.desc).trim()
-          || safeText(obj.text).trim()
-          || safeText(obj.location).trim()
-          || safeText(obj.note).trim()
-          || "(zonder titel)";
-      }
-
-      function fbImportLegacy(done){
-        var root = firebase.database().ref("/");
-        Promise.all([
-          root.child("appointments").once("value"),
-          root.child("birthdays").once("value"),
-          root.child("memories").once("value")
-        ]).then(function(res){
-          var apps = res[0].val() || {};
-          var bds = res[1].val() || {};
-          var mem = res[2].val() || {};
-          var out = [];
-
-          Object.keys(apps).forEach(function(k){
-            var a = apps[k] || {};
-            out.push(normalizeOne({
-              id: String(k),
-              type: a.type || "shared",
-              date: a.date || "",
-              time: a.time || "",
-              location: a.location || a.place || "",
-              title: pickTitle(a),
-              desc: a.desc || a.omschrijving || a.description || a.text || "",
-              note: a.note || ""
-            }));
-          });
-
-          Object.keys(bds).forEach(function(k){
-            var b = bds[k] || {};
-            out.push(normalizeOne({
-              id: String(k),
-              type: "bday",
-              date: b.date || "",
-              time: "",
-              location: "",
-              title: pickTitle(b),
-              desc: b.desc || b.omschrijving || b.description || "",
-              note: b.note || ""
-            }));
-          });
-
-          Object.keys(mem).forEach(function(k){
-            var m = mem[k] || {};
-            out.push(normalizeOne({
-              id: String(k),
-              type: "note",
-              date: m.date || "",
-              time: m.time || "",
-              location: m.location || "",
-              title: pickTitle(m),
-              desc: m.desc || m.omschrijving || m.description || m.text || "",
-              note: m.note || ""
-            }));
-          });
-
-          if(!out.length){ done(false); return; }
-
-          out.sort(byDateTime);
-          state.data = out;
-          localStorage.setItem(storeKey, JSON.stringify(state.data));
-
-          var base = fbBasePath();
-          firebase.database().ref(base + "/data").set(state.data)
-            .then(function(){ done(true); })
-            .catch(function(){ done(true); });
-        }).catch(function(){
-          done(false);
-        });
+      var toastEl = $("toast");
+      function toast(msg){
+        toastEl.textContent = msg;
+        toastEl.classList.add("show");
+        if(toastEl._t){ clearTimeout(toastEl._t); }
+        toastEl._t = setTimeout(function(){ toastEl.classList.remove("show"); }, 1800);
       }
 
       function getPin(){ return localStorage.getItem(pinKey) || defaultPin; }
       function setPin(p){ localStorage.setItem(pinKey, p); }
-
       function getMode(){ return localStorage.getItem(modeKey) || "locked"; }
-      function setMode(m){
-        localStorage.setItem(modeKey, m);
-        state.mode = m;
-        renderLockUI();
-      }
-
+      function setMode(m){ localStorage.setItem(modeKey, m); state.mode = m; renderModeUI(); }
       function getSync(){ return localStorage.getItem(syncKey) || "local"; }
-      function setSync(v){
-        localStorage.setItem(syncKey, v);
-        state.sync = v;
-        renderSyncUI();
-        if(state.sync === "firebase"){ fbLoadAll(function(){}); }
+      function setSync(v){ localStorage.setItem(syncKey, v); state.sync = v; renderSyncUI(); }
+
+      function uid(){
+        return Math.random().toString(16).slice(2) + (new Date().getTime()).toString(16);
       }
 
       function load(){
@@ -990,28 +980,74 @@
         }catch(e){
           state.data = [];
         }
-        normalizeAll();
-        if(state.sync === "firebase"){ fbLoadAll(function(){}); }
       }
-
       function save(){
-        normalizeAll();
         localStorage.setItem(storeKey, JSON.stringify(state.data));
-        fbSaveAll();
         renderAll();
       }
 
-      function initMonth(){
-        var d = new Date();
-        state.year = d.getFullYear();
-        state.month = d.getMonth();
+      function formatLong(d){
+        return weekdaysNL[d.getDay()] + " " + d.getDate() + " " + monthsNL[d.getMonth()] + " " + d.getFullYear();
       }
 
-      function renderLockUI(){
-        var locked = state.mode !== "private";
-        $("lockState").textContent = locked ? "Gastmodus" : "Ontgrendeld";
-        $("lockDot").style.background = locked ? "var(--warn)" : "var(--ok)";
-        $("lockDot").style.boxShadow = locked ? "0 0 0 4px rgba(245,158,11,.18)" : "0 0 0 4px rgba(34,197,94,.18)";
+      function getItemsOn(dateStr){
+        var items = [];
+        for(var i=0;i<state.data.length;i++){
+          if(state.data[i].date === dateStr){ items.push(state.data[i]); }
+        }
+        items.sort(function(a,b){
+          var ta = a.time || "";
+          var tb = b.time || "";
+          return ta.localeCompare(tb);
+        });
+        return items;
+      }
+
+      function renderDots(items){
+        if(!items.length){ return '<div class="dotRow"></div>'; }
+        var kinds = { shared:false, personal:false, bday:false };
+        for(var i=0;i<items.length;i++){
+          if(items[i].type === "shared"){ kinds.shared = true; }
+          if(items[i].type === "personal"){ kinds.personal = true; }
+          if(items[i].type === "bday"){ kinds.bday = true; }
+        }
+        var html = '<div class="dotRow">';
+        if(kinds.shared){ html += '<span class="dot shared"></span>'; }
+        if(kinds.personal){ html += '<span class="dot personal"></span>'; }
+        if(kinds.bday){ html += '<span class="dot bday"></span>'; }
+        html += "</div>";
+        return html;
+      }
+
+      function renderModeUI(){
+        var locked = state.mode !== "unlocked";
+        if(locked){
+          $("modeDot").style.background = "var(--warn)";
+          $("modeDot").style.boxShadow = "0 0 0 4px rgba(245,158,11,.18)";
+          $("modeLabel").textContent = "Gastmodus";
+          $("modeNotice").textContent = "Gastmodus, alleen kijken. Wijzigen en wissen is geblokkeerd.";
+          $("lockDot").style.background = "var(--warn)";
+          $("lockDot").style.boxShadow = "0 0 0 4px rgba(245,158,11,.18)";
+          $("lockLabel").textContent = "Vergrendeld";
+          $("cardMain").classList.add("readOnly");
+        }else{
+          $("modeDot").style.background = "var(--ok)";
+          $("modeDot").style.boxShadow = "0 0 0 4px rgba(34,197,94,.18)";
+          $("modeLabel").textContent = "Privé";
+          $("modeNotice").textContent = "Privé, je kan alles toevoegen, wijzigen en wissen.";
+          $("lockDot").style.background = "var(--ok)";
+          $("lockDot").style.boxShadow = "0 0 0 4px rgba(34,197,94,.18)";
+          $("lockLabel").textContent = "Ontgrendeld";
+          $("cardMain").classList.remove("readOnly");
+        }
+
+        $("btnAddEvent").disabled = locked;
+        $("btnAddBday").disabled = locked;
+        $("btnClear").disabled = locked;
+        $("btnSave").disabled = locked;
+        $("btnDelete").disabled = locked;
+        $("btnSavePin").disabled = locked;
+        $("newPin").disabled = locked;
       }
 
       function renderSyncUI(){
@@ -1019,14 +1055,10 @@
           $("syncDot").style.background = "var(--ok)";
           $("syncDot").style.boxShadow = "0 0 0 4px rgba(34,197,94,.18)";
           $("syncState").textContent = "Lokaal";
-        }else if(state.sync === "manual"){
-          $("syncDot").style.background = "var(--accent)";
-          $("syncDot").style.boxShadow = "0 0 0 4px rgba(56,189,248,.18)";
-          $("syncState").textContent = "Handmatig";
         }else{
           $("syncDot").style.background = "var(--accent)";
           $("syncDot").style.boxShadow = "0 0 0 4px rgba(56,189,248,.18)";
-          $("syncState").textContent = "Online";
+          $("syncState").textContent = "Handmatig";
         }
         $("syncSelect").value = state.sync;
       }
@@ -1036,381 +1068,473 @@
 
         var tabs = document.querySelectorAll(".tab");
         for(var i=0;i<tabs.length;i++){
-          tabs[i].classList.toggle("active", tabs[i].getAttribute("data-view") === view);
+          tabs[i].classList.toggle("active", tabs[i].getAttribute("data-tab") === view);
         }
 
         $("viewCalendar").classList.toggle("hidden", view !== "calendar");
         $("viewList").classList.toggle("hidden", view !== "list");
         $("viewAdd").classList.toggle("hidden", view !== "add");
-        $("viewInfo").classList.toggle("hidden", view !== "info");
+        $("viewHelp").classList.toggle("hidden", view !== "help");
 
-        if(view === "add"){
-          state.editingId = null;
-          clearForm();
-          updateDeleteBtn();
-        }
-        if(view === "list"){
-          renderList();
-          renderCounts();
-        }
-        if(view === "calendar"){
-          renderCalendar();
-          renderDaySummary();
-        }
-      }
+        $("mainTitle").textContent = (view === "add") ? "Toevoegen" : ((view === "list") ? "Lijst" : ((view === "help") ? "Info" : "Kalender"));
+        $("mainHint").textContent = (view === "add") ? "Maak of wijzig" : ((view === "list") ? "Afspraken" : ((view === "help") ? "Tips" : "Tik op een dag"));
 
-      function clearForm(){
-        $("typeSelect").value = "shared";
-        $("dateInput").value = state.selectedDate || "";
-        $("timeInput").value = "";
-        $("titleInput").value = "";
-        $("locInput").value = "";
-        $("noteInput").value = "";
-      }
-
-      function updateDeleteBtn(){
-        var canEdit = state.mode === "private";
-        var show = canEdit && !!state.editingId;
-        $("btnDeleteItem").style.display = show ? "block" : "none";
-      }
-
-      function iconFor(item){
-        if(item.type === "bday") return "🎂";
-        if(item.type === "note") return "📝";
-        return "📅";
-      }
-
-      function labelFor(item){
-        if(item.type === "bday") return "Bday";
-        if(item.type === "note") return "Note";
-        return "Afspraak";
-      }
-
-      function byDateTime(a,b){
-        var ad = a.date || "";
-        var bd = b.date || "";
-        if(ad !== bd) return ad < bd ? -1 : 1;
-        var at = a.time || "";
-        var bt = b.time || "";
-        if(at !== bt) return at < bt ? -1 : 1;
-        return (a.title||"").localeCompare(b.title||"");
-      }
-
-      function itemsOnDate(dateStr){
-        return state.data.filter(function(it){ return it.date === dateStr; }).sort(byDateTime);
+        if(view === "calendar"){ renderCalendar(); }
+        if(view === "list"){ renderList(); }
+        if(view === "add"){ openAddForm(); }
+        if(view === "help"){ renderKPIs(); }
       }
 
       function renderCalendar(){
-        $("calMonth").textContent = monthsNL[state.month] + " " + state.year;
-        var grid = $("calGrid");
+        var grid = $("daysGrid");
         grid.innerHTML = "";
 
-        for(var i=0;i<7;i++){
-          var el = document.createElement("div");
-          el.className = "dow";
-          el.textContent = dows[i];
-          grid.appendChild(el);
-        }
+        var first = new Date(state.year, state.month, 1, 12);
+        var daysInMonth = new Date(state.year, state.month+1, 0, 12).getDate();
+        var startIndex = mondayIndex(first.getDay());
+        var prevMonthDays = new Date(state.year, state.month, 0, 12).getDate();
 
-        var first = new Date(state.year, state.month, 1);
-        var firstDow = first.getDay();
-        var offset = (firstDow + 6) % 7;
+        var today = new Date();
+        var selected = state.selectedDate ? parseYMD(state.selectedDate) : null;
 
-        for(var c=0;c<42;c++){
-          var dayNum = c - offset + 1;
-          var d = new Date(state.year, state.month, dayNum);
+        $("monthTitle").textContent = monthsNL[state.month] + " " + state.year;
+        $("selLabel").textContent = state.selectedDate ? ("Gekozen, " + formatLong(selected)) : "Geen dag gekozen";
+
+        for(var i=0;i<42;i++){
+          var dayIndex = i - startIndex + 1;
+          var d, inMonth = true;
+
+          if(dayIndex <= 0){
+            d = new Date(state.year, state.month-1, prevMonthDays + dayIndex, 12);
+            inMonth = false;
+          }else if(dayIndex > daysInMonth){
+            d = new Date(state.year, state.month+1, dayIndex - daysInMonth, 12);
+            inMonth = false;
+          }else{
+            d = new Date(state.year, state.month, dayIndex, 12);
+          }
+
           var dateStr = ymd(d);
+          var dayEl = document.createElement("div");
+          dayEl.className = "day";
+          if(!inMonth){ dayEl.classList.add("disabled"); }
+          if(isWeekend(d)){ dayEl.classList.add("weekend"); }
+          if(isSameDay(d, today)){ dayEl.classList.add("today"); }
+          if(selected && isSameDay(d, selected)){ dayEl.classList.add("selected"); }
 
-          var btn = document.createElement("div");
-          btn.className = "day";
-          btn.textContent = String(d.getDate());
+          var items = getItemsOn(dateStr);
+          var dots = renderDots(items);
 
-          var inMonth = d.getMonth() === state.month;
-          if(!inMonth) btn.classList.add("muted");
+          dayEl.innerHTML = ""
+            + '<div class="row">'
+            + '<div class="dNum">' + d.getDate() + '</div>'
+            + '<div class="mini">' + (items.length ? (items.length + "x") : "") + "</div>"
+            + "</div>"
+            + dots;
 
-          if(dateStr === todayYMD()) btn.classList.add("today");
-          if(state.selectedDate && dateStr === state.selectedDate) btn.classList.add("selected");
-          if(itemsOnDate(dateStr).length) btn.classList.add("has");
-
-          btn.addEventListener("click", (function(ds){
-            return function(){
+          (function(ds){
+            dayEl.addEventListener("click", function(){
               state.selectedDate = ds;
-              if(state.view === "calendar"){ renderCalendar(); renderDaySummary(); }
-              if(state.view === "list"){ renderList(); renderCounts(); }
-              $("dateInput").value = ds;
-            };
-          })(dateStr));
+              renderAll();
+              showDay();
+            });
+          })(dateStr);
 
-          grid.appendChild(btn);
+          grid.appendChild(dayEl);
         }
-      }
 
-      function renderDaySummary(){
-        if(!state.selectedDate){
-          $("daySummary").textContent = "Kies eerst een dag in de kalender";
-          return;
-        }
-        var list = itemsOnDate(state.selectedDate);
-        if(!list.length){
-          $("daySummary").textContent = "Geen afspraken op " + state.selectedDate;
-          return;
-        }
-        var txt = list.slice(0,3).map(function(it){
-          var t = it.time ? it.time + " " : "";
-          var name = it.title || it.location || it.note || "(zonder titel)";
-          return t + name;
-        }).join(", ");
-        if(list.length > 3) txt += ", +" + (list.length-3);
-        $("daySummary").textContent = txt;
+        renderKPIs();
       }
 
       function renderList(){
-        var host = $("listItems");
-        host.innerHTML = "";
+        var list = $("itemsList");
+        list.innerHTML = "";
 
-        var list = state.data.slice().sort(byDateTime);
-
-        if(state.listMode === "today"){
-          var t = todayYMD();
-          list = list.filter(function(it){ return it.date === t; });
-        } else if(state.listMode === "month"){
-          var pref = state.year + "-" + pad2(state.month + 1) + "-";
-          list = list.filter(function(it){ return (it.date || "").indexOf(pref) === 0; });
-        } else if(state.listMode === "bday"){
-          list = list.filter(function(it){ return it.type === "bday"; });
-        } else if(state.selectedDate){
-          list = list.filter(function(it){ return it.date === state.selectedDate; });
-        }
-
-        if(!list.length){
-          var empty = document.createElement("div");
-          empty.className = "tile mt14";
-          empty.innerHTML = '<div class="tileTitle"><span>Geen items</span><span class="chip">Tip</span></div><div class="help">Voeg iets toe via Toevoegen.</div>';
-          host.appendChild(empty);
+        if(!state.selectedDate){
+          $("listSub").textContent = "Kies eerst een dag in de kalender";
           return;
         }
 
-        list.forEach(function(it){
-          var row = document.createElement("div");
-          row.className = "item";
+        $("listSub").textContent = formatLong(parseYMD(state.selectedDate));
 
-          var b = document.createElement("div");
-          b.className = "badge";
-          b.textContent = iconFor(it);
-
-          var body = document.createElement("div");
-          body.className = "itemBody";
-
-          var top = document.createElement("div");
-          top.className = "itemTop";
-
-          var title = document.createElement("div");
-          title.className = "itemTitle";
-          title.textContent = it.title || it.location || it.note || "(zonder titel)";
-
-          var chip = document.createElement("div");
-          chip.className = "chip";
-          chip.textContent = labelFor(it);
-
-          top.appendChild(title);
-          top.appendChild(chip);
-
-          var meta = document.createElement("div");
-          meta.className = "itemMeta";
-
-          var c1 = document.createElement("div");
-          c1.className = "chip";
-          c1.textContent = it.date || "";
-
-          var c2 = document.createElement("div");
-          c2.className = "chip";
-          c2.textContent = it.time || "--:--";
-
-          var c3 = document.createElement("div");
-          c3.className = "chip";
-          c3.textContent = it.location || "Geen locatie";
-
-          meta.appendChild(c1);
-          meta.appendChild(c2);
-          meta.appendChild(c3);
-
-          body.appendChild(top);
-          body.appendChild(meta);
-
-          if(it.note){
-            var note = document.createElement("div");
-            note.className = "tileHint";
-            note.textContent = it.note;
-            body.appendChild(note);
-          }
-
-          row.appendChild(b);
-          row.appendChild(body);
-
-          row.addEventListener("click", function(){
-            if(state.mode !== "private"){ toast("Gastmodus"); return; }
-            state.editingId = it.id;
-            $("typeSelect").value = it.type || "shared";
-            $("dateInput").value = it.date || "";
-            $("timeInput").value = it.time || "";
-            $("titleInput").value = it.title || "";
-            $("locInput").value = it.location || "";
-            $("noteInput").value = it.note || "";
-            updateDeleteBtn();
-            setView("add");
-          });
-
-          host.appendChild(row);
-        });
-      }
-
-      function countMonthItems(){
-        var m = state.month + 1;
-        var y = state.year;
-        var pref = y + "-" + pad2(m) + "-";
-        var c = 0;
-        for(var i=0;i<state.data.length;i++){
-          if((state.data[i].date || "").indexOf(pref) === 0) c++;
-        }
-        return c;
-      }
-
-      function countTodayItems(){
-        var t = todayYMD();
-        var c = 0;
-        for(var i=0;i<state.data.length;i++){
-          if(state.data[i].date === t) c++;
-        }
-        return c;
-      }
-
-      function countBirthdays(){
-        var c = 0;
-        for(var i=0;i<state.data.length;i++){
-          if(state.data[i].type === "bday") c++;
-        }
-        return c;
-      }
-
-      function renderCounts(){
-        $("countMonth").textContent = String(countMonthItems());
-        $("countToday").textContent = String(countTodayItems());
-        $("countBirthdays").textContent = String(countBirthdays());
-      }
-
-      function renderAll(){
-        renderLockUI();
-        renderSyncUI();
-        if(state.view === "calendar"){ renderCalendar(); renderDaySummary(); }
-        if(state.view === "list"){ renderList(); renderCounts(); }
-        if(state.view === "add"){ updateDeleteBtn(); }
-      }
-
-      function addOrUpdateFromForm(){
-        if(state.mode !== "private"){ toast("Gastmodus"); return; }
-
-        var type = $("typeSelect").value || "shared";
-        var date = ($("dateInput").value || "").trim();
-        var time = ($("timeInput").value || "").trim();
-        var title = ($("titleInput").value || "").trim();
-        var location = ($("locInput").value || "").trim();
-        var note = ($("noteInput").value || "").trim();
-
-        if(!date){ toast("Kies datum"); return; }
-        if(!title){ title = location || note || "(zonder titel)"; }
-
-        var id = state.editingId || uid();
-        var idx = -1;
-        for(var i=0;i<state.data.length;i++){
-          if(state.data[i].id === id){ idx = i; break; }
+        var items = getItemsOn(state.selectedDate);
+        if(!items.length){
+          list.innerHTML = '<div class="notice">Geen afspraken op deze dag.</div>';
+          return;
         }
 
-        var obj = normalizeOne({ id:id, type:type, date:date, time:time, title:title, location:location, note:note });
+        for(var i=0;i<items.length;i++){
+          (function(it){
+            var el = document.createElement("div");
+            el.className = "item";
 
-        if(idx >= 0) state.data[idx] = obj;
-        else state.data.push(obj);
+            var tag = (it.type === "shared") ? "Samen" : ((it.type === "personal") ? "Privé" : "Verjaardag");
+            var tagClass = (it.type === "shared") ? "blue" : ((it.type === "personal") ? "purple" : "orange");
 
-        state.data.sort(byDateTime);
-        state.selectedDate = date;
+            var metaParts = [];
+            if(it.time){ metaParts.push(it.time); }
+            if(it.location){ metaParts.push(it.location); }
+            var meta = metaParts.join(" , ");
+
+            el.innerHTML = ""
+              + '<div class="itemTop">'
+              + '  <div>'
+              + '    <div class="itemTitle">' + escapeHTML(it.title || "(zonder titel)") + "</div>"
+              + '    <div class="itemMeta">' + escapeHTML(meta) + "</div>"
+              + "  </div>"
+              + '  <div class="tagRow"><div class="tag ' + tagClass + '">' + tag + "</div></div>"
+              + "</div>"
+              + (it.note ? ('<div class="notice">' + escapeHTML(it.note) + "</div>") : "")
+              + '<div class="itemActions">'
+              + '  <button class="btn btnGhost btnSmall" type="button" data-act="edit">Wijzig</button>'
+              + '  <button class="btn btnDanger btnSmall" type="button" data-act="del">Verwijder</button>'
+              + "</div>";
+
+            el.querySelector('[data-act="edit"]').addEventListener("click", function(){
+              if(state.mode !== "unlocked"){ toast("Gastmodus, je kan niet wijzigen"); return; }
+              state.editingId = it.id;
+              setView("add");
+              fillForm(it);
+            });
+
+            el.querySelector('[data-act="del"]').addEventListener("click", function(){
+              if(state.mode !== "unlocked"){ toast("Gastmodus, je kan niet wissen"); return; }
+              if(!confirm("Afspraak verwijderen?")){ return; }
+              var n = [];
+              for(var k=0;k<state.data.length;k++){
+                if(state.data[k].id !== it.id){ n.push(state.data[k]); }
+              }
+              state.data = n;
+              save();
+              toast("Verwijderd");
+            });
+
+            list.appendChild(el);
+          })(items[i]);
+        }
+
+        renderKPIs();
+      }
+
+      function openAddForm(){
+        $("formSub").textContent = (state.mode === "unlocked") ? "Wordt opgeslagen op je toestel" : "Gastmodus, je kan niets opslaan";
+        $("btnDelete").style.display = "none";
+        $("formTitle").textContent = "Nieuwe afspraak";
         state.editingId = null;
 
-        save();
-        clearForm();
-        updateDeleteBtn();
-        toast("Opgeslagen");
-        setView("calendar");
+        var defaultDate = state.selectedDate || ymd(new Date());
+        $("dateInput").value = defaultDate;
+        $("timeInput").value = "";
+        $("locInput").value = "";
+        $("titleInput").value = "";
+        $("noteInput").value = "";
+        $("typeSelect").value = "shared";
       }
 
-      function deleteEditing(){
-        if(state.mode !== "private"){ toast("Gastmodus"); return; }
-        if(!state.editingId){ toast("Niets gekozen"); return; }
+      function fillForm(it){
+        $("formTitle").textContent = "Afspraak wijzigen";
+        $("dateInput").value = it.date || "";
+        $("timeInput").value = it.time || "";
+        $("locInput").value = it.location || "";
+        $("titleInput").value = it.title || "";
+        $("noteInput").value = it.note || "";
+        $("typeSelect").value = it.type || "shared";
+        $("btnDelete").style.display = "inline-flex";
+      }
 
-        var id = state.editingId;
-        state.data = state.data.filter(function(it){ return it.id !== id; });
-        state.editingId = null;
+      function currentFormData(){
+        return {
+          type: $("typeSelect").value,
+          date: $("dateInput").value,
+          time: $("timeInput").value,
+          location: ($("locInput").value || "").trim(),
+          title: ($("titleInput").value || "").trim(),
+          note: ($("noteInput").value || "").trim()
+        };
+      }
 
-        save();
-        clearForm();
-        updateDeleteBtn();
-        toast("Verwijderd");
-        setView("calendar");
+      function renderKPIs(){
+        var today = ymd(new Date());
+        var monthKey = state.year + "-" + pad2(state.month+1);
+
+        var inMonth = 0;
+        var todayItems = 0;
+        var bdays = 0;
+
+        for(var i=0;i<state.data.length;i++){
+          var x = state.data[i];
+          if(x.date && x.date.indexOf(monthKey) === 0){ inMonth++; }
+          if(x.date === today){ todayItems++; }
+          if(x.type === "bday"){ bdays++; }
+        }
+
+        $("kMonth").textContent = String(inMonth);
+        $("kToday").textContent = String(todayItems);
+        $("kBday").textContent = String(bdays);
+
+        var selCount = state.selectedDate ? getItemsOn(state.selectedDate).length : 0;
+        var parts = [];
+        if(state.selectedDate){ parts.push("Gekozen dag " + selCount + " afspraak"); }
+        else{ parts.push("Kies een dag in de kalender"); }
+        parts.push(state.mode === "unlocked" ? "Privé" : "Gastmodus");
+        $("quickInfo").textContent = parts.join(" , ");
       }
 
       function exportData(){
-        try{ return btoa(unescape(encodeURIComponent(JSON.stringify(state.data)))); }
-        catch(e){ return ""; }
-      }
-
-      function importData(txt){
+        var payload = { v: 5, created: (new Date()).toISOString(), data: state.data };
+        var json = JSON.stringify(payload);
         try{
-          var data = JSON.parse(decodeURIComponent(escape(atob(txt))));
-          if(Array.isArray(data)){
-            state.data = data;
-            normalizeAll();
-            state.data.sort(byDateTime);
-            save();
-            return true;
-          }
-          return false;
+          return btoa(unescape(encodeURIComponent(json)));
         }catch(e){
-          return false;
+          return "";
         }
       }
 
-      function openOverlay(id){ $(id).classList.remove("hidden"); }
-      function closeOverlay(id){ $(id).classList.add("hidden"); }
+      function importData(str){
+        var raw = decodeURIComponent(escape(atob((str || "").trim())));
+        var payload = JSON.parse(raw);
+        if(!payload || !payload.data || !payload.data.length){ throw new Error("Ongeldig"); }
+
+        var next = [];
+        for(var i=0;i<payload.data.length;i++){
+          var x = payload.data[i] || {};
+          next.push({
+            id: x.id || uid(),
+            type: x.type || "shared",
+            date: x.date || "",
+            time: x.time || "",
+            location: x.location || "",
+            title: x.title || "",
+            note: x.note || ""
+          });
+        }
+        state.data = next;
+        save();
+      }
+
+      function showLogin(){ $("loginOverlay").classList.remove("hidden"); $("pinInput").value = ""; renderModeUI(); }
+      function hideLogin(){ $("loginOverlay").classList.add("hidden"); }
+
+      function showSettings(){ $("settingsOverlay").classList.remove("hidden"); renderModeUI(); renderSyncUI(); }
+      function hideSettings(){ $("settingsOverlay").classList.add("hidden"); }
+
+      function renderDay(){
+        if(!state.selectedDate){
+          $("dayTitle").textContent = "Dag";
+          $("daySub").textContent = "Kies een dag";
+          $("dayList").innerHTML = "";
+          return;
+        }
+        $("dayTitle").textContent = formatLong(state.selectedDate);
+        var items = getItemsOn(state.selectedDate);
+        if(!items.length){
+          $("daySub").textContent = "Geen afspraken op deze dag";
+          $("dayList").innerHTML = "";
+          return;
+        }
+        $("daySub").textContent = items.length + " item" + (items.length === 1 ? "" : "s");
+        var html = "";
+        for(var i=0;i<items.length;i++){
+          var it = items[i] || {};
+          var t = it.time ? it.time : "";
+          var name = it.title || it.desc || it.location || it.note || "(zonder titel)";
+          html += '<div class="item" style="margin-bottom:10px;">'
+               +  '<div class="badge">' + iconFor(it) + '</div>'
+               +  '<div class="itemBody">'
+               +    '<div class="itemTop">'
+               +      '<div class="itemTitle">' + escapeHTML((t ? (t + " ") : "") + name) + '</div>'
+               +      '<div class="chip">' + escapeHTML(labelFor(it)) + '</div>'
+               +    '</div>'
+               +    '<div class="itemMeta">'
+               +      '<div class="chip">' + escapeHTML(it.time || "--:--") + '</div>'
+               +      '<div class="chip">' + escapeHTML(it.location || "Geen locatie") + '</div>'
+               +    '</div>'
+               +  '</div>'
+               + '</div>';
+        }
+        $("dayList").innerHTML = html;
+      }
+
+      function showDay(){
+        renderDay();
+        $("dayOverlay").classList.remove("hidden");
+      }
+
+      function hideDay(){
+        $("dayOverlay").classList.add("hidden");
+      }
+
+
+      function showImport(){ $("importOverlay").classList.remove("hidden"); $("importText").value = ""; }
+      function hideImport(){ $("importOverlay").classList.add("hidden"); }
+
+      function renderAll(){
+        if(state.view === "calendar"){ renderCalendar(); }
+        if(state.view === "list"){ renderList(); }
+        if(state.view === "help"){ renderKPIs(); }
+        renderKPIs();
+        renderModeUI();
+        renderSyncUI();
+      }
+
+      function initMonth(){
+        var now = new Date();
+        state.year = now.getFullYear();
+        state.month = now.getMonth();
+      }
 
       function wire(){
-        $("btnSettings").addEventListener("click", function(){
-          renderLockUI();
-          renderSyncUI();
-          openOverlay("settingsOverlay");
+        var tabs = document.querySelectorAll(".tab");
+        for(var i=0;i<tabs.length;i++){
+          (function(t){
+            t.addEventListener("click", function(){
+              setView(t.getAttribute("data-tab"));
+            });
+          })(tabs[i]);
+        }
+
+        $("prevMonth").addEventListener("click", function(){
+          state.month--;
+          if(state.month < 0){ state.month = 11; state.year--; }
+          renderAll();
         });
 
-        $("btnCloseSettings").addEventListener("click", function(){ closeOverlay("settingsOverlay"); });
+        $("nextMonth").addEventListener("click", function(){
+          state.month++;
+          if(state.month > 11){ state.month = 0; state.year++; }
+          renderAll();
+        });
 
-        $("btnLogout").addEventListener("click", function(){
-          if(state.sync !== "firebase"){ toast("Niet in Firebase sync"); return; }
-          if(!fbInit()){ toast("Firebase niet actief"); return; }
-          firebase.auth().signOut()
-            .then(function(){ fb.user = null; toast("Uitgelogd"); setTimeout(function(){ location.reload(); }, 500); })
-            .catch(function(){ toast("Uitloggen fout"); });
+        $("todayBtn").addEventListener("click", function(){
+          initMonth();
+          state.selectedDate = ymd(new Date());
+          setView("list");
+          renderAll();
+        });
+
+        $("btnBackToCal").addEventListener("click", function(){
+          setView("calendar");
+          renderAll();
+        });
+
+        $("btnAddEvent").addEventListener("click", function(){
+          if(state.mode !== "unlocked"){ toast("Gastmodus, je kan niet toevoegen"); return; }
+          state.editingId = null;
+          setView("add");
+          $("typeSelect").value = "shared";
+          $("dateInput").value = state.selectedDate || ymd(new Date());
+          $("timeInput").value = "";
+          $("locInput").value = "";
+          $("titleInput").value = "";
+          $("noteInput").value = "";
+          renderAll();
+        });
+
+        $("btnAddBday").addEventListener("click", function(){
+          if(state.mode !== "unlocked"){ toast("Gastmodus, je kan niet toevoegen"); return; }
+          state.editingId = null;
+          setView("add");
+          $("typeSelect").value = "bday";
+          $("dateInput").value = state.selectedDate || ymd(new Date());
+          $("timeInput").value = "";
+          $("locInput").value = "";
+          $("titleInput").value = "";
+          $("noteInput").value = "";
+          renderAll();
+        });
+
+        $("btnCancelForm").addEventListener("click", function(){
+          setView(state.selectedDate ? "list" : "calendar");
+          renderAll();
+        });
+
+        $("btnSave").addEventListener("click", function(){
+          if(state.mode !== "unlocked"){ toast("Gastmodus, je kan niet opslaan"); return; }
+          var f = currentFormData();
+          if(!f.date){ toast("Kies een datum"); return; }
+          if(!f.title){ toast("Vul een titel"); return; }
+
+          if(state.editingId){
+            for(var i=0;i<state.data.length;i++){
+              if(state.data[i].id === state.editingId){
+                state.data[i].type = f.type;
+                state.data[i].date = f.date;
+                state.data[i].time = f.time;
+                state.data[i].location = f.location;
+                state.data[i].title = f.title;
+                state.data[i].note = f.note;
+              }
+            }
+            save();
+            toast("Gewijzigd");
+          }else{
+            state.data.push({ id: uid(), type:f.type, date:f.date, time:f.time, location:f.location, title:f.title, note:f.note });
+            save();
+            toast("Opgeslagen");
+          }
+
+          state.selectedDate = f.date;
+          setView("list");
+          renderAll();
+        });
+
+        $("btnDelete").addEventListener("click", function(){
+          if(state.mode !== "unlocked"){ toast("Gastmodus, je kan niet wissen"); return; }
+          if(!state.editingId){ return; }
+          if(!confirm("Afspraak verwijderen?")){ return; }
+
+          var next = [];
+          for(var i=0;i<state.data.length;i++){
+            if(state.data[i].id !== state.editingId){ next.push(state.data[i]); }
+          }
+          state.data = next;
+          save();
+          toast("Verwijderd");
+          setView("list");
+          renderAll();
+        });
+
+        $("btnSettings").addEventListener("click", function(){ showSettings(); });
+        $("btnCloseSettings").addEventListener("click", function(){ hideSettings(); });
+
+        $("btnCloseDay").addEventListener("click", function(){ hideDay(); });
+        $("btnAddOnDay").addEventListener("click", function(){
+          hideDay();
+          setView("add");
+          $("dateInput").value = state.selectedDate || "";
+          $("titleInput").focus();
+        });
+        $("btnGoListDay").addEventListener("click", function(){
+          hideDay();
+          setView("list");
+          renderAll();
+        });
+
+        $("dayOverlay").addEventListener("click", function(e){ if(e.target === this) hideDay(); });
+
+
+        $("btnLock").addEventListener("click", function(){
+          setMode("locked");
+          toast("Gastmodus aan");
+          hideSettings();
+          renderAll();
         });
 
         $("btnUnlock").addEventListener("click", function(){
-          var p = prompt("Code");
-          if(p === null) return;
-          if(String(p) === getPin()){
-            setMode("private");
+          var pin = prompt("Voer code in");
+          if(pin === null){ return; }
+          if(String(pin).trim() === getPin()){
+            setMode("unlocked");
             toast("Ontgrendeld");
+            hideSettings();
+            renderAll();
           }else{
-            toast("Foute code");
+            toast("Verkeerde code");
           }
         });
 
-        $("btnGuest").addEventListener("click", function(){ setMode("locked"); toast("Gastmodus"); });
-
         $("btnSavePin").addEventListener("click", function(){
+          if(state.mode !== "unlocked"){ toast("Eerst ontgrendelen"); return; }
           var p = ($("newPin").value || "").trim();
           if(p.length < 3){ toast("Code te kort"); return; }
           setPin(p);
@@ -1426,62 +1550,73 @@
         $("btnExport").addEventListener("click", function(){
           var txt = exportData();
           if(!txt){ toast("Export fout"); return; }
+
           if(navigator.clipboard && navigator.clipboard.writeText){
-            navigator.clipboard.writeText(txt).then(function(){ toast("Export gekopieerd"); }).catch(function(){ prompt("Kopieer dit", txt); });
+            navigator.clipboard.writeText(txt).then(function(){
+              toast("Export gekopieerd");
+            }).catch(function(){
+              prompt("Kopieer dit", txt);
+            });
           }else{
             prompt("Kopieer dit", txt);
           }
         });
 
-        $("btnImport").addEventListener("click", function(){
-          $("importText").value = "";
-          openOverlay("importOverlay");
-        });
-
-        $("btnCloseImport").addEventListener("click", function(){ closeOverlay("importOverlay"); });
+        $("btnImport").addEventListener("click", function(){ showImport(); });
+        $("btnCloseImport").addEventListener("click", function(){ hideImport(); });
 
         $("btnDoImport").addEventListener("click", function(){
-          var t = ($("importText").value || "").trim();
-          if(!t){ toast("Plak export"); return; }
-          if(importData(t)){ closeOverlay("importOverlay"); toast("Geïmporteerd"); }
-          else{ toast("Import fout"); }
+          try{
+            importData($("importText").value);
+            toast("Import klaar");
+            hideImport();
+            renderAll();
+          }catch(e){
+            toast("Import fout");
+          }
         });
 
-        $("btnPrev").addEventListener("click", function(){
-          state.month--;
-          if(state.month < 0){ state.month = 11; state.year--; }
-          renderCalendar();
-          renderDaySummary();
+        $("btnClear").addEventListener("click", function(){
+          if(state.mode !== "unlocked"){ toast("Gastmodus, je kan niet wissen"); return; }
+          if(!confirm("Alles wissen?")){ return; }
+          state.data = [];
+          save();
+          toast("Alles gewist");
+          renderAll();
         });
 
-        $("btnNext").addEventListener("click", function(){
-          state.month++;
-          if(state.month > 11){ state.month = 0; state.year++; }
-          renderCalendar();
-          renderDaySummary();
+        $("btnLogin").addEventListener("click", function(){
+          var pin = ($("pinInput").value || "").trim();
+          if(pin === getPin()){
+            setMode("unlocked");
+            hideLogin();
+            toast("Welkom");
+            renderAll();
+          }else{
+            toast("Verkeerde code");
+          }
         });
 
-        $("btnGoList").addEventListener("click", function(){ setView("list"); });
-        $("btnBackFromList").addEventListener("click", function(){ setView("calendar"); });
-        $("btnBackFromAdd").addEventListener("click", function(){ setView("calendar"); });
+        $("btnGuest").addEventListener("click", function(){
+          setMode("locked");
+          hideLogin();
+          toast("Gastmodus");
+          renderAll();
+        });
 
-        $("btnSaveItem").addEventListener("click", function(){ addOrUpdateFromForm(); });
-        $("btnDeleteItem").addEventListener("click", function(){ deleteEditing(); });
-
-        $("tabCalendar").addEventListener("click", function(){ setView("calendar"); });
-        $("tabList").addEventListener("click", function(){ setView("list"); });
-        $("tabAdd").addEventListener("click", function(){ setView("add"); });
-        $("tabInfo").addEventListener("click", function(){ setView("info"); });
+        $("btnForgot").addEventListener("click", function(){
+          alert("Standaard code is 1234. Als je die hebt veranderd en vergeten, wis de website data van deze site in Safari instellingen.");
+        });
       }
 
       function boot(){
         initMonth();
+        load();
         state.mode = getMode();
         state.sync = getSync();
         wire();
-        renderSyncUI();
-        load();
         setView("calendar");
+        showLogin();
         renderAll();
       }
 
@@ -1489,6 +1624,7 @@
     })();
   </script>
 
-
 </body>
 </html>
+
+
