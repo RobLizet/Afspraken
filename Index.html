@@ -12,29 +12,17 @@
 
  <style>
     :root{
-      --bg:#0b1020;
-      --panel: rgba(255,255,255,.08);
-      --panel2: rgba(255,255,255,.10);
-      --card: rgba(255,255,255,.10);
-      --card2: rgba(255,255,255,.08);
-      --text:#eef2ff;
-      --muted: rgba(238,242,255,.70);
-      --border: rgba(255,255,255,.14);
-
-      --primary:#7c3aed;
-      --accent:#38bdf8;
-      --ok:#22c55e;
-      --warn:#f59e0b;
-      --danger:#ef4444;
-
-      --radius:18px;
-      --radius2:14px;
-
-      --shadow: 0 18px 44px rgba(0,0,0,.35);
-      --shadow2: 0 10px 26px rgba(0,0,0,.25);
-
-      --safeTop: env(safe-area-inset-top);
-      --safeBottom: env(safe-area-inset-bottom);
+      --bg0:#0b1026;
+      --bg1:#151a3a;
+      --text:rgba(255,255,255,.92);
+      --muted:rgba(255,255,255,.70);
+      --muted2:rgba(255,255,255,.52);
+      --accent:#7aa7ff;
+      --accent2:#c49bff;
+      --ok:#2ee59d;
+      --warn:#ffb020;
+      --bad:#ff5a73;
+      --shadow:0 18px 50px rgba(0,0,0,.35);
     }
 
     *{ box-sizing:border-box; }
@@ -534,7 +522,25 @@
     </div>
   </div>
 
- <div class="toast" id="toast"></div>
+ 
+  <div class="overlay hidden" id="dayOverlay">
+    <div class="modal" style="max-width:780px;">
+      <div class="modalHeader" style="background:linear-gradient(135deg, rgba(96,165,250,.18), rgba(167,139,250,.22)); border-bottom:1px solid rgba(255,255,255,.12);">
+        <h3 id="dayTitle">Dag</h3>
+        <button class="btn btnGhost btnSmall" id="btnCloseDay" type="button">Sluiten</button>
+      </div>
+      <div class="modalBody" style="padding-top:18px;">
+        <div class="notice" id="daySub">Kies een dag</div>
+        <div class="list mt14" id="dayList"></div>
+      </div>
+      <div class="modalFooter" style="display:flex; gap:12px;">
+        <button class="btn btnPrimary btnWide" id="btnAddOnDay" type="button">Toevoegen</button>
+        <button class="btn btnGhost btnWide" id="btnGoListDay" type="button">Naar lijst</button>
+      </div>
+    </div>
+  </div>
+
+<div class="toast" id="toast"></div>
 
  <div class="container" id="appRoot">
     <div class="topbar">
@@ -1014,8 +1020,8 @@
           (function(ds){
             dayEl.addEventListener("click", function(){
               state.selectedDate = ds;
-              setView("list");
               renderAll();
+              showDay();
             });
           })(dateStr);
 
@@ -1197,6 +1203,53 @@
       function showSettings(){ $("settingsOverlay").classList.remove("hidden"); renderModeUI(); renderSyncUI(); }
       function hideSettings(){ $("settingsOverlay").classList.add("hidden"); }
 
+      function renderDay(){
+        if(!state.selectedDate){
+          $("dayTitle").textContent = "Dag";
+          $("daySub").textContent = "Kies een dag";
+          $("dayList").innerHTML = "";
+          return;
+        }
+        $("dayTitle").textContent = formatLong(state.selectedDate);
+        var items = getItemsOn(state.selectedDate);
+        if(!items.length){
+          $("daySub").textContent = "Geen afspraken op deze dag";
+          $("dayList").innerHTML = "";
+          return;
+        }
+        $("daySub").textContent = items.length + " item" + (items.length === 1 ? "" : "s");
+        var html = "";
+        for(var i=0;i<items.length;i++){
+          var it = items[i] || {};
+          var t = it.time ? it.time : "";
+          var name = it.title || it.desc || it.location || it.note || "(zonder titel)";
+          html += '<div class="item" style="margin-bottom:10px;">'
+               +  '<div class="badge">' + iconFor(it) + '</div>'
+               +  '<div class="itemBody">'
+               +    '<div class="itemTop">'
+               +      '<div class="itemTitle">' + escapeHTML((t ? (t + " ") : "") + name) + '</div>'
+               +      '<div class="chip">' + escapeHTML(labelFor(it)) + '</div>'
+               +    '</div>'
+               +    '<div class="itemMeta">'
+               +      '<div class="chip">' + escapeHTML(it.time || "--:--") + '</div>'
+               +      '<div class="chip">' + escapeHTML(it.location || "Geen locatie") + '</div>'
+               +    '</div>'
+               +  '</div>'
+               + '</div>';
+        }
+        $("dayList").innerHTML = html;
+      }
+
+      function showDay(){
+        renderDay();
+        $("dayOverlay").classList.remove("hidden");
+      }
+
+      function hideDay(){
+        $("dayOverlay").classList.add("hidden");
+      }
+
+
       function showImport(){ $("importOverlay").classList.remove("hidden"); $("importText").value = ""; }
       function hideImport(){ $("importOverlay").classList.add("hidden"); }
 
@@ -1328,6 +1381,22 @@
 
         $("btnSettings").addEventListener("click", function(){ showSettings(); });
         $("btnCloseSettings").addEventListener("click", function(){ hideSettings(); });
+
+        $("btnCloseDay").addEventListener("click", function(){ hideDay(); });
+        $("btnAddOnDay").addEventListener("click", function(){
+          hideDay();
+          setView("add");
+          $("dateInput").value = state.selectedDate || "";
+          $("titleInput").focus();
+        });
+        $("btnGoListDay").addEventListener("click", function(){
+          hideDay();
+          setView("list");
+          renderAll();
+        });
+
+        $("dayOverlay").addEventListener("click", function(e){ if(e.target === this) hideDay(); });
+
 
         $("btnLock").addEventListener("click", function(){
           setMode("locked");
