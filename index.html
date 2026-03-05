@@ -881,10 +881,18 @@ textarea{min-height:90px;resize:vertical}
     <div class="row">
       <div>
         <h2>Instellingen</h2>
-        <p class="sub">Privé is bewerken. Gastmodus is alleen kijken.</p>
+        <p class="sub">Backup maken en terugzetten, plus sync instellingen.</p>
       </div>
       <button class="btn" id="closeSettings">Sluiten</button>
     </div>
+
+    <hr class="hr">
+
+    <div class="row">
+      <button class="btn primary" id="backupMake">Backup maken</button>
+      <button class="btn" id="backupRestore">Backup terugzetten</button>
+    </div>
+    <p class="note" id="backupInfo"></p>
 
     <hr class="hr">
 
@@ -914,7 +922,8 @@ textarea{min-height:90px;resize:vertical}
   </div>
 
 
-  <div class="tabs">
+
+<div class="tabs">
     <div class="tabbar">
       <button class="tab active" data-tab="calendar">Kalender</button>
       <button class="tab" data-tab="list">Lijst</button>
@@ -949,7 +958,7 @@ textarea{min-height:90px;resize:vertical}
     const state = {
       syncMode: localStorage.getItem("rb_syncMode") || "local",
       unlocked: true,
-      code: localStorage.getItem("rb_code") || "1234",
+      code: null,
       selectedDate: null,
       viewYear: null,
       viewMonth: null,
@@ -1187,10 +1196,6 @@ textarea{min-height:90px;resize:vertical}
     function updateEditUI(){
       document.getElementById("saveBtn").disabled = !isEditAllowed();
       document.getElementById("clearBtn").disabled = !isEditAllowed();
-      const ub = document.getElementById("unlockBtn");
-      if(ub) ub.textContent = state.unlocked ? "Ontgrendeld" : "Ontgrendel met code";
-      const gb = document.getElementById("guestBtn");
-      if(gb) gb.textContent = state.unlocked ? "Zet gastmodus" : "Gastmodus";
     }
 
     function openModal(dateStr, items){
@@ -1723,36 +1728,66 @@ textarea{min-height:90px;resize:vertical}
       }
     }
 
-    function unlock(){
-      const c = prompt("Code");
-      if(c === null) return;
-      if(c === state.code){
-        state.unlocked = true;
-        localStorage.setItem("rb_unlocked","1");
-        toast("Ontgrendeld");
-      }else{
-        toast("Foute code");
-      }
-      updateEditUI();
-    }
-
-    function guest(){
-      state.unlocked = false;
-      localStorage.setItem("rb_unlocked","0");
-      toast("Gastmodus aan");
-      updateEditUI();
-    }
-
-    function saveCode(){
-      const n = document.getElementById("newCode").value.trim();
-      if(!n){
-        toast("Vul nieuwe code in");
+    
+    function setBackupInfo(){
+      const raw = localStorage.getItem("rb_backup_v1");
+      const el = document.getElementById("backupInfo");
+      if(!el) return;
+      if(!raw){
+        el.textContent = "Nog geen backup gemaakt.";
         return;
       }
-      state.code = n;
-      localStorage.setItem("rb_code", n);
-      document.getElementById("newCode").value = "";
-      toast("Code opgeslagen");
+      try{
+        const obj = JSON.parse(raw);
+        const d = new Date(obj.ts || Date.now());
+        el.textContent = "Laatste backup: " + d.toLocaleString();
+      }catch(e){
+        el.textContent = "Backup gevonden, maar kan niet gelezen worden.";
+      }
+    }
+
+    function makeBackup(){
+      const obj = { ts: Date.now(), items: {} };
+      for(let i=0;i<localStorage.length;i++){
+        const k = localStorage.key(i);
+        if(!k) continue;
+        if(k.startsWith("rb_")){
+          obj.items[k] = localStorage.getItem(k);
+        }
+      }
+      localStorage.setItem("rb_backup_v1", JSON.stringify(obj));
+      setBackupInfo();
+      toast("Backup opgeslagen");
+    }
+
+    async function restoreBackup(){
+      const raw = localStorage.getItem("rb_backup_v1");
+      if(!raw){
+        toast("Geen backup");
+        return;
+      }
+      const ok = confirm("Backup terugzetten. Dit overschrijft je huidige data.");
+      if(!ok) return;
+
+      try{
+        const obj = JSON.parse(raw);
+        const items = obj.items || {};
+        Object.keys(items).forEach(k=>{
+          localStorage.setItem(k, items[k]);
+        });
+
+        localStorage.removeItem("rb_unlocked");
+        localStorage.removeItem("rb_code");
+
+        state.syncMode = localStorage.getItem("rb_syncMode") || "local";
+        els.syncSelect.value = state.syncMode;
+
+        await refreshAll();
+        setBackupInfo();
+        toast("Backup teruggezet");
+      }catch(e){
+        toast("Backup fout");
+      }
     }
 
     function openDateFromList(dateStr){
@@ -1822,12 +1857,9 @@ textarea{min-height:90px;resize:vertical}
     document.getElementById("exportBtn").addEventListener("click", exportData);
     document.getElementById("importBtn").addEventListener("click", importData);
 
-    const _unlockBtn = document.getElementById("unlockBtn");
-    if(_unlockBtn) _unlockBtn.addEventListener("click", unlock);
-    const _guestBtn = document.getElementById("guestBtn");
-    if(_guestBtn) _guestBtn.addEventListener("click", guest);
-    const _saveCode = document.getElementById("saveCode");
-    if(_saveCode) _saveCode.addEventListener("click", saveCode);
+    document.getElementById("backupMake").addEventListener("click", makeBackup);
+    document.getElementById("backupRestore").addEventListener("click", restoreBackup);
+    setBackupInfo();
 
     els.syncSelect.addEventListener("change", async ()=>{
       state.syncMode = els.syncSelect.value;
