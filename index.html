@@ -2001,7 +2001,24 @@ textarea{min-height:90px;resize:vertical}
     bindDaysGrid();
 
 
-     document.addEventListener("click", async (e)=>{
+     
+    function bindTap(id, fn){
+      const el = document.getElementById(id);
+      if(!el) return;
+      const handler = (e)=>{
+        e.preventDefault();
+        e.stopPropagation();
+        fn(e);
+      };
+      el.addEventListener("click", handler);
+      el.addEventListener("pointerup", handler);
+      el.addEventListener("touchend", handler, {passive:false});
+    }
+
+    bindTap("loginBtn", ()=>doLogin());
+    bindTap("logoutBtn", ()=>doLogout());
+
+    document.addEventListener("click", async (e)=>{
       const quick = e.target.closest("[data-quick]");
       if(quick){
         const f = quick.dataset.quick;
