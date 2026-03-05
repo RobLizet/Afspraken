@@ -1392,7 +1392,6 @@ textarea{min-height:90px;resize:vertical}
         els.daysGrid.appendChild(d);
       }
 
-      if(typeof bindDaysGrid === "function") bindDaysGrid();
       updateSelectedBox();
       updateStats();
       renderList();
@@ -1874,32 +1873,16 @@ textarea{min-height:90px;resize:vertical}
     document.getElementById("loginBtn").addEventListener("click", doLogin);
     document.getElementById("logoutBtn").addEventListener("click", doLogout);
 
-    /* Kalender dag klik fix: bind aan daysGrid (iOS PWA stabiel) */
-    const bindDaysGrid = ()=>{
-      const grid = els.daysGrid;
-      if(!grid) return;
-      if(grid.dataset.boundDayTap === "1") return;
-      grid.dataset.boundDayTap = "1";
-
-      const onTap = async (ev)=>{
-        const dayEl = ev.target.closest(".day");
-        if(!dayEl) return;
-        const ds = dayEl.dataset.date;
-        if(!ds) return;
+    document.addEventListener("click", async (e)=>{
+      const day = e.target.closest(".day");
+      if(day && day.dataset.date){
+        const ds = day.dataset.date;
         state.selectedDate = ds;
         await renderCalendar();
         const items = await dayItems(ds);
         openModal(ds, items);
-      };
+      }
 
-      grid.addEventListener("pointerup", onTap);
-      grid.addEventListener("click", onTap);
-      grid.addEventListener("touchend", onTap, { passive:true });
-    };
-    bindDaysGrid();
-
-
-     document.addEventListener("click", async (e)=>{
       const quick = e.target.closest("[data-quick]");
       if(quick){
         const f = quick.dataset.quick;
