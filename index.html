@@ -1028,6 +1028,7 @@ textarea{min-height:90px;resize:vertical}
     }
 
     function setScreen(name){
+      safeCloseModal();
       document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
       document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
 
@@ -1240,6 +1241,16 @@ textarea{min-height:90px;resize:vertical}
       els.dayModal.classList.add("open");
       els.dayModal.setAttribute("aria-hidden","false");
       document.body.style.overflow = "hidden";
+    }
+
+    function safeCloseModal(){
+      try{
+        if(els && els.dayModal){
+          els.dayModal.classList.remove("open");
+          els.dayModal.setAttribute("aria-hidden","true");
+        }
+      }catch(e){}
+      try{ document.body.style.overflow = ""; }catch(e){}
     }
 
     function closeModal(){
@@ -1867,17 +1878,28 @@ textarea{min-height:90px;resize:vertical}
     }
 
     document.querySelectorAll(".tab").forEach(btn=>{
-      btn.addEventListener("click", ()=>{
+      const go = ()=>{
         const t = btn.dataset.tab;
         if(t === "calendar") setScreen("calendar");
         if(t === "list") { setScreen("list"); renderList(); }
         if(t === "add") setScreen("add");
         if(t === "info") setScreen("info");
-      });
+      };
+      btn.addEventListener("click", go);
+      btn.addEventListener("pointerup", go);
+      btn.addEventListener("touchend", go, {passive:true});
     });
 
-    document.getElementById("openSettings").addEventListener("click", ()=>setScreen("settings"));
-    document.getElementById("closeSettings").addEventListener("click", ()=>setScreen("calendar"));
+    function bindTap(id, fn){
+      const el = document.getElementById(id);
+      if(!el) return;
+      el.addEventListener("click", fn);
+      el.addEventListener("pointerup", fn);
+      el.addEventListener("touchend", fn, {passive:true});
+    }
+
+    bindTap("openSettings", ()=>setScreen("settings"));
+    bindTap("closeSettings", ()=>setScreen("calendar"));
     document.getElementById("prevMonth").addEventListener("click", async ()=>{
       state.viewMonth--;
       if(state.viewMonth < 0){ state.viewMonth = 11; state.viewYear--; }
@@ -1923,8 +1945,8 @@ textarea{min-height:90px;resize:vertical}
     document.getElementById("exportBtn").addEventListener("click", exportData);
     document.getElementById("importBtn").addEventListener("click", importData);
 
-    document.getElementById("backupMake").addEventListener("click", makeBackup);
-    document.getElementById("backupRestore").addEventListener("click", restoreBackup);
+    bindTap("backupMake", makeBackup);
+    bindTap("backupRestore", restoreBackup);
     document.getElementById("backupDownload").addEventListener("click", downloadBackupFile);
     const bu = document.getElementById("backupUpload");
     document.getElementById("backupUploadBtn").addEventListener("click", ()=> bu && bu.click());
@@ -1951,8 +1973,8 @@ textarea{min-height:90px;resize:vertical}
       await refreshAll();
     });
 
-    document.getElementById("loginBtn").addEventListener("click", doLogin);
-    document.getElementById("logoutBtn").addEventListener("click", doLogout);
+    bindTap("loginBtn", doLogin);
+    bindTap("logoutBtn", doLogout);
 
     /* Kalender dag klik fix: bind aan daysGrid (iOS PWA stabiel) */
     const bindDaysGrid = ()=>{
