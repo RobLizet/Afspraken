@@ -894,14 +894,6 @@ textarea{min-height:90px;resize:vertical}
     </div>
     <p class="note" id="backupInfo"></p>
 
-    <div class="row" style="margin-top:10px">
-      <button class="btn" id="backupDownload">Backup downloaden</button>
-      <button class="btn" id="backupUploadBtn">Backup importeren</button>
-      <input type="file" id="backupUpload" accept="application/json" style="display:none">
-    </div>
-    <p class="note" id="backupFileInfo"></p>
-
-
     <hr class="hr">
 
     <div class="field">
@@ -1797,64 +1789,7 @@ textarea{min-height:90px;resize:vertical}
       }catch(e){
         toast("Backup fout");
       }
-    
-    function setBackupFileInfo(msg){
-      const el = document.getElementById("backupFileInfo");
-      if(el) el.textContent = msg || "";
     }
-
-    function downloadBackupFile(){
-      const payload = {
-        app: "Onze Agenda - Rob & Lizet",
-        version: 1,
-        createdAt: new Date().toISOString(),
-        items: {
-          rb_data_v3: localStorage.getItem("rb_data_v3") || "",
-          rb_syncMode: localStorage.getItem("rb_syncMode") || "local"
-        }
-      };
-      const blob = new Blob([JSON.stringify(payload, null, 2)], {type:"application/json"});
-      const a = document.createElement("a");
-      const stamp = new Date().toISOString().slice(0,19).replace(/[:T]/g,"-");
-      a.href = URL.createObjectURL(blob);
-      a.download = "agenda-backup-" + stamp + ".json";
-      document.body.appendChild(a);
-      a.click();
-      setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 500);
-      setBackupFileInfo("Backup gedownload als bestand.");
-      toast("Backup gedownload");
-    }
-
-    async function importBackupFile(file){
-      if(!file) return;
-      try{
-        const text = await file.text();
-        const data = JSON.parse(text);
-
-        const items = data.items || data;
-        if(items.rb_data_v3 !== undefined) localStorage.setItem("rb_data_v3", items.rb_data_v3 || "");
-        if(items.rb_syncMode) localStorage.setItem("rb_syncMode", items.rb_syncMode);
-
-        state.syncMode = localStorage.getItem("rb_syncMode") || "local";
-        els.syncSelect.value = state.syncMode;
-        setStatus(state.syncMode);
-
-        if(state.syncMode === "firebase"){
-          await initFirebase();
-        }
-
-        await refreshAll();
-        setBackupInfo();
-        setBackupFileInfo("Backup geïmporteerd uit bestand.");
-        toast("Backup geïmporteerd");
-      }catch(e){
-        setBackupFileInfo("Kon backup bestand niet lezen.");
-        toast("Import fout");
-      }
-    }
-
-
-}
 
     function openDateFromList(dateStr){
       if(!dateStr) return;
@@ -1925,22 +1860,7 @@ textarea{min-height:90px;resize:vertical}
 
     document.getElementById("backupMake").addEventListener("click", makeBackup);
     document.getElementById("backupRestore").addEventListener("click", restoreBackup);
-    document.getElementById("backupDownload").addEventListener("click", downloadBackupFile);
-    const bu = document.getElementById("backupUpload");
-    document.getElementById("backupUploadBtn").addEventListener("click", ()=> bu && bu.click());
-    if(bu){
-      bu.addEventListener("change", async ()=>{
-        const f = bu.files && bu.files[0];
-        if(!f) return;
-        const ok = confirm("Backup importeren. Dit overschrijft je huidige data op dit toestel.");
-        if(!ok){ bu.value = ""; return; }
-        await importBackupFile(f);
-        bu.value = "";
-      });
-    }
-
     setBackupInfo();
-    setBackupFileInfo("Je kunt ook een backup bestand downloaden.");
 
     els.syncSelect.addEventListener("change", async ()=>{
       state.syncMode = els.syncSelect.value;
