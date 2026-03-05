@@ -1405,10 +1405,13 @@ textarea{min-height:90px;resize:vertical}
         d.dataset.date = "";
         els.daysGrid.appendChild(d);
       }
+      await updateSelectedBox();
 
-      updateSelectedBox();
-      updateStats();
-      renderList();
+      const listActive = document.getElementById("screenList").classList.contains("active");
+      if(listActive){
+        await updateStats();
+        await renderList();
+      }
     }
 
     async function updateSelectedBox(){
@@ -1857,16 +1860,43 @@ textarea{min-height:90px;resize:vertical}
     document.getElementById("loginBtn").addEventListener("click", doLogin);
     document.getElementById("logoutBtn").addEventListener("click", doLogout);
 
-    document.addEventListener("click", async (e)=>{
-      const day = e.target.closest(".day");
-      if(day && day.dataset.date){
-        const ds = day.dataset.date;
+    
+    let dayTapBusy = false;
+    let lastDayTap = 0;
+
+    const handleDayTap = async (e)=>{
+      const dayEl = e.target.closest(".day");
+      if(!dayEl) return;
+
+      const ds = dayEl.dataset.date;
+      if(!ds) return;
+      if(dayEl.classList.contains("muted")) return;
+
+      const nowTs = Date.now();
+      if(nowTs - lastDayTap < 300) return;
+      lastDayTap = nowTs;
+
+      if(dayTapBusy) return;
+      dayTapBusy = true;
+
+      try{
         state.selectedDate = ds;
         await renderCalendar();
         const items = await dayItems(ds);
         openModal(ds, items);
+      }finally{
+        dayTapBusy = false;
       }
+    };
 
+    if(els.daysGrid){
+      els.daysGrid.addEventListener("click", handleDayTap);
+      els.daysGrid.addEventListener("pointerup", handleDayTap);
+      els.daysGrid.addEventListener("touchend", handleDayTap, {passive:true});
+    }
+
+
+document.addEventListener("click", async (e)=>{
       const quick = e.target.closest("[data-quick]");
       if(quick){
         const f = quick.dataset.quick;
