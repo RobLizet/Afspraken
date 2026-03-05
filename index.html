@@ -669,10 +669,7 @@ textarea{min-height:90px;resize:vertical}
   line-height:1.4;
 }
 
-  
-#dayModal[aria-hidden="true"]{pointer-events:none;}
-#settingsOverlay[aria-hidden="true"]{pointer-events:none;}
-</style>
+  </style>
 </head>
 
 
@@ -884,7 +881,7 @@ textarea{min-height:90px;resize:vertical}
     <div class="row">
       <div>
         <h2>Instellingen</h2>
-        <p class="sub">Privé is bewerken. Gastmodus is alleen kijken.</p>
+        <p class="sub">Backup maken en terugzetten, plus sync instellingen.</p>
       </div>
       <button class="btn" id="closeSettings">Sluiten</button>
     </div>
@@ -892,17 +889,10 @@ textarea{min-height:90px;resize:vertical}
     <hr class="hr">
 
     <div class="row">
-      <button class="btn primary" id="unlockBtn">Ontgrendel met code</button>
-      <button class="btn" id="guestBtn">Zet gastmodus</button>
+      <button class="btn primary" id="backupMake">Backup maken</button>
+      <button class="btn" id="backupRestore">Backup terugzetten</button>
     </div>
-
-    <div class="field">
-      <label for="newCode">Code wijzigen</label>
-      <input id="newCode" placeholder="Nieuwe code">
-    </div>
-    <div class="actions">
-      <button class="btn" id="saveCode">Code opslaan</button>
-    </div>
+    <p class="note" id="backupInfo"></p>
 
     <hr class="hr">
 
@@ -932,7 +922,8 @@ textarea{min-height:90px;resize:vertical}
   </div>
 
 
-  <div class="tabs">
+
+<div class="tabs">
     <div class="tabbar">
       <button class="tab active" data-tab="calendar">Kalender</button>
       <button class="tab" data-tab="list">Lijst</button>
@@ -966,8 +957,8 @@ textarea{min-height:90px;resize:vertical}
   <script type="module">
     const state = {
       syncMode: localStorage.getItem("rb_syncMode") || "local",
-      unlocked: localStorage.getItem("rb_unlocked") === "1",
-      code: localStorage.getItem("rb_code") || "1234",
+      unlocked: true,
+      code: null,
       selectedDate: null,
       viewYear: null,
       viewMonth: null,
@@ -1030,18 +1021,7 @@ textarea{min-height:90px;resize:vertical}
 
     function setScreen(name){
       document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
-      
-    function bindTap(el, fn){
-      if(!el || !fn) return;
-      const h = async (e)=>{
-        try{ await fn(e); } catch(err){ console.error(err); toast("Fout in knop"); }
-      };
-      el.addEventListener("click", h);
-      el.addEventListener("pointerup", h);
-      el.addEventListener("touchend", h, {passive:true});
-    }
-
-document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+      document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
 
       if(name === "calendar"){
         document.getElementById("screenCalendar").classList.add("active");
@@ -1094,7 +1074,6 @@ document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
     let fb = null;
 
     async function initFirebase(){
-      window.__fbReady = false;
       try{
         const firebaseConfig = {
           apiKey: "AIzaSyDeGP5IIWaFoG4PuISUueeccexrZOIVwGY",
@@ -1130,8 +1109,6 @@ document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
         state.firebaseReady = false;
         renderAuthState();
       }
-    }
-      window.__fbReady = true;
     }
 
     function renderAuthState(){
@@ -1213,14 +1190,12 @@ document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
     }
 
     function isEditAllowed(){
-      return state.unlocked;
+      return true;
     }
 
     function updateEditUI(){
       document.getElementById("saveBtn").disabled = !isEditAllowed();
       document.getElementById("clearBtn").disabled = !isEditAllowed();
-      document.getElementById("unlockBtn").textContent = state.unlocked ? "Ontgrendeld" : "Ontgrendel met code";
-      document.getElementById("guestBtn").textContent = state.unlocked ? "Zet gastmodus" : "Gastmodus";
     }
 
     function openModal(dateStr, items){
@@ -1417,6 +1392,7 @@ document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
         els.daysGrid.appendChild(d);
       }
 
+      if(typeof bindDaysGrid === "function") bindDaysGrid();
       updateSelectedBox();
       updateStats();
       renderList();
@@ -1753,36 +1729,66 @@ document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
       }
     }
 
-    function unlock(){
-      const c = prompt("Code");
-      if(c === null) return;
-      if(c === state.code){
-        state.unlocked = true;
-        localStorage.setItem("rb_unlocked","1");
-        toast("Ontgrendeld");
-      }else{
-        toast("Foute code");
-      }
-      updateEditUI();
-    }
-
-    function guest(){
-      state.unlocked = false;
-      localStorage.setItem("rb_unlocked","0");
-      toast("Gastmodus aan");
-      updateEditUI();
-    }
-
-    function saveCode(){
-      const n = document.getElementById("newCode").value.trim();
-      if(!n){
-        toast("Vul nieuwe code in");
+    
+    function setBackupInfo(){
+      const raw = localStorage.getItem("rb_backup_v1");
+      const el = document.getElementById("backupInfo");
+      if(!el) return;
+      if(!raw){
+        el.textContent = "Nog geen backup gemaakt.";
         return;
       }
-      state.code = n;
-      localStorage.setItem("rb_code", n);
-      document.getElementById("newCode").value = "";
-      toast("Code opgeslagen");
+      try{
+        const obj = JSON.parse(raw);
+        const d = new Date(obj.ts || Date.now());
+        el.textContent = "Laatste backup: " + d.toLocaleString();
+      }catch(e){
+        el.textContent = "Backup gevonden, maar kan niet gelezen worden.";
+      }
+    }
+
+    function makeBackup(){
+      const obj = { ts: Date.now(), items: {} };
+      for(let i=0;i<localStorage.length;i++){
+        const k = localStorage.key(i);
+        if(!k) continue;
+        if(k.startsWith("rb_")){
+          obj.items[k] = localStorage.getItem(k);
+        }
+      }
+      localStorage.setItem("rb_backup_v1", JSON.stringify(obj));
+      setBackupInfo();
+      toast("Backup opgeslagen");
+    }
+
+    async function restoreBackup(){
+      const raw = localStorage.getItem("rb_backup_v1");
+      if(!raw){
+        toast("Geen backup");
+        return;
+      }
+      const ok = confirm("Backup terugzetten. Dit overschrijft je huidige data.");
+      if(!ok) return;
+
+      try{
+        const obj = JSON.parse(raw);
+        const items = obj.items || {};
+        Object.keys(items).forEach(k=>{
+          localStorage.setItem(k, items[k]);
+        });
+
+        localStorage.removeItem("rb_unlocked");
+        localStorage.removeItem("rb_code");
+
+        state.syncMode = localStorage.getItem("rb_syncMode") || "local";
+        els.syncSelect.value = state.syncMode;
+
+        await refreshAll();
+        setBackupInfo();
+        toast("Backup teruggezet");
+      }catch(e){
+        toast("Backup fout");
+      }
     }
 
     function openDateFromList(dateStr){
@@ -1796,7 +1802,7 @@ document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
     }
 
     document.querySelectorAll(".tab").forEach(btn=>{
-      bindTap(btn, ()=>{
+      btn.addEventListener("click", ()=>{
         const t = btn.dataset.tab;
         if(t === "calendar") setScreen("calendar");
         if(t === "list") { setScreen("list"); renderList(); }
@@ -1805,7 +1811,7 @@ document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
       });
     });
 
-document.getElementById("openSettings").addEventListener("click", ()=>setScreen("settings"));
+    document.getElementById("openSettings").addEventListener("click", ()=>setScreen("settings"));
     document.getElementById("closeSettings").addEventListener("click", ()=>setScreen("calendar"));
     document.getElementById("prevMonth").addEventListener("click", async ()=>{
       state.viewMonth--;
@@ -1852,9 +1858,9 @@ document.getElementById("openSettings").addEventListener("click", ()=>setScreen(
     document.getElementById("exportBtn").addEventListener("click", exportData);
     document.getElementById("importBtn").addEventListener("click", importData);
 
-    document.getElementById("unlockBtn").addEventListener("click", unlock);
-    document.getElementById("guestBtn").addEventListener("click", guest);
-    document.getElementById("saveCode").addEventListener("click", saveCode);
+    document.getElementById("backupMake").addEventListener("click", makeBackup);
+    document.getElementById("backupRestore").addEventListener("click", restoreBackup);
+    setBackupInfo();
 
     els.syncSelect.addEventListener("change", async ()=>{
       state.syncMode = els.syncSelect.value;
@@ -1865,39 +1871,35 @@ document.getElementById("openSettings").addEventListener("click", ()=>setScreen(
       await refreshAll();
     });
 
-    bindTap(document.getElementById("loginBtn"), async ()=>{
-      if(state.syncMode !== "firebase"){
-        state.syncMode = "firebase";
-        els.syncSelect.value = "firebase";
-        setStatus("firebase");
-      }
-      if(!window.__fbReady){ await initFirebase(); }
-      await doLogin();
-    });
-    bindTap(document.getElementById("logoutBtn"), async ()=>{
-      if(!window.__fbReady){ await initFirebase(); }
-      await doLogout();
-    });
+    document.getElementById("loginBtn").addEventListener("click", doLogin);
+    document.getElementById("logoutBtn").addEventListener("click", doLogout);
 
-    
-    const daysGridEl = document.getElementById("daysGrid") || document.querySelector(".daysGrid") || document.querySelector(".days-grid");
-    if(daysGridEl){
-      const onDayTap = async (e)=>{
-        const dayEl = e.target.closest(".day");
-        if(!dayEl || !dayEl.dataset.date) return;
+    /* Kalender dag klik fix: bind aan daysGrid (iOS PWA stabiel) */
+    const bindDaysGrid = ()=>{
+      const grid = els.daysGrid;
+      if(!grid) return;
+      if(grid.dataset.boundDayTap === "1") return;
+      grid.dataset.boundDayTap = "1";
+
+      const onTap = async (ev)=>{
+        const dayEl = ev.target.closest(".day");
+        if(!dayEl) return;
         const ds = dayEl.dataset.date;
+        if(!ds) return;
         state.selectedDate = ds;
         await renderCalendar();
         const items = await dayItems(ds);
         openModal(ds, items);
       };
-      daysGridEl.addEventListener("click", onDayTap);
-      daysGridEl.addEventListener("pointerup", onDayTap);
-      daysGridEl.addEventListener("touchend", onDayTap, {passive:true});
-    }
 
-document.addEventListener("click", async (e)=>{
+      grid.addEventListener("pointerup", onTap);
+      grid.addEventListener("click", onTap);
+      grid.addEventListener("touchend", onTap, { passive:true });
+    };
+    bindDaysGrid();
 
+
+     document.addEventListener("click", async (e)=>{
       const quick = e.target.closest("[data-quick]");
       if(quick){
         const f = quick.dataset.quick;
