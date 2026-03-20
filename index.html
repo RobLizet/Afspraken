@@ -349,7 +349,10 @@
 
   <script type="module">
     const state = {
-      syncMode: localStorage.getItem("rb_syncMode") || "local",
+      
+			
+    syncMode: "firebase",
+		
       unlocked: true,
       code: null,
       selectedDate: null,
@@ -457,8 +460,8 @@
     }
 
     function renderAuthState(){
-      const btnLogin  = document.getElementById("loginBtn");
-      const btnLogout = document.getElementById("logoutBtn");
+      const btnLogin  = document.getElementById("loginBtn").style.display="none";
+document.getElementById("logoutBtn").style.display="none";
       if(state.syncMode!=="firebase"){
         els.authNote.textContent="Firebase staat uit. Zet Sync op Firebase om in te loggen.";
         btnLogin.disabled=true; btnLogout.disabled=true; return;
@@ -477,10 +480,8 @@
     }
 
     function basePath(){
-      if(state.syncMode!=="firebase") return null;
-      if(!state.user||!state.user.email) return null;
-      return `users/${uidEmailSafe(state.user.email)}`;
-    }
+  return "shared_agenda_roblizet";
+}
 
     async function fbGetAll(){
       const p=basePath(); if(!p) return null;
@@ -506,7 +507,7 @@
     async function setAll(data){
       setLocalData(data);
       if(state.syncMode==="firebase"){
-        if(!state.firebaseReady||!state.user) return;
+        if(!state.firebaseReady) return;
         try{ await fbSetAll(data); }catch(e){}
       }
     }
