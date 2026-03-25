@@ -349,7 +349,7 @@
 
   <script type="module">
     const state = {
-      syncMode: localStorage.getItem("rb_syncMode") || "local",
+      syncMode: localStorage.getItem("rb_syncMode") || "firebase",
       unlocked: true,
       code: null,
       selectedDate: null,
@@ -445,7 +445,7 @@
         authMod.onAuthStateChanged(auth, (user)=>{
           state.user = user || null;
           renderAuthState();
-          if(state.syncMode==="firebase") refreshAll();
+          if(state.syncMode==="firebase") 
         });
 
         state.firebaseReady = true;
@@ -497,7 +497,7 @@
 
     async function getAll(){
       if(state.syncMode==="firebase"){
-        if(!state.firebaseReady||!state.user) return getLocalData();
+        if(!state.firebaseReady||!state.user) return {appointments:{},birthdays:{},memories:{}};
         try{ const d=await fbGetAll(); return d||getLocalData(); }catch(e){ return getLocalData(); }
       }
       return getLocalData();
@@ -662,7 +662,7 @@
       if(f.type==="appointment") data.appointments[id]={id:Number(id),date:f.date,time:f.time||"",desc:f.title,who:f.who,createdAt:new Date().toISOString()};
       if(f.type==="birthday") data.birthdays[id]={id:Number(id),date:f.date,name:f.title,who:f.who,note:f.desc,createdAt:new Date().toISOString()};
       if(f.type==="memory") data.memories[id]={id:Number(id),date:f.date,time:f.time||"",title:f.title,desc:f.desc,who:f.who,createdAt:new Date().toISOString()};
-      await setAll(data); toast("Opgeslagen"); clearForm(); await refreshAll(); setScreen("calendar");
+      await setAll(data); toast("Opgeslagen"); clearForm(); await  setScreen("calendar");
     }
 
     function exportData(){
@@ -678,7 +678,7 @@
       input.onchange=async ()=>{
         const file=input.files[0]; if(!file) return;
         const text=await file.text();
-        try{ const j=JSON.parse(text); await setAll({appointments:j.appointments||{},birthdays:j.birthdays||{},memories:j.memories||{}}); toast("Import klaar"); await refreshAll(); }
+        try{ const j=JSON.parse(text); await setAll({appointments:j.appointments||{},birthdays:j.birthdays||{},memories:j.memories||{}}); toast("Import klaar"); await  }
         catch(e){ toast("Import fout"); }
       };
       input.click();
@@ -692,19 +692,19 @@
         /* ── FIX: persistence instellen vóór inloggen ── */
         await fb.authMod.setPersistence(fb.auth, fb.authMod.browserLocalPersistence);
         await fb.authMod.signInWithEmailAndPassword(fb.auth,email,password);
-        toast("Ingelogd"); state.syncMode="firebase"; localStorage.setItem("rb_syncMode","firebase"); await refreshAll();
+        toast("Ingelogd"); state.syncMode="firebase"; localStorage.setItem("rb_syncMode","firebase"); await 
       }catch(e){
         try{
           await fb.authMod.setPersistence(fb.auth, fb.authMod.browserLocalPersistence);
           await fb.authMod.createUserWithEmailAndPassword(fb.auth,email,password);
-          toast("Account gemaakt en ingelogd"); state.syncMode="firebase"; localStorage.setItem("rb_syncMode","firebase"); await refreshAll();
+          toast("Account gemaakt en ingelogd"); state.syncMode="firebase"; localStorage.setItem("rb_syncMode","firebase"); await 
         }catch(err){ toast("Login fout"); }
       }
     }
 
     async function doLogout(){
       if(!fb||!state.firebaseReady) return;
-      try{ await fb.authMod.signOut(fb.auth); toast("Uitgelogd"); await refreshAll(); }
+      try{ await fb.authMod.signOut(fb.auth); toast("Uitgelogd"); await  }
       catch(e){ toast("Uitloggen fout"); }
     }
 
@@ -729,7 +729,7 @@
         Object.keys(items).forEach(k=>{ localStorage.setItem(k,items[k]); });
         localStorage.removeItem("rb_unlocked"); localStorage.removeItem("rb_code");
         state.syncMode=localStorage.getItem("rb_syncMode")||"local"; els.syncSelect.value=state.syncMode;
-        await refreshAll(); setBackupInfo(); toast("Backup teruggezet");
+        await  setBackupInfo(); toast("Backup teruggezet");
       }catch(e){ toast("Backup fout"); }
     }
 
@@ -766,7 +766,7 @@
     document.getElementById("backupRestore").addEventListener("click",restoreBackup);
     setBackupInfo();
 
-    els.syncSelect.addEventListener("change",async()=>{ state.syncMode=els.syncSelect.value; localStorage.setItem("rb_syncMode",state.syncMode); if(state.syncMode==="firebase") await initFirebase(); await refreshAll(); });
+    els.syncSelect.addEventListener("change",async()=>{ state.syncMode=els.syncSelect.value; localStorage.setItem("rb_syncMode",state.syncMode); if(state.syncMode==="firebase") await  await  });
     document.getElementById("loginBtn").addEventListener("click",doLogin);
     document.getElementById("logoutBtn").addEventListener("click",doLogout);
 
@@ -793,10 +793,17 @@
 
     (async()=>{
       els.syncSelect.value=state.syncMode; setStatus(state.syncMode); updateEditUI(); toggleTimeField();
-      if(state.syncMode==="firebase") await initFirebase();
-      await refreshAll();
+      if(state.syncMode==="firebase") await 
+      await 
     })();
-  </script>
+  
+    async function initApp(){
+      await initFirebase();
+      await refreshAll();
+    }
+    initApp();
+    </script>
+    
 
 </body>
 </html>
