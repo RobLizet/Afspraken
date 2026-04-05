@@ -6,6 +6,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Onze Agenda"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+  <meta name="theme-color" content="#ffd7e6"/>
+  <!-- Android PWA -->
+  <link rel="manifest" href="manifest.json"/>
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png"/>
+  <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png"/>
+  <link rel="apple-touch-icon" href="icon-512.png"/>
   <title>Onze Agenda - Rob &amp; Lizet</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800&amp;display=swap">
@@ -202,121 +210,118 @@
       </div>
     </div>
 
-```
-<div id="screenList" class="screen">
-  <div class="grid">
-    <div class="statCard">
-      <div class="statTop">
-        <div><p class="statTitle">Deze maand</p><p class="statHint">Aantal afspraken in deze maand.</p></div>
-        <button class="btn small" data-quick="month">Snel zien</button>
-      </div>
-      <div class="statValue" id="statMonth">0</div>
-    </div>
-    <div class="statCard">
-      <div class="statTop">
-        <div><p class="statTitle">Vandaag</p><p class="statHint">Aantal afspraken vandaag.</p></div>
-        <button class="btn small" data-quick="today">Snel zien</button>
-      </div>
-      <div class="statValue" id="statToday">0</div>
-    </div>
-    <div class="statCard">
-      <div class="statTop">
-        <div><p class="statTitle">Verjaardagen</p><p class="statHint">Aantal verjaardagen opgeslagen.</p></div>
-        <button class="btn small" data-quick="birthdays">Overzicht</button>
-      </div>
-      <div class="statValue" id="statBirthdays">0</div>
-    </div>
-    <div class="itemCard" id="listHintCard">
-      <div class="row">
-        <div>
-          <p class="statTitle" style="margin:0">Kies een dag in de kalender</p>
-          <p class="sub" style="margin:4px 0 0">Privé</p>
+    <div id="screenList" class="screen">
+      <div class="grid">
+        <div class="statCard">
+          <div class="statTop">
+            <div><p class="statTitle">Deze maand</p><p class="statHint">Aantal afspraken in deze maand.</p></div>
+            <button class="btn small" data-quick="month">Snel zien</button>
+          </div>
+          <div class="statValue" id="statMonth">0</div>
         </div>
-        <div style="display:flex;gap:10px;align-items:center">
-          <button class="btn" id="exportBtn">Export</button>
-          <button class="btn" id="importBtn">Import</button>
+        <div class="statCard">
+          <div class="statTop">
+            <div><p class="statTitle">Vandaag</p><p class="statHint">Aantal afspraken vandaag.</p></div>
+            <button class="btn small" data-quick="today">Snel zien</button>
+          </div>
+          <div class="statValue" id="statToday">0</div>
         </div>
+        <div class="statCard">
+          <div class="statTop">
+            <div><p class="statTitle">Verjaardagen</p><p class="statHint">Aantal verjaardagen opgeslagen.</p></div>
+            <button class="btn small" data-quick="birthdays">Overzicht</button>
+          </div>
+          <div class="statValue" id="statBirthdays">0</div>
+        </div>
+        <div class="itemCard" id="listHintCard">
+          <div class="row">
+            <div>
+              <p class="statTitle" style="margin:0">Kies een dag in de kalender</p>
+              <p class="sub" style="margin:4px 0 0">Privé</p>
+            </div>
+            <div style="display:flex;gap:10px;align-items:center">
+              <button class="btn" id="exportBtn">Export</button>
+              <button class="btn" id="importBtn">Import</button>
+            </div>
+          </div>
+        </div>
+        <div class="listCards" id="listCards"></div>
+        <button class="btn" id="backToCalendar" style="width:100%">Terug</button>
       </div>
     </div>
-    <div class="listCards" id="listCards"></div>
-    <button class="btn" id="backToCalendar" style="width:100%">Terug</button>
-  </div>
-</div>
 
-<div id="screenAdd" class="screen">
-  <div class="formCard">
-    <div class="row">
-      <div><h2>Toevoegen</h2><p class="sub">Sla alles op, lokaal of in Firebase</p></div>
+    <div id="screenAdd" class="screen">
+      <div class="formCard">
+        <div class="row">
+          <div><h2>Toevoegen</h2><p class="sub">Sla alles op, lokaal of in Firebase</p></div>
+        </div>
+        <div class="field">
+          <label for="typeSelect">Soort</label>
+          <select id="typeSelect">
+            <option value="appointment">Afspraak</option>
+            <option value="birthday">Verjaardag</option>
+            <option value="memory">Herinnering</option>
+          </select>
+        </div>
+        <div class="field"><label for="titleInput">Titel</label><input id="titleInput" placeholder="Bijv. Etentje Theo"></div>
+        <div class="field"><label for="dateInput">Datum</label><input id="dateInput" type="date"></div>
+        <div class="field" id="timeField"><label for="timeInput">Tijd</label><input id="timeInput" type="time"></div>
+        <div class="field"><label for="descInput">Beschrijving</label><textarea id="descInput" placeholder="Extra info"></textarea></div>
+        <div class="field">
+          <label for="whoSelect">Wie</label>
+          <select id="whoSelect">
+            <option value="rob">Rob</option>
+            <option value="lizet">Lizet</option>
+            <option value="samen">Samen</option>
+          </select>
+        </div>
+        <div class="actions">
+          <button class="btn primary" id="saveBtn">Opslaan</button>
+          <button class="btn" id="clearBtn">Leegmaken</button>
+        </div>
+        <hr class="hr">
+        <p class="note">Tips. Titel is verplicht. Voor afspraken is datum verplicht.</p>
+      </div>
     </div>
-    <div class="field">
-      <label for="typeSelect">Soort</label>
-      <select id="typeSelect">
-        <option value="appointment">Afspraak</option>
-        <option value="birthday">Verjaardag</option>
-        <option value="memory">Herinnering</option>
-      </select>
-    </div>
-    <div class="field"><label for="titleInput">Titel</label><input id="titleInput" placeholder="Bijv. Etentje Theo"></div>
-    <div class="field"><label for="dateInput">Datum</label><input id="dateInput" type="date"></div>
-    <div class="field" id="timeField"><label for="timeInput">Tijd</label><input id="timeInput" type="time"></div>
-    <div class="field"><label for="descInput">Beschrijving</label><textarea id="descInput" placeholder="Extra info"></textarea></div>
-    <div class="field">
-      <label for="whoSelect">Wie</label>
-      <select id="whoSelect">
-        <option value="rob">Rob</option>
-        <option value="lizet">Lizet</option>
-        <option value="samen">Samen</option>
-      </select>
-    </div>
-    <div class="actions">
-      <button class="btn primary" id="saveBtn">Opslaan</button>
-      <button class="btn" id="clearBtn">Leegmaken</button>
-    </div>
-    <hr class="hr">
-    <p class="note">Tips. Titel is verplicht. Voor afspraken is datum verplicht.</p>
-  </div>
-</div>
 
-<div id="screenInfo" class="screen">
-  <div class="settingsCard">
-    <div class="row">
-      <div><h2>Info</h2><p class="sub">Made by Rob Borghouts 2026</p></div>
+    <div id="screenInfo" class="screen">
+      <div class="settingsCard">
+        <div class="row">
+          <div><h2>Info</h2><p class="sub">Made by Rob Borghouts 2026</p></div>
+        </div>
+        <p class="note" id="infoText">Gebruik de tabs onderin. Kies Sync in instellingen.</p>
+      </div>
     </div>
-    <p class="note" id="infoText">Gebruik de tabs onderin. Kies Sync in instellingen.</p>
-  </div>
-</div>
 
-<div id="screenSettings" class="screen">
-  <div class="settingsCard">
-    <div class="row">
-      <div><h2>Instellingen</h2><p class="sub">Backup maken en terugzetten, plus sync instellingen.</p></div>
-      <button class="btn" id="closeSettings">Sluiten</button>
+    <div id="screenSettings" class="screen">
+      <div class="settingsCard">
+        <div class="row">
+          <div><h2>Instellingen</h2><p class="sub">Backup maken en terugzetten, plus sync instellingen.</p></div>
+          <button class="btn" id="closeSettings">Sluiten</button>
+        </div>
+        <hr class="hr">
+        <div class="row">
+          <button class="btn primary" id="backupMake">Backup maken</button>
+          <button class="btn" id="backupRestore">Backup terugzetten</button>
+        </div>
+        <p class="note" id="backupInfo"></p>
+        <hr class="hr">
+        <div class="field">
+          <label for="syncSelect">Sync</label>
+          <select id="syncSelect">
+            <option value="local">Lokaal</option>
+            <option value="firebase">Firebase</option>
+          </select>
+        </div>
+        <p class="note">Delen met Lizet werkt via Firebase, of anders via export en import.</p>
+        <hr class="hr">
+        <div class="authBox">
+          <button class="btn" id="loginBtn">Inloggen</button>
+          <button class="btn" id="logoutBtn">Uitloggen</button>
+        </div>
+        <p class="note" id="authNote"></p>
+      </div>
     </div>
-    <hr class="hr">
-    <div class="row">
-      <button class="btn primary" id="backupMake">Backup maken</button>
-      <button class="btn" id="backupRestore">Backup terugzetten</button>
-    </div>
-    <p class="note" id="backupInfo"></p>
-    <hr class="hr">
-    <div class="field">
-      <label for="syncSelect">Sync</label>
-      <select id="syncSelect">
-        <option value="local">Lokaal</option>
-        <option value="firebase">Firebase</option>
-      </select>
-    </div>
-    <p class="note">Delen met Lizet werkt via Firebase, of anders via export en import.</p>
-    <hr class="hr">
-    <div class="authBox">
-      <button class="btn" id="loginBtn">Inloggen</button>
-      <button class="btn" id="logoutBtn">Uitloggen</button>
-    </div>
-    <p class="note" id="authNote"></p>
-  </div>
-</div>
-```
-
   </div>
 
   <div class="tabs">
@@ -437,7 +442,6 @@
         const auth = authMod.getAuth(app);
         const db   = dbMod.getDatabase(app);
 
-        /* ── FIX: blijf ingelogd ook na sluiten PWA ── */
         await authMod.setPersistence(auth, authMod.browserLocalPersistence);
 
         fb = {app, auth, db, authMod, dbMod};
@@ -689,7 +693,6 @@
       const email=prompt("Email voor agenda login"); if(!email) return;
       const password=prompt("Wachtwoord"); if(!password) return;
       try{
-        /* ── FIX: persistence instellen vóór inloggen ── */
         await fb.authMod.setPersistence(fb.auth, fb.authMod.browserLocalPersistence);
         await fb.authMod.signInWithEmailAndPassword(fb.auth,email,password);
         toast("Ingelogd"); state.syncMode="firebase"; localStorage.setItem("rb_syncMode","firebase"); await refreshAll();
@@ -790,6 +793,15 @@
 
     document.addEventListener("keydown",(e)=>{ if(e.key==="Escape") closeModal(); });
     document.getElementById("modalGoList").addEventListener("click",()=>{ closeModal(); setScreen("list"); renderList(); });
+
+    // ── Service Worker (Android PWA installatie) ──────────────
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./sw.js")
+          .then(() => {})
+          .catch(() => {});
+      });
+    }
 
     (async()=>{
       els.syncSelect.value=state.syncMode; setStatus(state.syncMode); updateEditUI(); toggleTimeField();
