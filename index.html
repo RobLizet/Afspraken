@@ -1,0 +1,114 @@
+<!doctype html>
+
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Onze Agenda - Meldingen Fix</title>
+</head>
+<body><button onclick="initFCM()">🔔 Meldingen inschakelen</button> <button onclick="testMelding()">Test melding</button>
+
+<script>
+
+function toast(msg){ console.log(msg); }
+
+function getMeldingen(){
+  return JSON.parse(localStorage.getItem("rb_meldingen") || "[]");
+}
+
+function setMeldingen(list){
+  localStorage.setItem("rb_meldingen", JSON.stringify(list));
+}
+
+async function initFCM(){
+  if(!("Notification" in window)){
+    alert("Niet ondersteund");
+    return;
+  }
+
+  if(Notification.permission === "denied"){
+    alert("Geblokkeerd in browser");
+    return;
+  }
+
+  const permission = await Notification.requestPermission();
+
+  if(permission === "granted"){
+    alert("Meldingen aan");
+  } else {
+    alert("Geweigerd");
+  }
+}
+
+function showNotif(titel, tekst){
+  if (Notification.permission === "granted") {
+    navigator.serviceWorker.getRegistration().then(reg => {
+      if(reg){
+        reg.showNotification(titel, {
+          body: tekst,
+          icon: "./icon-192.png"
+        });
+      } else {
+        new Notification(titel, { body: tekst });
+      }
+    });
+  }
+}
+
+function scheduleOne(titel, tekst, tijd){
+  const delay = tijd - Date.now();
+
+  if(delay <= 0){
+    showNotif(titel, tekst);
+    return;
+  }
+
+  setTimeout(() => {
+    showNotif(titel, tekst);
+
+    let list = getMeldingen();
+    list = list.filter(m => m.tijd !== tijd);
+    setMeldingen(list);
+
+  }, delay);
+}
+
+async function planMelding(titel, tekst, datumTijd){
+  const tijd = new Date(datumTijd).getTime();
+
+  if(tijd <= Date.now()){
+    toast("Verleden");
+    return;
+  }
+
+  const list = getMeldingen();
+  list.push({ id: Date.now(), titel, tekst, tijd });
+  setMeldingen(list);
+
+  scheduleOne(titel, tekst, tijd);
+
+  toast("Gepland");
+}
+
+function restoreMeldingen(){
+  const list = getMeldingen();
+  list.forEach(m => {
+    if(m.tijd > Date.now()){
+      scheduleOne(m.titel, m.tekst, m.tijd);
+    }
+  });
+}
+
+function testMelding(){
+  const t = new Date(Date.now() + 60000).toISOString();
+  planMelding("Test", "Werkt dit?", t);
+}
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/firebase-messaging-sw.js');
+}
+
+restoreMeldingen();
+
+</script></body>
+</html>
