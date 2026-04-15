@@ -839,9 +839,13 @@
 
     async function initFCM(){
       try{
-        if(!("Notification" in window)) return;
+        if(!("Notification" in window)){ toast("Browser ondersteunt geen meldingen"); return; }
+        if(!("serviceWorker" in navigator)){ toast("Service Worker niet beschikbaar"); return; }
+
         const permission = await Notification.requestPermission();
-        if(permission !== "granted"){ toast("Meldingen geweigerd"); return; }
+        if(permission !== "granted"){ toast("Meldingen geweigerd – check Android instellingen"); return; }
+
+        const swReg = await navigator.serviceWorker.ready;
 
         const { initializeApp, getApps } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");
         const { getMessaging, getToken, onMessage } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js");
@@ -859,11 +863,11 @@
         const fcmApp = getApps().find(a=>a.name==="fcm") || initializeApp(fcmConfig, "fcm");
         const messaging = getMessaging(fcmApp);
 
-        const token = await getToken(messaging, { vapidKey: FCM_VAPID });
+        const token = await getToken(messaging, { vapidKey: FCM_VAPID, serviceWorkerRegistration: swReg });
+        if(!token){ toast("Geen token – probeer opnieuw"); return; }
         localStorage.setItem("fcm_token", token);
-        console.log("FCM klaar ✓");
+        console.log("FCM token:", token);
 
-        // Melding ontvangen terwijl app OPEN is
         onMessage(messaging, payload => {
           const { title, body } = payload.notification || {};
           if(title) new Notification(title, { body: body||"", icon: "./icon-192.png" });
@@ -871,7 +875,8 @@
 
         toast("Meldingen ingeschakeld ✓");
       }catch(e){
-        console.warn("FCM fout:", e);
+        console.error("FCM fout:", e);
+        toast("Fout: " + e.message);
       }
     }
 
