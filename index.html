@@ -266,6 +266,15 @@
         <div class="field"><label for="titleInput">Titel</label><input id="titleInput" placeholder="Bijv. Etentje Theo"></div>
         <div class="field"><label for="dateInput">Datum</label><input id="dateInput" type="date"></div>
         <div class="field" id="timeField"><label for="timeInput">Tijd</label><input id="timeInput" type="time"></div>
+        <div class="field" id="reminderField">
+          <label for="reminderSelect">Herinnering</label>
+          <select id="reminderSelect">
+            <option value="">Geen herinnering</option>
+            <option value="15">15 minuten van tevoren</option>
+            <option value="60">1 uur van tevoren</option>
+            <option value="1440">1 dag van tevoren</option>
+          </select>
+        </div>
         <div class="field"><label for="descInput">Beschrijving</label><textarea id="descInput" placeholder="Extra info"></textarea></div>
         <div class="field">
           <label for="whoSelect">Wie</label>
@@ -654,10 +663,16 @@
       document.getElementById("descInput").value="";
       document.getElementById("whoSelect").value="rob";
       document.getElementById("typeSelect").value="appointment";
+      document.getElementById("reminderSelect").value="";
       toggleTimeField();
     }
 
-    function toggleTimeField(){ const type=document.getElementById("typeSelect").value; document.getElementById("timeField").style.display=(type==="birthday")?"none":"block"; }
+    function toggleTimeField(){
+      const type=document.getElementById("typeSelect").value;
+      const isBirthday=(type==="birthday");
+      document.getElementById("timeField").style.display=isBirthday?"none":"block";
+      document.getElementById("reminderField").style.display=isBirthday?"none":"block";
+    }
 
     async function saveItem(){
       if(!isEditAllowed()){ toast("Gastmodus, bewerken uit"); return; }
@@ -666,7 +681,23 @@
       if(f.type==="appointment") data.appointments[id]={id:Number(id),date:f.date,time:f.time||"",desc:f.title,who:f.who,createdAt:new Date().toISOString()};
       if(f.type==="birthday") data.birthdays[id]={id:Number(id),date:f.date,name:f.title,who:f.who,note:f.desc,createdAt:new Date().toISOString()};
       if(f.type==="memory") data.memories[id]={id:Number(id),date:f.date,time:f.time||"",title:f.title,desc:f.desc,who:f.who,createdAt:new Date().toISOString()};
-      await setAll(data); toast("Opgeslagen"); clearForm(); await refreshAll(); setScreen("calendar");
+      await setAll(data);
+
+      // Herinnering inplannen indien gekozen
+      const herinnering = document.getElementById("reminderSelect").value;
+      if(herinnering && f.date && f.time){
+        const datumTijd = `${f.date}T${f.time}:00`;
+        const tijdstip = new Date(datumTijd).getTime() - (Number(herinnering) * 60 * 1000);
+        if(tijdstip > Date.now()){
+          await planMelding("📅 " + f.title, "Herinnering: " + f.title, new Date(tijdstip).toISOString());
+        } else {
+          toast("Opgeslagen (moment al voorbij voor herinnering)");
+        }
+      } else {
+        toast("Opgeslagen");
+      }
+
+      clearForm(); await refreshAll(); setScreen("calendar");
     }
 
     function exportData(){
@@ -797,11 +828,82 @@
     // ── Service Worker (Android PWA installatie) ──────────────
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
-        navigator.serviceWorker.register("./sw.js")
+        navigator.serviceWorker.register("./firebase-messaging-sw.js")
           .then(() => {})
           .catch(() => {});
       });
     }
+
+    // ── FCM PUSH MELDINGEN ────────────────────────────────────
+    const FCM_VAPID = "BHcSgoBWs8T5oiyoRR8lVHXOUIqQL6aqMAE86YnzPKrSTtaW-lw5UrZYb2NrHnyrJnMAAS4KK9rEuHvO-GVmOjw";
+
+    async function initFCM(){
+      try{
+        if(!("Notification" in window)) return;
+        const permission = await Notification.requestPermission();
+        if(permission !== "granted"){ toast("Meldingen geweigerd"); return; }
+
+        const { initializeApp, getApps } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");
+        const { getMessaging, getToken, onMessage } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js");
+
+        const fcmConfig = {
+          apiKey: "AIzaSyC5gP6H084hLqdczzVjhWdFXsqagTCAYkM",
+          authDomain: "agenda-roblizet.firebaseapp.com",
+          databaseURL: "https://agenda-roblizet-default-rtdb.europe-west1.firebasedatabase.app",
+          projectId: "agenda-roblizet",
+          storageBucket: "agenda-roblizet.firebasestorage.app",
+          messagingSenderId: "789902813974",
+          appId: "1:789902813974:web:3efeb3021381b3ca91fe37"
+        };
+
+        const fcmApp = getApps().find(a=>a.name==="fcm") || initializeApp(fcmConfig, "fcm");
+        const messaging = getMessaging(fcmApp);
+
+        const token = await getToken(messaging, { vapidKey: FCM_VAPID });
+        localStorage.setItem("fcm_token", token);
+        console.log("FCM klaar ✓");
+
+        // Melding ontvangen terwijl app OPEN is
+        onMessage(messaging, payload => {
+          const { title, body } = payload.notification || {};
+          if(title) new Notification(title, { body: body||"", icon: "./icon-192.png" });
+        });
+
+        toast("Meldingen ingeschakeld ✓");
+      }catch(e){
+        console.warn("FCM fout:", e);
+      }
+    }
+
+    // Herinnering inplannen – slaat op in Firebase zodat Cloud Function het verstuurt
+    async function planMelding(titel, tekst, datumTijd){
+      const token = localStorage.getItem("fcm_token");
+      if(!token){ toast("Schakel eerst meldingen in"); return; }
+      if(!fb || !state.firebaseReady || !state.user){ toast("Log eerst in"); return; }
+      const ref = fb.dbMod.push(fb.dbMod.ref(fb.db, "meldingen"));
+      await fb.dbMod.set(ref, {
+        token,
+        titel,
+        tekst,
+        tijdstip: new Date(datumTijd).getTime(),
+        verzonden: false
+      });
+      toast("Herinnering ingepland ✓");
+    }
+
+    // Knop toevoegen aan Instellingen-scherm
+    (function addMeldingBtn(){
+      const card = document.querySelector("#screenSettings .settingsCard");
+      if(!card) return;
+      const hr = document.createElement("hr"); hr.className="hr";
+      const btn = document.createElement("button");
+      btn.className="btn primary"; btn.textContent="🔔 Meldingen inschakelen";
+      btn.addEventListener("click", initFCM);
+      card.appendChild(hr); card.appendChild(btn);
+      const note = document.createElement("p"); note.className="note";
+      note.textContent="Schakel meldingen in zodat je herinneringen ontvangt, ook als de app gesloten is.";
+      card.appendChild(note);
+    })();
 
     (async()=>{
       els.syncSelect.value=state.syncMode; setStatus(state.syncMode); updateEditUI(); toggleTimeField();
