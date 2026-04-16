@@ -840,52 +840,53 @@
     // ── FCM PUSH MELDINGEN ────────────────────────────────────
     const FCM_VAPID = "BHcSgoBWs8T5oiyoRR8lVHXOUIqQL6aqMAE86YnzPKrSTtaW-lw5UrZYb2NrHnyrJnMAAS4KK9rEuHvO-GVmOjw";
 
-    async function initFCM(){
-      try{
-        if(!("Notification" in window)){ toast("Browser ondersteunt geen meldingen"); return; }
-        if(!("serviceWorker" in navigator)){ toast("Service Worker niet beschikbaar"); return; }
-
-        const permission = await Notification.requestPermission();
-        if(permission !== "granted"){ toast("Meldingen geweigerd – check Android instellingen"); return; }
-
-        // Gebruik bestaande SW registratie, geen nieuwe register() aanroep
-        const swReg = await Promise.race([
-          navigator.serviceWorker.ready,
-          new Promise((_, rej) => setTimeout(() => rej(new Error("SW niet beschikbaar na 15s")), 15000))
-        ]);
-
-        const { initializeApp, getApps } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");
-        const { getMessaging, getToken, onMessage } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js");
-
-        const fcmConfig = {
-          apiKey: "AIzaSyC5gP6H084hLqdczzVjhWdFXsqagTCAYkM",
-          authDomain: "agenda-roblizet.firebaseapp.com",
-          databaseURL: "https://agenda-roblizet-default-rtdb.europe-west1.firebasedatabase.app",
-          projectId: "agenda-roblizet",
-          storageBucket: "agenda-roblizet.firebasestorage.app",
-          messagingSenderId: "789902813974",
-          appId: "1:789902813974:web:3efeb3021381b3ca91fe37"
-        };
-
-        const fcmApp = getApps().find(a=>a.name==="fcm") || initializeApp(fcmConfig, "fcm");
-        const messaging = getMessaging(fcmApp);
-
-        const token = await getToken(messaging, { vapidKey: FCM_VAPID, serviceWorkerRegistration: swReg });
-        if(!token){ toast("Geen token – probeer opnieuw"); return; }
-        localStorage.setItem("fcm_token", token);
-        console.log("FCM token:", token);
-
-        onMessage(messaging, payload => {
-          const { title, body } = payload.notification || {};
-          if(title) new Notification(title, { body: body||"", icon: "./icon-192.png" });
-        });
-
-        toast("Meldingen ingeschakeld ✓");
-      }catch(e){
-        console.error("FCM fout:", e);
-        toast("Fout: " + (e.message||String(e)).substring(0,80));
-      }
+    async function initFCM() {
+  try {
+    if (!("Notification" in window)) {
+      toast("Browser ondersteunt geen meldingen");
+      return;
     }
+
+    const permission = await Notification.requestPermission();
+    if (permission !== "granted") {
+      toast("Meldingen geweigerd. Check Samsung instellingen.");
+      return;
+    }
+
+    const swReg = await navigator.serviceWorker.ready;
+
+    // Dit is de "import" die je niet snapte — dit is normaal zo
+    const { getMessaging, getToken, onMessage } = await import(
+      "https://www.gstatic.com/firebasejs/12.12.0/firebase-messaging.js"
+    );
+
+    const messaging = getMessaging();
+
+    const token = await getToken(messaging, {
+      vapidKey: "BHcSgoBWs8T5oiyoRR8lVHXOUIqQL6aqMAE86YnzPKrSTtaW-lw5UrZYb2NrHnyrJnMAAS4KK9rEuHvO-GVmOjw",
+      serviceWorkerRegistration: swReg
+    });
+
+    if (!token) {
+      toast("Geen token ontvangen");
+      return;
+    }
+
+    localStorage.setItem("fcm_token", token);
+    console.log("FCM Token:", token);
+
+    toast("🔔 Meldingen zijn nu ingeschakeld!");
+
+    // Als de app open is, toon toast in plaats van systeem melding
+    onMessage(messaging, (payload) => {
+      toast("📅 " + (payload.notification?.title || "Herinnering"));
+    });
+
+  } catch (e) {
+    console.error("Fout:", e);
+    toast("Fout bij meldingen: " + e.message);
+  }
+}
 
     // Herinnering inplannen – slaat op in Firebase zodat Cloud Function het verstuurt
     async function planMelding(titel, tekst, datumTijd){
