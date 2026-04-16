@@ -147,6 +147,17 @@
     .authBox{display:flex;gap:10px;align-items:center;justify-content:flex-end;flex-wrap:wrap;}
     .settingsCard{background:rgba(255,255,255,0.80);border:1px solid rgba(28,35,48,0.10);border-radius:26px;padding:16px;box-shadow:var(--shadow);}
     .note{margin:10px 0 0;color:var(--muted);font-size:13px;line-height:1.4;}
+    .btn.danger{background:rgba(255,80,80,0.12);border-color:rgba(255,80,80,0.22);color:#c0392b;}
+    .btn.edit{background:rgba(107,182,255,0.15);border-color:rgba(107,182,255,0.28);color:#1a6fa8;}
+    .btn.android{background:rgba(61,220,132,0.15);border-color:rgba(61,220,132,0.30);color:#1a7a48;}
+    .itemActions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px;}
+    .editingBadge{display:inline-block;padding:4px 10px;background:rgba(107,182,255,0.18);border:1px solid rgba(107,182,255,0.30);border-radius:999px;font-size:12px;font-weight:900;color:#1a6fa8;margin-bottom:8px;}
+    .confirmOverlay{position:fixed;inset:0;display:none;z-index:100;background:rgba(15,18,28,0.35);backdrop-filter:blur(10px);align-items:center;justify-content:center;}
+    .confirmOverlay.open{display:flex;}
+    .confirmCard{max-width:360px;width:calc(100% - 32px);background:rgba(255,255,255,0.95);border:1px solid rgba(28,35,48,0.12);border-radius:26px;padding:22px 18px;box-shadow:0 30px 80px rgba(0,0,0,0.22);}
+    .confirmTitle{font-weight:900;font-size:18px;margin:0 0 8px;}
+    .confirmText{color:var(--muted);font-size:14px;margin:0 0 18px;}
+    .confirmActions{display:flex;gap:10px;justify-content:flex-end;}
   </style>
 </head>
 <body>
@@ -253,7 +264,11 @@
     <div id="screenAdd" class="screen">
       <div class="formCard">
         <div class="row">
-          <div><h2>Toevoegen</h2><p class="sub">Sla alles op, lokaal of in Firebase</p></div>
+          <div>
+            <div id="editingBadge" class="editingBadge" style="display:none">✏️ Bewerken</div>
+            <h2 id="addFormTitle">Toevoegen</h2><p class="sub">Sla alles op, lokaal of in Firebase</p>
+          </div>
+          <button class="btn ghost" id="cancelEditBtn" style="display:none">Annuleer</button>
         </div>
         <div class="field">
           <label for="typeSelect">Soort</label>
@@ -344,6 +359,18 @@
 
   <div class="toast" id="toast"></div>
 
+  <!-- Bevestig verwijderen dialoog -->
+  <div class="confirmOverlay" id="confirmOverlay">
+    <div class="confirmCard">
+      <p class="confirmTitle">Verwijderen?</p>
+      <p class="confirmText" id="confirmText">Weet je zeker dat je dit wilt verwijderen?</p>
+      <div class="confirmActions">
+        <button class="btn" id="confirmNo">Annuleren</button>
+        <button class="btn danger" id="confirmYes">Verwijderen</button>
+      </div>
+    </div>
+  </div>
+
   <div class="modalOverlay" id="dayModal" aria-hidden="true">
     <div class="modalCard" role="dialog" aria-modal="true" aria-labelledby="modalHead">
       <div class="modalTop">
@@ -362,6 +389,9 @@
   </div>
 
   <script type="module">
+    // ── EDIT STATE ──────────────────────────────────────────────
+    let editingItem = null; // { type, id } when editing
+
     const state = {
       syncMode: localStorage.getItem("rb_syncMode") || "firebase",
       unlocked: true,
@@ -530,7 +560,7 @@
       document.getElementById("clearBtn").disabled=!isEditAllowed();
     }
 
-    function openModal(dateStr,items){
+    function openModal(dateStr,items,rawData){
       els.modalDate.textContent=dateStr;
       els.modalList.innerHTML="";
       if(!items||items.length===0){
@@ -540,7 +570,14 @@
         items.forEach(it=>{
           const card=document.createElement("div");
           card.className="itemCard";
-          card.innerHTML=`<div class="itemRow"><div class="itemMain"><div class="row" style="align-items:flex-start"><div style="min-width:0"><p class="itemTitle" style="margin:0 0 6px">${escapeHtml(it.title||"(zonder titel)")}</p><div class="chips"><span class="chip ${it.kindChip}">${it.kindLabel}</span>${it.date?`<span class="chip">${it.date}</span>`:""}${it.time?`<span class="chip">${it.time}</span>`:""}${it.who?`<span class="chip muted">${escapeHtml(it.who)}</span>`:""}</div>${it.desc?`<p class="sub" style="margin:10px 0 0">${escapeHtml(it.desc)}</p>`:""}</div></div></div></div>`;
+          // Android calendar intent URL
+          const androidCalUrl = buildAndroidCalUrl(it);
+          card.innerHTML=`<div class="itemRow"><div class="itemMain"><div class="row" style="align-items:flex-start"><div style="min-width:0"><p class="itemTitle" style="margin:0 0 6px">${escapeHtml(it.title||"(zonder titel)")}</p><div class="chips"><span class="chip ${it.kindChip}">${it.kindLabel}</span>${it.date?`<span class="chip">${it.date}</span>`:""}${it.time?`<span class="chip">${it.time}</span>`:""}${it.who?`<span class="chip muted">${escapeHtml(it.who)}</span>`:""}</div>${it.desc?`<p class="sub" style="margin:10px 0 0">${escapeHtml(it.desc)}</p>`:""}</div></div></div></div>
+          <div class="itemActions">
+            <button class="btn small edit" data-edit-type="${it.type}" data-edit-id="${it.id}">✏️ Wijzigen</button>
+            <button class="btn small danger" data-del-type="${it.type}" data-del-id="${it.id}" data-del-title="${escapeHtml(it.title||'')}">🗑 Verwijderen</button>
+            ${it.date ? `<a class="btn small android" href="${androidCalUrl}" target="_blank">📅 Android Agenda</a>` : ""}
+          </div>`;
           els.modalList.appendChild(card);
         });
       }
@@ -557,12 +594,49 @@
 
     function escapeHtml(s){ return String(s).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;"); }
 
+    // ── ANDROID AGENDA KOPPELING ────────────────────────────────
+    function buildAndroidCalUrl(it){
+      // Gebruikt web-calendar-intent die door Android wordt opgepikt
+      const title = encodeURIComponent(it.title || "Afspraak");
+      const desc  = encodeURIComponent(it.desc  || "");
+      let begin = "", end = "";
+      if(it.date){
+        const timeStr = it.time || "09:00";
+        const [h,m] = timeStr.split(":").map(Number);
+        const dtStart = new Date(`${it.date}T${String(h).padStart(2,"0")}:${String(m||0).padStart(2,"0")}:00`);
+        const dtEnd   = new Date(dtStart.getTime() + 60*60*1000); // +1 uur standaard
+        const fmt = d => d.toISOString().replace(/[-:]/g,"").replace(/\.\d{3}/,"");
+        begin = fmt(dtStart);
+        end   = fmt(dtEnd);
+      }
+      // Google Calendar web – Android opent dit native als je Google Calendar hebt
+      return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${begin}/${end}&details=${desc}`;
+    }
+
+    // ── CONFIRM DIALOOG ─────────────────────────────────────────
+    let _confirmResolve = null;
+    function showConfirm(title, text){
+      return new Promise(resolve => {
+        _confirmResolve = resolve;
+        document.getElementById("confirmText").textContent = text;
+        document.getElementById("confirmOverlay").classList.add("open");
+      });
+    }
+    document.getElementById("confirmNo").addEventListener("click",()=>{
+      document.getElementById("confirmOverlay").classList.remove("open");
+      if(_confirmResolve){ _confirmResolve(false); _confirmResolve=null; }
+    });
+    document.getElementById("confirmYes").addEventListener("click",()=>{
+      document.getElementById("confirmOverlay").classList.remove("open");
+      if(_confirmResolve){ _confirmResolve(true); _confirmResolve=null; }
+    });
+
     async function dayItems(dateStr){
       const data=await getAll();
       const items=[];
-      Object.values(data.appointments||{}).forEach(a=>{ if(a&&a.date===dateStr) items.push({type:"appointment",kindLabel:"Afspraak",kindChip:"a",title:a.desc||a.title||"(zonder titel)",date:a.date,time:a.time||"",who:a.who||"",desc:a.location?`Locatie: ${a.location}`:""}); });
-      Object.values(data.birthdays||{}).forEach(b=>{ if(b&&b.date===dateStr) items.push({type:"birthday",kindLabel:"Verjaardag",kindChip:"b",title:b.name||b.title||"(verjaardag)",date:b.date,time:"",who:b.who||"",desc:b.note||""}); });
-      Object.values(data.memories||{}).forEach(m=>{ if(m&&m.date===dateStr) items.push({type:"memory",kindLabel:"Herinnering",kindChip:"m",title:m.title||m.desc||"(herinnering)",date:m.date,time:m.time||"",who:m.who||"",desc:m.desc||""}); });
+      Object.entries(data.appointments||{}).forEach(([id,a])=>{ if(a&&a.date===dateStr) items.push({type:"appointment",id,kindLabel:"Afspraak",kindChip:"a",title:a.desc||a.title||"(zonder titel)",date:a.date,time:a.time||"",who:a.who||"",desc:a.location?`Locatie: ${a.location}`:""}); });
+      Object.entries(data.birthdays||{}).forEach(([id,b])=>{ if(b&&b.date===dateStr) items.push({type:"birthday",id,kindLabel:"Verjaardag",kindChip:"b",title:b.name||b.title||"(verjaardag)",date:b.date,time:"",who:b.who||"",desc:b.note||""}); });
+      Object.entries(data.memories||{}).forEach(([id,m])=>{ if(m&&m.date===dateStr) items.push({type:"memory",id,kindLabel:"Herinnering",kindChip:"m",title:m.title||m.desc||"(herinnering)",date:m.date,time:m.time||"",who:m.who||"",desc:m.desc||""}); });
       items.sort((x,y)=>(x.time||"99:99").localeCompare(y.time||"99:99"));
       return items;
     }
@@ -623,9 +697,9 @@
     async function renderList(filter){
       const data=await getAll(); const cards=els.listCards; cards.innerHTML="";
       let items=[];
-      Object.values(data.appointments||{}).forEach(a=>{ if(!a) return; items.push({type:"appointment",kindLabel:"Afspraak",kindChip:"a",title:a.desc||a.title||"(zonder titel)",date:a.date||"",time:a.time||"",who:a.who||"",desc:a.location||""}); });
-      Object.values(data.birthdays||{}).forEach(b=>{ if(!b) return; items.push({type:"birthday",kindLabel:"Verjaardag",kindChip:"b",title:b.name||b.title||"(verjaardag)",date:b.date||"",time:"",who:b.who||"",desc:b.note||""}); });
-      Object.values(data.memories||{}).forEach(m=>{ if(!m) return; items.push({type:"memory",kindLabel:"Herinnering",kindChip:"m",title:m.title||m.desc||"(herinnering)",date:m.date||"",time:m.time||"",who:m.who||"",desc:m.desc||""}); });
+      Object.entries(data.appointments||{}).forEach(([id,a])=>{ if(!a) return; items.push({type:"appointment",id,kindLabel:"Afspraak",kindChip:"a",title:a.desc||a.title||"(zonder titel)",date:a.date||"",time:a.time||"",who:a.who||"",desc:a.location||""}); });
+      Object.entries(data.birthdays||{}).forEach(([id,b])=>{ if(!b) return; items.push({type:"birthday",id,kindLabel:"Verjaardag",kindChip:"b",title:b.name||b.title||"(verjaardag)",date:b.date||"",time:"",who:b.who||"",desc:b.note||""}); });
+      Object.entries(data.memories||{}).forEach(([id,m])=>{ if(!m) return; items.push({type:"memory",id,kindLabel:"Herinnering",kindChip:"m",title:m.title||m.desc||"(herinnering)",date:m.date||"",time:m.time||"",who:m.who||"",desc:m.desc||""}); });
       const now=new Date(); const today=isoDate(now); const ym=`${now.getFullYear()}-${pad(now.getMonth()+1)}`;
       if(filter==="today") items=items.filter(i=>i.date===today);
       if(filter==="month") items=items.filter(i=>i.type==="appointment"&&i.date&&i.date.startsWith(ym));
@@ -634,13 +708,74 @@
       items.forEach(it=>{
         const card=document.createElement("div"); card.className="itemCard";
         const ic=it.date?iconFromDate(it.date):{m:"",d:""};
-        card.innerHTML=`<div class="itemRow"><div class="iconDate"><div class="m">${ic.m}</div><div class="d">${ic.d}</div></div><div class="itemMain"><div class="row" style="align-items:flex-start"><div style="min-width:0"><p class="itemTitle">${escapeHtml(it.title)}</p><div class="chips"><span class="chip ${it.kindChip}">${it.kindLabel}</span>${it.date?`<span class="chip">${it.date}</span>`:""}${it.time?`<span class="chip">${it.time}</span>`:""}${it.desc?`<span class="chip muted">${escapeHtml(it.desc)}</span>`:`<span class="chip muted">Geen locatie</span>`}</div></div><div style="display:flex;gap:10px;align-items:center"><button class="btn small" data-open-date="${it.date||""}">Open</button></div></div></div></div>`;
+        const androidCalUrl = buildAndroidCalUrl(it);
+        card.innerHTML=`<div class="itemRow"><div class="iconDate"><div class="m">${ic.m}</div><div class="d">${ic.d}</div></div><div class="itemMain"><div class="row" style="align-items:flex-start"><div style="min-width:0"><p class="itemTitle">${escapeHtml(it.title)}</p><div class="chips"><span class="chip ${it.kindChip}">${it.kindLabel}</span>${it.date?`<span class="chip">${it.date}</span>`:""}${it.time?`<span class="chip">${it.time}</span>`:""}${it.desc?`<span class="chip muted">${escapeHtml(it.desc)}</span>`:`<span class="chip muted">Geen locatie</span>`}</div></div><div style="display:flex;gap:8px;align-items:center"><button class="btn small" data-open-date="${it.date||""}">Open</button></div></div></div></div>
+        <div class="itemActions">
+          <button class="btn small edit" data-edit-type="${it.type}" data-edit-id="${it.id}">✏️ Wijzigen</button>
+          <button class="btn small danger" data-del-type="${it.type}" data-del-id="${it.id}" data-del-title="${escapeHtml(it.title||'')}">🗑 Verwijderen</button>
+          ${it.date ? `<a class="btn small android" href="${androidCalUrl}" target="_blank">📅 Android Agenda</a>` : ""}
+        </div>`;
         cards.appendChild(card);
       });
     }
 
     async function refreshAll(){
       setStatus(state.syncMode); els.syncSelect.value=state.syncMode; updateEditUI(); await renderCalendar(); renderAuthState();
+    }
+
+    // ── VERWIJDEREN ─────────────────────────────────────────────
+    async function deleteItem(type, id, title){
+      const ok = await showConfirm("Verwijderen", `"${title}" verwijderen?`);
+      if(!ok) return;
+      const data = await getAll();
+      if(type==="appointment")  delete data.appointments[id];
+      if(type==="birthday")     delete data.birthdays[id];
+      if(type==="memory")       delete data.memories[id];
+      await setAll(data);
+      toast("Verwijderd");
+      closeModal();
+      await refreshAll();
+      renderList();
+    }
+
+    // ── BEWERKEN – formulier voorinvullen ───────────────────────
+    async function startEdit(type, id){
+      const data = await getAll();
+      let item = null;
+      if(type==="appointment") item = data.appointments[id];
+      if(type==="birthday")    item = data.birthdays[id];
+      if(type==="memory")      item = data.memories[id];
+      if(!item){ toast("Item niet gevonden"); return; }
+
+      editingItem = {type, id};
+      closeModal();
+      setScreen("add");
+
+      document.getElementById("typeSelect").value = type;
+      toggleTimeField();
+      // Vul titel
+      const titleVal = item.desc || item.title || item.name || "";
+      document.getElementById("titleInput").value = titleVal;
+      document.getElementById("dateInput").value  = item.date  || "";
+      document.getElementById("timeInput").value  = item.time  || "";
+      document.getElementById("descInput").value  = item.note  || item.desc || "";
+      document.getElementById("whoSelect").value  = item.who   || "rob";
+      document.getElementById("reminderSelect").value = "";
+
+      // Toon bewerkenmodus
+      document.getElementById("editingBadge").style.display = "inline-block";
+      document.getElementById("addFormTitle").textContent = "Wijzigen";
+      document.getElementById("cancelEditBtn").style.display = "block";
+      document.getElementById("saveBtn").textContent = "Opslaan wijziging";
+    }
+
+    function cancelEdit(){
+      editingItem = null;
+      document.getElementById("editingBadge").style.display = "none";
+      document.getElementById("addFormTitle").textContent = "Toevoegen";
+      document.getElementById("cancelEditBtn").style.display = "none";
+      document.getElementById("saveBtn").textContent = "Opslaan";
+      clearForm();
     }
 
     function requireTitle(){ const t=document.getElementById("titleInput").value.trim(); if(!t){ toast("Titel is verplicht"); return null; } return t; }
@@ -677,7 +812,24 @@
     async function saveItem(){
       if(!isEditAllowed()){ toast("Gastmodus, bewerken uit"); return; }
       const f=readForm(); if(!f) return;
-      const data=await getAll(); const id=nowId();
+      const data=await getAll();
+
+      if(editingItem){
+        // Bestaand item bijwerken
+        const {type, id} = editingItem;
+        if(type==="appointment") data.appointments[id]={...data.appointments[id], date:f.date, time:f.time||"", desc:f.title, who:f.who};
+        if(type==="birthday")    data.birthdays[id]   ={...data.birthdays[id],    date:f.date, name:f.title, who:f.who, note:f.desc};
+        if(type==="memory")      data.memories[id]    ={...data.memories[id],     date:f.date, time:f.time||"", title:f.title, desc:f.desc, who:f.who};
+        await setAll(data);
+        toast("Wijziging opgeslagen");
+        cancelEdit();
+        await refreshAll();
+        setScreen("calendar");
+        return;
+      }
+
+      // Nieuw item
+      const id=nowId();
       if(f.type==="appointment") data.appointments[id]={id:Number(id),date:f.date,time:f.time||"",desc:f.title,who:f.who,createdAt:new Date().toISOString()};
       if(f.type==="birthday") data.birthdays[id]={id:Number(id),date:f.date,name:f.title,who:f.who,note:f.desc,createdAt:new Date().toISOString()};
       if(f.type==="memory") data.memories[id]={id:Number(id),date:f.date,time:f.time||"",title:f.title,desc:f.desc,who:f.who,createdAt:new Date().toISOString()};
@@ -791,6 +943,7 @@
     document.getElementById("tapHint").addEventListener("click",()=>toast("Tik een dag met stipjes"));
     document.getElementById("goListFromSelected").addEventListener("click",()=>{ setScreen("list"); renderList(); });
     document.getElementById("backToCalendar").addEventListener("click",()=>setScreen("calendar"));
+    document.getElementById("cancelEditBtn").addEventListener("click", cancelEdit);
     document.getElementById("typeSelect").addEventListener("change",toggleTimeField);
     document.getElementById("saveBtn").addEventListener("click",saveItem);
     document.getElementById("clearBtn").addEventListener("click",()=>{ if(!isEditAllowed()){toast("Gastmodus");return;} clearForm(); toast("Leeg"); });
@@ -820,6 +973,14 @@
       const openBtn=e.target.closest("[data-open-date]"); if(openBtn) openDateFromList(openBtn.dataset.openDate);
       if(e.target&&e.target.matches("[data-close-modal]")) closeModal();
       if(e.target&&e.target.id==="dayModal") closeModal();
+
+      // Verwijderen
+      const delBtn = e.target.closest("[data-del-type]");
+      if(delBtn){ await deleteItem(delBtn.dataset.delType, delBtn.dataset.delId, delBtn.dataset.delTitle); return; }
+
+      // Bewerken
+      const editBtn = e.target.closest("[data-edit-type]");
+      if(editBtn){ await startEdit(editBtn.dataset.editType, editBtn.dataset.editId); return; }
     });
 
     document.addEventListener("keydown",(e)=>{ if(e.key==="Escape") closeModal(); });
