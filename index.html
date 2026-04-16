@@ -1,847 +1,878 @@
-<!doctype html>
+<!doctype html>
+
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Onze Agenda"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+  <meta name="theme-color" content="#ffd7e6"/>
+  <!-- Android PWA -->
+  <link rel="manifest" href="manifest.json"/>
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png"/>
+  <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png"/>
+  <link rel="apple-touch-icon" href="icon-512.png"/>
+  <title>Onze Agenda - Rob &amp; Lizet</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800&amp;display=swap">
+  <style>
+    :root{
+      --bg1:#fff7f0;
+      --bg2:#f4f1ff;
+      --bg3:#eef7ff;
+      --ink:#1d2330;
+      --muted:#5a6578;
+      --card:rgba(255,255,255,0.72);
+      --card2:rgba(255,255,255,0.55);
+      --stroke:rgba(28,35,48,0.10);
+      --shadow:0 18px 50px rgba(12,18,30,0.10);
+      --shadow2:0 10px 30px rgba(12,18,30,0.08);
+      --pill:rgba(255,255,255,0.65);
+      --good:#2ecc71;
+      --warn:#ff9f43;
+      --dotA:#6bb6ff;
+      --dotB:#ff9ac1;
+      --dotM:#a7a2ff;
+      --accent1:#ffd7e6;
+      --accent2:#d6f0ff;
+      --accent3:#efe4ff;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:"DM Sans",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(1200px 700px at 20% -10%, rgba(255,168,217,0.35), transparent 55%),
+        radial-gradient(1000px 650px at 85% 5%, rgba(143,209,255,0.35), transparent 60%),
+        radial-gradient(900px 700px at 40% 120%, rgba(191,164,255,0.35), transparent 60%),
+        linear-gradient(180deg, var(--bg1), var(--bg2) 55%, var(--bg3));
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      overflow-x:hidden;
+    }
+    .app{max-width:560px;margin:0 auto;padding:16px 14px 110px;}
+    .topbar{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:10px 8px 14px;position:sticky;top:0;z-index:50;background:linear-gradient(180deg,rgba(255,247,240,0.80),rgba(255,247,240,0.30),transparent);backdrop-filter:blur(10px);}
+    .brand{display:flex;align-items:center;gap:10px;min-width:0;}
+    .avatar{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,rgba(255,154,193,0.9),rgba(107,182,255,0.9));box-shadow:0 10px 30px rgba(0,0,0,0.08);border:1px solid rgba(255,255,255,0.8);flex:0 0 auto;}
+    .brandText{min-width:0;line-height:1.05;}
+    .brandTitle{font-weight:800;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .brandSub{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .statusPill{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:999px;background:var(--pill);border:1px solid var(--stroke);box-shadow:var(--shadow2);white-space:nowrap;font-weight:700;font-size:12px;user-select:none;}
+    .dot{width:10px;height:10px;border-radius:50%;background:var(--good);box-shadow:0 0 0 5px rgba(46,204,113,0.15);}
+    .dot.off{background:#b2becd;box-shadow:0 0 0 5px rgba(178,190,205,0.18);}
+    .badge{padding:10px 12px;border-radius:18px;border:1px solid rgba(255,255,255,0.65);background:linear-gradient(135deg,rgba(255,215,230,0.85),rgba(214,240,255,0.85),rgba(239,228,255,0.85));box-shadow:var(--shadow2);font-weight:900;font-size:12px;letter-spacing:0.6px;text-align:center;line-height:1.05;user-select:none;}
+    .btn{appearance:none;border:0;background:var(--pill);border:1px solid var(--stroke);color:var(--ink);padding:10px 14px;border-radius:999px;font-weight:800;box-shadow:var(--shadow2);cursor:pointer;}
+    .btn:active{transform:scale(0.99)}
+    .btn.primary{background:linear-gradient(135deg,rgba(255,154,193,0.35),rgba(107,182,255,0.35));}
+    .btn.small{padding:8px 12px;font-size:12px}
+    .btn.ghost{background:transparent}
+    .panel{background:var(--card);border:1px solid var(--stroke);border-radius:26px;padding:16px 16px 14px;box-shadow:var(--shadow);backdrop-filter:blur(14px);}
+    .grid{display:grid;grid-template-columns:1fr;gap:14px;}
+    .row{display:flex;align-items:center;justify-content:space-between;gap:12px;}
+    h2{margin:0;font-size:20px;letter-spacing:-0.2px;}
+    .sub{margin:2px 0 0;color:var(--muted);font-size:13px;}
+    .calendarHeader{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;}
+    .monthTitle{font-size:20px;font-weight:900;letter-spacing:-0.2px;text-transform:lowercase;}
+    .navBtns{display:flex;gap:10px;align-items:center;}
+    .calWrap{margin-top:12px;background:var(--card2);border:1px solid var(--stroke);border-radius:22px;padding:12px;box-shadow:var(--shadow2);}
+    .dow{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;padding:6px 4px 10px;color:var(--muted);font-size:12px;font-weight:800;text-align:center;}
+    .days{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;padding:2px 4px 6px;}
+    .day{position:relative;height:44px;border-radius:16px;border:1px solid rgba(28,35,48,0.10);background:rgba(255,255,255,0.55);display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--ink);box-shadow:0 8px 18px rgba(12,18,30,0.06);cursor:pointer;user-select:none;overflow:hidden;}
+    .day.muted{opacity:0.40;cursor:default;}
+    .day.today{outline:2px solid rgba(107,182,255,0.55);background:linear-gradient(180deg,rgba(214,240,255,0.65),rgba(255,255,255,0.55));}
+    .day.selected{outline:2px solid rgba(255,154,193,0.55);background:linear-gradient(180deg,rgba(255,215,230,0.65),rgba(255,255,255,0.55));}
+    .dots{position:absolute;left:50%;bottom:7px;transform:translateX(-50%);display:flex;gap:4px;align-items:center;justify-content:center;pointer-events:none;}
+    .d{width:8px;height:8px;border-radius:50%;box-shadow:0 0 0 4px rgba(0,0,0,0.04);opacity:0.95;}
+    .d.a{background:var(--dotA);box-shadow:0 0 0 4px rgba(107,182,255,0.18)}
+    .d.b{background:var(--dotB);box-shadow:0 0 0 4px rgba(255,154,193,0.18)}
+    .d.m{background:var(--dotM);box-shadow:0 0 0 4px rgba(167,162,255,0.18)}
+    .selectedBox{margin-top:14px;background:rgba(255,255,255,0.58);border:1px solid var(--stroke);border-radius:22px;padding:14px;box-shadow:var(--shadow2);display:flex;align-items:center;justify-content:space-between;gap:12px;}
+    .selectedTitle{font-weight:900;font-size:16px;margin:0;}
+    .selectedText{margin:2px 0 0;color:var(--muted);font-size:13px;}
+    .tabs{position:fixed;left:0;right:0;bottom:0;padding:10px 12px 18px;z-index:60;background:linear-gradient(180deg,transparent,rgba(255,247,240,0.50) 30%,rgba(255,247,240,0.92));backdrop-filter:blur(18px);}
+    .tabbar{max-width:560px;margin:0 auto;background:rgba(255,255,255,0.72);border:1px solid rgba(28,35,48,0.12);border-radius:22px;box-shadow:0 18px 55px rgba(12,18,30,0.14);display:flex;gap:6px;padding:8px;}
+    .tab{flex:1;border:0;background:transparent;border-radius:16px;padding:10px 10px;font-weight:900;color:var(--muted);cursor:pointer;}
+    .tab.active{color:var(--ink);background:linear-gradient(135deg,rgba(255,215,230,0.65),rgba(214,240,255,0.65),rgba(239,228,255,0.65));border:1px solid rgba(255,255,255,0.7);box-shadow:0 10px 30px rgba(12,18,30,0.10);}
+    .screen{display:none}
+    .screen.active{display:block}
+    .listCards{display:grid;gap:14px;}
+    .statCard{background:rgba(255,255,255,0.70);border:1px solid var(--stroke);border-radius:26px;padding:16px;box-shadow:var(--shadow);backdrop-filter:blur(14px);}
+    .statTop{display:flex;align-items:center;justify-content:space-between;gap:12px;}
+    .statTitle{margin:0;font-weight:900;font-size:16px;}
+    .statValue{font-size:44px;font-weight:900;letter-spacing:-1px;margin:6px 0 6px;}
+    .statHint{color:var(--muted);font-size:13px;margin:0;}
+    .itemCard{background:rgba(255,255,255,0.75);border:1px solid rgba(28,35,48,0.10);border-radius:26px;padding:14px;box-shadow:var(--shadow2);}
+    .itemRow{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;}
+    .iconDate{width:44px;height:44px;border-radius:16px;background:linear-gradient(135deg,rgba(214,240,255,0.9),rgba(239,228,255,0.9));border:1px solid rgba(255,255,255,0.8);display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1;font-weight:900;box-shadow:0 10px 25px rgba(12,18,30,0.10);flex:0 0 auto;}
+    .iconDate .m{font-size:10px;opacity:0.75}
+    .iconDate .d{font-size:16px}
+    .itemMain{flex:1;min-width:0;}
+    .itemTitle{margin:0;font-size:18px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;}
+    .chip{padding:8px 10px;border-radius:999px;background:rgba(255,255,255,0.65);border:1px solid rgba(28,35,48,0.10);font-weight:900;font-size:12px;color:var(--ink);}
+    .chip.muted{color:var(--muted);font-weight:800}
+    .chip.a{background:rgba(214,240,255,0.75)}
+    .chip.b{background:rgba(255,215,230,0.75)}
+    .chip.m{background:rgba(239,228,255,0.75)}
+    .formCard{background:rgba(255,255,255,0.78);border:1px solid rgba(28,35,48,0.10);border-radius:26px;padding:16px;box-shadow:var(--shadow);}
+    .field{display:flex;flex-direction:column;gap:8px;margin-top:12px;}
+    label{font-size:13px;font-weight:900;color:var(--muted);}
+    input,select,textarea{font:inherit;padding:12px 14px;border-radius:18px;border:1px solid rgba(28,35,48,0.10);background:rgba(255,255,255,0.70);outline:none;box-shadow:0 10px 25px rgba(12,18,30,0.06);}
+    textarea{min-height:90px;resize:vertical}
+    .actions{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;}
+    .hr{height:1px;background:rgba(28,35,48,0.08);margin:14px 0;border:0;}
+    .toast{position:fixed;left:50%;bottom:92px;transform:translateX(-50%);max-width:560px;width:calc(100% - 28px);background:rgba(20,24,34,0.88);color:#fff;border-radius:18px;padding:12px 14px;box-shadow:0 20px 60px rgba(0,0,0,0.20);z-index:80;display:none;font-weight:800;backdrop-filter:blur(12px);}
+    .toast.show{display:block}
+    .modalOverlay{position:fixed;inset:0;display:none;z-index:90;background:rgba(15,18,28,0.25);backdrop-filter:blur(8px);padding:18px 12px 120px;overflow:auto;}
+    .modalOverlay.open{display:block}
+    .modalCard{max-width:560px;margin:0 auto;border-radius:28px;border:1px solid rgba(255,255,255,0.55);background:linear-gradient(180deg,rgba(255,255,255,0.88),rgba(255,255,255,0.78));box-shadow:0 30px 90px rgba(0,0,0,0.22);padding:16px;}
+    .modalTop{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;}
+    .modalTitle{margin:0;font-weight:900;font-size:13px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;}
+    .modalDate{font-weight:900;font-size:28px;letter-spacing:-0.6px;margin:2px 0 0;}
+    .modalClose{appearance:none;border:0;background:rgba(20,24,34,0.85);color:#fff;font-weight:900;padding:12px 16px;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,0.25);cursor:pointer;flex:0 0 auto;}
+    .modalClose:active{transform:scale(0.98)}
+    .modalList{display:grid;gap:10px;margin-top:12px;}
+    .modalEmpty{color:var(--muted);font-weight:800;padding:10px 2px;}
+    .miniRow{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:10px;}
+    .legend{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+    .legItem{display:flex;align-items:center;gap:8px;font-weight:900;font-size:12px;color:var(--muted);background:rgba(255,255,255,0.55);border:1px solid rgba(28,35,48,0.10);border-radius:999px;padding:8px 10px;}
+    .legDot{width:10px;height:10px;border-radius:50%;box-shadow:0 0 0 5px rgba(0,0,0,0.04);}
+    .legDot.a{background:var(--dotA);box-shadow:0 0 0 5px rgba(107,182,255,0.16)}
+    .legDot.b{background:var(--dotB);box-shadow:0 0 0 5px rgba(255,154,193,0.16)}
+    .legDot.m{background:var(--dotM);box-shadow:0 0 0 5px rgba(167,162,255,0.16)}
+    .authBox{display:flex;gap:10px;align-items:center;justify-content:flex-end;flex-wrap:wrap;}
+    .settingsCard{background:rgba(255,255,255,0.80);border:1px solid rgba(28,35,48,0.10);border-radius:26px;padding:16px;box-shadow:var(--shadow);}
+    .note{margin:10px 0 0;color:var(--muted);font-size:13px;line-height:1.4;}
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="brand">
+      <div class="avatar"></div>
+      <div class="brandText">
+        <div class="brandTitle">Onze Agenda</div>
+        <div class="brandSub">Rob en Lizet</div>
+      </div>
+    </div>
+    <div class="statusPill" id="statusPill" title="Sync status">
+      <span class="dot" id="statusDot"></span>
+      <span>Status</span>
+      <span id="statusText" style="font-weight:900">Lokaal</span>
+    </div>
+    <div class="badge" id="versionBadge">PASTEL<br>FIREBASE<br>V3 DOTS</div>
+    <button class="btn" id="openSettings">Instellingen</button>
+  </div>
+
+  <div class="app">
+    <div id="screenCalendar" class="screen active">
+      <div class="panel">
+        <div class="row">
+          <div>
+            <h2>Kalender</h2>
+            <p class="sub">Tik een dag om activiteiten te zien</p>
+          </div>
+          <div class="navBtns">
+            <button class="btn" id="prevMonth">Vorige</button>
+            <button class="btn" id="nextMonth">Volgende</button>
+          </div>
+        </div>
+        <div class="miniRow">
+          <div class="legend">
+            <div class="legItem"><span class="legDot a"></span>Afspraak</div>
+            <div class="legItem"><span class="legDot b"></span>Verjaardag</div>
+            <div class="legItem"><span class="legDot m"></span>Herinnering</div>
+          </div>
+          <button class="btn small" id="tapHint">Tik een dag</button>
+        </div>
+        <div class="calendarHeader" style="margin-top:10px">
+          <div class="monthTitle" id="monthTitle">Maand</div>
+          <div style="display:flex;gap:10px;align-items:center">
+            <button class="btn small ghost" id="goToday">Vandaag</button>
+          </div>
+        </div>
+        <div class="calWrap">
+          <div class="dow">
+            <div>Ma</div><div>Di</div><div>Wo</div><div>Do</div><div>Vr</div><div>Za</div><div>Zo</div>
+          </div>
+          <div class="days" id="daysGrid"></div>
+        </div>
+        <div class="selectedBox">
+          <div>
+            <p class="selectedTitle" id="selectedTitle">Afspraken op geselecteerde dag</p>
+            <p class="selectedText" id="selectedText">Kies eerst een dag in de kalender</p>
+          </div>
+          <button class="btn" id="goListFromSelected">Lijst</button>
+        </div>
+      </div>
+    </div>
+
+```
+<div id="screenList" class="screen">
+  <div class="grid">
+    <div class="statCard">
+      <div class="statTop">
+        <div><p class="statTitle">Deze maand</p><p class="statHint">Aantal afspraken in deze maand.</p></div>
+        <button class="btn small" data-quick="month">Snel zien</button>
+      </div>
+      <div class="statValue" id="statMonth">0</div>
+    </div>
+    <div class="statCard">
+      <div class="statTop">
+        <div><p class="statTitle">Vandaag</p><p class="statHint">Aantal afspraken vandaag.</p></div>
+        <button class="btn small" data-quick="today">Snel zien</button>
+      </div>
+      <div class="statValue" id="statToday">0</div>
+    </div>
+    <div class="statCard">
+      <div class="statTop">
+        <div><p class="statTitle">Verjaardagen</p><p class="statHint">Aantal verjaardagen opgeslagen.</p></div>
+        <button class="btn small" data-quick="birthdays">Overzicht</button>
+      </div>
+      <div class="statValue" id="statBirthdays">0</div>
+    </div>
+    <div class="itemCard" id="listHintCard">
+      <div class="row">
+        <div>
+          <p class="statTitle" style="margin:0">Kies een dag in de kalender</p>
+          <p class="sub" style="margin:4px 0 0">Privé</p>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center">
+          <button class="btn" id="exportBtn">Export</button>
+          <button class="btn" id="importBtn">Import</button>
+        </div>
+      </div>
+    </div>
+    <div class="listCards" id="listCards"></div>
+    <button class="btn" id="backToCalendar" style="width:100%">Terug</button>
+  </div>
+</div>
+
+<div id="screenAdd" class="screen">
+  <div class="formCard">
+    <div class="row">
+      <div><h2>Toevoegen</h2><p class="sub">Sla alles op, lokaal of in Firebase</p></div>
+    </div>
+    <div class="field">
+      <label for="typeSelect">Soort</label>
+      <select id="typeSelect">
+        <option value="appointment">Afspraak</option>
+        <option value="birthday">Verjaardag</option>
+        <option value="memory">Herinnering</option>
+      </select>
+    </div>
+    <div class="field"><label for="titleInput">Titel</label><input id="titleInput" placeholder="Bijv. Etentje Theo"></div>
+    <div class="field"><label for="dateInput">Datum</label><input id="dateInput" type="date"></div>
+    <div class="field" id="timeField"><label for="timeInput">Tijd</label><input id="timeInput" type="time"></div>
+    <div class="field" id="reminderField">
+      <label for="reminderSelect">Herinnering</label>
+      <select id="reminderSelect">
+        <option value="">Geen herinnering</option>
+        <option value="15">15 minuten van tevoren</option>
+        <option value="60">1 uur van tevoren</option>
+        <option value="1440">1 dag van tevoren</option>
+      </select>
+    </div>
+    <div class="field"><label for="descInput">Beschrijving</label><textarea id="descInput" placeholder="Extra info"></textarea></div>
+    <div class="field">
+      <label for="whoSelect">Wie</label>
+      <select id="whoSelect">
+        <option value="rob">Rob</option>
+        <option value="lizet">Lizet</option>
+        <option value="samen">Samen</option>
+      </select>
+    </div>
+    <div class="actions">
+      <button class="btn primary" id="saveBtn">Opslaan</button>
+      <button class="btn" id="clearBtn">Leegmaken</button>
+    </div>
+    <hr class="hr">
+    <p class="note">Tips. Titel is verplicht. Voor afspraken is datum verplicht.</p>
+  </div>
+</div>
+
+<div id="screenInfo" class="screen">
+  <div class="settingsCard">
+    <div class="row">
+      <div><h2>Info</h2><p class="sub">Made by Rob Borghouts 2026</p></div>
+    </div>
+    <p class="note" id="infoText">Gebruik de tabs onderin. Kies Sync in instellingen.</p>
+  </div>
+</div>
+
+<div id="screenSettings" class="screen">
+  <div class="settingsCard">
+    <div class="row">
+      <div><h2>Instellingen</h2><p class="sub">Backup maken en terugzetten, plus sync instellingen.</p></div>
+      <button class="btn" id="closeSettings">Sluiten</button>
+    </div>
+    <hr class="hr">
+    <div class="row">
+      <button class="btn primary" id="backupMake">Backup maken</button>
+      <button class="btn" id="backupRestore">Backup terugzetten</button>
+    </div>
+    <p class="note" id="backupInfo"></p>
+    <hr class="hr">
+    <div class="field">
+      <label for="syncSelect">Sync</label>
+      <select id="syncSelect">
+        <option value="local">Lokaal</option>
+        <option value="firebase">Firebase</option>
+      </select>
+    </div>
+    <p class="note">Delen met Lizet werkt via Firebase, of anders via export en import.</p>
+    <hr class="hr">
+    <div class="authBox">
+      <button class="btn" id="loginBtn">Inloggen</button>
+      <button class="btn" id="logoutBtn">Uitloggen</button>
+    </div>
+    <p class="note" id="authNote"></p>
+  </div>
+</div>
+```
+
+  </div>
+
+  <div class="tabs">
+    <div class="tabbar">
+      <button class="tab active" data-tab="calendar">Kalender</button>
+      <button class="tab" data-tab="list">Lijst</button>
+      <button class="tab" data-tab="add">Toevoegen</button>
+      <button class="tab" data-tab="info">Info</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <div class="modalOverlay" id="dayModal" aria-hidden="true">
+    <div class="modalCard" role="dialog" aria-modal="true" aria-labelledby="modalHead">
+      <div class="modalTop">
+        <div>
+          <p class="modalTitle" id="modalHead">Activiteiten</p>
+          <div class="modalDate" id="modalDate">0000-00-00</div>
+        </div>
+        <button class="modalClose" data-close-modal>Sluiten</button>
+      </div>
+      <div class="modalList" id="modalList"></div>
+      <div class="modalEmpty" id="modalEmpty" style="display:none">Geen items op deze dag.</div>
+      <div style="margin-top:10px;display:flex;justify-content:flex-end">
+        <button class="btn" id="modalGoList">Naar lijst</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    const state = {
+      syncMode: localStorage.getItem("rb_syncMode") || "firebase",
+      unlocked: true,
+      code: null,
+      selectedDate: null,
+      viewYear: null,
+      viewMonth: null,
+      firebaseReady: false,
+      user: null
+    };
+    // ==================== FIREBASE INITIALISATIE VOOR MAIN APP ====================
+let mainApp = null;
+let messagingInstance = null;
 
-<html lang="nl">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="Onze Agenda"/>
-  <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
-  <meta name="theme-color" content="#ffd7e6"/>
-  <!-- Android PWA -->
-  <link rel="manifest" href="manifest.json"/>
-  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png"/>
-  <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png"/>
-  <link rel="apple-touch-icon" href="icon-512.png"/>
-  <title>Onze Agenda - Rob &amp; Lizet</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800&amp;display=swap">
-  <style>
-    :root{
-      --bg1:#fff7f0;
-      --bg2:#f4f1ff;
-      --bg3:#eef7ff;
-      --ink:#1d2330;
-      --muted:#5a6578;
-      --card:rgba(255,255,255,0.72);
-      --card2:rgba(255,255,255,0.55);
-      --stroke:rgba(28,35,48,0.10);
-      --shadow:0 18px 50px rgba(12,18,30,0.10);
-      --shadow2:0 10px 30px rgba(12,18,30,0.08);
-      --pill:rgba(255,255,255,0.65);
-      --good:#2ecc71;
-      --warn:#ff9f43;
-      --dotA:#6bb6ff;
-      --dotB:#ff9ac1;
-      --dotM:#a7a2ff;
-      --accent1:#ffd7e6;
-      --accent2:#d6f0ff;
-      --accent3:#efe4ff;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family:"DM Sans",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      color:var(--ink);
-      background:
-        radial-gradient(1200px 700px at 20% -10%, rgba(255,168,217,0.35), transparent 55%),
-        radial-gradient(1000px 650px at 85% 5%, rgba(143,209,255,0.35), transparent 60%),
-        radial-gradient(900px 700px at 40% 120%, rgba(191,164,255,0.35), transparent 60%),
-        linear-gradient(180deg, var(--bg1), var(--bg2) 55%, var(--bg3));
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      overflow-x:hidden;
-    }
-    .app{max-width:560px;margin:0 auto;padding:16px 14px 110px;}
-    .topbar{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:10px 8px 14px;position:sticky;top:0;z-index:50;background:linear-gradient(180deg,rgba(255,247,240,0.80),rgba(255,247,240,0.30),transparent);backdrop-filter:blur(10px);}
-    .brand{display:flex;align-items:center;gap:10px;min-width:0;}
-    .avatar{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,rgba(255,154,193,0.9),rgba(107,182,255,0.9));box-shadow:0 10px 30px rgba(0,0,0,0.08);border:1px solid rgba(255,255,255,0.8);flex:0 0 auto;}
-    .brandText{min-width:0;line-height:1.05;}
-    .brandTitle{font-weight:800;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-    .brandSub{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-    .statusPill{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:999px;background:var(--pill);border:1px solid var(--stroke);box-shadow:var(--shadow2);white-space:nowrap;font-weight:700;font-size:12px;user-select:none;}
-    .dot{width:10px;height:10px;border-radius:50%;background:var(--good);box-shadow:0 0 0 5px rgba(46,204,113,0.15);}
-    .dot.off{background:#b2becd;box-shadow:0 0 0 5px rgba(178,190,205,0.18);}
-    .badge{padding:10px 12px;border-radius:18px;border:1px solid rgba(255,255,255,0.65);background:linear-gradient(135deg,rgba(255,215,230,0.85),rgba(214,240,255,0.85),rgba(239,228,255,0.85));box-shadow:var(--shadow2);font-weight:900;font-size:12px;letter-spacing:0.6px;text-align:center;line-height:1.05;user-select:none;}
-    .btn{appearance:none;border:0;background:var(--pill);border:1px solid var(--stroke);color:var(--ink);padding:10px 14px;border-radius:999px;font-weight:800;box-shadow:var(--shadow2);cursor:pointer;}
-    .btn:active{transform:scale(0.99)}
-    .btn.primary{background:linear-gradient(135deg,rgba(255,154,193,0.35),rgba(107,182,255,0.35));}
-    .btn.small{padding:8px 12px;font-size:12px}
-    .btn.ghost{background:transparent}
-    .panel{background:var(--card);border:1px solid var(--stroke);border-radius:26px;padding:16px 16px 14px;box-shadow:var(--shadow);backdrop-filter:blur(14px);}
-    .grid{display:grid;grid-template-columns:1fr;gap:14px;}
-    .row{display:flex;align-items:center;justify-content:space-between;gap:12px;}
-    h2{margin:0;font-size:20px;letter-spacing:-0.2px;}
-    .sub{margin:2px 0 0;color:var(--muted);font-size:13px;}
-    .calendarHeader{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;}
-    .monthTitle{font-size:20px;font-weight:900;letter-spacing:-0.2px;text-transform:lowercase;}
-    .navBtns{display:flex;gap:10px;align-items:center;}
-    .calWrap{margin-top:12px;background:var(--card2);border:1px solid var(--stroke);border-radius:22px;padding:12px;box-shadow:var(--shadow2);}
-    .dow{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;padding:6px 4px 10px;color:var(--muted);font-size:12px;font-weight:800;text-align:center;}
-    .days{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;padding:2px 4px 6px;}
-    .day{position:relative;height:44px;border-radius:16px;border:1px solid rgba(28,35,48,0.10);background:rgba(255,255,255,0.55);display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--ink);box-shadow:0 8px 18px rgba(12,18,30,0.06);cursor:pointer;user-select:none;overflow:hidden;}
-    .day.muted{opacity:0.40;cursor:default;}
-    .day.today{outline:2px solid rgba(107,182,255,0.55);background:linear-gradient(180deg,rgba(214,240,255,0.65),rgba(255,255,255,0.55));}
-    .day.selected{outline:2px solid rgba(255,154,193,0.55);background:linear-gradient(180deg,rgba(255,215,230,0.65),rgba(255,255,255,0.55));}
-    .dots{position:absolute;left:50%;bottom:7px;transform:translateX(-50%);display:flex;gap:4px;align-items:center;justify-content:center;pointer-events:none;}
-    .d{width:8px;height:8px;border-radius:50%;box-shadow:0 0 0 4px rgba(0,0,0,0.04);opacity:0.95;}
-    .d.a{background:var(--dotA);box-shadow:0 0 0 4px rgba(107,182,255,0.18)}
-    .d.b{background:var(--dotB);box-shadow:0 0 0 4px rgba(255,154,193,0.18)}
-    .d.m{background:var(--dotM);box-shadow:0 0 0 4px rgba(167,162,255,0.18)}
-    .selectedBox{margin-top:14px;background:rgba(255,255,255,0.58);border:1px solid var(--stroke);border-radius:22px;padding:14px;box-shadow:var(--shadow2);display:flex;align-items:center;justify-content:space-between;gap:12px;}
-    .selectedTitle{font-weight:900;font-size:16px;margin:0;}
-    .selectedText{margin:2px 0 0;color:var(--muted);font-size:13px;}
-    .tabs{position:fixed;left:0;right:0;bottom:0;padding:10px 12px 18px;z-index:60;background:linear-gradient(180deg,transparent,rgba(255,247,240,0.50) 30%,rgba(255,247,240,0.92));backdrop-filter:blur(18px);}
-    .tabbar{max-width:560px;margin:0 auto;background:rgba(255,255,255,0.72);border:1px solid rgba(28,35,48,0.12);border-radius:22px;box-shadow:0 18px 55px rgba(12,18,30,0.14);display:flex;gap:6px;padding:8px;}
-    .tab{flex:1;border:0;background:transparent;border-radius:16px;padding:10px 10px;font-weight:900;color:var(--muted);cursor:pointer;}
-    .tab.active{color:var(--ink);background:linear-gradient(135deg,rgba(255,215,230,0.65),rgba(214,240,255,0.65),rgba(239,228,255,0.65));border:1px solid rgba(255,255,255,0.7);box-shadow:0 10px 30px rgba(12,18,30,0.10);}
-    .screen{display:none}
-    .screen.active{display:block}
-    .listCards{display:grid;gap:14px;}
-    .statCard{background:rgba(255,255,255,0.70);border:1px solid var(--stroke);border-radius:26px;padding:16px;box-shadow:var(--shadow);backdrop-filter:blur(14px);}
-    .statTop{display:flex;align-items:center;justify-content:space-between;gap:12px;}
-    .statTitle{margin:0;font-weight:900;font-size:16px;}
-    .statValue{font-size:44px;font-weight:900;letter-spacing:-1px;margin:6px 0 6px;}
-    .statHint{color:var(--muted);font-size:13px;margin:0;}
-    .itemCard{background:rgba(255,255,255,0.75);border:1px solid rgba(28,35,48,0.10);border-radius:26px;padding:14px;box-shadow:var(--shadow2);}
-    .itemRow{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;}
-    .iconDate{width:44px;height:44px;border-radius:16px;background:linear-gradient(135deg,rgba(214,240,255,0.9),rgba(239,228,255,0.9));border:1px solid rgba(255,255,255,0.8);display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1;font-weight:900;box-shadow:0 10px 25px rgba(12,18,30,0.10);flex:0 0 auto;}
-    .iconDate .m{font-size:10px;opacity:0.75}
-    .iconDate .d{font-size:16px}
-    .itemMain{flex:1;min-width:0;}
-    .itemTitle{margin:0;font-size:18px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-    .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;}
-    .chip{padding:8px 10px;border-radius:999px;background:rgba(255,255,255,0.65);border:1px solid rgba(28,35,48,0.10);font-weight:900;font-size:12px;color:var(--ink);}
-    .chip.muted{color:var(--muted);font-weight:800}
-    .chip.a{background:rgba(214,240,255,0.75)}
-    .chip.b{background:rgba(255,215,230,0.75)}
-    .chip.m{background:rgba(239,228,255,0.75)}
-    .formCard{background:rgba(255,255,255,0.78);border:1px solid rgba(28,35,48,0.10);border-radius:26px;padding:16px;box-shadow:var(--shadow);}
-    .field{display:flex;flex-direction:column;gap:8px;margin-top:12px;}
-    label{font-size:13px;font-weight:900;color:var(--muted);}
-    input,select,textarea{font:inherit;padding:12px 14px;border-radius:18px;border:1px solid rgba(28,35,48,0.10);background:rgba(255,255,255,0.70);outline:none;box-shadow:0 10px 25px rgba(12,18,30,0.06);}
-    textarea{min-height:90px;resize:vertical}
-    .actions{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;}
-    .hr{height:1px;background:rgba(28,35,48,0.08);margin:14px 0;border:0;}
-    .toast{position:fixed;left:50%;bottom:92px;transform:translateX(-50%);max-width:560px;width:calc(100% - 28px);background:rgba(20,24,34,0.88);color:#fff;border-radius:18px;padding:12px 14px;box-shadow:0 20px 60px rgba(0,0,0,0.20);z-index:80;display:none;font-weight:800;backdrop-filter:blur(12px);}
-    .toast.show{display:block}
-    .modalOverlay{position:fixed;inset:0;display:none;z-index:90;background:rgba(15,18,28,0.25);backdrop-filter:blur(8px);padding:18px 12px 120px;overflow:auto;}
-    .modalOverlay.open{display:block}
-    .modalCard{max-width:560px;margin:0 auto;border-radius:28px;border:1px solid rgba(255,255,255,0.55);background:linear-gradient(180deg,rgba(255,255,255,0.88),rgba(255,255,255,0.78));box-shadow:0 30px 90px rgba(0,0,0,0.22);padding:16px;}
-    .modalTop{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;}
-    .modalTitle{margin:0;font-weight:900;font-size:13px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;}
-    .modalDate{font-weight:900;font-size:28px;letter-spacing:-0.6px;margin:2px 0 0;}
-    .modalClose{appearance:none;border:0;background:rgba(20,24,34,0.85);color:#fff;font-weight:900;padding:12px 16px;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,0.25);cursor:pointer;flex:0 0 auto;}
-    .modalClose:active{transform:scale(0.98)}
-    .modalList{display:grid;gap:10px;margin-top:12px;}
-    .modalEmpty{color:var(--muted);font-weight:800;padding:10px 2px;}
-    .miniRow{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:10px;}
-    .legend{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
-    .legItem{display:flex;align-items:center;gap:8px;font-weight:900;font-size:12px;color:var(--muted);background:rgba(255,255,255,0.55);border:1px solid rgba(28,35,48,0.10);border-radius:999px;padding:8px 10px;}
-    .legDot{width:10px;height:10px;border-radius:50%;box-shadow:0 0 0 5px rgba(0,0,0,0.04);}
-    .legDot.a{background:var(--dotA);box-shadow:0 0 0 5px rgba(107,182,255,0.16)}
-    .legDot.b{background:var(--dotB);box-shadow:0 0 0 5px rgba(255,154,193,0.16)}
-    .legDot.m{background:var(--dotM);box-shadow:0 0 0 5px rgba(167,162,255,0.16)}
-    .authBox{display:flex;gap:10px;align-items:center;justify-content:flex-end;flex-wrap:wrap;}
-    .settingsCard{background:rgba(255,255,255,0.80);border:1px solid rgba(28,35,48,0.10);border-radius:26px;padding:16px;box-shadow:var(--shadow);}
-    .note{margin:10px 0 0;color:var(--muted);font-size:13px;line-height:1.4;}
-  </style>
-</head>
-<body>
-  <div class="topbar">
-    <div class="brand">
-      <div class="avatar"></div>
-      <div class="brandText">
-        <div class="brandTitle">Onze Agenda</div>
-        <div class="brandSub">Rob en Lizet</div>
-      </div>
-    </div>
-    <div class="statusPill" id="statusPill" title="Sync status">
-      <span class="dot" id="statusDot"></span>
-      <span>Status</span>
-      <span id="statusText" style="font-weight:900">Lokaal</span>
-    </div>
-    <div class="badge" id="versionBadge">PASTEL<br>FIREBASE<br>V3 DOTS</div>
-    <button class="btn" id="openSettings">Instellingen</button>
-  </div>
+async function initMainFirebase() {
+  if (mainApp) return; // al gedaan
 
-  <div class="app">
-    <div id="screenCalendar" class="screen active">
-      <div class="panel">
-        <div class="row">
-          <div>
-            <h2>Kalender</h2>
-            <p class="sub">Tik een dag om activiteiten te zien</p>
-          </div>
-          <div class="navBtns">
-            <button class="btn" id="prevMonth">Vorige</button>
-            <button class="btn" id="nextMonth">Volgende</button>
-          </div>
-        </div>
-        <div class="miniRow">
-          <div class="legend">
-            <div class="legItem"><span class="legDot a"></span>Afspraak</div>
-            <div class="legItem"><span class="legDot b"></span>Verjaardag</div>
-            <div class="legItem"><span class="legDot m"></span>Herinnering</div>
-          </div>
-          <button class="btn small" id="tapHint">Tik een dag</button>
-        </div>
-        <div class="calendarHeader" style="margin-top:10px">
-          <div class="monthTitle" id="monthTitle">Maand</div>
-          <div style="display:flex;gap:10px;align-items:center">
-            <button class="btn small ghost" id="goToday">Vandaag</button>
-          </div>
-        </div>
-        <div class="calWrap">
-          <div class="dow">
-            <div>Ma</div><div>Di</div><div>Wo</div><div>Do</div><div>Vr</div><div>Za</div><div>Zo</div>
-          </div>
-          <div class="days" id="daysGrid"></div>
-        </div>
-        <div class="selectedBox">
-          <div>
-            <p class="selectedTitle" id="selectedTitle">Afspraken op geselecteerde dag</p>
-            <p class="selectedText" id="selectedText">Kies eerst een dag in de kalender</p>
-          </div>
-          <button class="btn" id="goListFromSelected">Lijst</button>
-        </div>
-      </div>
-    </div>
-
-```
-<div id="screenList" class="screen">
-  <div class="grid">
-    <div class="statCard">
-      <div class="statTop">
-        <div><p class="statTitle">Deze maand</p><p class="statHint">Aantal afspraken in deze maand.</p></div>
-        <button class="btn small" data-quick="month">Snel zien</button>
-      </div>
-      <div class="statValue" id="statMonth">0</div>
-    </div>
-    <div class="statCard">
-      <div class="statTop">
-        <div><p class="statTitle">Vandaag</p><p class="statHint">Aantal afspraken vandaag.</p></div>
-        <button class="btn small" data-quick="today">Snel zien</button>
-      </div>
-      <div class="statValue" id="statToday">0</div>
-    </div>
-    <div class="statCard">
-      <div class="statTop">
-        <div><p class="statTitle">Verjaardagen</p><p class="statHint">Aantal verjaardagen opgeslagen.</p></div>
-        <button class="btn small" data-quick="birthdays">Overzicht</button>
-      </div>
-      <div class="statValue" id="statBirthdays">0</div>
-    </div>
-    <div class="itemCard" id="listHintCard">
-      <div class="row">
-        <div>
-          <p class="statTitle" style="margin:0">Kies een dag in de kalender</p>
-          <p class="sub" style="margin:4px 0 0">Privé</p>
-        </div>
-        <div style="display:flex;gap:10px;align-items:center">
-          <button class="btn" id="exportBtn">Export</button>
-          <button class="btn" id="importBtn">Import</button>
-        </div>
-      </div>
-    </div>
-    <div class="listCards" id="listCards"></div>
-    <button class="btn" id="backToCalendar" style="width:100%">Terug</button>
-  </div>
-</div>
-
-<div id="screenAdd" class="screen">
-  <div class="formCard">
-    <div class="row">
-      <div><h2>Toevoegen</h2><p class="sub">Sla alles op, lokaal of in Firebase</p></div>
-    </div>
-    <div class="field">
-      <label for="typeSelect">Soort</label>
-      <select id="typeSelect">
-        <option value="appointment">Afspraak</option>
-        <option value="birthday">Verjaardag</option>
-        <option value="memory">Herinnering</option>
-      </select>
-    </div>
-    <div class="field"><label for="titleInput">Titel</label><input id="titleInput" placeholder="Bijv. Etentje Theo"></div>
-    <div class="field"><label for="dateInput">Datum</label><input id="dateInput" type="date"></div>
-    <div class="field" id="timeField"><label for="timeInput">Tijd</label><input id="timeInput" type="time"></div>
-    <div class="field" id="reminderField">
-      <label for="reminderSelect">Herinnering</label>
-      <select id="reminderSelect">
-        <option value="">Geen herinnering</option>
-        <option value="15">15 minuten van tevoren</option>
-        <option value="60">1 uur van tevoren</option>
-        <option value="1440">1 dag van tevoren</option>
-      </select>
-    </div>
-    <div class="field"><label for="descInput">Beschrijving</label><textarea id="descInput" placeholder="Extra info"></textarea></div>
-    <div class="field">
-      <label for="whoSelect">Wie</label>
-      <select id="whoSelect">
-        <option value="rob">Rob</option>
-        <option value="lizet">Lizet</option>
-        <option value="samen">Samen</option>
-      </select>
-    </div>
-    <div class="actions">
-      <button class="btn primary" id="saveBtn">Opslaan</button>
-      <button class="btn" id="clearBtn">Leegmaken</button>
-    </div>
-    <hr class="hr">
-    <p class="note">Tips. Titel is verplicht. Voor afspraken is datum verplicht.</p>
-  </div>
-</div>
-
-<div id="screenInfo" class="screen">
-  <div class="settingsCard">
-    <div class="row">
-      <div><h2>Info</h2><p class="sub">Made by Rob Borghouts 2026</p></div>
-    </div>
-    <p class="note" id="infoText">Gebruik de tabs onderin. Kies Sync in instellingen.</p>
-  </div>
-</div>
-
-<div id="screenSettings" class="screen">
-  <div class="settingsCard">
-    <div class="row">
-      <div><h2>Instellingen</h2><p class="sub">Backup maken en terugzetten, plus sync instellingen.</p></div>
-      <button class="btn" id="closeSettings">Sluiten</button>
-    </div>
-    <hr class="hr">
-    <div class="row">
-      <button class="btn primary" id="backupMake">Backup maken</button>
-      <button class="btn" id="backupRestore">Backup terugzetten</button>
-    </div>
-    <p class="note" id="backupInfo"></p>
-    <hr class="hr">
-    <div class="field">
-      <label for="syncSelect">Sync</label>
-      <select id="syncSelect">
-        <option value="local">Lokaal</option>
-        <option value="firebase">Firebase</option>
-      </select>
-    </div>
-    <p class="note">Delen met Lizet werkt via Firebase, of anders via export en import.</p>
-    <hr class="hr">
-    <div class="authBox">
-      <button class="btn" id="loginBtn">Inloggen</button>
-      <button class="btn" id="logoutBtn">Uitloggen</button>
-    </div>
-    <p class="note" id="authNote"></p>
-  </div>
-</div>
-```
-
-  </div>
-
-  <div class="tabs">
-    <div class="tabbar">
-      <button class="tab active" data-tab="calendar">Kalender</button>
-      <button class="tab" data-tab="list">Lijst</button>
-      <button class="tab" data-tab="add">Toevoegen</button>
-      <button class="tab" data-tab="info">Info</button>
-    </div>
-  </div>
-
-  <div class="toast" id="toast"></div>
-
-  <div class="modalOverlay" id="dayModal" aria-hidden="true">
-    <div class="modalCard" role="dialog" aria-modal="true" aria-labelledby="modalHead">
-      <div class="modalTop">
-        <div>
-          <p class="modalTitle" id="modalHead">Activiteiten</p>
-          <div class="modalDate" id="modalDate">0000-00-00</div>
-        </div>
-        <button class="modalClose" data-close-modal>Sluiten</button>
-      </div>
-      <div class="modalList" id="modalList"></div>
-      <div class="modalEmpty" id="modalEmpty" style="display:none">Geen items op deze dag.</div>
-      <div style="margin-top:10px;display:flex;justify-content:flex-end">
-        <button class="btn" id="modalGoList">Naar lijst</button>
-      </div>
-    </div>
-  </div>
-
-  <script type="module">
-    const state = {
-      syncMode: localStorage.getItem("rb_syncMode") || "firebase",
-      unlocked: true,
-      code: null,
-      selectedDate: null,
-      viewYear: null,
-      viewMonth: null,
-      firebaseReady: false,
-      user: null
+  try {
+    const { initializeApp } = await import("https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js");
+    
+    const firebaseConfig = {
+      apiKey: "AIzaSyDeGP5IIWaFoG4PuISUueeccexrZOIVwGY",
+      authDomain: "agenda-roblizet.firebaseapp.com",
+      projectId: "agenda-roblizet",
+      storageBucket: "agenda-roblizet.firebasestorage.app",
+      messagingSenderId: "789902813974",
+      appId: "1:789902813974:web:62231ad5f5f90b4a91fe37"
     };
 
-    const els = {
-      statusDot: document.getElementById("statusDot"),
-      statusText: document.getElementById("statusText"),
-      toast: document.getElementById("toast"),
-      monthTitle: document.getElementById("monthTitle"),
-      daysGrid: document.getElementById("daysGrid"),
-      selectedTitle: document.getElementById("selectedTitle"),
-      selectedText: document.getElementById("selectedText"),
-      listCards: document.getElementById("listCards"),
-      statMonth: document.getElementById("statMonth"),
-      statToday: document.getElementById("statToday"),
-      statBirthdays: document.getElementById("statBirthdays"),
-      syncSelect: document.getElementById("syncSelect"),
-      authNote: document.getElementById("authNote"),
-      dayModal: document.getElementById("dayModal"),
-      modalDate: document.getElementById("modalDate"),
-      modalList: document.getElementById("modalList"),
-      modalEmpty: document.getElementById("modalEmpty")
-    };
-
-    function toast(msg){
-      els.toast.textContent = msg;
-      els.toast.classList.add("show");
-      setTimeout(()=>els.toast.classList.remove("show"), 2200);
-    }
-
-    function pad(n){ return String(n).padStart(2,"0"); }
-    function isoDate(d){ return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`; }
-    function parseISO(s){ const [y,m,d]=s.split("-").map(Number); return new Date(y,m-1,d); }
-    function monthLabel(y,m){ const names=["januari","februari","maart","april","mei","juni","juli","augustus","september","oktober","november","december"]; return `${names[m]} ${y}`; }
-
-    function setStatus(mode){
-      els.statusDot.classList.remove("off");
-      els.statusText.textContent = mode==="firebase" ? "Online" : "Lokaal";
-    }
-
-    function setScreen(name){
-      document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
-      document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
-      if(name==="calendar"){ document.getElementById("screenCalendar").classList.add("active"); document.querySelector('.tab[data-tab="calendar"]').classList.add("active"); }
-      if(name==="list"){ document.getElementById("screenList").classList.add("active"); document.querySelector('.tab[data-tab="list"]').classList.add("active"); }
-      if(name==="add"){ document.getElementById("screenAdd").classList.add("active"); document.querySelector('.tab[data-tab="add"]').classList.add("active"); }
-      if(name==="info"){ document.getElementById("screenInfo").classList.add("active"); document.querySelector('.tab[data-tab="info"]').classList.add("active"); }
-      if(name==="settings"){ document.getElementById("screenSettings").classList.add("active"); }
-    }
-
-    function getLocalData(){
-      const raw=localStorage.getItem("rb_data_v3");
-      if(!raw) return {appointments:{},birthdays:{},memories:{}};
-      try{ const j=JSON.parse(raw); return {appointments:j.appointments||{},birthdays:j.birthdays||{},memories:j.memories||{}}; }
-      catch(e){ return {appointments:{},birthdays:{},memories:{}}; }
-    }
-    function setLocalData(data){ localStorage.setItem("rb_data_v3",JSON.stringify(data)); }
-    function uidEmailSafe(email){ return email.replace(/[^a-zA-Z0-9]/g,"_"); }
-    function nowId(){ return String(Date.now()); }
-
-    let fb = null;
-
-    async function initFirebase(){
-      try{
-        const firebaseConfig = {
-          apiKey: "AIzaSyDeGP5IIWaFoG4PuISUueeccexrZOIVwGY",
-          authDomain: "agenda-roblizet.firebaseapp.com",
-          databaseURL: "https://agenda-roblizet-default-rtdb.europe-west1.firebasedatabase.app",
-          projectId: "agenda-roblizet",
-          storageBucket: "agenda-roblizet.firebasestorage.app",
-          messagingSenderId: "789902813974",
-          appId: "1:789902813974:web:62231ad5f5f90b4a91fe37"
-        };
-
-        const appMod  = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");
-        const authMod = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js");
-        const dbMod   = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js");
-
-        const app  = appMod.initializeApp(firebaseConfig);
-        const auth = authMod.getAuth(app);
-        const db   = dbMod.getDatabase(app);
-
-        await authMod.setPersistence(auth, authMod.browserLocalPersistence);
-
-        fb = {app, auth, db, authMod, dbMod};
-
-        authMod.onAuthStateChanged(auth, (user)=>{
-          state.user = user || null;
-          renderAuthState();
-          if(state.syncMode==="firebase") refreshAll();
-        });
-
-        state.firebaseReady = true;
-        renderAuthState();
-      }catch(e){
-        state.firebaseReady = false;
-        renderAuthState();
-      }
-    }
-
-    function renderAuthState(){
-      const btnLogin  = document.getElementById("loginBtn");
-      const btnLogout = document.getElementById("logoutBtn");
-      if(state.syncMode!=="firebase"){
-        els.authNote.textContent="Firebase staat uit. Zet Sync op Firebase om in te loggen.";
-        btnLogin.disabled=true; btnLogout.disabled=true; return;
-      }
-      if(!state.firebaseReady){
-        els.authNote.textContent="Firebase laadt niet. Check internet, en ververs.";
-        btnLogin.disabled=true; btnLogout.disabled=true; return;
-      }
-      if(state.user){
-        els.authNote.textContent=`Ingelogd als ${state.user.email||"gebruiker"}.`;
-        btnLogin.disabled=true; btnLogout.disabled=false;
-      }else{
-        els.authNote.textContent="Niet ingelogd. Tik op Inloggen.";
-        btnLogin.disabled=false; btnLogout.disabled=true;
-      }
-    }
-
-    function basePath(){
-      if(state.syncMode!=="firebase") return null;
-      if(!state.user||!state.user.email) return null;
-      return `users/${uidEmailSafe(state.user.email)}`;
-    }
-
-    async function fbGetAll(){
-      const p=basePath(); if(!p) return null;
-      const snap=await fb.dbMod.get(fb.dbMod.ref(fb.db,`${p}/data`));
-      if(!snap.exists()) return {appointments:{},birthdays:{},memories:{}};
-      const v=snap.val()||{};
-      return {appointments:v.appointments||{},birthdays:v.birthdays||{},memories:v.memories||{}};
-    }
-
-    async function fbSetAll(data){
-      const p=basePath(); if(!p) throw new Error("not logged in");
-      await fb.dbMod.set(fb.dbMod.ref(fb.db,`${p}/data`),data);
-    }
-
-    async function getAll(){
-      if(state.syncMode==="firebase"){
-        if(!state.firebaseReady||!state.user) return {appointments:{},birthdays:{},memories:{}};
-        try{ const d=await fbGetAll(); return d||getLocalData(); }catch(e){ return getLocalData(); }
-      }
-      return getLocalData();
-    }
-
-    async function setAll(data){
-      setLocalData(data);
-      if(state.syncMode==="firebase"){
-        if(!state.firebaseReady||!state.user) return;
-        try{ await fbSetAll(data); }catch(e){}
-      }
-    }
-
-    function isEditAllowed(){ return true; }
-    function updateEditUI(){
-      document.getElementById("saveBtn").disabled=!isEditAllowed();
-      document.getElementById("clearBtn").disabled=!isEditAllowed();
-    }
-
-    function openModal(dateStr,items){
-      els.modalDate.textContent=dateStr;
-      els.modalList.innerHTML="";
-      if(!items||items.length===0){
-        els.modalEmpty.style.display="block";
-      }else{
-        els.modalEmpty.style.display="none";
-        items.forEach(it=>{
-          const card=document.createElement("div");
-          card.className="itemCard";
-          card.innerHTML=`<div class="itemRow"><div class="itemMain"><div class="row" style="align-items:flex-start"><div style="min-width:0"><p class="itemTitle" style="margin:0 0 6px">${escapeHtml(it.title||"(zonder titel)")}</p><div class="chips"><span class="chip ${it.kindChip}">${it.kindLabel}</span>${it.date?`<span class="chip">${it.date}</span>`:""}${it.time?`<span class="chip">${it.time}</span>`:""}${it.who?`<span class="chip muted">${escapeHtml(it.who)}</span>`:""}</div>${it.desc?`<p class="sub" style="margin:10px 0 0">${escapeHtml(it.desc)}</p>`:""}</div></div></div></div>`;
-          els.modalList.appendChild(card);
-        });
-      }
-      els.dayModal.classList.add("open");
-      els.dayModal.setAttribute("aria-hidden","false");
-      document.body.style.overflow="hidden";
-    }
-
-    function closeModal(){
-      els.dayModal.classList.remove("open");
-      els.dayModal.setAttribute("aria-hidden","true");
-      document.body.style.overflow="";
-    }
-
-    function escapeHtml(s){ return String(s).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;"); }
-
-    async function dayItems(dateStr){
-      const data=await getAll();
-      const items=[];
-      Object.values(data.appointments||{}).forEach(a=>{ if(a&&a.date===dateStr) items.push({type:"appointment",kindLabel:"Afspraak",kindChip:"a",title:a.desc||a.title||"(zonder titel)",date:a.date,time:a.time||"",who:a.who||"",desc:a.location?`Locatie: ${a.location}`:""}); });
-      Object.values(data.birthdays||{}).forEach(b=>{ if(b&&b.date===dateStr) items.push({type:"birthday",kindLabel:"Verjaardag",kindChip:"b",title:b.name||b.title||"(verjaardag)",date:b.date,time:"",who:b.who||"",desc:b.note||""}); });
-      Object.values(data.memories||{}).forEach(m=>{ if(m&&m.date===dateStr) items.push({type:"memory",kindLabel:"Herinnering",kindChip:"m",title:m.title||m.desc||"(herinnering)",date:m.date,time:m.time||"",who:m.who||"",desc:m.desc||""}); });
-      items.sort((x,y)=>(x.time||"99:99").localeCompare(y.time||"99:99"));
-      return items;
-    }
-
-    async function renderCalendar(){
-      const now=new Date();
-      if(state.viewYear===null){ state.viewYear=now.getFullYear(); state.viewMonth=now.getMonth(); }
-      els.monthTitle.textContent=monthLabel(state.viewYear,state.viewMonth);
-      const first=new Date(state.viewYear,state.viewMonth,1);
-      const last=new Date(state.viewYear,state.viewMonth+1,0);
-      let startDow=first.getDay(); startDow=startDow===0?7:startDow;
-      const leading=startDow-1;
-      const totalDays=last.getDate();
-      els.daysGrid.innerHTML="";
-      const data=await getAll();
-      const hasA={},hasB={},hasM={};
-      Object.values(data.appointments||{}).forEach(a=>{ if(a&&a.date){ const [y,mo]=a.date.split("-").map(Number); if(y===state.viewYear&&(mo-1)===state.viewMonth) hasA[a.date]=true; } });
-      Object.values(data.birthdays||{}).forEach(b=>{ if(b&&b.date){ const [y,mo]=b.date.split("-").map(Number); if(y===state.viewYear&&(mo-1)===state.viewMonth) hasB[b.date]=true; } });
-      Object.values(data.memories||{}).forEach(m=>{ if(m&&m.date){ const [y,mo]=m.date.split("-").map(Number); if(y===state.viewYear&&(mo-1)===state.viewMonth) hasM[m.date]=true; } });
-      for(let i=0;i<leading;i++){ const d=document.createElement("div"); d.className="day muted"; d.dataset.date=""; els.daysGrid.appendChild(d); }
-      for(let day=1;day<=totalDays;day++){
-        const d=document.createElement("div"); d.className="day"; d.textContent=String(day);
-        const ds=`${state.viewYear}-${pad(state.viewMonth+1)}-${pad(day)}`; d.dataset.date=ds;
-        if(ds===isoDate(now)) d.classList.add("today");
-        if(state.selectedDate===ds) d.classList.add("selected");
-        const dots=document.createElement("div"); dots.className="dots";
-        if(hasA[ds]){ const s=document.createElement("span"); s.className="d a"; dots.appendChild(s); }
-        if(hasB[ds]){ const s=document.createElement("span"); s.className="d b"; dots.appendChild(s); }
-        if(hasM[ds]){ const s=document.createElement("span"); s.className="d m"; dots.appendChild(s); }
-        if(dots.childNodes.length>0) d.appendChild(dots);
-        els.daysGrid.appendChild(d);
-      }
-      const filled=leading+totalDays;
-      const remainder=filled%7===0?0:(7-(filled%7));
-      for(let i=0;i<remainder;i++){ const d=document.createElement("div"); d.className="day muted"; d.dataset.date=""; els.daysGrid.appendChild(d); }
-      if(typeof bindDaysGrid==="function") bindDaysGrid();
-      updateSelectedBox(); updateStats(); renderList();
-    }
-
-    async function updateSelectedBox(){
-      if(!state.selectedDate){ els.selectedText.textContent="Kies eerst een dag in de kalender"; return; }
-      const items=await dayItems(state.selectedDate);
-      if(items.length===0){ els.selectedText.textContent="Geen activiteiten op deze dag"; }
-      else{ const first=items[0]; let line=""; if(first.kindLabel) line+=`${first.kindLabel} `; if(first.title) line+=first.title; if(first.time) line+=`, ${first.time}`; els.selectedText.textContent=line; }
-    }
-
-    async function updateStats(){
-      const data=await getAll(); const now=new Date();
-      const ym=`${now.getFullYear()}-${pad(now.getMonth()+1)}`; const today=isoDate(now);
-      let monthCount=0; Object.values(data.appointments||{}).forEach(a=>{ if(a&&a.date&&a.date.startsWith(ym)) monthCount++; });
-      let todayCount=0; Object.values(data.appointments||{}).forEach(a=>{ if(a&&a.date===today) todayCount++; });
-      const bCount=Object.keys(data.birthdays||{}).length;
-      els.statMonth.textContent=String(monthCount); els.statToday.textContent=String(todayCount); els.statBirthdays.textContent=String(bCount);
-    }
-
-    function iconFromDate(dateStr){ const d=parseISO(dateStr); const months=["JAN","FEB","MRT","APR","MEI","JUN","JUL","AUG","SEP","OKT","NOV","DEC"]; return {m:months[d.getMonth()],d:pad(d.getDate())}; }
-
-    async function renderList(filter){
-      const data=await getAll(); const cards=els.listCards; cards.innerHTML="";
-      let items=[];
-      Object.values(data.appointments||{}).forEach(a=>{ if(!a) return; items.push({type:"appointment",kindLabel:"Afspraak",kindChip:"a",title:a.desc||a.title||"(zonder titel)",date:a.date||"",time:a.time||"",who:a.who||"",desc:a.location||""}); });
-      Object.values(data.birthdays||{}).forEach(b=>{ if(!b) return; items.push({type:"birthday",kindLabel:"Verjaardag",kindChip:"b",title:b.name||b.title||"(verjaardag)",date:b.date||"",time:"",who:b.who||"",desc:b.note||""}); });
-      Object.values(data.memories||{}).forEach(m=>{ if(!m) return; items.push({type:"memory",kindLabel:"Herinnering",kindChip:"m",title:m.title||m.desc||"(herinnering)",date:m.date||"",time:m.time||"",who:m.who||"",desc:m.desc||""}); });
-      const now=new Date(); const today=isoDate(now); const ym=`${now.getFullYear()}-${pad(now.getMonth()+1)}`;
-      if(filter==="today") items=items.filter(i=>i.date===today);
-      if(filter==="month") items=items.filter(i=>i.type==="appointment"&&i.date&&i.date.startsWith(ym));
-      if(filter==="birthdays") items=items.filter(i=>i.type==="birthday");
-      items.sort((a,b)=>{ const da=a.date||"9999-99-99"; const db=b.date||"9999-99-99"; if(da!==db) return da.localeCompare(db); return (a.time||"99:99").localeCompare(b.time||"99:99"); });
-      items.forEach(it=>{
-        const card=document.createElement("div"); card.className="itemCard";
-        const ic=it.date?iconFromDate(it.date):{m:"",d:""};
-        card.innerHTML=`<div class="itemRow"><div class="iconDate"><div class="m">${ic.m}</div><div class="d">${ic.d}</div></div><div class="itemMain"><div class="row" style="align-items:flex-start"><div style="min-width:0"><p class="itemTitle">${escapeHtml(it.title)}</p><div class="chips"><span class="chip ${it.kindChip}">${it.kindLabel}</span>${it.date?`<span class="chip">${it.date}</span>`:""}${it.time?`<span class="chip">${it.time}</span>`:""}${it.desc?`<span class="chip muted">${escapeHtml(it.desc)}</span>`:`<span class="chip muted">Geen locatie</span>`}</div></div><div style="display:flex;gap:10px;align-items:center"><button class="btn small" data-open-date="${it.date||""}">Open</button></div></div></div></div>`;
-        cards.appendChild(card);
+    mainApp = initializeApp(firebaseConfig);
+    console.log("✅ Main Firebase App geïnitialiseerd");
+  } catch (e) {
+    console.error("Firebase initialisatie mislukt:", e);
+  }
+}
+
+    const els = {
+      statusDot: document.getElementById("statusDot"),
+      statusText: document.getElementById("statusText"),
+      toast: document.getElementById("toast"),
+      monthTitle: document.getElementById("monthTitle"),
+      daysGrid: document.getElementById("daysGrid"),
+      selectedTitle: document.getElementById("selectedTitle"),
+      selectedText: document.getElementById("selectedText"),
+      listCards: document.getElementById("listCards"),
+      statMonth: document.getElementById("statMonth"),
+      statToday: document.getElementById("statToday"),
+      statBirthdays: document.getElementById("statBirthdays"),
+      syncSelect: document.getElementById("syncSelect"),
+      authNote: document.getElementById("authNote"),
+      dayModal: document.getElementById("dayModal"),
+      modalDate: document.getElementById("modalDate"),
+      modalList: document.getElementById("modalList"),
+      modalEmpty: document.getElementById("modalEmpty")
+    };
+
+    function toast(msg){
+      els.toast.textContent = msg;
+      els.toast.classList.add("show");
+      setTimeout(()=>els.toast.classList.remove("show"), 2200);
+    }
+
+    function pad(n){ return String(n).padStart(2,"0"); }
+    function isoDate(d){ return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`; }
+    function parseISO(s){ const [y,m,d]=s.split("-").map(Number); return new Date(y,m-1,d); }
+    function monthLabel(y,m){ const names=["januari","februari","maart","april","mei","juni","juli","augustus","september","oktober","november","december"]; return `${names[m]} ${y}`; }
+
+    function setStatus(mode){
+      els.statusDot.classList.remove("off");
+      els.statusText.textContent = mode==="firebase" ? "Online" : "Lokaal";
+    }
+
+    function setScreen(name){
+      document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+      document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+      if(name==="calendar"){ document.getElementById("screenCalendar").classList.add("active"); document.querySelector('.tab[data-tab="calendar"]').classList.add("active"); }
+      if(name==="list"){ document.getElementById("screenList").classList.add("active"); document.querySelector('.tab[data-tab="list"]').classList.add("active"); }
+      if(name==="add"){ document.getElementById("screenAdd").classList.add("active"); document.querySelector('.tab[data-tab="add"]').classList.add("active"); }
+      if(name==="info"){ document.getElementById("screenInfo").classList.add("active"); document.querySelector('.tab[data-tab="info"]').classList.add("active"); }
+      if(name==="settings"){ document.getElementById("screenSettings").classList.add("active"); }
+    }
+
+    function getLocalData(){
+      const raw=localStorage.getItem("rb_data_v3");
+      if(!raw) return {appointments:{},birthdays:{},memories:{}};
+      try{ const j=JSON.parse(raw); return {appointments:j.appointments||{},birthdays:j.birthdays||{},memories:j.memories||{}}; }
+      catch(e){ return {appointments:{},birthdays:{},memories:{}}; }
+    }
+    function setLocalData(data){ localStorage.setItem("rb_data_v3",JSON.stringify(data)); }
+    function uidEmailSafe(email){ return email.replace(/[^a-zA-Z0-9]/g,"_"); }
+    function nowId(){ return String(Date.now()); }
+
+    let fb = null;
+
+    async function initFirebase(){
+      try{
+        const firebaseConfig = {
+          apiKey: "AIzaSyDeGP5IIWaFoG4PuISUueeccexrZOIVwGY",
+          authDomain: "agenda-roblizet.firebaseapp.com",
+          databaseURL: "https://agenda-roblizet-default-rtdb.europe-west1.firebasedatabase.app",
+          projectId: "agenda-roblizet",
+          storageBucket: "agenda-roblizet.firebasestorage.app",
+          messagingSenderId: "789902813974",
+          appId: "1:789902813974:web:62231ad5f5f90b4a91fe37"
+        };
+
+        const appMod  = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");
+        const authMod = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js");
+        const dbMod   = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js");
+
+        const app  = appMod.initializeApp(firebaseConfig);
+        const auth = authMod.getAuth(app);
+        const db   = dbMod.getDatabase(app);
+
+        await authMod.setPersistence(auth, authMod.browserLocalPersistence);
+
+        fb = {app, auth, db, authMod, dbMod};
+
+        authMod.onAuthStateChanged(auth, (user)=>{
+          state.user = user || null;
+          renderAuthState();
+          if(state.syncMode==="firebase") refreshAll();
+        });
+
+        state.firebaseReady = true;
+        renderAuthState();
+      }catch(e){
+        state.firebaseReady = false;
+        renderAuthState();
+      }
+    }
+
+    function renderAuthState(){
+      const btnLogin  = document.getElementById("loginBtn");
+      const btnLogout = document.getElementById("logoutBtn");
+      if(state.syncMode!=="firebase"){
+        els.authNote.textContent="Firebase staat uit. Zet Sync op Firebase om in te loggen.";
+        btnLogin.disabled=true; btnLogout.disabled=true; return;
+      }
+      if(!state.firebaseReady){
+        els.authNote.textContent="Firebase laadt niet. Check internet, en ververs.";
+        btnLogin.disabled=true; btnLogout.disabled=true; return;
+      }
+      if(state.user){
+        els.authNote.textContent=`Ingelogd als ${state.user.email||"gebruiker"}.`;
+        btnLogin.disabled=true; btnLogout.disabled=false;
+      }else{
+        els.authNote.textContent="Niet ingelogd. Tik op Inloggen.";
+        btnLogin.disabled=false; btnLogout.disabled=true;
+      }
+    }
+
+    function basePath(){
+      if(state.syncMode!=="firebase") return null;
+      if(!state.user||!state.user.email) return null;
+      return `users/${uidEmailSafe(state.user.email)}`;
+    }
+
+    async function fbGetAll(){
+      const p=basePath(); if(!p) return null;
+      const snap=await fb.dbMod.get(fb.dbMod.ref(fb.db,`${p}/data`));
+      if(!snap.exists()) return {appointments:{},birthdays:{},memories:{}};
+      const v=snap.val()||{};
+      return {appointments:v.appointments||{},birthdays:v.birthdays||{},memories:v.memories||{}};
+    }
+
+    async function fbSetAll(data){
+      const p=basePath(); if(!p) throw new Error("not logged in");
+      await fb.dbMod.set(fb.dbMod.ref(fb.db,`${p}/data`),data);
+    }
+
+    async function getAll(){
+      if(state.syncMode==="firebase"){
+        if(!state.firebaseReady||!state.user) return {appointments:{},birthdays:{},memories:{}};
+        try{ const d=await fbGetAll(); return d||getLocalData(); }catch(e){ return getLocalData(); }
+      }
+      return getLocalData();
+    }
+
+    async function setAll(data){
+      setLocalData(data);
+      if(state.syncMode==="firebase"){
+        if(!state.firebaseReady||!state.user) return;
+        try{ await fbSetAll(data); }catch(e){}
+      }
+    }
+
+    function isEditAllowed(){ return true; }
+    function updateEditUI(){
+      document.getElementById("saveBtn").disabled=!isEditAllowed();
+      document.getElementById("clearBtn").disabled=!isEditAllowed();
+    }
+
+    function openModal(dateStr,items){
+      els.modalDate.textContent=dateStr;
+      els.modalList.innerHTML="";
+      if(!items||items.length===0){
+        els.modalEmpty.style.display="block";
+      }else{
+        els.modalEmpty.style.display="none";
+        items.forEach(it=>{
+          const card=document.createElement("div");
+          card.className="itemCard";
+          card.innerHTML=`<div class="itemRow"><div class="itemMain"><div class="row" style="align-items:flex-start"><div style="min-width:0"><p class="itemTitle" style="margin:0 0 6px">${escapeHtml(it.title||"(zonder titel)")}</p><div class="chips"><span class="chip ${it.kindChip}">${it.kindLabel}</span>${it.date?`<span class="chip">${it.date}</span>`:""}${it.time?`<span class="chip">${it.time}</span>`:""}${it.who?`<span class="chip muted">${escapeHtml(it.who)}</span>`:""}</div>${it.desc?`<p class="sub" style="margin:10px 0 0">${escapeHtml(it.desc)}</p>`:""}</div></div></div></div>`;
+          els.modalList.appendChild(card);
+        });
+      }
+      els.dayModal.classList.add("open");
+      els.dayModal.setAttribute("aria-hidden","false");
+      document.body.style.overflow="hidden";
+    }
+
+    function closeModal(){
+      els.dayModal.classList.remove("open");
+      els.dayModal.setAttribute("aria-hidden","true");
+      document.body.style.overflow="";
+    }
+
+    function escapeHtml(s){ return String(s).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;"); }
+
+    async function dayItems(dateStr){
+      const data=await getAll();
+      const items=[];
+      Object.values(data.appointments||{}).forEach(a=>{ if(a&&a.date===dateStr) items.push({type:"appointment",kindLabel:"Afspraak",kindChip:"a",title:a.desc||a.title||"(zonder titel)",date:a.date,time:a.time||"",who:a.who||"",desc:a.location?`Locatie: ${a.location}`:""}); });
+      Object.values(data.birthdays||{}).forEach(b=>{ if(b&&b.date===dateStr) items.push({type:"birthday",kindLabel:"Verjaardag",kindChip:"b",title:b.name||b.title||"(verjaardag)",date:b.date,time:"",who:b.who||"",desc:b.note||""}); });
+      Object.values(data.memories||{}).forEach(m=>{ if(m&&m.date===dateStr) items.push({type:"memory",kindLabel:"Herinnering",kindChip:"m",title:m.title||m.desc||"(herinnering)",date:m.date,time:m.time||"",who:m.who||"",desc:m.desc||""}); });
+      items.sort((x,y)=>(x.time||"99:99").localeCompare(y.time||"99:99"));
+      return items;
+    }
+
+    async function renderCalendar(){
+      const now=new Date();
+      if(state.viewYear===null){ state.viewYear=now.getFullYear(); state.viewMonth=now.getMonth(); }
+      els.monthTitle.textContent=monthLabel(state.viewYear,state.viewMonth);
+      const first=new Date(state.viewYear,state.viewMonth,1);
+      const last=new Date(state.viewYear,state.viewMonth+1,0);
+      let startDow=first.getDay(); startDow=startDow===0?7:startDow;
+      const leading=startDow-1;
+      const totalDays=last.getDate();
+      els.daysGrid.innerHTML="";
+      const data=await getAll();
+      const hasA={},hasB={},hasM={};
+      Object.values(data.appointments||{}).forEach(a=>{ if(a&&a.date){ const [y,mo]=a.date.split("-").map(Number); if(y===state.viewYear&&(mo-1)===state.viewMonth) hasA[a.date]=true; } });
+      Object.values(data.birthdays||{}).forEach(b=>{ if(b&&b.date){ const [y,mo]=b.date.split("-").map(Number); if(y===state.viewYear&&(mo-1)===state.viewMonth) hasB[b.date]=true; } });
+      Object.values(data.memories||{}).forEach(m=>{ if(m&&m.date){ const [y,mo]=m.date.split("-").map(Number); if(y===state.viewYear&&(mo-1)===state.viewMonth) hasM[m.date]=true; } });
+      for(let i=0;i<leading;i++){ const d=document.createElement("div"); d.className="day muted"; d.dataset.date=""; els.daysGrid.appendChild(d); }
+      for(let day=1;day<=totalDays;day++){
+        const d=document.createElement("div"); d.className="day"; d.textContent=String(day);
+        const ds=`${state.viewYear}-${pad(state.viewMonth+1)}-${pad(day)}`; d.dataset.date=ds;
+        if(ds===isoDate(now)) d.classList.add("today");
+        if(state.selectedDate===ds) d.classList.add("selected");
+        const dots=document.createElement("div"); dots.className="dots";
+        if(hasA[ds]){ const s=document.createElement("span"); s.className="d a"; dots.appendChild(s); }
+        if(hasB[ds]){ const s=document.createElement("span"); s.className="d b"; dots.appendChild(s); }
+        if(hasM[ds]){ const s=document.createElement("span"); s.className="d m"; dots.appendChild(s); }
+        if(dots.childNodes.length>0) d.appendChild(dots);
+        els.daysGrid.appendChild(d);
+      }
+      const filled=leading+totalDays;
+      const remainder=filled%7===0?0:(7-(filled%7));
+      for(let i=0;i<remainder;i++){ const d=document.createElement("div"); d.className="day muted"; d.dataset.date=""; els.daysGrid.appendChild(d); }
+      if(typeof bindDaysGrid==="function") bindDaysGrid();
+      updateSelectedBox(); updateStats(); renderList();
+    }
+
+    async function updateSelectedBox(){
+      if(!state.selectedDate){ els.selectedText.textContent="Kies eerst een dag in de kalender"; return; }
+      const items=await dayItems(state.selectedDate);
+      if(items.length===0){ els.selectedText.textContent="Geen activiteiten op deze dag"; }
+      else{ const first=items[0]; let line=""; if(first.kindLabel) line+=`${first.kindLabel} `; if(first.title) line+=first.title; if(first.time) line+=`, ${first.time}`; els.selectedText.textContent=line; }
+    }
+
+    async function updateStats(){
+      const data=await getAll(); const now=new Date();
+      const ym=`${now.getFullYear()}-${pad(now.getMonth()+1)}`; const today=isoDate(now);
+      let monthCount=0; Object.values(data.appointments||{}).forEach(a=>{ if(a&&a.date&&a.date.startsWith(ym)) monthCount++; });
+      let todayCount=0; Object.values(data.appointments||{}).forEach(a=>{ if(a&&a.date===today) todayCount++; });
+      const bCount=Object.keys(data.birthdays||{}).length;
+      els.statMonth.textContent=String(monthCount); els.statToday.textContent=String(todayCount); els.statBirthdays.textContent=String(bCount);
+    }
+
+    function iconFromDate(dateStr){ const d=parseISO(dateStr); const months=["JAN","FEB","MRT","APR","MEI","JUN","JUL","AUG","SEP","OKT","NOV","DEC"]; return {m:months[d.getMonth()],d:pad(d.getDate())}; }
+
+    async function renderList(filter){
+      const data=await getAll(); const cards=els.listCards; cards.innerHTML="";
+      let items=[];
+      Object.values(data.appointments||{}).forEach(a=>{ if(!a) return; items.push({type:"appointment",kindLabel:"Afspraak",kindChip:"a",title:a.desc||a.title||"(zonder titel)",date:a.date||"",time:a.time||"",who:a.who||"",desc:a.location||""}); });
+      Object.values(data.birthdays||{}).forEach(b=>{ if(!b) return; items.push({type:"birthday",kindLabel:"Verjaardag",kindChip:"b",title:b.name||b.title||"(verjaardag)",date:b.date||"",time:"",who:b.who||"",desc:b.note||""}); });
+      Object.values(data.memories||{}).forEach(m=>{ if(!m) return; items.push({type:"memory",kindLabel:"Herinnering",kindChip:"m",title:m.title||m.desc||"(herinnering)",date:m.date||"",time:m.time||"",who:m.who||"",desc:m.desc||""}); });
+      const now=new Date(); const today=isoDate(now); const ym=`${now.getFullYear()}-${pad(now.getMonth()+1)}`;
+      if(filter==="today") items=items.filter(i=>i.date===today);
+      if(filter==="month") items=items.filter(i=>i.type==="appointment"&&i.date&&i.date.startsWith(ym));
+      if(filter==="birthdays") items=items.filter(i=>i.type==="birthday");
+      items.sort((a,b)=>{ const da=a.date||"9999-99-99"; const db=b.date||"9999-99-99"; if(da!==db) return da.localeCompare(db); return (a.time||"99:99").localeCompare(b.time||"99:99"); });
+      items.forEach(it=>{
+        const card=document.createElement("div"); card.className="itemCard";
+        const ic=it.date?iconFromDate(it.date):{m:"",d:""};
+        card.innerHTML=`<div class="itemRow"><div class="iconDate"><div class="m">${ic.m}</div><div class="d">${ic.d}</div></div><div class="itemMain"><div class="row" style="align-items:flex-start"><div style="min-width:0"><p class="itemTitle">${escapeHtml(it.title)}</p><div class="chips"><span class="chip ${it.kindChip}">${it.kindLabel}</span>${it.date?`<span class="chip">${it.date}</span>`:""}${it.time?`<span class="chip">${it.time}</span>`:""}${it.desc?`<span class="chip muted">${escapeHtml(it.desc)}</span>`:`<span class="chip muted">Geen locatie</span>`}</div></div><div style="display:flex;gap:10px;align-items:center"><button class="btn small" data-open-date="${it.date||""}">Open</button></div></div></div></div>`;
+        cards.appendChild(card);
+      });
+    }
+
+    async function refreshAll(){
+      setStatus(state.syncMode); els.syncSelect.value=state.syncMode; updateEditUI(); await renderCalendar(); renderAuthState();
+    }
+
+    function requireTitle(){ const t=document.getElementById("titleInput").value.trim(); if(!t){ toast("Titel is verplicht"); return null; } return t; }
+
+    function readForm(){
+      const type=document.getElementById("typeSelect").value;
+      const title=requireTitle(); if(!title) return null;
+      const date=document.getElementById("dateInput").value;
+      const time=document.getElementById("timeInput").value;
+      const desc=document.getElementById("descInput").value.trim();
+      const who=document.getElementById("whoSelect").value;
+      if(type==="appointment"&&!date){ toast("Datum is verplicht"); return null; }
+      return {type,title,date,time,desc,who};
+    }
+
+    function clearForm(){
+      document.getElementById("titleInput").value="";
+      document.getElementById("dateInput").value="";
+      document.getElementById("timeInput").value="";
+      document.getElementById("descInput").value="";
+      document.getElementById("whoSelect").value="rob";
+      document.getElementById("typeSelect").value="appointment";
+      document.getElementById("reminderSelect").value="";
+      toggleTimeField();
+    }
+
+    function toggleTimeField(){
+      const type=document.getElementById("typeSelect").value;
+      const isBirthday=(type==="birthday");
+      document.getElementById("timeField").style.display=isBirthday?"none":"block";
+      document.getElementById("reminderField").style.display=isBirthday?"none":"block";
+    }
+
+    async function saveItem(){
+      if(!isEditAllowed()){ toast("Gastmodus, bewerken uit"); return; }
+      const f=readForm(); if(!f) return;
+      const data=await getAll(); const id=nowId();
+      if(f.type==="appointment") data.appointments[id]={id:Number(id),date:f.date,time:f.time||"",desc:f.title,who:f.who,createdAt:new Date().toISOString()};
+      if(f.type==="birthday") data.birthdays[id]={id:Number(id),date:f.date,name:f.title,who:f.who,note:f.desc,createdAt:new Date().toISOString()};
+      if(f.type==="memory") data.memories[id]={id:Number(id),date:f.date,time:f.time||"",title:f.title,desc:f.desc,who:f.who,createdAt:new Date().toISOString()};
+      await setAll(data);
+
+      // Herinnering inplannen indien gekozen
+      const herinnering = document.getElementById("reminderSelect").value;
+      if(herinnering && f.date && f.time){
+        const datumTijd = `${f.date}T${f.time}:00`;
+        const tijdstip = new Date(datumTijd).getTime() - (Number(herinnering) * 60 * 1000);
+        if(tijdstip > Date.now()){
+          await planMelding("📅 " + f.title, "Herinnering: " + f.title, new Date(tijdstip).toISOString());
+        } else {
+          toast("Opgeslagen (moment al voorbij voor herinnering)");
+        }
+      } else {
+        toast("Opgeslagen");
+      }
+
+      clearForm(); await refreshAll(); setScreen("calendar");
+    }
+
+    function exportData(){
+      const data=getLocalData();
+      const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+      const url=URL.createObjectURL(blob);
+      const a=document.createElement("a"); a.href=url; a.download="agenda_roblizet_export.json";
+      document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url); toast("Export gemaakt");
+    }
+
+    function importData(){
+      const input=document.createElement("input"); input.type="file"; input.accept="application/json";
+      input.onchange=async ()=>{
+        const file=input.files[0]; if(!file) return;
+        const text=await file.text();
+        try{ const j=JSON.parse(text); await setAll({appointments:j.appointments||{},birthdays:j.birthdays||{},memories:j.memories||{}}); toast("Import klaar"); await refreshAll(); }
+        catch(e){ toast("Import fout"); }
+      };
+      input.click();
+    }
+
+    async function doLogin(){
+      if(!fb||!state.firebaseReady) return toast("Firebase niet klaar");
+      const email=prompt("Email voor agenda login"); if(!email) return;
+      const password=prompt("Wachtwoord"); if(!password) return;
+      try{
+        await fb.authMod.setPersistence(fb.auth, fb.authMod.browserLocalPersistence);
+        await fb.authMod.signInWithEmailAndPassword(fb.auth,email,password);
+        toast("Ingelogd"); state.syncMode="firebase"; localStorage.setItem("rb_syncMode","firebase"); await refreshAll();
+      }catch(e){
+        try{
+          await fb.authMod.setPersistence(fb.auth, fb.authMod.browserLocalPersistence);
+          await fb.authMod.createUserWithEmailAndPassword(fb.auth,email,password);
+          toast("Account gemaakt en ingelogd"); state.syncMode="firebase"; localStorage.setItem("rb_syncMode","firebase"); await refreshAll();
+        }catch(err){ toast("Login fout"); }
+      }
+    }
+
+    async function doLogout(){
+      if(!fb||!state.firebaseReady) return;
+      try{ await fb.authMod.signOut(fb.auth); toast("Uitgelogd"); await refreshAll(); }
+      catch(e){ toast("Uitloggen fout"); }
+    }
+
+    function setBackupInfo(){
+      const raw=localStorage.getItem("rb_backup_v1"); const el=document.getElementById("backupInfo"); if(!el) return;
+      if(!raw){ el.textContent="Nog geen backup gemaakt."; return; }
+      try{ const obj=JSON.parse(raw); const d=new Date(obj.ts||Date.now()); el.textContent="Laatste backup: "+d.toLocaleString(); }
+      catch(e){ el.textContent="Backup gevonden, maar kan niet gelezen worden."; }
+    }
+
+    function makeBackup(){
+      const obj={ts:Date.now(),items:{}};
+      for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); if(!k) continue; if(k.startsWith("rb_")) obj.items[k]=localStorage.getItem(k); }
+      localStorage.setItem("rb_backup_v1",JSON.stringify(obj)); setBackupInfo(); toast("Backup opgeslagen");
+    }
+
+    async function restoreBackup(){
+      const raw=localStorage.getItem("rb_backup_v1"); if(!raw){ toast("Geen backup"); return; }
+      const ok=confirm("Backup terugzetten. Dit overschrijft je huidige data."); if(!ok) return;
+      try{
+        const obj=JSON.parse(raw); const items=obj.items||{};
+        Object.keys(items).forEach(k=>{ localStorage.setItem(k,items[k]); });
+        localStorage.removeItem("rb_unlocked"); localStorage.removeItem("rb_code");
+        state.syncMode=localStorage.getItem("rb_syncMode")||"local"; els.syncSelect.value=state.syncMode;
+        await refreshAll(); setBackupInfo(); toast("Backup teruggezet");
+      }catch(e){ toast("Backup fout"); }
+    }
+
+    function openDateFromList(dateStr){
+      if(!dateStr) return;
+      state.selectedDate=dateStr; setScreen("calendar");
+      renderCalendar().then(async ()=>{ const items=await dayItems(dateStr); openModal(dateStr,items); });
+    }
+
+    document.querySelectorAll(".tab").forEach(btn=>{
+      btn.addEventListener("click",()=>{
+        const t=btn.dataset.tab;
+        if(t==="calendar") setScreen("calendar");
+        if(t==="list"){ setScreen("list"); renderList(); }
+        if(t==="add") setScreen("add");
+        if(t==="info") setScreen("info");
+      });
+    });
+
+    document.getElementById("openSettings").addEventListener("click",()=>setScreen("settings"));
+    document.getElementById("closeSettings").addEventListener("click",()=>setScreen("calendar"));
+    document.getElementById("prevMonth").addEventListener("click",async()=>{ state.viewMonth--; if(state.viewMonth<0){state.viewMonth=11;state.viewYear--;} await renderCalendar(); });
+    document.getElementById("nextMonth").addEventListener("click",async()=>{ state.viewMonth++; if(state.viewMonth>11){state.viewMonth=0;state.viewYear++;} await renderCalendar(); });
+    document.getElementById("goToday").addEventListener("click",async()=>{ const now=new Date(); state.viewYear=now.getFullYear(); state.viewMonth=now.getMonth(); state.selectedDate=isoDate(now); await renderCalendar(); const items=await dayItems(state.selectedDate); openModal(state.selectedDate,items); });
+    document.getElementById("tapHint").addEventListener("click",()=>toast("Tik een dag met stipjes"));
+    document.getElementById("goListFromSelected").addEventListener("click",()=>{ setScreen("list"); renderList(); });
+    document.getElementById("backToCalendar").addEventListener("click",()=>setScreen("calendar"));
+    document.getElementById("typeSelect").addEventListener("change",toggleTimeField);
+    document.getElementById("saveBtn").addEventListener("click",saveItem);
+    document.getElementById("clearBtn").addEventListener("click",()=>{ if(!isEditAllowed()){toast("Gastmodus");return;} clearForm(); toast("Leeg"); });
+    document.getElementById("exportBtn").addEventListener("click",exportData);
+    document.getElementById("importBtn").addEventListener("click",importData);
+    document.getElementById("backupMake").addEventListener("click",makeBackup);
+    document.getElementById("backupRestore").addEventListener("click",restoreBackup);
+    setBackupInfo();
+
+    els.syncSelect.addEventListener("change",async()=>{ state.syncMode=els.syncSelect.value; localStorage.setItem("rb_syncMode",state.syncMode); if(state.syncMode==="firebase") await initFirebase(); await refreshAll(); });
+    document.getElementById("loginBtn").addEventListener("click",doLogin);
+    document.getElementById("logoutBtn").addEventListener("click",doLogout);
+
+    const bindDaysGrid=()=>{
+      const grid=els.daysGrid; if(!grid) return;
+      if(grid.dataset.boundDayTap==="1") return;
+      grid.dataset.boundDayTap="1";
+      const onTap=async(ev)=>{ const dayEl=ev.target.closest(".day"); if(!dayEl) return; const ds=dayEl.dataset.date; if(!ds) return; state.selectedDate=ds; await renderCalendar(); const items=await dayItems(ds); openModal(ds,items); };
+      grid.addEventListener("pointerup",onTap);
+      grid.addEventListener("click",onTap);
+      grid.addEventListener("touchend",onTap,{passive:true});
+    };
+    bindDaysGrid();
+
+    document.addEventListener("click",async(e)=>{
+      const quick=e.target.closest("[data-quick]"); if(quick){ setScreen("list"); await renderList(quick.dataset.quick); }
+      const openBtn=e.target.closest("[data-open-date]"); if(openBtn) openDateFromList(openBtn.dataset.openDate);
+      if(e.target&&e.target.matches("[data-close-modal]")) closeModal();
+      if(e.target&&e.target.id==="dayModal") closeModal();
+    });
+
+    document.addEventListener("keydown",(e)=>{ if(e.key==="Escape") closeModal(); });
+    document.getElementById("modalGoList").addEventListener("click",()=>{ closeModal(); setScreen("list"); renderList(); });
+
+    // Service Worker registratie voor FCM meldingen
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./firebase-messaging-sw.js")
+      .then((registration) => {
+        console.log("✅ FCM Service Worker geregistreerd met scope:", registration.scope);
+      })
+      .catch((err) => {
+        console.error("❌ Service Worker registratie mislukt:", err);
       });
-    }
-
-    async function refreshAll(){
-      setStatus(state.syncMode); els.syncSelect.value=state.syncMode; updateEditUI(); await renderCalendar(); renderAuthState();
-    }
-
-    function requireTitle(){ const t=document.getElementById("titleInput").value.trim(); if(!t){ toast("Titel is verplicht"); return null; } return t; }
-
-    function readForm(){
-      const type=document.getElementById("typeSelect").value;
-      const title=requireTitle(); if(!title) return null;
-      const date=document.getElementById("dateInput").value;
-      const time=document.getElementById("timeInput").value;
-      const desc=document.getElementById("descInput").value.trim();
-      const who=document.getElementById("whoSelect").value;
-      if(type==="appointment"&&!date){ toast("Datum is verplicht"); return null; }
-      return {type,title,date,time,desc,who};
-    }
-
-    function clearForm(){
-      document.getElementById("titleInput").value="";
-      document.getElementById("dateInput").value="";
-      document.getElementById("timeInput").value="";
-      document.getElementById("descInput").value="";
-      document.getElementById("whoSelect").value="rob";
-      document.getElementById("typeSelect").value="appointment";
-      document.getElementById("reminderSelect").value="";
-      toggleTimeField();
-    }
-
-    function toggleTimeField(){
-      const type=document.getElementById("typeSelect").value;
-      const isBirthday=(type==="birthday");
-      document.getElementById("timeField").style.display=isBirthday?"none":"block";
-      document.getElementById("reminderField").style.display=isBirthday?"none":"block";
-    }
-
-    async function saveItem(){
-      if(!isEditAllowed()){ toast("Gastmodus, bewerken uit"); return; }
-      const f=readForm(); if(!f) return;
-      const data=await getAll(); const id=nowId();
-      if(f.type==="appointment") data.appointments[id]={id:Number(id),date:f.date,time:f.time||"",desc:f.title,who:f.who,createdAt:new Date().toISOString()};
-      if(f.type==="birthday") data.birthdays[id]={id:Number(id),date:f.date,name:f.title,who:f.who,note:f.desc,createdAt:new Date().toISOString()};
-      if(f.type==="memory") data.memories[id]={id:Number(id),date:f.date,time:f.time||"",title:f.title,desc:f.desc,who:f.who,createdAt:new Date().toISOString()};
-      await setAll(data);
-
-      // Herinnering inplannen indien gekozen
-      const herinnering = document.getElementById("reminderSelect").value;
-      if(herinnering && f.date && f.time){
-        const datumTijd = `${f.date}T${f.time}:00`;
-        const tijdstip = new Date(datumTijd).getTime() - (Number(herinnering) * 60 * 1000);
-        if(tijdstip > Date.now()){
-          await planMelding("📅 " + f.title, "Herinnering: " + f.title, new Date(tijdstip).toISOString());
-        } else {
-          toast("Opgeslagen (moment al voorbij voor herinnering)");
-        }
-      } else {
-        toast("Opgeslagen");
-      }
-
-      clearForm(); await refreshAll(); setScreen("calendar");
-    }
-
-    function exportData(){
-      const data=getLocalData();
-      const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
-      const url=URL.createObjectURL(blob);
-      const a=document.createElement("a"); a.href=url; a.download="agenda_roblizet_export.json";
-      document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url); toast("Export gemaakt");
-    }
-
-    function importData(){
-      const input=document.createElement("input"); input.type="file"; input.accept="application/json";
-      input.onchange=async ()=>{
-        const file=input.files[0]; if(!file) return;
-        const text=await file.text();
-        try{ const j=JSON.parse(text); await setAll({appointments:j.appointments||{},birthdays:j.birthdays||{},memories:j.memories||{}}); toast("Import klaar"); await refreshAll(); }
-        catch(e){ toast("Import fout"); }
-      };
-      input.click();
-    }
-
-    async function doLogin(){
-      if(!fb||!state.firebaseReady) return toast("Firebase niet klaar");
-      const email=prompt("Email voor agenda login"); if(!email) return;
-      const password=prompt("Wachtwoord"); if(!password) return;
-      try{
-        await fb.authMod.setPersistence(fb.auth, fb.authMod.browserLocalPersistence);
-        await fb.authMod.signInWithEmailAndPassword(fb.auth,email,password);
-        toast("Ingelogd"); state.syncMode="firebase"; localStorage.setItem("rb_syncMode","firebase"); await refreshAll();
-      }catch(e){
-        try{
-          await fb.authMod.setPersistence(fb.auth, fb.authMod.browserLocalPersistence);
-          await fb.authMod.createUserWithEmailAndPassword(fb.auth,email,password);
-          toast("Account gemaakt en ingelogd"); state.syncMode="firebase"; localStorage.setItem("rb_syncMode","firebase"); await refreshAll();
-        }catch(err){ toast("Login fout"); }
-      }
-    }
-
-    async function doLogout(){
-      if(!fb||!state.firebaseReady) return;
-      try{ await fb.authMod.signOut(fb.auth); toast("Uitgelogd"); await refreshAll(); }
-      catch(e){ toast("Uitloggen fout"); }
-    }
-
-    function setBackupInfo(){
-      const raw=localStorage.getItem("rb_backup_v1"); const el=document.getElementById("backupInfo"); if(!el) return;
-      if(!raw){ el.textContent="Nog geen backup gemaakt."; return; }
-      try{ const obj=JSON.parse(raw); const d=new Date(obj.ts||Date.now()); el.textContent="Laatste backup: "+d.toLocaleString(); }
-      catch(e){ el.textContent="Backup gevonden, maar kan niet gelezen worden."; }
-    }
-
-    function makeBackup(){
-      const obj={ts:Date.now(),items:{}};
-      for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); if(!k) continue; if(k.startsWith("rb_")) obj.items[k]=localStorage.getItem(k); }
-      localStorage.setItem("rb_backup_v1",JSON.stringify(obj)); setBackupInfo(); toast("Backup opgeslagen");
-    }
-
-    async function restoreBackup(){
-      const raw=localStorage.getItem("rb_backup_v1"); if(!raw){ toast("Geen backup"); return; }
-      const ok=confirm("Backup terugzetten. Dit overschrijft je huidige data."); if(!ok) return;
-      try{
-        const obj=JSON.parse(raw); const items=obj.items||{};
-        Object.keys(items).forEach(k=>{ localStorage.setItem(k,items[k]); });
-        localStorage.removeItem("rb_unlocked"); localStorage.removeItem("rb_code");
-        state.syncMode=localStorage.getItem("rb_syncMode")||"local"; els.syncSelect.value=state.syncMode;
-        await refreshAll(); setBackupInfo(); toast("Backup teruggezet");
-      }catch(e){ toast("Backup fout"); }
-    }
-
-    function openDateFromList(dateStr){
-      if(!dateStr) return;
-      state.selectedDate=dateStr; setScreen("calendar");
-      renderCalendar().then(async ()=>{ const items=await dayItems(dateStr); openModal(dateStr,items); });
-    }
-
-    document.querySelectorAll(".tab").forEach(btn=>{
-      btn.addEventListener("click",()=>{
-        const t=btn.dataset.tab;
-        if(t==="calendar") setScreen("calendar");
-        if(t==="list"){ setScreen("list"); renderList(); }
-        if(t==="add") setScreen("add");
-        if(t==="info") setScreen("info");
-      });
-    });
-
-    document.getElementById("openSettings").addEventListener("click",()=>setScreen("settings"));
-    document.getElementById("closeSettings").addEventListener("click",()=>setScreen("calendar"));
-    document.getElementById("prevMonth").addEventListener("click",async()=>{ state.viewMonth--; if(state.viewMonth<0){state.viewMonth=11;state.viewYear--;} await renderCalendar(); });
-    document.getElementById("nextMonth").addEventListener("click",async()=>{ state.viewMonth++; if(state.viewMonth>11){state.viewMonth=0;state.viewYear++;} await renderCalendar(); });
-    document.getElementById("goToday").addEventListener("click",async()=>{ const now=new Date(); state.viewYear=now.getFullYear(); state.viewMonth=now.getMonth(); state.selectedDate=isoDate(now); await renderCalendar(); const items=await dayItems(state.selectedDate); openModal(state.selectedDate,items); });
-    document.getElementById("tapHint").addEventListener("click",()=>toast("Tik een dag met stipjes"));
-    document.getElementById("goListFromSelected").addEventListener("click",()=>{ setScreen("list"); renderList(); });
-    document.getElementById("backToCalendar").addEventListener("click",()=>setScreen("calendar"));
-    document.getElementById("typeSelect").addEventListener("change",toggleTimeField);
-    document.getElementById("saveBtn").addEventListener("click",saveItem);
-    document.getElementById("clearBtn").addEventListener("click",()=>{ if(!isEditAllowed()){toast("Gastmodus");return;} clearForm(); toast("Leeg"); });
-    document.getElementById("exportBtn").addEventListener("click",exportData);
-    document.getElementById("importBtn").addEventListener("click",importData);
-    document.getElementById("backupMake").addEventListener("click",makeBackup);
-    document.getElementById("backupRestore").addEventListener("click",restoreBackup);
-    setBackupInfo();
-
-    els.syncSelect.addEventListener("change",async()=>{ state.syncMode=els.syncSelect.value; localStorage.setItem("rb_syncMode",state.syncMode); if(state.syncMode==="firebase") await initFirebase(); await refreshAll(); });
-    document.getElementById("loginBtn").addEventListener("click",doLogin);
-    document.getElementById("logoutBtn").addEventListener("click",doLogout);
-
-    const bindDaysGrid=()=>{
-      const grid=els.daysGrid; if(!grid) return;
-      if(grid.dataset.boundDayTap==="1") return;
-      grid.dataset.boundDayTap="1";
-      const onTap=async(ev)=>{ const dayEl=ev.target.closest(".day"); if(!dayEl) return; const ds=dayEl.dataset.date; if(!ds) return; state.selectedDate=ds; await renderCalendar(); const items=await dayItems(ds); openModal(ds,items); };
-      grid.addEventListener("pointerup",onTap);
-      grid.addEventListener("click",onTap);
-      grid.addEventListener("touchend",onTap,{passive:true});
-    };
-    bindDaysGrid();
-
-    document.addEventListener("click",async(e)=>{
-      const quick=e.target.closest("[data-quick]"); if(quick){ setScreen("list"); await renderList(quick.dataset.quick); }
-      const openBtn=e.target.closest("[data-open-date]"); if(openBtn) openDateFromList(openBtn.dataset.openDate);
-      if(e.target&&e.target.matches("[data-close-modal]")) closeModal();
-      if(e.target&&e.target.id==="dayModal") closeModal();
-    });
-
-    document.addEventListener("keydown",(e)=>{ if(e.key==="Escape") closeModal(); });
-    document.getElementById("modalGoList").addEventListener("click",()=>{ closeModal(); setScreen("list"); renderList(); });
-
-    // ── Service Worker (Android PWA installatie) ──────────────
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => {
-        navigator.serviceWorker.register("./firebase-messaging-sw.js")
-          .then(() => {})
-          .catch(() => {});
-      });
-    }
-
-    // ── FCM PUSH MELDINGEN ────────────────────────────────────
-    const FCM_VAPID = "BHcSgoBWs8T5oiyoRR8lVHXOUIqQL6aqMAE86YnzPKrSTtaW-lw5UrZYb2NrHnyrJnMAAS4KK9rEuHvO-GVmOjw";
-
+  });
+}
+
+    // ── FCM PUSH MELDINGEN ────────────────────────────────────
+    const FCM_VAPID = "BHcSgoBWs8T5oiyoRR8lVHXOUIqQL6aqMAE86YnzPKrSTtaW-lw5UrZYb2NrHnyrJnMAAS4KK9rEuHvO-GVmOjw";
+
     async function initFCM() {
   try {
+    await initMainFirebase();   // Eerst Firebase initialiseren
+
     if (!("Notification" in window)) {
       toast("Browser ondersteunt geen meldingen");
       return;
@@ -849,81 +880,81 @@
 
     const permission = await Notification.requestPermission();
     if (permission !== "granted") {
-      toast("Meldingen geweigerd. Check Samsung instellingen.");
+      toast("Meldingen geweigerd. Check je Samsung / browser instellingen.");
       return;
     }
 
     const swReg = await navigator.serviceWorker.ready;
 
-    // Dit is de "import" die je niet snapte — dit is normaal zo
     const { getMessaging, getToken, onMessage } = await import(
       "https://www.gstatic.com/firebasejs/12.12.0/firebase-messaging.js"
     );
 
-    const messaging = getMessaging();
+    messagingInstance = getMessaging(mainApp);
 
-    const token = await getToken(messaging, {
+    const token = await getToken(messagingInstance, {
       vapidKey: "BHcSgoBWs8T5oiyoRR8lVHXOUIqQL6aqMAE86YnzPKrSTtaW-lw5UrZYb2NrHnyrJnMAAS4KK9rEuHvO-GVmOjw",
       serviceWorkerRegistration: swReg
     });
 
     if (!token) {
-      toast("Geen token ontvangen");
+      toast("Geen FCM token ontvangen – probeer opnieuw");
       return;
     }
 
     localStorage.setItem("fcm_token", token);
-    console.log("FCM Token:", token);
+    console.log("✅ FCM Token opgeslagen:", token);
 
-    toast("🔔 Meldingen zijn nu ingeschakeld!");
+    toast("🔔 Meldingen succesvol ingeschakeld!");
 
-    // Als de app open is, toon toast in plaats van systeem melding
-    onMessage(messaging, (payload) => {
-      toast("📅 " + (payload.notification?.title || "Herinnering"));
+    // Melding tonen als de app open is (foreground)
+    onMessage(messagingInstance, (payload) => {
+      console.log("Foreground message:", payload);
+      toast("📅 " + (payload.notification?.title || payload.data?.titel || "Herinnering"));
     });
 
   } catch (e) {
-    console.error("Fout:", e);
-    toast("Fout bij meldingen: " + e.message);
+    console.error("FCM init fout:", e);
+    toast("Fout bij meldingen: " + (e.message || String(e)));
   }
 }
-
-    // Herinnering inplannen – slaat op in Firebase zodat Cloud Function het verstuurt
-    async function planMelding(titel, tekst, datumTijd){
-      const token = localStorage.getItem("fcm_token");
-      if(!token){ toast("Schakel eerst meldingen in"); return; }
-      if(!fb || !state.firebaseReady || !state.user){ toast("Log eerst in"); return; }
-      const ref = fb.dbMod.push(fb.dbMod.ref(fb.db, "meldingen"));
-      await fb.dbMod.set(ref, {
-        token,
-        titel,
-        tekst,
-        tijdstip: new Date(datumTijd).getTime(),
-        verzonden: false
-      });
-      toast("Herinnering ingepland ✓");
-    }
-
-    // Knop toevoegen aan Instellingen-scherm
-    (function addMeldingBtn(){
-      const card = document.querySelector("#screenSettings .settingsCard");
-      if(!card) return;
-      const hr = document.createElement("hr"); hr.className="hr";
-      const btn = document.createElement("button");
-      btn.className="btn primary"; btn.textContent="🔔 Meldingen inschakelen";
-      btn.addEventListener("click", initFCM);
-      card.appendChild(hr); card.appendChild(btn);
-      const note = document.createElement("p"); note.className="note";
-      note.textContent="Schakel meldingen in zodat je herinneringen ontvangt, ook als de app gesloten is.";
-      card.appendChild(note);
-    })();
-
-    (async()=>{
-      els.syncSelect.value=state.syncMode; setStatus(state.syncMode); updateEditUI(); toggleTimeField();
-      if(state.syncMode==="firebase") await initFirebase();
-      await refreshAll();
-    })();
-  </script>
-
-</body>
+
+    // Herinnering inplannen – slaat op in Firebase zodat Cloud Function het verstuurt
+    async function planMelding(titel, tekst, datumTijd){
+      const token = localStorage.getItem("fcm_token");
+      if(!token){ toast("Schakel eerst meldingen in"); return; }
+      if(!fb || !state.firebaseReady || !state.user){ toast("Log eerst in"); return; }
+      const ref = fb.dbMod.push(fb.dbMod.ref(fb.db, "meldingen"));
+      await fb.dbMod.set(ref, {
+        token,
+        titel,
+        tekst,
+        tijdstip: new Date(datumTijd).getTime(),
+        verzonden: false
+      });
+      toast("Herinnering ingepland ✓");
+    }
+
+    // Knop toevoegen aan Instellingen-scherm
+    (function addMeldingBtn(){
+      const card = document.querySelector("#screenSettings .settingsCard");
+      if(!card) return;
+      const hr = document.createElement("hr"); hr.className="hr";
+      const btn = document.createElement("button");
+      btn.className="btn primary"; btn.textContent="🔔 Meldingen inschakelen";
+      btn.addEventListener("click", initFCM);
+      card.appendChild(hr); card.appendChild(btn);
+      const note = document.createElement("p"); note.className="note";
+      note.textContent="Schakel meldingen in zodat je herinneringen ontvangt, ook als de app gesloten is.";
+      card.appendChild(note);
+    })();
+
+    (async()=>{
+      els.syncSelect.value=state.syncMode; setStatus(state.syncMode); updateEditUI(); toggleTimeField();
+      if(state.syncMode==="firebase") await initFirebase();
+      await refreshAll();
+    })();
+  </script>
+
+</body>
 </html>
