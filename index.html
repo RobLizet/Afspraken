@@ -493,7 +493,7 @@
 
   async function getAll(){
     if(S.syncMode==="firebase"&&S.fbReady&&S.user){
-      try{ const snap=await fb.dM.get(fb.dM.ref(fb.db,SHARED)); if(!snap.exists()) return{appointments:{},birthdays:{},memories:{}}; const v=snap.val()||{}; return{appointments:v.appointments||{},birthdays:v.birthdays||{},memories:v.memories||}; }
+      try{ const snap=await fb.dM.get(fb.dM.ref(fb.db,SHARED)); if(!snap.exists()) return{appointments:{},birthdays:{},memories:{}}; const v=snap.val()||{}; return{appointments:v.appointments||{},birthdays:v.birthdays||{},memories:v.memories||{}}; }
       catch(e){ return localGet(); }
     }
     return localGet();
