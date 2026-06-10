@@ -435,7 +435,7 @@
 
 <script type="module">
   // ── CONSTANTS ─────────────────────────────────────────────────
-  const APP_VERSION = "4.7";
+  const APP_VERSION = "4.8";
   // Auto-update: forceer herladen als er een nieuwe versie is
   (function(){
     const stored = localStorage.getItem("app_version");
@@ -579,13 +579,26 @@
       const isOn = sub.optedIn;
       toast("Status: " + (isOn ? "aan → uitschakelen" : "uit → inschakelen"));
       if(isOn){
-        await sub.optOut();
-        updateNotifUI(false);
-        toast("Meldingen uitgeschakeld");
+        try{
+          await sub.optOut();
+          updateNotifUI(false);
+          toast("Meldingen uitgeschakeld");
+        }catch(outErr){
+          // optOut() mislukt op sommige browsers — verberg knop ipv fout
+          console.warn("optOut mislukt:", outErr);
+          toast("Uitschakelen niet mogelijk in deze browser");
+          // Verberg uitschakelknop — meldingen blijven actief
+          document.getElementById("enableNotifsBtn").style.display="none";
+        }
       } else {
-        await sub.optIn();
-        updateNotifUI(true);
-        toast("Meldingen ingeschakeld ✓");
+        try{
+          await sub.optIn();
+          updateNotifUI(true);
+          toast("Meldingen ingeschakeld ✓");
+        }catch(inErr){
+          toast("Inschakelen mislukt: " + (inErr.message||String(inErr)));
+          console.error(inErr);
+        }
       }
     }catch(e){
       toast("Fout: " + (e.message||String(e)));
