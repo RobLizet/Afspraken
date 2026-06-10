@@ -191,7 +191,7 @@
     <div class="topbar-icon">💑</div>
     <div>
       <div class="topbar-title">Onze Agenda</div>
-      <div class="topbar-sub">Rob &amp; Lizet</div>
+      <div class="topbar-sub">Rob &amp; Lizet · v<span id="topbarVersion"></span></div>
     </div>
   </div>
   <div class="status-badge">
@@ -372,7 +372,7 @@
 
       <div class="section-title">Over</div>
       <div class="card">
-        <div style="font-size:14px;font-weight:700">Onze Agenda v4.0</div>
+        <div style="font-size:14px;font-weight:700">Onze Agenda <span id="appVersion"></span></div>
         <div style="font-size:12px;color:var(--muted);margin-top:4px">Made by Rob Borghouts 2026 · Gebouwd met ❤️</div>
       </div>
     </div>
@@ -424,6 +424,7 @@
 
 <script type="module">
   // ── CONSTANTS ─────────────────────────────────────────────────
+  const APP_VERSION = "4.1";
   const OS_APP_ID   = "e2c74ceb-a800-4ebd-95ea-6f6ac01e5677";
   const OS_API_KEY  = "os_v2_app_4lduz25iabhl3fpkn5vmahswo5vyyunnz42u7ruz5n6lvkxwu7uzwlfupzlslne2k6foczgvhgp2pmadtqjvhxncecz6kttyyhewywq";
   const AI_KEY      = localStorage.getItem('ai_key') || '';
@@ -922,6 +923,9 @@
   document.getElementById("chatInput").addEventListener("input",function(){ this.style.height="auto"; this.style.height=this.scrollHeight+"px"; });
   document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeModal(); });
 
+  // Versie tonen
+  document.getElementById("appVersion").textContent="v"+APP_VERSION;
+  document.getElementById("topbarVersion").textContent=APP_VERSION;
   // Firebase rules display
   document.getElementById("fbRulesBlock").textContent=FB_RULES;
   // AI key status tonen
