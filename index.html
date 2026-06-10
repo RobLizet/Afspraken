@@ -1,5 +1,4 @@
 <!doctype html>
-
 <html lang="nl">
 <head>
   <meta charset="utf-8">
@@ -7,993 +6,940 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="Onze Agenda"/>
-  <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
-  <meta name="theme-color" content="#ffd7e6"/>
-  <!-- Android PWA -->
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="theme-color" content="#6D28D9"/>
   <link rel="manifest" href="manifest.json"/>
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png"/>
-  <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png"/>
   <link rel="apple-touch-icon" href="icon-512.png"/>
-  <title>Onze Agenda - Rob &amp; Lizet</title>
+  <title>Onze Agenda</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800&amp;display=swap">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
   <style>
-    :root{
-      --bg1:#fff7f0;
-      --bg2:#f4f1ff;
-      --bg3:#eef7ff;
-      --ink:#1d2330;
-      --muted:#5a6578;
-      --card:rgba(255,255,255,0.72);
-      --card2:rgba(255,255,255,0.55);
-      --stroke:rgba(28,35,48,0.10);
-      --shadow:0 18px 50px rgba(12,18,30,0.10);
-      --shadow2:0 10px 30px rgba(12,18,30,0.08);
-      --pill:rgba(255,255,255,0.65);
-      --good:#2ecc71;
-      --warn:#ff9f43;
-      --dotA:#6bb6ff;
-      --dotB:#ff9ac1;
-      --dotM:#a7a2ff;
-      --accent1:#ffd7e6;
-      --accent2:#d6f0ff;
-      --accent3:#efe4ff;
+    :root {
+      --primary:#6D28D9; --primary-l:#EDE9FE; --primary-d:#5B21B6;
+      --pink:#DB2777; --pink-l:#FCE7F3;
+      --blue:#2563EB; --blue-l:#DBEAFE;
+      --purple:#7C3AED; --purple-l:#F5F3FF;
+      --green:#059669; --orange:#D97706; --red:#DC2626;
+      --bg:#F5F3FF; --card:#FFFFFF; --text:#111827; --text2:#374151;
+      --muted:#9CA3AF; --border:rgba(0,0,0,0.07);
+      --sh:0 2px 12px rgba(0,0,0,0.07),0 1px 3px rgba(0,0,0,0.04);
+      --sh-lg:0 8px 32px rgba(0,0,0,0.10),0 2px 8px rgba(0,0,0,0.05);
+      --r:16px; --r-sm:10px; --r-lg:24px;
     }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family:"DM Sans",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      color:var(--ink);
-      background:
-        radial-gradient(1200px 700px at 20% -10%, rgba(255,168,217,0.35), transparent 55%),
-        radial-gradient(1000px 650px at 85% 5%, rgba(143,209,255,0.35), transparent 60%),
-        radial-gradient(900px 700px at 40% 120%, rgba(191,164,255,0.35), transparent 60%),
-        linear-gradient(180deg, var(--bg1), var(--bg2) 55%, var(--bg3));
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      overflow-x:hidden;
-    }
-    .app{max-width:560px;margin:0 auto;padding:16px 14px 110px;}
-    .topbar{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:10px 8px 14px;position:sticky;top:0;z-index:50;background:linear-gradient(180deg,rgba(255,247,240,0.80),rgba(255,247,240,0.30),transparent);backdrop-filter:blur(10px);}
-    .brand{display:flex;align-items:center;gap:10px;min-width:0;}
-    .avatar{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,rgba(255,154,193,0.9),rgba(107,182,255,0.9));box-shadow:0 10px 30px rgba(0,0,0,0.08);border:1px solid rgba(255,255,255,0.8);flex:0 0 auto;}
-    .brandText{min-width:0;line-height:1.05;}
-    .brandTitle{font-weight:800;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-    .brandSub{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-    .statusPill{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:999px;background:var(--pill);border:1px solid var(--stroke);box-shadow:var(--shadow2);white-space:nowrap;font-weight:700;font-size:12px;user-select:none;}
-    .dot{width:10px;height:10px;border-radius:50%;background:var(--good);box-shadow:0 0 0 5px rgba(46,204,113,0.15);}
-    .dot.off{background:#b2becd;box-shadow:0 0 0 5px rgba(178,190,205,0.18);}
-    .badge{padding:10px 12px;border-radius:18px;border:1px solid rgba(255,255,255,0.65);background:linear-gradient(135deg,rgba(255,215,230,0.85),rgba(214,240,255,0.85),rgba(239,228,255,0.85));box-shadow:var(--shadow2);font-weight:900;font-size:12px;letter-spacing:0.6px;text-align:center;line-height:1.05;user-select:none;}
-    .btn{appearance:none;border:0;background:var(--pill);border:1px solid var(--stroke);color:var(--ink);padding:10px 14px;border-radius:999px;font-weight:800;box-shadow:var(--shadow2);cursor:pointer;}
-    .btn:active{transform:scale(0.99)}
-    .btn.primary{background:linear-gradient(135deg,rgba(255,154,193,0.35),rgba(107,182,255,0.35));}
-    .btn.small{padding:8px 12px;font-size:12px}
-    .btn.ghost{background:transparent}
-    .panel{background:var(--card);border:1px solid var(--stroke);border-radius:26px;padding:16px 16px 14px;box-shadow:var(--shadow);backdrop-filter:blur(14px);}
-    .grid{display:grid;grid-template-columns:1fr;gap:14px;}
-    .row{display:flex;align-items:center;justify-content:space-between;gap:12px;}
-    h2{margin:0;font-size:20px;letter-spacing:-0.2px;}
-    .sub{margin:2px 0 0;color:var(--muted);font-size:13px;}
-    .calendarHeader{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;}
-    .monthTitle{font-size:20px;font-weight:900;letter-spacing:-0.2px;text-transform:lowercase;}
-    .navBtns{display:flex;gap:10px;align-items:center;}
-    .calWrap{margin-top:12px;background:var(--card2);border:1px solid var(--stroke);border-radius:22px;padding:12px;box-shadow:var(--shadow2);}
-    .dow{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;padding:6px 4px 10px;color:var(--muted);font-size:12px;font-weight:800;text-align:center;}
-    .days{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;padding:2px 4px 6px;}
-    .day{position:relative;height:44px;border-radius:16px;border:1px solid rgba(28,35,48,0.10);background:rgba(255,255,255,0.55);display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--ink);box-shadow:0 8px 18px rgba(12,18,30,0.06);cursor:pointer;user-select:none;overflow:hidden;}
-    .day.muted{opacity:0.40;cursor:default;}
-    .day.today{outline:2px solid rgba(107,182,255,0.55);background:linear-gradient(180deg,rgba(214,240,255,0.65),rgba(255,255,255,0.55));}
-    .day.selected{outline:2px solid rgba(255,154,193,0.55);background:linear-gradient(180deg,rgba(255,215,230,0.65),rgba(255,255,255,0.55));}
-    .dots{position:absolute;left:50%;bottom:7px;transform:translateX(-50%);display:flex;gap:4px;align-items:center;justify-content:center;pointer-events:none;}
-    .d{width:8px;height:8px;border-radius:50%;box-shadow:0 0 0 4px rgba(0,0,0,0.04);opacity:0.95;}
-    .d.a{background:var(--dotA);box-shadow:0 0 0 4px rgba(107,182,255,0.18)}
-    .d.b{background:var(--dotB);box-shadow:0 0 0 4px rgba(255,154,193,0.18)}
-    .d.m{background:var(--dotM);box-shadow:0 0 0 4px rgba(167,162,255,0.18)}
-    .selectedBox{margin-top:14px;background:rgba(255,255,255,0.58);border:1px solid var(--stroke);border-radius:22px;padding:14px;box-shadow:var(--shadow2);display:flex;align-items:center;justify-content:space-between;gap:12px;}
-    .selectedTitle{font-weight:900;font-size:16px;margin:0;}
-    .selectedText{margin:2px 0 0;color:var(--muted);font-size:13px;}
-    .tabs{position:fixed;left:0;right:0;bottom:0;padding:10px 12px 18px;z-index:60;background:linear-gradient(180deg,transparent,rgba(255,247,240,0.50) 30%,rgba(255,247,240,0.92));backdrop-filter:blur(18px);}
-    .tabbar{max-width:560px;margin:0 auto;background:rgba(255,255,255,0.72);border:1px solid rgba(28,35,48,0.12);border-radius:22px;box-shadow:0 18px 55px rgba(12,18,30,0.14);display:flex;gap:6px;padding:8px;}
-    .tab{flex:1;border:0;background:transparent;border-radius:16px;padding:10px 10px;font-weight:900;color:var(--muted);cursor:pointer;}
-    .tab.active{color:var(--ink);background:linear-gradient(135deg,rgba(255,215,230,0.65),rgba(214,240,255,0.65),rgba(239,228,255,0.65));border:1px solid rgba(255,255,255,0.7);box-shadow:0 10px 30px rgba(12,18,30,0.10);}
-    .screen{display:none}
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%;overflow:hidden}
+    body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+
+    /* TOPBAR */
+    .topbar{position:fixed;top:0;left:0;right:0;z-index:100;background:linear-gradient(135deg,#6D28D9,#DB2777);padding:10px 16px;padding-top:calc(10px + env(safe-area-inset-top));display:flex;align-items:center;justify-content:space-between;gap:8px}
+    .topbar-brand{display:flex;align-items:center;gap:10px}
+    .topbar-icon{width:38px;height:38px;border-radius:12px;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+    .topbar-title{color:#fff;font-size:17px;font-weight:800;line-height:1.1}
+    .topbar-sub{color:rgba(255,255,255,0.75);font-size:11px;font-weight:500}
+    .status-badge{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.28);border-radius:999px;padding:5px 10px;color:#fff;font-size:11px;font-weight:700;white-space:nowrap}
+    .status-dot{width:7px;height:7px;border-radius:50%;background:#4ADE80;box-shadow:0 0 0 3px rgba(74,222,128,0.3);flex-shrink:0}
+    .status-dot.off{background:rgba(255,255,255,0.4);box-shadow:none}
+
+    /* MAIN */
+    .main{position:fixed;top:0;bottom:68px;left:0;right:0;overflow:hidden}
+    .screen{display:none;position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-top:calc(62px + env(safe-area-inset-top));padding-bottom:16px}
     .screen.active{display:block}
-    .listCards{display:grid;gap:14px;}
-    .statCard{background:rgba(255,255,255,0.70);border:1px solid var(--stroke);border-radius:26px;padding:16px;box-shadow:var(--shadow);backdrop-filter:blur(14px);}
-    .statTop{display:flex;align-items:center;justify-content:space-between;gap:12px;}
-    .statTitle{margin:0;font-weight:900;font-size:16px;}
-    .statValue{font-size:44px;font-weight:900;letter-spacing:-1px;margin:6px 0 6px;}
-    .statHint{color:var(--muted);font-size:13px;margin:0;}
-    .itemCard{background:rgba(255,255,255,0.75);border:1px solid rgba(28,35,48,0.10);border-radius:26px;padding:14px;box-shadow:var(--shadow2);}
-    .itemRow{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;}
-    .iconDate{width:44px;height:44px;border-radius:16px;background:linear-gradient(135deg,rgba(214,240,255,0.9),rgba(239,228,255,0.9));border:1px solid rgba(255,255,255,0.8);display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1;font-weight:900;box-shadow:0 10px 25px rgba(12,18,30,0.10);flex:0 0 auto;}
-    .iconDate .m{font-size:10px;opacity:0.75}
-    .iconDate .d{font-size:16px}
-    .itemMain{flex:1;min-width:0;}
-    .itemTitle{margin:0;font-size:18px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-    .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;}
-    .chip{padding:8px 10px;border-radius:999px;background:rgba(255,255,255,0.65);border:1px solid rgba(28,35,48,0.10);font-weight:900;font-size:12px;color:var(--ink);}
-    .chip.muted{color:var(--muted);font-weight:800}
-    .chip.a{background:rgba(214,240,255,0.75)}
-    .chip.b{background:rgba(255,215,230,0.75)}
-    .chip.m{background:rgba(239,228,255,0.75)}
-    .formCard{background:rgba(255,255,255,0.78);border:1px solid rgba(28,35,48,0.10);border-radius:26px;padding:16px;box-shadow:var(--shadow);}
-    .field{display:flex;flex-direction:column;gap:8px;margin-top:12px;}
-    label{font-size:13px;font-weight:900;color:var(--muted);}
-    input,select,textarea{font:inherit;padding:12px 14px;border-radius:18px;border:1px solid rgba(28,35,48,0.10);background:rgba(255,255,255,0.70);outline:none;box-shadow:0 10px 25px rgba(12,18,30,0.06);}
-    textarea{min-height:90px;resize:vertical}
-    .actions{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;}
-    .hr{height:1px;background:rgba(28,35,48,0.08);margin:14px 0;border:0;}
-    .toast{position:fixed;left:50%;bottom:92px;transform:translateX(-50%);max-width:560px;width:calc(100% - 28px);background:rgba(20,24,34,0.88);color:#fff;border-radius:18px;padding:12px 14px;box-shadow:0 20px 60px rgba(0,0,0,0.20);z-index:80;display:none;font-weight:800;backdrop-filter:blur(12px);}
-    .toast.show{display:block}
-    .modalOverlay{position:fixed;inset:0;display:none;z-index:90;background:rgba(15,18,28,0.25);backdrop-filter:blur(8px);padding:18px 12px 120px;overflow:auto;}
-    .modalOverlay.open{display:block}
-    .modalCard{max-width:560px;margin:0 auto;border-radius:28px;border:1px solid rgba(255,255,255,0.55);background:linear-gradient(180deg,rgba(255,255,255,0.88),rgba(255,255,255,0.78));box-shadow:0 30px 90px rgba(0,0,0,0.22);padding:16px;}
-    .modalTop{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;}
-    .modalTitle{margin:0;font-weight:900;font-size:13px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;}
-    .modalDate{font-weight:900;font-size:28px;letter-spacing:-0.6px;margin:2px 0 0;}
-    .modalClose{appearance:none;border:0;background:rgba(20,24,34,0.85);color:#fff;font-weight:900;padding:12px 16px;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,0.25);cursor:pointer;flex:0 0 auto;}
-    .modalClose:active{transform:scale(0.98)}
-    .modalList{display:grid;gap:10px;margin-top:12px;}
-    .modalEmpty{color:var(--muted);font-weight:800;padding:10px 2px;}
-    .miniRow{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:10px;}
-    .legend{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
-    .legItem{display:flex;align-items:center;gap:8px;font-weight:900;font-size:12px;color:var(--muted);background:rgba(255,255,255,0.55);border:1px solid rgba(28,35,48,0.10);border-radius:999px;padding:8px 10px;}
-    .legDot{width:10px;height:10px;border-radius:50%;box-shadow:0 0 0 5px rgba(0,0,0,0.04);}
-    .legDot.a{background:var(--dotA);box-shadow:0 0 0 5px rgba(107,182,255,0.16)}
-    .legDot.b{background:var(--dotB);box-shadow:0 0 0 5px rgba(255,154,193,0.16)}
-    .legDot.m{background:var(--dotM);box-shadow:0 0 0 5px rgba(167,162,255,0.16)}
-    .authBox{display:flex;gap:10px;align-items:center;justify-content:flex-end;flex-wrap:wrap;}
-    .settingsCard{background:rgba(255,255,255,0.80);border:1px solid rgba(28,35,48,0.10);border-radius:26px;padding:16px;box-shadow:var(--shadow);}
-    .note{margin:10px 0 0;color:var(--muted);font-size:13px;line-height:1.4;}
+    .screen-inner{max-width:480px;margin:0 auto;padding:14px 14px}
+
+    /* TABS */
+    .tabbar-wrap{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(255,255,255,0.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--border);padding:6px 10px;padding-bottom:calc(6px + env(safe-area-inset-bottom))}
+    .tabbar{max-width:480px;margin:0 auto;display:flex;gap:2px}
+    .tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 2px;border:none;background:transparent;color:var(--muted);cursor:pointer;border-radius:12px;transition:all 0.18s}
+    .tab.active{color:var(--primary);background:var(--primary-l)}
+    .tab svg{width:20px;height:20px;flex-shrink:0}
+    .tab-label{font-size:10px;font-weight:700}
+
+    /* CARDS */
+    .card{background:var(--card);border-radius:var(--r-lg);padding:16px;box-shadow:var(--sh);margin-bottom:12px}
+    .section-title{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:0.6px;margin:16px 0 8px}
+
+    /* TODAY HERO */
+    .hero{background:linear-gradient(135deg,#6D28D9,#DB2777);border-radius:var(--r-lg);padding:18px 20px;color:#fff;margin-bottom:14px;position:relative;overflow:hidden}
+    .hero::before{content:'';position:absolute;top:-30px;right:-30px;width:130px;height:130px;border-radius:50%;background:rgba(255,255,255,0.08)}
+    .hero::after{content:'';position:absolute;bottom:-20px;left:-10px;width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,0.06)}
+    .hero-day{font-size:12px;font-weight:600;opacity:0.8;text-transform:capitalize}
+    .hero-date{font-size:38px;font-weight:900;line-height:1;margin:2px 0}
+    .hero-month{font-size:15px;font-weight:700;opacity:0.88}
+    .hero-badge{display:inline-flex;align-items:center;gap:6px;margin-top:12px;background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.3);border-radius:999px;padding:6px 12px;font-size:12px;font-weight:700}
+
+    /* CALENDAR */
+    .cal-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+    .cal-month{font-size:17px;font-weight:800}
+    .cal-nav{display:flex;gap:6px}
+    .icon-btn{width:34px;height:34px;border-radius:10px;border:1px solid var(--border);background:var(--card);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text2);box-shadow:0 1px 4px rgba(0,0,0,0.06)}
+    .cal-dow{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:4px}
+    .cal-dow div{text-align:center;font-size:10px;font-weight:800;color:var(--muted);padding:3px 0}
+    .cal-days{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+    .day-cell{aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:11px;cursor:pointer;position:relative;font-size:13px;font-weight:700;color:var(--text);background:transparent;border:none;gap:1px}
+    .day-cell.muted{opacity:.22;pointer-events:none}
+    .day-cell.today{background:var(--primary-l);color:var(--primary)}
+    .day-cell.selected{background:var(--primary);color:#fff}
+    .day-cell.selected .day-dots span{background:rgba(255,255,255,0.75)!important;box-shadow:none!important}
+    .day-num{font-size:13px;font-weight:800;line-height:1}
+    .day-dots{display:flex;gap:2px;height:5px;align-items:center}
+    .day-dots span{width:4px;height:4px;border-radius:50%}
+    .dr{background:var(--blue)} .dl{background:var(--pink)} .ds{background:var(--purple)} .db{background:var(--orange)} .dm{background:var(--green)}
+    .legend{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;padding-top:10px;border-top:1px solid #F3F4F6}
+    .leg{display:flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:var(--text2)}
+    .leg span{width:7px;height:7px;border-radius:50%}
+    .sel-box{background:linear-gradient(135deg,#EDE9FE,#FCE7F3);border-radius:var(--r);padding:12px 14px;margin-top:12px;display:flex;align-items:center;gap:10px}
+    .sel-box-icon{font-size:22px}
+    .sel-box-title{font-size:14px;font-weight:700}
+    .sel-box-sub{font-size:11px;color:var(--muted);font-weight:500;margin-top:2px}
+
+    /* LIST */
+    .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+    .stat-card{background:var(--card);border-radius:var(--r);padding:12px;text-align:center;box-shadow:var(--sh)}
+    .stat-val{font-size:26px;font-weight:900;color:var(--primary)}
+    .stat-lbl{font-size:10px;font-weight:700;color:var(--muted);margin-top:2px}
+    .filter-row{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;padding-bottom:2px}
+    .filter-row::-webkit-scrollbar{display:none}
+    .filter-chip{padding:6px 12px;border-radius:999px;border:1.5px solid var(--border);background:var(--card);font-family:inherit;font-size:12px;font-weight:700;color:var(--text2);cursor:pointer;white-space:nowrap;transition:all 0.18s}
+    .filter-chip.active{background:var(--primary);border-color:var(--primary);color:#fff}
+
+    /* ITEM CARDS */
+    .item-card{display:flex;align-items:flex-start;gap:10px;background:var(--card);border-radius:var(--r);padding:12px;box-shadow:var(--sh);margin-bottom:8px}
+    .date-ico{width:42px;height:42px;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;font-weight:800;line-height:1}
+    .date-ico.appt{background:var(--blue-l);color:var(--blue)} .date-ico.bday{background:#FEF3C7;color:var(--orange)} .date-ico.mem{background:#D1FAE5;color:var(--green)}
+    .date-ico .mo{font-size:9px} .date-ico .dy{font-size:17px}
+    .item-body{flex:1;min-width:0}
+    .item-title{font-size:14px;font-weight:700;margin-bottom:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .chips{display:flex;gap:5px;flex-wrap:wrap}
+    .chip{padding:2px 7px;border-radius:999px;font-size:10px;font-weight:700}
+    .ca{background:var(--blue-l);color:var(--blue)} .cb{background:#FEF3C7;color:var(--orange)} .cm{background:#D1FAE5;color:var(--green)}
+    .cg{background:#F3F4F6;color:var(--muted)} .cr{background:var(--blue-l);color:var(--blue)} .cl{background:var(--pink-l);color:var(--pink)} .cs{background:var(--purple-l);color:var(--purple)}
+    .item-acts{display:flex;gap:5px;margin-top:7px}
+
+    /* FORMS */
+    .form-group{margin-bottom:14px}
+    .form-label{display:block;font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px}
+    .form-input,.form-select,.form-textarea{width:100%;padding:11px 13px;border-radius:var(--r);border:1.5px solid var(--border);background:var(--card);font-family:inherit;font-size:14px;font-weight:500;color:var(--text);outline:none;transition:border-color .2s;box-shadow:var(--sh)}
+    .form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--primary)}
+    .form-textarea{min-height:72px;resize:vertical}
+    .segment{display:flex;background:#F3F4F6;border-radius:12px;padding:3px;gap:2px}
+    .seg-item{flex:1;padding:8px 4px;border-radius:9px;border:none;background:transparent;font-family:inherit;font-size:12px;font-weight:700;color:var(--muted);cursor:pointer;text-align:center;transition:all .18s}
+    .seg-item.active{background:var(--card);color:var(--primary);box-shadow:var(--sh)}
+    .who-row{display:flex;gap:6px}
+    .who-btn{flex:1;padding:9px 6px;border-radius:var(--r);border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;text-align:center;transition:all .18s;color:var(--text2)}
+    .who-btn.wr{border-color:var(--blue);background:var(--blue-l);color:var(--blue)}
+    .who-btn.wl{border-color:var(--pink);background:var(--pink-l);color:var(--pink)}
+    .who-btn.ws{border-color:var(--purple);background:var(--purple-l);color:var(--purple)}
+
+    /* BUTTONS */
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:9px 14px;border-radius:var(--r);border:none;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s}
+    .btn:active{transform:scale(0.97)}
+    .btn-primary{background:linear-gradient(135deg,var(--primary),var(--pink));color:#fff;box-shadow:0 4px 14px rgba(109,40,217,.3)}
+    .btn-secondary{background:#F3F4F6;color:var(--text2)}
+    .btn-ghost{background:transparent;color:var(--text2)}
+    .btn-danger{background:#FEE2E2;color:var(--red)}
+    .btn-sm{padding:5px 9px;font-size:11px;border-radius:8px}
+    .btn-full{width:100%}
+
+    /* AI CHAT */
+    #chatMessages{position:absolute;inset:0;overflow-y:auto;padding:16px 14px;padding-top:calc(62px + env(safe-area-inset-top) + 6px);padding-bottom:72px;display:flex;flex-direction:column;gap:10px;max-width:480px;margin:0 auto}
+    .chat-msg{max-width:84%;padding:11px 14px;border-radius:18px;font-size:13px;font-weight:500;line-height:1.55}
+    .chat-msg.bot{background:var(--card);color:var(--text);border-radius:18px 18px 18px 4px;box-shadow:var(--sh);align-self:flex-start}
+    .chat-msg.user{background:linear-gradient(135deg,var(--primary),var(--pink));color:#fff;border-radius:18px 18px 4px 18px;align-self:flex-end}
+    .typing-dots{display:flex;gap:4px;padding:2px 0}
+    .typing-dots span{width:7px;height:7px;border-radius:50%;background:var(--muted);animation:blink 1.3s infinite}
+    .typing-dots span:nth-child(2){animation-delay:.2s}
+    .typing-dots span:nth-child(3){animation-delay:.4s}
+    @keyframes blink{0%,60%,100%{transform:translateY(0);opacity:.4}30%{transform:translateY(-5px);opacity:1}}
+    .chat-bar{position:fixed;bottom:68px;left:0;right:0;background:rgba(255,255,255,0.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:8px 12px;padding-bottom:calc(8px + env(safe-area-inset-bottom));border-top:1px solid var(--border);display:flex;gap:8px;align-items:flex-end;z-index:50;max-width:480px;margin:0 auto}
+    .chat-input{flex:1;padding:9px 13px;border-radius:20px;border:1.5px solid var(--border);background:#F9F8FF;font-family:inherit;font-size:13px;font-weight:500;outline:none;resize:none;max-height:90px;line-height:1.4}
+    .chat-input:focus{border-color:var(--primary)}
+    .send-btn{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--pink));border:none;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;box-shadow:0 3px 10px rgba(109,40,217,.35)}
+
+    /* MODAL */
+    .modal-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.45);backdrop-filter:blur(4px);display:none;align-items:flex-end;padding:0}
+    .modal-overlay.open{display:flex}
+    .modal-sheet{background:var(--card);border-radius:24px 24px 0 0;width:100%;max-width:480px;margin:0 auto;padding:18px 16px;padding-bottom:calc(20px + env(safe-area-inset-bottom));max-height:82vh;overflow-y:auto;animation:slideUp .28s ease}
+    @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+    .modal-handle{width:34px;height:4px;border-radius:2px;background:#E5E7EB;margin:0 auto 14px}
+    .modal-title{font-size:20px;font-weight:900;margin-bottom:2px}
+    .modal-sub{font-size:13px;color:var(--muted);font-weight:500;margin-bottom:14px;text-transform:capitalize}
+
+    /* SETTINGS */
+    .set-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px solid #F3F4F6}
+    .set-row:last-child{border-bottom:none}
+    .set-label{font-size:14px;font-weight:700}
+    .set-sub{font-size:11px;color:var(--muted);margin-top:2px}
+    .code-block{background:#1F2937;color:#86EFAC;border-radius:var(--r);padding:12px;font-family:'Courier New',monospace;font-size:10px;line-height:1.6;overflow-x:auto;margin-top:8px;white-space:pre}
+
+    /* TOAST */
+    #toast{position:fixed;bottom:calc(76px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);background:rgba(17,24,39,.9);color:#fff;border-radius:12px;padding:9px 16px;font-size:13px;font-weight:700;z-index:300;display:none;white-space:nowrap;backdrop-filter:blur(10px)}
+    #toast.show{display:block}
+    .empty{text-align:center;padding:28px 16px;color:var(--muted)}
+    .empty-icon{font-size:36px;margin-bottom:8px}
+    .empty-text{font-size:14px;font-weight:700}
+    .empty-sub{font-size:12px;margin-top:4px}
+    .divider{height:1px;background:#F3F4F6;margin:14px 0}
   </style>
 </head>
 <body>
-  <div class="topbar">
-    <div class="brand">
-      <div class="avatar"></div>
-      <div class="brandText">
-        <div class="brandTitle">Onze Agenda</div>
-        <div class="brandSub">Rob en Lizet</div>
-      </div>
-    </div>
-    <div class="statusPill" id="statusPill" title="Sync status">
-      <span class="dot" id="statusDot"></span>
-      <span>Status</span>
-      <span id="statusText" style="font-weight:900">Lokaal</span>
-    </div>
-    <div class="badge" id="versionBadge">PASTEL<br>FIREBASE<br>V3 DOTS</div>
-    <button class="btn" id="openSettings">Instellingen</button>
-  </div>
 
-  <div class="app">
-    <div id="screenCalendar" class="screen active">
-      <div class="panel">
-        <div class="row">
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-brand">
+    <div class="topbar-icon">💑</div>
+    <div>
+      <div class="topbar-title">Onze Agenda</div>
+      <div class="topbar-sub">Rob &amp; Lizet</div>
+    </div>
+  </div>
+  <div class="status-badge">
+    <span class="status-dot off" id="statusDot"></span>
+    <span id="statusText">Offline</span>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- ===== KALENDER ===== -->
+  <div class="screen active" id="screenCalendar">
+    <div class="screen-inner">
+      <div class="hero">
+        <div class="hero-day" id="heroDayName">maandag</div>
+        <div class="hero-date" id="heroDateNum">9</div>
+        <div class="hero-month" id="heroMonth">juni 2026</div>
+        <div class="hero-badge" id="heroBadge">📅 Geen afspraken vandaag</div>
+      </div>
+      <div class="card">
+        <div class="cal-hdr">
+          <div class="cal-month" id="calTitle">juni 2026</div>
+          <div class="cal-nav">
+            <button class="icon-btn" id="prevMonth"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+            <button class="icon-btn" id="goToday"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></button>
+            <button class="icon-btn" id="nextMonth"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
+          </div>
+        </div>
+        <div class="cal-dow"><div>ma</div><div>di</div><div>wo</div><div>do</div><div>vr</div><div>za</div><div>zo</div></div>
+        <div class="cal-days" id="calDays"></div>
+        <div class="legend">
+          <div class="leg"><span class="dr"></span>Rob</div>
+          <div class="leg"><span class="dl"></span>Lizet</div>
+          <div class="leg"><span class="ds"></span>Samen</div>
+          <div class="leg"><span class="db"></span>Verjaardag</div>
+          <div class="leg"><span class="dm"></span>Herinnering</div>
+        </div>
+        <div class="sel-box" id="selBox" style="display:none">
+          <div class="sel-box-icon">📅</div>
           <div>
-            <h2>Kalender</h2>
-            <p class="sub">Tik een dag om activiteiten te zien</p>
+            <div class="sel-box-title" id="selBoxTitle">—</div>
+            <div class="sel-box-sub">Tik nogmaals voor details</div>
           </div>
-          <div class="navBtns">
-            <button class="btn" id="prevMonth">Vorige</button>
-            <button class="btn" id="nextMonth">Volgende</button>
-          </div>
-        </div>
-        <div class="miniRow">
-          <div class="legend">
-            <div class="legItem"><span class="legDot a"></span>Afspraak</div>
-            <div class="legItem"><span class="legDot b"></span>Verjaardag</div>
-            <div class="legItem"><span class="legDot m"></span>Herinnering</div>
-          </div>
-          <button class="btn small" id="tapHint">Tik een dag</button>
-        </div>
-        <div class="calendarHeader" style="margin-top:10px">
-          <div class="monthTitle" id="monthTitle">Maand</div>
-          <div style="display:flex;gap:10px;align-items:center">
-            <button class="btn small ghost" id="goToday">Vandaag</button>
-          </div>
-        </div>
-        <div class="calWrap">
-          <div class="dow">
-            <div>Ma</div><div>Di</div><div>Wo</div><div>Do</div><div>Vr</div><div>Za</div><div>Zo</div>
-          </div>
-          <div class="days" id="daysGrid"></div>
-        </div>
-        <div class="selectedBox">
-          <div>
-            <p class="selectedTitle" id="selectedTitle">Afspraken op geselecteerde dag</p>
-            <p class="selectedText" id="selectedText">Kies eerst een dag in de kalender</p>
-          </div>
-          <button class="btn" id="goListFromSelected">Lijst</button>
         </div>
       </div>
     </div>
+  </div>
 
-```
-<div id="screenList" class="screen">
-  <div class="grid">
-    <div class="statCard">
-      <div class="statTop">
-        <div><p class="statTitle">Deze maand</p><p class="statHint">Aantal afspraken in deze maand.</p></div>
-        <button class="btn small" data-quick="month">Snel zien</button>
+  <!-- ===== AGENDA ===== -->
+  <div class="screen" id="screenList">
+    <div class="screen-inner">
+      <div style="margin-bottom:12px"><div style="font-size:22px;font-weight:900">Agenda</div><div style="font-size:13px;color:var(--muted);font-weight:500;margin-top:2px">Alle afspraken &amp; events</div></div>
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-val" id="statToday">0</div><div class="stat-lbl">Vandaag</div></div>
+        <div class="stat-card"><div class="stat-val" id="statMonth">0</div><div class="stat-lbl">Deze maand</div></div>
+        <div class="stat-card"><div class="stat-val" id="statBdays">0</div><div class="stat-lbl">Verj.</div></div>
       </div>
-      <div class="statValue" id="statMonth">0</div>
-    </div>
-    <div class="statCard">
-      <div class="statTop">
-        <div><p class="statTitle">Vandaag</p><p class="statHint">Aantal afspraken vandaag.</p></div>
-        <button class="btn small" data-quick="today">Snel zien</button>
+      <div class="filter-row">
+        <button class="filter-chip active" data-f="upcoming">Aankomend</button>
+        <button class="filter-chip" data-f="today">Vandaag</button>
+        <button class="filter-chip" data-f="month">Deze maand</button>
+        <button class="filter-chip" data-f="birthdays">Verjaardagen</button>
+        <button class="filter-chip" data-f="all">Alles</button>
       </div>
-      <div class="statValue" id="statToday">0</div>
+      <div id="listItems"></div>
     </div>
-    <div class="statCard">
-      <div class="statTop">
-        <div><p class="statTitle">Verjaardagen</p><p class="statHint">Aantal verjaardagen opgeslagen.</p></div>
-        <button class="btn small" data-quick="birthdays">Overzicht</button>
-      </div>
-      <div class="statValue" id="statBirthdays">0</div>
-    </div>
-    <div class="itemCard" id="listHintCard">
-      <div class="row">
-        <div>
-          <p class="statTitle" style="margin:0">Kies een dag in de kalender</p>
-          <p class="sub" style="margin:4px 0 0">Privé</p>
+  </div>
+
+  <!-- ===== TOEVOEGEN ===== -->
+  <div class="screen" id="screenAdd">
+    <div class="screen-inner">
+      <div style="margin-bottom:12px"><div class="screen-title" id="formTitle" style="font-size:22px;font-weight:900">Toevoegen</div><div id="formSub" style="font-size:13px;color:var(--muted);font-weight:500;margin-top:2px">Nieuw item toevoegen</div></div>
+      <div class="card">
+        <div class="form-group">
+          <div class="form-label">Soort</div>
+          <div class="segment" id="typeSegment">
+            <button class="seg-item active" data-type="appointment">📅 Afspraak</button>
+            <button class="seg-item" data-type="birthday">🎂 Verjaardag</button>
+            <button class="seg-item" data-type="memory">📝 Herinnering</button>
+          </div>
         </div>
-        <div style="display:flex;gap:10px;align-items:center">
-          <button class="btn" id="exportBtn">Export</button>
-          <button class="btn" id="importBtn">Import</button>
+        <div class="form-group"><label class="form-label" for="titleInput">Titel *</label><input class="form-input" id="titleInput" type="text" placeholder="Bijv. Etentje bij Theo"></div>
+        <div class="form-group"><label class="form-label" for="dateInput">Datum</label><input class="form-input" id="dateInput" type="date"></div>
+        <div class="form-group" id="timeField"><label class="form-label" for="timeInput">Tijd</label><input class="form-input" id="timeInput" type="time"></div>
+        <div class="form-group" id="reminderField">
+          <label class="form-label" for="reminderSelect">Herinnering via OneSignal</label>
+          <select class="form-select" id="reminderSelect">
+            <option value="">Geen herinnering</option>
+            <option value="15">15 min van tevoren</option>
+            <option value="60">1 uur van tevoren</option>
+            <option value="1440">1 dag van tevoren</option>
+          </select>
+        </div>
+        <div class="form-group"><label class="form-label" for="descInput">Beschrijving / locatie</label><textarea class="form-textarea" id="descInput" placeholder="Extra info..."></textarea></div>
+        <div class="form-group">
+          <div class="form-label">Wie</div>
+          <div class="who-row">
+            <button class="who-btn wr" id="whoRob" data-who="rob">👨 Rob</button>
+            <button class="who-btn" id="whoLizet" data-who="lizet">👩 Lizet</button>
+            <button class="who-btn" id="whoSamen" data-who="samen">💑 Samen</button>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-primary btn-full" id="saveBtn">Opslaan</button>
+          <button class="btn btn-secondary" id="clearBtn" style="flex-shrink:0">Wis</button>
         </div>
       </div>
     </div>
-    <div class="listCards" id="listCards"></div>
-    <button class="btn" id="backToCalendar" style="width:100%">Terug</button>
+  </div>
+
+  <!-- ===== AI ===== -->
+  <div class="screen" id="screenAI">
+    <div id="chatMessages"></div>
+    <div class="chat-bar" id="chatBar">
+      <textarea class="chat-input" id="chatInput" placeholder="Vraag iets over jullie agenda..." rows="1"></textarea>
+      <button class="send-btn" id="chatSendBtn"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/></svg></button>
+    </div>
+  </div>
+
+  <!-- ===== INSTELLINGEN ===== -->
+  <div class="screen" id="screenSettings">
+    <div class="screen-inner">
+      <div style="margin-bottom:12px"><div style="font-size:22px;font-weight:900">Instellingen</div><div style="font-size:13px;color:var(--muted);font-weight:500;margin-top:2px">Account, sync &amp; meldingen</div></div>
+
+      <div class="section-title">Account</div>
+      <div class="card">
+        <div id="authStatus" style="font-size:13px;font-weight:600;color:var(--muted);margin-bottom:10px">Niet ingelogd</div>
+        <div style="display:flex;gap:7px;flex-wrap:wrap">
+          <button class="btn btn-primary btn-sm" id="loginBtn">Inloggen</button>
+          <button class="btn btn-secondary btn-sm" id="logoutBtn" disabled>Uitloggen</button>
+        </div>
+      </div>
+
+      <div class="section-title">Synchronisatie</div>
+      <div class="card">
+        <div class="set-row">
+          <div><div class="set-label">Sync modus</div><div class="set-sub">Firebase = gedeeld met Lizet</div></div>
+          <select class="form-select" id="syncSelect" style="width:auto;padding:5px 8px;font-size:12px">
+            <option value="firebase">Firebase</option>
+            <option value="local">Lokaal</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="section-title">Meldingen (OneSignal)</div>
+      <div class="card">
+        <div class="set-row">
+          <div><div class="set-label">Push meldingen</div><div class="set-sub" id="notifStatus">Nog niet ingeschakeld</div></div>
+          <button class="btn btn-secondary btn-sm" id="enableNotifsBtn">Inschakelen</button>
+        </div>
+      </div>
+
+      <div class="section-title">Data</div>
+      <div class="card">
+        <div class="set-row"><div><div class="set-label">Migreer oude data</div><div class="set-sub">Kopieer per-user naar gedeeld pad</div></div><button class="btn btn-secondary btn-sm" id="migrateBtn">Migreer</button></div>
+        <div class="set-row"><div><div class="set-label">Export</div><div class="set-sub">Download als JSON</div></div><button class="btn btn-secondary btn-sm" id="exportBtn">Export</button></div>
+        <div class="set-row"><div><div class="set-label">Import</div><div class="set-sub">Laad JSON backup</div></div><button class="btn btn-secondary btn-sm" id="importBtn">Import</button></div>
+      </div>
+
+      <div class="section-title">Firebase Beveiligingsregels</div>
+      <div class="card">
+        <div style="font-size:12px;color:var(--muted);font-weight:500;margin-bottom:8px">Plak dit in Firebase Console → Realtime Database → Rules:</div>
+        <div class="code-block" id="fbRulesBlock"></div>
+        <button class="btn btn-secondary btn-sm" id="copyRulesBtn" style="margin-top:10px">📋 Kopieer regels</button>
+      </div>
+
+      <div class="section-title">AI Assistent</div>
+      <div class="card">
+        <div class="set-row" style="flex-direction:column;align-items:flex-start;gap:8px">
+          <div><div class="set-label">Anthropic API Key</div><div class="set-sub">Sla eenmalig op, wordt lokaal bewaard</div></div>
+          <div style="display:flex;gap:7px;width:100%">
+            <input type="password" id="aiKeyInput" class="form-input" placeholder="sk-ant-api03-..." style="flex:1;font-size:12px" value="">
+            <button class="btn btn-primary btn-sm" id="saveAiKeyBtn">Opslaan</button>
+          </div>
+          <div id="aiKeyStatus" style="font-size:11px;color:var(--muted)">Niet ingesteld</div>
+        </div>
+      </div>
+
+      <div class="section-title">Over</div>
+      <div class="card">
+        <div style="font-size:14px;font-weight:700">Onze Agenda v4.0</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px">Made by Rob Borghouts 2026 · Gebouwd met ❤️</div>
+      </div>
+    </div>
   </div>
 </div>
 
-<div id="screenAdd" class="screen">
-  <div class="formCard">
-    <div class="row">
-      <div><h2>Toevoegen</h2><p class="sub">Sla alles op, lokaal of in Firebase</p></div>
-    </div>
-    <div class="field">
-      <label for="typeSelect">Soort</label>
-      <select id="typeSelect">
-        <option value="appointment">Afspraak</option>
-        <option value="birthday">Verjaardag</option>
-        <option value="memory">Herinnering</option>
-      </select>
-    </div>
-    <div class="field"><label for="titleInput">Titel</label><input id="titleInput" placeholder="Bijv. Etentje Theo"></div>
-    <div class="field"><label for="dateInput">Datum</label><input id="dateInput" type="date"></div>
-    <div class="field" id="timeField"><label for="timeInput">Tijd</label><input id="timeInput" type="time"></div>
-    <div class="field" id="reminderField">
-      <label for="reminderSelect">Herinnering</label>
-      <select id="reminderSelect">
-        <option value="">Geen herinnering</option>
-        <option value="15">15 minuten van tevoren</option>
-        <option value="60">1 uur van tevoren</option>
-        <option value="1440">1 dag van tevoren</option>
-      </select>
-    </div>
-    <div class="field"><label for="descInput">Beschrijving</label><textarea id="descInput" placeholder="Extra info"></textarea></div>
-    <div class="field">
-      <label for="whoSelect">Wie</label>
-      <select id="whoSelect">
-        <option value="rob">Rob</option>
-        <option value="lizet">Lizet</option>
-        <option value="samen">Samen</option>
-      </select>
-    </div>
-    <div class="actions">
-      <button class="btn primary" id="saveBtn">Opslaan</button>
-      <button class="btn" id="clearBtn">Leegmaken</button>
-    </div>
-    <hr class="hr">
-    <p class="note">Tips. Titel is verplicht. Voor afspraken is datum verplicht.</p>
+<!-- TABS -->
+<div class="tabbar-wrap">
+  <div class="tabbar">
+    <button class="tab active" data-tab="calendar">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      <span class="tab-label">Kalender</span>
+    </button>
+    <button class="tab" data-tab="list">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+      <span class="tab-label">Agenda</span>
+    </button>
+    <button class="tab" data-tab="add">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>
+      <span class="tab-label">Toevoegen</span>
+    </button>
+    <button class="tab" data-tab="ai">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2a10 10 0 110 20 10 10 0 010-20zM8 12h8M12 8v8"/></svg>
+      <span class="tab-label">Assistent</span>
+    </button>
+    <button class="tab" data-tab="settings">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      <span class="tab-label">Instellingen</span>
+    </button>
   </div>
 </div>
 
-<div id="screenInfo" class="screen">
-  <div class="settingsCard">
-    <div class="row">
-      <div><h2>Info</h2><p class="sub">Made by Rob Borghouts 2026</p></div>
+<!-- DAY MODAL -->
+<div class="modal-overlay" id="dayModal">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="modalTitle">—</div>
+    <div class="modal-sub" id="modalSub">—</div>
+    <div id="modalItems"></div>
+    <div id="modalEmpty" style="display:none" class="empty"><div class="empty-icon">📭</div><div class="empty-text">Geen activiteiten</div><div class="empty-sub">Op deze dag staan geen events</div></div>
+    <div style="display:flex;gap:7px;margin-top:14px">
+      <button class="btn btn-primary btn-sm" id="modalAddBtn">+ Toevoegen</button>
+      <button class="btn btn-ghost btn-sm" id="modalCloseBtn">Sluiten</button>
     </div>
-    <p class="note" id="infoText">Gebruik de tabs onderin. Kies Sync in instellingen.</p>
   </div>
 </div>
 
-<div id="screenSettings" class="screen">
-  <div class="settingsCard">
-    <div class="row">
-      <div><h2>Instellingen</h2><p class="sub">Backup maken en terugzetten, plus sync instellingen.</p></div>
-      <button class="btn" id="closeSettings">Sluiten</button>
-    </div>
-    <hr class="hr">
-    <div class="row">
-      <button class="btn primary" id="backupMake">Backup maken</button>
-      <button class="btn" id="backupRestore">Backup terugzetten</button>
-    </div>
-    <p class="note" id="backupInfo"></p>
-    <hr class="hr">
-    <div class="field">
-      <label for="syncSelect">Sync</label>
-      <select id="syncSelect">
-        <option value="local">Lokaal</option>
-        <option value="firebase">Firebase</option>
-      </select>
-    </div>
-    <p class="note">Delen met Lizet werkt via Firebase, of anders via export en import.</p>
-    <hr class="hr">
-    <div class="authBox">
-      <button class="btn" id="loginBtn">Inloggen</button>
-      <button class="btn" id="logoutBtn">Uitloggen</button>
-    </div>
-    <p class="note" id="authNote"></p>
-  </div>
-</div>
-```
+<div id="toast"></div>
 
-  </div>
-
-  <div class="tabs">
-    <div class="tabbar">
-      <button class="tab active" data-tab="calendar">Kalender</button>
-      <button class="tab" data-tab="list">Lijst</button>
-      <button class="tab" data-tab="add">Toevoegen</button>
-      <button class="tab" data-tab="info">Info</button>
-    </div>
-  </div>
-
-  <div class="toast" id="toast"></div>
-
-  <div class="modalOverlay" id="dayModal" aria-hidden="true">
-    <div class="modalCard" role="dialog" aria-modal="true" aria-labelledby="modalHead">
-      <div class="modalTop">
-        <div>
-          <p class="modalTitle" id="modalHead">Activiteiten</p>
-          <div class="modalDate" id="modalDate">0000-00-00</div>
-        </div>
-        <button class="modalClose" data-close-modal>Sluiten</button>
-      </div>
-      <div class="modalList" id="modalList"></div>
-      <div class="modalEmpty" id="modalEmpty" style="display:none">Geen items op deze dag.</div>
-      <div style="margin-top:10px;display:flex;justify-content:flex-end">
-        <button class="btn" id="modalGoList">Naar lijst</button>
-      </div>
-    </div>
-  </div>
-
-  <script type="module">
-    const state = {
-      syncMode: localStorage.getItem("rb_syncMode") || "firebase",
-      unlocked: true,
-      code: null,
-      selectedDate: null,
-      viewYear: null,
-      viewMonth: null,
-      firebaseReady: false,
-      user: null,
-      editId: null,
-      editType: null
-    };
-
-    const els = {
-      statusDot: document.getElementById("statusDot"),
-      statusText: document.getElementById("statusText"),
-      toast: document.getElementById("toast"),
-      monthTitle: document.getElementById("monthTitle"),
-      daysGrid: document.getElementById("daysGrid"),
-      selectedTitle: document.getElementById("selectedTitle"),
-      selectedText: document.getElementById("selectedText"),
-      listCards: document.getElementById("listCards"),
-      statMonth: document.getElementById("statMonth"),
-      statToday: document.getElementById("statToday"),
-      statBirthdays: document.getElementById("statBirthdays"),
-      syncSelect: document.getElementById("syncSelect"),
-      authNote: document.getElementById("authNote"),
-      dayModal: document.getElementById("dayModal"),
-      modalDate: document.getElementById("modalDate"),
-      modalList: document.getElementById("modalList"),
-      modalEmpty: document.getElementById("modalEmpty")
-    };
-
-    function toast(msg){
-      els.toast.textContent = msg;
-      els.toast.classList.add("show");
-      setTimeout(()=>els.toast.classList.remove("show"), 2200);
+<script type="module">
+  // ── CONSTANTS ─────────────────────────────────────────────────
+  const OS_APP_ID   = "e2c74ceb-a800-4ebd-95ea-6f6ac01e5677";
+  const OS_API_KEY  = "os_v2_app_4lduz25iabhl3fpkn5vmahswo5vyyunnz42u7ruz5n6lvkxwu7uzwlfupzlslne2k6foczgvhgp2pmadtqjvhxncecz6kttyyhewywq";
+  const AI_KEY      = localStorage.getItem('ai_key') || '';
+  const SHARED      = "agenda/shared";
+  const SUBS        = "agenda/subscriptions";
+  const FB_RULES    = `{
+  "rules": {
+    "agenda": {
+      ".read": "auth != null && (auth.token.email == 'zweetzakken@gmail.com' || auth.token.email == 'lizetdewerdt@live.nl')",
+      ".write": "auth != null && (auth.token.email == 'zweetzakken@gmail.com' || auth.token.email == 'lizetdewerdt@live.nl')"
     }
+  }
+}`;
 
-    function pad(n){ return String(n).padStart(2,"0"); }
-    function isoDate(d){ return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`; }
-    function parseISO(s){ const [y,m,d]=s.split("-").map(Number); return new Date(y,m-1,d); }
-    function monthLabel(y,m){ const names=["januari","februari","maart","april","mei","juni","juli","augustus","september","oktober","november","december"]; return `${names[m]} ${y}`; }
+  // ── STATE ──────────────────────────────────────────────────────
+  const S = {
+    syncMode: localStorage.getItem("rb_syncMode")||"firebase",
+    selDate: null, viewY: null, viewM: null,
+    fbReady: false, user: null,
+    editId: null, editType: null,
+    who: "rob", type: "appointment",
+    filter: "upcoming", chat: [], osSubId: null
+  };
 
-    function setStatus(mode){
-      els.statusDot.classList.remove("off");
-      els.statusText.textContent = mode==="firebase" ? "Online" : "Lokaal";
+  // ── UTILS ──────────────────────────────────────────────────────
+  const pad = n => String(n).padStart(2,"0");
+  const isoDate = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+  const parseISO = s => { const [y,m,d]=s.split("-").map(Number); return new Date(y,m-1,d); };
+  const MN = ["januari","februari","maart","april","mei","juni","juli","augustus","september","oktober","november","december"];
+  const MS = ["jan","feb","mrt","apr","mei","jun","jul","aug","sep","okt","nov","dec"];
+  const DN = ["zondag","maandag","dinsdag","woensdag","donderdag","vrijdag","zaterdag"];
+  const esc = s => String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  const nowId = () => String(Date.now());
+
+  function toast(msg){
+    const el=document.getElementById("toast");
+    el.textContent=msg; el.classList.add("show");
+    setTimeout(()=>el.classList.remove("show"),2500);
+  }
+
+  // ── FIREBASE ───────────────────────────────────────────────────
+  let fb=null;
+  async function initFirebase(){
+    try{
+      const cfg={apiKey:"AIzaSyDeGP5IIWaFoG4PuISUueeccexrZOIVwGY",authDomain:"agenda-roblizet.firebaseapp.com",databaseURL:"https://agenda-roblizet-default-rtdb.europe-west1.firebasedatabase.app",projectId:"agenda-roblizet",storageBucket:"agenda-roblizet.firebasestorage.app",messagingSenderId:"789902813974",appId:"1:789902813974:web:62231ad5f5f90b4a91fe37"};
+      const [aM,uM,dM]=await Promise.all([
+        import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"),
+        import("https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"),
+        import("https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js")
+      ]);
+      const app=aM.initializeApp(cfg);
+      const auth=uM.getAuth(app);
+      const db=dM.getDatabase(app);
+      await uM.setPersistence(auth,uM.browserLocalPersistence);
+      fb={app,auth,db,uM,dM};
+      uM.onAuthStateChanged(auth,async user=>{
+        S.user=user||null; renderAuth();
+        if(S.syncMode==="firebase"&&user) await refreshAll();
+      });
+      S.fbReady=true;
+    }catch(e){ S.fbReady=false; renderAuth(); }
+  }
+
+  // ── DATA ───────────────────────────────────────────────────────
+  const localGet = ()=>{ try{const r=localStorage.getItem("rb_v4"); return r?JSON.parse(r):{appointments:{},birthdays:{},memories:{}};}catch(e){return{appointments:{},birthdays:{},memories:{}};} };
+  const localSet = d=>localStorage.setItem("rb_v4",JSON.stringify(d));
+
+  async function getAll(){
+    if(S.syncMode==="firebase"&&S.fbReady&&S.user){
+      try{ const snap=await fb.dM.get(fb.dM.ref(fb.db,SHARED)); if(!snap.exists()) return{appointments:{},birthdays:{},memories:{}}; const v=snap.val()||{}; return{appointments:v.appointments||{},birthdays:v.birthdays||{},memories:v.memories||}; }
+      catch(e){ return localGet(); }
     }
+    return localGet();
+  }
 
-    function setScreen(name){
-      document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
-      document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
-      if(name==="calendar"){ document.getElementById("screenCalendar").classList.add("active"); document.querySelector('.tab[data-tab="calendar"]').classList.add("active"); }
-      if(name==="list"){ document.getElementById("screenList").classList.add("active"); document.querySelector('.tab[data-tab="list"]').classList.add("active"); }
-      if(name==="add"){ document.getElementById("screenAdd").classList.add("active"); document.querySelector('.tab[data-tab="add"]').classList.add("active"); }
-      if(name==="info"){ document.getElementById("screenInfo").classList.add("active"); document.querySelector('.tab[data-tab="info"]').classList.add("active"); }
-      if(name==="settings"){ document.getElementById("screenSettings").classList.add("active"); }
+  async function setAll(data){
+    localSet(data);
+    if(S.syncMode==="firebase"&&S.fbReady&&S.user){
+      try{await fb.dM.set(fb.dM.ref(fb.db,SHARED),data);}catch(e){}
     }
+  }
 
-    function getLocalData(){
-      const raw=localStorage.getItem("rb_data_v3");
-      if(!raw) return {appointments:{},birthdays:{},memories:{}};
-      try{ const j=JSON.parse(raw); return {appointments:j.appointments||{},birthdays:j.birthdays||{},memories:j.memories||{}}; }
-      catch(e){ return {appointments:{},birthdays:{},memories:{}}; }
-    }
-    function setLocalData(data){ localStorage.setItem("rb_data_v3",JSON.stringify(data)); }
-    function uidEmailSafe(email){ return email.replace(/[^a-zA-Z0-9]/g,"_"); }
-    function nowId(){ return String(Date.now()); }
+  // ── ONESIGNAL ──────────────────────────────────────────────────
+  function initOneSignal(){
+    window.OneSignalDeferred=window.OneSignalDeferred||[];
+    OneSignalDeferred.push(async function(OS){
+      await OS.init({appId:OS_APP_ID,serviceWorkerPath:"OneSignalSDKWorker.js",serviceWorkerParam:{scope:"/Afspraken/"},notifyButton:{enable:false}});
+      const sub=OS.User.PushSubscription;
+      sub.addEventListener("change",async ev=>{
+        if(ev.current.optedIn){ S.osSubId=ev.current.id; document.getElementById("notifStatus").textContent="Ingeschakeld ✓"; await saveSubId(ev.current.id); }
+      });
+      if(await sub.optedIn){ S.osSubId=sub.id; document.getElementById("notifStatus").textContent="Ingeschakeld ✓"; }
+    });
+  }
 
-    let fb = null;
+  async function enableNotifs(){
+    window.OneSignalDeferred=window.OneSignalDeferred||[];
+    OneSignalDeferred.push(async OS=>{ try{ await OS.User.PushSubscription.optIn(); toast("Meldingen ingeschakeld ✓"); }catch(e){ toast("Meldingen inschakelen mislukt"); } });
+  }
 
-    async function initFirebase(){
-      try{
-        const firebaseConfig = {
-          apiKey: "AIzaSyDeGP5IIWaFoG4PuISUueeccexrZOIVwGY",
-          authDomain: "agenda-roblizet.firebaseapp.com",
-          databaseURL: "https://agenda-roblizet-default-rtdb.europe-west1.firebasedatabase.app",
-          projectId: "agenda-roblizet",
-          storageBucket: "agenda-roblizet.firebasestorage.app",
-          messagingSenderId: "789902813974",
-          appId: "1:789902813974:web:62231ad5f5f90b4a91fe37"
-        };
+  async function saveSubId(id){
+    if(!fb||!S.user) return;
+    try{ await fb.dM.set(fb.dM.ref(fb.db,`${SUBS}/${S.user.uid}`),{subscriptionId:id,email:S.user.email,updatedAt:Date.now()}); }catch(e){}
+  }
 
-        const appMod  = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");
-        const authMod = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js");
-        const dbMod   = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js");
+  async function getAllSubIds(){
+    if(!fb||!S.user) return S.osSubId?[S.osSubId]:[];
+    try{
+      const snap=await fb.dM.get(fb.dM.ref(fb.db,SUBS));
+      if(!snap.exists()) return S.osSubId?[S.osSubId]:[];
+      return Object.values(snap.val()||{}).map(s=>s.subscriptionId).filter(Boolean);
+    }catch(e){ return S.osSubId?[S.osSubId]:[]; }
+  }
 
-        const app  = appMod.initializeApp(firebaseConfig);
-        const auth = authMod.getAuth(app);
-        const db   = dbMod.getDatabase(app);
+  async function scheduleNotif(title,body,when){
+    const ids=await getAllSubIds();
+    if(!ids.length){ toast("Schakel eerst meldingen in"); return; }
+    try{
+      const r=await fetch("https://api.onesignal.com/notifications",{
+        method:"POST",
+        headers:{"Content-Type":"application/json","Authorization":`Key ${OS_API_KEY}`},
+        body:JSON.stringify({app_id:OS_APP_ID,include_subscription_ids:ids,headings:{nl:title,en:title},contents:{nl:body,en:body},send_after:when.toISOString()})
+      });
+      const d=await r.json();
+      if(d.id) toast("Herinnering ingepland ✓");
+      else toast("Melding fout");
+    }catch(e){ toast("Melding kon niet worden ingepland"); }
+  }
 
-        await authMod.setPersistence(auth, authMod.browserLocalPersistence);
+  // ── SCREENS ────────────────────────────────────────────────────
+  function setScreen(name){
+    document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+    document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+    const cap=name.charAt(0).toUpperCase()+name.slice(1);
+    document.getElementById(`screen${cap}`)?.classList.add("active");
+    document.querySelector(`.tab[data-tab="${name}"]`)?.classList.add("active");
+    // Fix chat bar: only show when AI is active
+    document.getElementById("chatBar").style.display = name==="ai"?"flex":"none";
+  }
 
-        fb = {app, auth, db, authMod, dbMod};
+  // ── HERO ───────────────────────────────────────────────────────
+  async function renderHero(){
+    const now=new Date();
+    document.getElementById("heroDayName").textContent=DN[now.getDay()];
+    document.getElementById("heroDateNum").textContent=String(now.getDate());
+    document.getElementById("heroMonth").textContent=`${MN[now.getMonth()]} ${now.getFullYear()}`;
+    const data=await getAll(); const today=isoDate(now);
+    let cnt=0;
+    Object.values(data.appointments||{}).forEach(a=>{if(a&&a.date===today)cnt++;});
+    Object.values(data.memories||{}).forEach(m=>{if(m&&m.date===today)cnt++;});
+    const bdays=Object.values(data.birthdays||{}).filter(b=>{
+      if(!b||!b.date) return false;
+      const p=b.date.split("-"); return p[1]===pad(now.getMonth()+1)&&p[2]===pad(now.getDate());
+    });
+    cnt+=bdays.length;
+    const badge=document.getElementById("heroBadge");
+    if(bdays.length) badge.textContent=`🎂 ${bdays[0].name||bdays[0].title} is jarig!`;
+    else if(!cnt) badge.textContent="📅 Geen afspraken vandaag";
+    else badge.textContent=`📅 ${cnt} activiteit${cnt>1?"en":""} vandaag`;
+  }
 
-        authMod.onAuthStateChanged(auth, (user)=>{
-          state.user = user || null;
-          renderAuthState();
-          if(state.syncMode==="firebase") refreshAll();
-        });
-
-        state.firebaseReady = true;
-        renderAuthState();
-      }catch(e){
-        state.firebaseReady = false;
-        renderAuthState();
+  // ── CALENDAR ───────────────────────────────────────────────────
+  async function renderCal(){
+    const now=new Date();
+    if(S.viewY===null){S.viewY=now.getFullYear();S.viewM=now.getMonth();}
+    document.getElementById("calTitle").textContent=`${MN[S.viewM]} ${S.viewY}`;
+    const data=await getAll();
+    const dm={};
+    Object.values(data.appointments||{}).forEach(a=>{
+      if(!a||!a.date) return;
+      const [y,m]=a.date.split("-").map(Number);
+      if(y===S.viewY&&(m-1)===S.viewM){ if(!dm[a.date])dm[a.date]={}; dm[a.date][(a.who||"samen").toLowerCase()]=true; }
+    });
+    Object.values(data.birthdays||{}).forEach(b=>{
+      if(!b||!b.date) return;
+      const p=b.date.split("-"); const k=`${S.viewY}-${p[1]}-${p[2]}`;
+      if(!dm[k])dm[k]={}; dm[k].bday=true;
+    });
+    Object.values(data.memories||{}).forEach(m=>{
+      if(!m||!m.date) return;
+      const [y,mo]=m.date.split("-").map(Number);
+      if(y===S.viewY&&(mo-1)===S.viewM){ if(!dm[m.date])dm[m.date]={}; dm[m.date].mem=true; }
+    });
+    const first=new Date(S.viewY,S.viewM,1);
+    let dow=first.getDay(); dow=dow===0?7:dow; const lead=dow-1;
+    const total=new Date(S.viewY,S.viewM+1,0).getDate();
+    const grid=document.getElementById("calDays"); grid.innerHTML="";
+    const today=isoDate(now);
+    for(let i=0;i<lead;i++){const d=document.createElement("div");d.className="day-cell muted";grid.appendChild(d);}
+    for(let day=1;day<=total;day++){
+      const ds=`${S.viewY}-${pad(S.viewM+1)}-${pad(day)}`;
+      const btn=document.createElement("button"); btn.className="day-cell";
+      if(ds===today) btn.classList.add("today");
+      if(S.selDate===ds) btn.classList.add("selected");
+      btn.dataset.date=ds;
+      const num=document.createElement("div"); num.className="day-num"; num.textContent=String(day);
+      btn.appendChild(num);
+      const dots=document.createElement("div"); dots.className="day-dots";
+      const ddd=dm[ds];
+      if(ddd){
+        if(ddd.rob){const s=document.createElement("span");s.className="dr";dots.appendChild(s);}
+        if(ddd.lizet){const s=document.createElement("span");s.className="dl";dots.appendChild(s);}
+        if(ddd.samen){const s=document.createElement("span");s.className="ds";dots.appendChild(s);}
+        if(ddd.bday){const s=document.createElement("span");s.className="db";dots.appendChild(s);}
+        if(ddd.mem){const s=document.createElement("span");s.className="dm";dots.appendChild(s);}
       }
+      if(dots.children.length) btn.appendChild(dots);
+      btn.addEventListener("click",async()=>{ S.selDate=ds; await renderCal(); const items=await getDayItems(ds); openModal(ds,items); });
+      grid.appendChild(btn);
     }
+    // sel box
+    const box=document.getElementById("selBox");
+    if(S.selDate){ box.style.display="flex"; const d=parseISO(S.selDate); document.getElementById("selBoxTitle").textContent=`${DN[d.getDay()]} ${d.getDate()} ${MN[d.getMonth()]}`; }
+    else box.style.display="none";
+    renderHero();
+  }
 
-    function renderAuthState(){
-      const btnLogin  = document.getElementById("loginBtn");
-      const btnLogout = document.getElementById("logoutBtn");
-      if(state.syncMode!=="firebase"){
-        els.authNote.textContent="Firebase staat uit. Zet Sync op Firebase om in te loggen.";
-        btnLogin.disabled=true; btnLogout.disabled=true; return;
-      }
-      if(!state.firebaseReady){
-        els.authNote.textContent="Firebase laadt niet. Check internet, en ververs.";
-        btnLogin.disabled=true; btnLogout.disabled=true; return;
-      }
-      if(state.user){
-        els.authNote.textContent=`Ingelogd als ${state.user.email||"gebruiker"}.`;
-        btnLogin.disabled=true; btnLogout.disabled=false;
-      }else{
-        els.authNote.textContent="Niet ingelogd. Tik op Inloggen.";
-        btnLogin.disabled=false; btnLogout.disabled=true;
-      }
-    }
+  // ── DAY ITEMS ──────────────────────────────────────────────────
+  async function getDayItems(ds){
+    const data=await getAll(); const items=[]; const p=ds.split("-");
+    Object.entries(data.appointments||{}).forEach(([k,a])=>{ if(a&&a.date===ds) items.push({id:k,type:"appointment",title:a.desc||a.title||"(zonder titel)",date:a.date,time:a.time||"",who:a.who||"samen",desc:a.location||""}); });
+    Object.entries(data.birthdays||{}).forEach(([k,b])=>{ if(!b||!b.date) return; const bp=b.date.split("-"); if(bp[1]===p[1]&&bp[2]===p[2]) items.push({id:k,type:"birthday",title:b.name||b.title||"(verjaardag)",date:ds,time:"",who:b.who||"samen",desc:b.note||""}); });
+    Object.entries(data.memories||{}).forEach(([k,m])=>{ if(m&&m.date===ds) items.push({id:k,type:"memory",title:m.title||m.desc||"(herinnering)",date:m.date,time:m.time||"",who:m.who||"samen",desc:m.desc||""}); });
+    items.sort((a,b)=>(a.time||"99:99").localeCompare(b.time||"99:99"));
+    return items;
+  }
 
-    function basePath(){
-      if(state.syncMode!=="firebase") return null;
-      if(!state.user||!state.user.email) return null;
-      return `users/${uidEmailSafe(state.user.email)}`;
-    }
-
-    async function fbGetAll(){
-      const p=basePath(); if(!p) return null;
-      const snap=await fb.dbMod.get(fb.dbMod.ref(fb.db,`${p}/data`));
-      if(!snap.exists()) return {appointments:{},birthdays:{},memories:{}};
-      const v=snap.val()||{};
-      return {appointments:v.appointments||{},birthdays:v.birthdays||{},memories:v.memories||{}};
-    }
-
-    async function fbSetAll(data){
-      const p=basePath(); if(!p) throw new Error("not logged in");
-      await fb.dbMod.set(fb.dbMod.ref(fb.db,`${p}/data`),data);
-    }
-
-    async function getAll(){
-      if(state.syncMode==="firebase"){
-        if(!state.firebaseReady||!state.user) return {appointments:{},birthdays:{},memories:{}};
-        try{ const d=await fbGetAll(); return d||getLocalData(); }catch(e){ return getLocalData(); }
-      }
-      return getLocalData();
-    }
-
-    async function setAll(data){
-      setLocalData(data);
-      if(state.syncMode==="firebase"){
-        if(!state.firebaseReady||!state.user) return;
-        try{ await fbSetAll(data); }catch(e){}
-      }
-    }
-
-    function isEditAllowed(){ return true; }
-    function updateEditUI(){
-      document.getElementById("saveBtn").disabled=!isEditAllowed();
-      document.getElementById("clearBtn").disabled=!isEditAllowed();
-    }
-
-    function openModal(dateStr,items){
-      els.modalDate.textContent=dateStr;
-      els.modalList.innerHTML="";
-      if(!items||items.length===0){
-        els.modalEmpty.style.display="block";
-      }else{
-        els.modalEmpty.style.display="none";
-        items.forEach(it=>{
-          const card=document.createElement("div");
-          card.className="itemCard";
-          card.innerHTML=`<div class="itemRow"><div class="itemMain"><div class="row" style="align-items:flex-start"><div style="min-width:0"><p class="itemTitle" style="margin:0 0 6px">${escapeHtml(it.title||"(zonder titel)")}</p><div class="chips"><span class="chip ${it.kindChip}">${it.kindLabel}</span>${it.date?`<span class="chip">${it.date}</span>`:""}${it.time?`<span class="chip">${it.time}</span>`:""}${it.who?`<span class="chip muted">${escapeHtml(it.who)}</span>`:""}</div>${it.desc?`<p class="sub" style="margin:10px 0 0">${escapeHtml(it.desc)}</p>`:""}</div></div><div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"><button class="btn small btn-ics" data-id="${it.id}" data-type="${it.type}">📅 Agenda</button><button class="btn small btn-edit" data-id="${it.id}" data-type="${it.type}">✏️ Bewerken</button><button class="btn small btn-del" data-id="${it.id}" data-type="${it.type}" style="color:#e74c3c">🗑️ Verwijderen</button></div></div></div>`;
-          els.modalList.appendChild(card);
-        });
-      }
-      els.dayModal.classList.add("open");
-      els.dayModal.setAttribute("aria-hidden","false");
-      document.body.style.overflow="hidden";
-    }
-
-    function closeModal(){
-      els.dayModal.classList.remove("open");
-      els.dayModal.setAttribute("aria-hidden","true");
-      document.body.style.overflow="";
-    }
-
-    function escapeHtml(s){ return String(s).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;"); }
-
-    async function dayItems(dateStr){
-      const data=await getAll();
-      const items=[];
-      Object.entries(data.appointments||{}).forEach(([k,a])=>{ if(a&&a.date===dateStr) items.push({id:k,type:"appointment",kindLabel:"Afspraak",kindChip:"a",title:a.desc||a.title||"(zonder titel)",date:a.date,time:a.time||"",who:a.who||"",desc:a.location?`Locatie: ${a.location}`:""}); });
-      Object.entries(data.birthdays||{}).forEach(([k,b])=>{ if(b&&b.date===dateStr) items.push({id:k,type:"birthday",kindLabel:"Verjaardag",kindChip:"b",title:b.name||b.title||"(verjaardag)",date:b.date,time:"",who:b.who||"",desc:b.note||""}); });
-      Object.entries(data.memories||{}).forEach(([k,m])=>{ if(m&&m.date===dateStr) items.push({id:k,type:"memory",kindLabel:"Herinnering",kindChip:"m",title:m.title||m.desc||"(herinnering)",date:m.date,time:m.time||"",who:m.who||"",desc:m.desc||""}); });
-      items.sort((x,y)=>(x.time||"99:99").localeCompare(y.time||"99:99"));
-      return items;
-    }
-
-    async function renderCalendar(){
-      const now=new Date();
-      if(state.viewYear===null){ state.viewYear=now.getFullYear(); state.viewMonth=now.getMonth(); }
-      els.monthTitle.textContent=monthLabel(state.viewYear,state.viewMonth);
-      const first=new Date(state.viewYear,state.viewMonth,1);
-      const last=new Date(state.viewYear,state.viewMonth+1,0);
-      let startDow=first.getDay(); startDow=startDow===0?7:startDow;
-      const leading=startDow-1;
-      const totalDays=last.getDate();
-      els.daysGrid.innerHTML="";
-      const data=await getAll();
-      const hasA={},hasB={},hasM={};
-      Object.values(data.appointments||{}).forEach(a=>{ if(a&&a.date){ const [y,mo]=a.date.split("-").map(Number); if(y===state.viewYear&&(mo-1)===state.viewMonth) hasA[a.date]=true; } });
-      Object.values(data.birthdays||{}).forEach(b=>{ if(b&&b.date){ const [y,mo]=b.date.split("-").map(Number); if(y===state.viewYear&&(mo-1)===state.viewMonth) hasB[b.date]=true; } });
-      Object.values(data.memories||{}).forEach(m=>{ if(m&&m.date){ const [y,mo]=m.date.split("-").map(Number); if(y===state.viewYear&&(mo-1)===state.viewMonth) hasM[m.date]=true; } });
-      for(let i=0;i<leading;i++){ const d=document.createElement("div"); d.className="day muted"; d.dataset.date=""; els.daysGrid.appendChild(d); }
-      for(let day=1;day<=totalDays;day++){
-        const d=document.createElement("div"); d.className="day"; d.textContent=String(day);
-        const ds=`${state.viewYear}-${pad(state.viewMonth+1)}-${pad(day)}`; d.dataset.date=ds;
-        if(ds===isoDate(now)) d.classList.add("today");
-        if(state.selectedDate===ds) d.classList.add("selected");
-        const dots=document.createElement("div"); dots.className="dots";
-        if(hasA[ds]){ const s=document.createElement("span"); s.className="d a"; dots.appendChild(s); }
-        if(hasB[ds]){ const s=document.createElement("span"); s.className="d b"; dots.appendChild(s); }
-        if(hasM[ds]){ const s=document.createElement("span"); s.className="d m"; dots.appendChild(s); }
-        if(dots.childNodes.length>0) d.appendChild(dots);
-        els.daysGrid.appendChild(d);
-      }
-      const filled=leading+totalDays;
-      const remainder=filled%7===0?0:(7-(filled%7));
-      for(let i=0;i<remainder;i++){ const d=document.createElement("div"); d.className="day muted"; d.dataset.date=""; els.daysGrid.appendChild(d); }
-      if(typeof bindDaysGrid==="function") bindDaysGrid();
-      updateSelectedBox(); updateStats(); renderList();
-    }
-
-    async function updateSelectedBox(){
-      if(!state.selectedDate){ els.selectedText.textContent="Kies eerst een dag in de kalender"; return; }
-      const items=await dayItems(state.selectedDate);
-      if(items.length===0){ els.selectedText.textContent="Geen activiteiten op deze dag"; }
-      else{ const first=items[0]; let line=""; if(first.kindLabel) line+=`${first.kindLabel} `; if(first.title) line+=first.title; if(first.time) line+=`, ${first.time}`; els.selectedText.textContent=line; }
-    }
-
-    async function updateStats(){
-      const data=await getAll(); const now=new Date();
-      const ym=`${now.getFullYear()}-${pad(now.getMonth()+1)}`; const today=isoDate(now);
-      let monthCount=0; Object.values(data.appointments||{}).forEach(a=>{ if(a&&a.date&&a.date.startsWith(ym)) monthCount++; });
-      let todayCount=0; Object.values(data.appointments||{}).forEach(a=>{ if(a&&a.date===today) todayCount++; });
-      const bCount=Object.keys(data.birthdays||{}).length;
-      els.statMonth.textContent=String(monthCount); els.statToday.textContent=String(todayCount); els.statBirthdays.textContent=String(bCount);
-    }
-
-    function iconFromDate(dateStr){ const d=parseISO(dateStr); const months=["JAN","FEB","MRT","APR","MEI","JUN","JUL","AUG","SEP","OKT","NOV","DEC"]; return {m:months[d.getMonth()],d:pad(d.getDate())}; }
-
-    async function renderList(filter){
-      const data=await getAll(); const cards=els.listCards; cards.innerHTML="";
-      let items=[];
-      Object.entries(data.appointments||{}).forEach(([k,a])=>{ if(!a) return; items.push({id:k,type:"appointment",kindLabel:"Afspraak",kindChip:"a",title:a.desc||a.title||"(zonder titel)",date:a.date||"",time:a.time||"",who:a.who||"",desc:a.location||""}); });
-      Object.entries(data.birthdays||{}).forEach(([k,b])=>{ if(!b) return; items.push({id:k,type:"birthday",kindLabel:"Verjaardag",kindChip:"b",title:b.name||b.title||"(verjaardag)",date:b.date||"",time:"",who:b.who||"",desc:b.note||""}); });
-      Object.entries(data.memories||{}).forEach(([k,m])=>{ if(!m) return; items.push({id:k,type:"memory",kindLabel:"Herinnering",kindChip:"m",title:m.title||m.desc||"(herinnering)",date:m.date||"",time:m.time||"",who:m.who||"",desc:m.desc||""}); });
-      const now=new Date(); const today=isoDate(now); const ym=`${now.getFullYear()}-${pad(now.getMonth()+1)}`;
-      if(filter==="today") items=items.filter(i=>i.date===today);
-      if(filter==="month") items=items.filter(i=>i.type==="appointment"&&i.date&&i.date.startsWith(ym));
-      if(filter==="birthdays") items=items.filter(i=>i.type==="birthday");
-      items.sort((a,b)=>{ const da=a.date||"9999-99-99"; const db=b.date||"9999-99-99"; if(da!==db) return da.localeCompare(db); return (a.time||"99:99").localeCompare(b.time||"99:99"); });
+  // ── MODAL ──────────────────────────────────────────────────────
+  function openModal(ds,items){
+    const d=parseISO(ds);
+    document.getElementById("modalTitle").textContent=`${d.getDate()} ${MN[d.getMonth()]} ${d.getFullYear()}`;
+    document.getElementById("modalSub").textContent=DN[d.getDay()];
+    const cont=document.getElementById("modalItems"); cont.innerHTML="";
+    const empty=document.getElementById("modalEmpty");
+    if(!items.length){ empty.style.display="block"; }
+    else{
+      empty.style.display="none";
       items.forEach(it=>{
-        const card=document.createElement("div"); card.className="itemCard";
-        const ic=it.date?iconFromDate(it.date):{m:"",d:""};
-        card.innerHTML=`<div class="itemRow"><div class="iconDate"><div class="m">${ic.m}</div><div class="d">${ic.d}</div></div><div class="itemMain"><div class="row" style="align-items:flex-start"><div style="min-width:0"><p class="itemTitle">${escapeHtml(it.title)}</p><div class="chips"><span class="chip ${it.kindChip}">${it.kindLabel}</span>${it.date?`<span class="chip">${it.date}</span>`:""}${it.time?`<span class="chip">${it.time}</span>`:""}${it.desc?`<span class="chip muted">${escapeHtml(it.desc)}</span>`:`<span class="chip muted">Geen locatie</span>`}</div></div><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:4px"><button class="btn small" data-open-date="${it.date||""}">Open</button><button class="btn small btn-edit" data-id="${it.id}" data-type="${it.type}">✏️</button><button class="btn small btn-ics" data-id="${it.id}" data-type="${it.type}">📅</button><button class="btn small btn-del" data-id="${it.id}" data-type="${it.type}" style="color:#e74c3c">🗑️</button></div></div></div></div>`;
-        cards.appendChild(card);
+        const card=document.createElement("div"); card.className="item-card";
+        const tc=it.type==="appointment"?"appt":it.type==="birthday"?"bday":"mem";
+        const tl=it.type==="appointment"?"Afspraak":it.type==="birthday"?"🎂 Verjaardag":"📝 Herinnering";
+        const wc=it.who==="rob"?"cr":it.who==="lizet"?"cl":"cs";
+        const wl=it.who==="rob"?"👨 Rob":it.who==="lizet"?"👩 Lizet":"💑 Samen";
+        card.innerHTML=`<div class="date-ico ${tc}"><div class="mo">${MS[d.getMonth()].toUpperCase()}</div><div class="dy">${pad(d.getDate())}</div></div><div class="item-body"><div class="item-title">${esc(it.title)}</div><div class="chips"><span class="chip c${tc.charAt(0)}">${tl}</span>${it.time?`<span class="chip cg">🕐 ${it.time}</span>`:""}<span class="chip ${wc}">${wl}</span></div>${it.desc?`<div style="font-size:11px;color:var(--muted);margin-top:5px">${esc(it.desc)}</div>`:""}<div class="item-acts"><button class="btn btn-secondary btn-sm btn-edit" data-id="${it.id}" data-type="${it.type}">✏️ Bewerken</button><button class="btn btn-danger btn-sm btn-del" data-id="${it.id}" data-type="${it.type}">🗑 Verwijder</button></div></div>`;
+        cont.appendChild(card);
       });
     }
+    document.getElementById("dayModal").classList.add("open");
+  }
+  const closeModal=()=>document.getElementById("dayModal").classList.remove("open");
 
-    async function refreshAll(){
-      setStatus(state.syncMode); els.syncSelect.value=state.syncMode; updateEditUI(); await renderCalendar(); renderAuthState();
-    }
-
-    function requireTitle(){ const t=document.getElementById("titleInput").value.trim(); if(!t){ toast("Titel is verplicht"); return null; } return t; }
-
-    function readForm(){
-      const type=document.getElementById("typeSelect").value;
-      const title=requireTitle(); if(!title) return null;
-      const date=document.getElementById("dateInput").value;
-      const time=document.getElementById("timeInput").value;
-      const desc=document.getElementById("descInput").value.trim();
-      const who=document.getElementById("whoSelect").value;
-      if(type==="appointment"&&!date){ toast("Datum is verplicht"); return null; }
-      return {type,title,date,time,desc,who};
-    }
-
-    function clearForm(){
-      document.getElementById("titleInput").value="";
-      document.getElementById("dateInput").value="";
-      document.getElementById("timeInput").value="";
-      document.getElementById("descInput").value="";
-      document.getElementById("whoSelect").value="rob";
-      state.editId=null; state.editType=null;
-      document.querySelector("#screenAdd h2").textContent="Toevoegen";
-      document.getElementById("typeSelect").value="appointment";
-      document.getElementById("reminderSelect").value="";
-      toggleTimeField();
-    }
-
-    function toggleTimeField(){
-      const type=document.getElementById("typeSelect").value;
-      const isBirthday=(type==="birthday");
-      document.getElementById("timeField").style.display=isBirthday?"none":"block";
-      document.getElementById("reminderField").style.display=isBirthday?"none":"block";
-    }
-
-    async function saveItem(){
-      if(!isEditAllowed()){ toast("Gastmodus, bewerken uit"); return; }
-      const f=readForm(); if(!f) return;
-      const data=await getAll();
-
-      if(state.editId && state.editType){
-        // UPDATE bestaand item
-        const cat = state.editType==="appointment"?"appointments":state.editType==="birthday"?"birthdays":"memories";
-        if(state.editType==="appointment") data.appointments[state.editId]={...data.appointments[state.editId],date:f.date,time:f.time||"",desc:f.title,who:f.who};
-        if(state.editType==="birthday") data.birthdays[state.editId]={...data.birthdays[state.editId],date:f.date,name:f.title,who:f.who,note:f.desc};
-        if(state.editType==="memory") data.memories[state.editId]={...data.memories[state.editId],date:f.date,time:f.time||"",title:f.title,desc:f.desc,who:f.who};
-        state.editId=null; state.editType=null;
-        document.querySelector("#screenAdd h2").textContent="Toevoegen";
-        await setAll(data);
-        toast("Bijgewerkt ✓");
-        clearForm(); await refreshAll(); setScreen("calendar");
-        return;
-      }
-
-      const id=nowId();
-      if(f.type==="appointment") data.appointments[id]={id:Number(id),date:f.date,time:f.time||"",desc:f.title,who:f.who,createdAt:new Date().toISOString()};
-      if(f.type==="birthday") data.birthdays[id]={id:Number(id),date:f.date,name:f.title,who:f.who,note:f.desc,createdAt:new Date().toISOString()};
-      if(f.type==="memory") data.memories[id]={id:Number(id),date:f.date,time:f.time||"",title:f.title,desc:f.desc,who:f.who,createdAt:new Date().toISOString()};
-      await setAll(data);
-
-      // Herinnering inplannen indien gekozen
-      const herinnering = document.getElementById("reminderSelect").value;
-      if(herinnering && f.date && f.time){
-        const datumTijd = `${f.date}T${f.time}:00`;
-        const tijdstip = new Date(datumTijd).getTime() - (Number(herinnering) * 60 * 1000);
-        if(tijdstip > Date.now()){
-          await planMelding("📅 " + f.title, "Herinnering: " + f.title, new Date(tijdstip).toISOString());
-        } else {
-          toast("Opgeslagen (moment al voorbij voor herinnering)");
-        }
-      } else {
-        toast("Opgeslagen");
-      }
-
-      clearForm(); await refreshAll(); setScreen("calendar");
-    }
-
-    async function deleteItem(type, id){
-      if(!confirm("Verwijderen?")) return;
-      const data=await getAll();
-      const cat = type==="appointment"?"appointments":type==="birthday"?"birthdays":"memories";
-      if(data[cat]&&data[cat][id]) delete data[cat][id];
-      await setAll(data);
-      toast("Verwijderd");
-      await refreshAll();
-      closeModal();
-    }
-
-    async function loadEditItem(type, id){
-      const data=await getAll();
-      const cat = type==="appointment"?"appointments":type==="birthday"?"birthdays":"memories";
-      const it=data[cat]&&data[cat][id];
-      if(!it){ toast("Niet gevonden"); return; }
-      state.editId=id; state.editType=type;
-      const typeMap={appointment:"appointment",birthday:"birthday",memory:"memory"};
-      document.getElementById("typeSelect").value=typeMap[type]||"appointment";
-      document.getElementById("titleInput").value=type==="appointment"?(it.desc||it.title||""):type==="birthday"?(it.name||it.title||""):(it.title||it.desc||"");
-      document.getElementById("dateInput").value=it.date||"";
-      document.getElementById("timeInput").value=it.time||"";
-      document.getElementById("descInput").value=type==="birthday"?(it.note||""):(it.desc||"");
-      document.getElementById("whoSelect").value=it.who||"rob";
-      toggleTimeField();
-      document.querySelector("#screenAdd h2").textContent="Bewerken";
-      closeModal();
-      setScreen("add");
-      toast("Klaar om te bewerken");
-    }
-
-    function downloadICS(id, type){
-      getAll().then(data=>{
-        const cat = type==="appointment"?"appointments":type==="birthday"?"birthdays":"memories";
-        const it=data[cat]&&data[cat][id]; if(!it) return;
-        const title = type==="appointment"?(it.desc||it.title||"Afspraak"):type==="birthday"?(it.name||"Verjaardag"):(it.title||"Herinnering");
-        const dateStr=it.date||""; if(!dateStr) return;
-        const hasTime=!!it.time;
-        const datePart=dateStr.replace(/-/g,"");
-        const timePart=hasTime?it.time.replace(":","")+"00":"";
-        const dtStart=hasTime?`${datePart}T${timePart}`:datePart;
-        const endHH=hasTime?String(Number(it.time.split(":")[0])+1).padStart(2,"0"):null;
-        const dtEnd=hasTime?`${datePart}T${endHH}${it.time.split(":")[1]}00`:datePart;
-        const dtProp=hasTime?"DTSTART":"DTSTART;VALUE=DATE";
-        const dtPropE=hasTime?"DTEND":"DTEND;VALUE=DATE";
-        const alarm=hasTime?`BEGIN:VALARM\r\nACTION:DISPLAY\r\nDESCRIPTION:${title}\r\nTRIGGER:-PT30M\r\nEND:VALARM\r\n`:"";
-        const desc=type==="birthday"?(it.note||""):(it.desc||it.location||"");
-        const ics=`BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//OnzeAgenda//NL\r\nBEGIN:VEVENT\r\n${dtProp}:${dtStart}\r\n${dtPropE}:${dtEnd}\r\nSUMMARY:${title}\r\nDESCRIPTION:${desc}\r\n${alarm}END:VEVENT\r\nEND:VCALENDAR\r\n`;
-        const blob=new Blob([ics],{type:"text/calendar;charset=utf-8"});
-        const url=URL.createObjectURL(blob);
-        const a=document.createElement("a"); a.href=url; a.download=`${title.replace(/[^a-z0-9]/gi,"_")}.ics`;
-        document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
-        toast("📅 ICS gedownload – open met Agenda-app voor melding");
+  // ── LIST ───────────────────────────────────────────────────────
+  async function renderList(filter){
+    if(filter) S.filter=filter;
+    document.querySelectorAll(".filter-chip").forEach(c=>c.classList.toggle("active",c.dataset.f===S.filter));
+    const data=await getAll(); let items=[]; const now=new Date(); const today=isoDate(now); const ym=`${now.getFullYear()}-${pad(now.getMonth()+1)}`;
+    Object.entries(data.appointments||{}).forEach(([k,a])=>{ if(!a) return; items.push({id:k,type:"appointment",title:a.desc||a.title||"(zonder titel)",date:a.date||"",time:a.time||"",who:a.who||"samen",desc:a.location||""}); });
+    Object.entries(data.birthdays||{}).forEach(([k,b])=>{ if(!b) return; items.push({id:k,type:"birthday",title:b.name||b.title||"(verjaardag)",date:b.date||"",time:"",who:b.who||"samen",desc:b.note||""}); });
+    Object.entries(data.memories||{}).forEach(([k,m])=>{ if(!m) return; items.push({id:k,type:"memory",title:m.title||m.desc||"(herinnering)",date:m.date||"",time:m.time||"",who:m.who||"samen",desc:m.desc||""}); });
+    if(S.filter==="upcoming") items=items.filter(i=>i.date>=today);
+    else if(S.filter==="today") items=items.filter(i=>i.date===today);
+    else if(S.filter==="month") items=items.filter(i=>i.date&&i.date.startsWith(ym));
+    else if(S.filter==="birthdays") items=items.filter(i=>i.type==="birthday");
+    items.sort((a,b)=>{ const da=a.date||"9999"; const db=b.date||"9999"; return da!==db?da.localeCompare(db):(a.time||"99:99").localeCompare(b.time||"99:99"); });
+    const cont=document.getElementById("listItems"); cont.innerHTML="";
+    if(!items.length){ cont.innerHTML=`<div class="empty"><div class="empty-icon">📭</div><div class="empty-text">Geen items</div><div class="empty-sub">Voeg een afspraak toe via de + tab</div></div>`; }
+    else{
+      items.forEach(it=>{
+        const card=document.createElement("div"); card.className="item-card";
+        const tc=it.type==="appointment"?"appt":it.type==="birthday"?"bday":"mem";
+        const tl=it.type==="appointment"?"Afspraak":it.type==="birthday"?"🎂 Verjaardag":"📝 Herinnering";
+        const d=it.date?parseISO(it.date):null;
+        const wc=it.who==="rob"?"cr":it.who==="lizet"?"cl":"cs";
+        const wl=it.who==="rob"?"Rob":it.who==="lizet"?"Lizet":"Samen";
+        card.innerHTML=`<div class="date-ico ${tc}"><div class="mo">${d?MS[d.getMonth()].toUpperCase():"--"}</div><div class="dy">${d?pad(d.getDate()):"--"}</div></div><div class="item-body"><div class="item-title">${esc(it.title)}</div><div class="chips"><span class="chip c${tc.charAt(0)}">${tl}</span>${it.time?`<span class="chip cg">🕐 ${it.time}</span>`:""}<span class="chip ${wc}">${wl}</span></div><div class="item-acts"><button class="btn btn-secondary btn-sm btn-edit" data-id="${it.id}" data-type="${it.type}">✏️</button><button class="btn btn-danger btn-sm btn-del" data-id="${it.id}" data-type="${it.type}">🗑</button></div></div>`;
+        cont.appendChild(card);
       });
     }
+    let tc=0,mc=0,bc=0;
+    Object.values(data.appointments||{}).forEach(a=>{ if(a&&a.date===today)tc++; if(a&&a.date&&a.date.startsWith(ym))mc++; });
+    Object.values(data.memories||{}).forEach(m=>{ if(m&&m.date===today)tc++; });
+    bc=Object.keys(data.birthdays||{}).length;
+    document.getElementById("statToday").textContent=String(tc);
+    document.getElementById("statMonth").textContent=String(mc);
+    document.getElementById("statBdays").textContent=String(bc);
+  }
 
-    function exportData(){
-      const data=getLocalData();
-      const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
-      const url=URL.createObjectURL(blob);
-      const a=document.createElement("a"); a.href=url; a.download="agenda_roblizet_export.json";
-      document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url); toast("Export gemaakt");
-    }
-
-    function importData(){
-      const input=document.createElement("input"); input.type="file"; input.accept="application/json";
-      input.onchange=async ()=>{
-        const file=input.files[0]; if(!file) return;
-        const text=await file.text();
-        try{ const j=JSON.parse(text); await setAll({appointments:j.appointments||{},birthdays:j.birthdays||{},memories:j.memories||{}}); toast("Import klaar"); await refreshAll(); }
-        catch(e){ toast("Import fout"); }
-      };
-      input.click();
-    }
-
-    async function doLogin(){
-      if(!fb||!state.firebaseReady) return toast("Firebase niet klaar");
-      const email=prompt("Email voor agenda login"); if(!email) return;
-      const password=prompt("Wachtwoord"); if(!password) return;
-      try{
-        await fb.authMod.setPersistence(fb.auth, fb.authMod.browserLocalPersistence);
-        await fb.authMod.signInWithEmailAndPassword(fb.auth,email,password);
-        toast("Ingelogd"); state.syncMode="firebase"; localStorage.setItem("rb_syncMode","firebase"); await refreshAll();
-      }catch(e){
-        try{
-          await fb.authMod.setPersistence(fb.auth, fb.authMod.browserLocalPersistence);
-          await fb.authMod.createUserWithEmailAndPassword(fb.auth,email,password);
-          toast("Account gemaakt en ingelogd"); state.syncMode="firebase"; localStorage.setItem("rb_syncMode","firebase"); await refreshAll();
-        }catch(err){ toast("Login fout"); }
-      }
-    }
-
-    async function doLogout(){
-      if(!fb||!state.firebaseReady) return;
-      try{ await fb.authMod.signOut(fb.auth); toast("Uitgelogd"); await refreshAll(); }
-      catch(e){ toast("Uitloggen fout"); }
-    }
-
-    function setBackupInfo(){
-      const raw=localStorage.getItem("rb_backup_v1"); const el=document.getElementById("backupInfo"); if(!el) return;
-      if(!raw){ el.textContent="Nog geen backup gemaakt."; return; }
-      try{ const obj=JSON.parse(raw); const d=new Date(obj.ts||Date.now()); el.textContent="Laatste backup: "+d.toLocaleString(); }
-      catch(e){ el.textContent="Backup gevonden, maar kan niet gelezen worden."; }
-    }
-
-    function makeBackup(){
-      const obj={ts:Date.now(),items:{}};
-      for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); if(!k) continue; if(k.startsWith("rb_")) obj.items[k]=localStorage.getItem(k); }
-      localStorage.setItem("rb_backup_v1",JSON.stringify(obj)); setBackupInfo(); toast("Backup opgeslagen");
-    }
-
-    async function restoreBackup(){
-      const raw=localStorage.getItem("rb_backup_v1"); if(!raw){ toast("Geen backup"); return; }
-      const ok=confirm("Backup terugzetten. Dit overschrijft je huidige data."); if(!ok) return;
-      try{
-        const obj=JSON.parse(raw); const items=obj.items||{};
-        Object.keys(items).forEach(k=>{ localStorage.setItem(k,items[k]); });
-        localStorage.removeItem("rb_unlocked"); localStorage.removeItem("rb_code");
-        state.syncMode=localStorage.getItem("rb_syncMode")||"local"; els.syncSelect.value=state.syncMode;
-        await refreshAll(); setBackupInfo(); toast("Backup teruggezet");
-      }catch(e){ toast("Backup fout"); }
-    }
-
-    function openDateFromList(dateStr){
-      if(!dateStr) return;
-      state.selectedDate=dateStr; setScreen("calendar");
-      renderCalendar().then(async ()=>{ const items=await dayItems(dateStr); openModal(dateStr,items); });
-    }
-
-    document.querySelectorAll(".tab").forEach(btn=>{
-      btn.addEventListener("click",()=>{
-        const t=btn.dataset.tab;
-        if(t==="calendar") setScreen("calendar");
-        if(t==="list"){ setScreen("list"); renderList(); }
-        if(t==="add") setScreen("add");
-        if(t==="info") setScreen("info");
-      });
+  // ── FORM ───────────────────────────────────────────────────────
+  function setType(t){
+    S.type=t;
+    document.querySelectorAll("#typeSegment .seg-item").forEach(b=>b.classList.toggle("active",b.dataset.type===t));
+    const isBday=t==="birthday";
+    document.getElementById("timeField").style.display=isBday?"none":"block";
+    document.getElementById("reminderField").style.display=isBday?"none":"block";
+  }
+  function setWho(w){
+    S.who=w;
+    const map={rob:"wr",lizet:"wl",samen:"ws"};
+    ["rob","lizet","samen"].forEach(x=>{
+      const b=document.getElementById(`who${x.charAt(0).toUpperCase()+x.slice(1)}`);
+      b.className=`who-btn${w===x?" "+map[x]:""}`;
     });
+  }
+  function clearForm(){
+    ["titleInput","dateInput","timeInput","descInput"].forEach(id=>document.getElementById(id).value="");
+    document.getElementById("reminderSelect").value="";
+    S.editId=null; S.editType=null;
+    setType("appointment"); setWho("rob");
+    document.getElementById("formTitle").textContent="Toevoegen";
+    document.getElementById("formSub").textContent="Nieuw item toevoegen";
+  }
 
-    document.getElementById("openSettings").addEventListener("click",()=>setScreen("settings"));
-    document.getElementById("closeSettings").addEventListener("click",()=>setScreen("calendar"));
-    document.getElementById("prevMonth").addEventListener("click",async()=>{ state.viewMonth--; if(state.viewMonth<0){state.viewMonth=11;state.viewYear--;} await renderCalendar(); });
-    document.getElementById("nextMonth").addEventListener("click",async()=>{ state.viewMonth++; if(state.viewMonth>11){state.viewMonth=0;state.viewYear++;} await renderCalendar(); });
-    document.getElementById("goToday").addEventListener("click",async()=>{ const now=new Date(); state.viewYear=now.getFullYear(); state.viewMonth=now.getMonth(); state.selectedDate=isoDate(now); await renderCalendar(); const items=await dayItems(state.selectedDate); openModal(state.selectedDate,items); });
-    document.getElementById("tapHint").addEventListener("click",()=>toast("Tik een dag met stipjes"));
-    document.getElementById("goListFromSelected").addEventListener("click",()=>{ setScreen("list"); renderList(); });
-    document.getElementById("backToCalendar").addEventListener("click",()=>setScreen("calendar"));
-    document.getElementById("typeSelect").addEventListener("change",toggleTimeField);
-    document.getElementById("saveBtn").addEventListener("click",saveItem);
-    document.getElementById("clearBtn").addEventListener("click",()=>{ if(!isEditAllowed()){toast("Gastmodus");return;} clearForm(); toast("Leeg"); });
-    document.getElementById("exportBtn").addEventListener("click",exportData);
-    document.getElementById("importBtn").addEventListener("click",importData);
-    document.getElementById("backupMake").addEventListener("click",makeBackup);
-    document.getElementById("backupRestore").addEventListener("click",restoreBackup);
-    setBackupInfo();
-
-    els.syncSelect.addEventListener("change",async()=>{ state.syncMode=els.syncSelect.value; localStorage.setItem("rb_syncMode",state.syncMode); if(state.syncMode==="firebase") await initFirebase(); await refreshAll(); });
-    document.getElementById("loginBtn").addEventListener("click",doLogin);
-    document.getElementById("logoutBtn").addEventListener("click",doLogout);
-
-    const bindDaysGrid=()=>{
-      const grid=els.daysGrid; if(!grid) return;
-      if(grid.dataset.boundDayTap==="1") return;
-      grid.dataset.boundDayTap="1";
-      const onTap=async(ev)=>{ const dayEl=ev.target.closest(".day"); if(!dayEl) return; const ds=dayEl.dataset.date; if(!ds) return; state.selectedDate=ds; await renderCalendar(); const items=await dayItems(ds); openModal(ds,items); };
-      grid.addEventListener("pointerup",onTap);
-      grid.addEventListener("click",onTap);
-      grid.addEventListener("touchend",onTap,{passive:true});
-    };
-    bindDaysGrid();
-
-    document.addEventListener("click",async(e)=>{
-      const quick=e.target.closest("[data-quick]"); if(quick){ setScreen("list"); await renderList(quick.dataset.quick); }
-      const openBtn=e.target.closest("[data-open-date]"); if(openBtn) openDateFromList(openBtn.dataset.openDate);
-      if(e.target&&e.target.matches("[data-close-modal]")) closeModal();
-      if(e.target&&e.target.id==="dayModal") closeModal();
-
-      const delBtn=e.target.closest(".btn-del"); if(delBtn){ await deleteItem(delBtn.dataset.type, delBtn.dataset.id); return; }
-      const editBtn=e.target.closest(".btn-edit"); if(editBtn){ await loadEditItem(editBtn.dataset.type, editBtn.dataset.id); return; }
-      const icsBtn=e.target.closest(".btn-ics"); if(icsBtn){ downloadICS(icsBtn.dataset.id, icsBtn.dataset.type); return; }
-    });
-
-    document.addEventListener("keydown",(e)=>{ if(e.key==="Escape") closeModal(); });
-    document.getElementById("modalGoList").addEventListener("click",()=>{ closeModal(); setScreen("list"); renderList(); });
-
-    // ── Service Worker (Android PWA installatie) ──────────────
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => {
-        navigator.serviceWorker.register("./firebase-messaging-sw.js")
-          .then(() => {})
-          .catch(() => {});
-      });
+  async function saveItem(){
+    const title=document.getElementById("titleInput").value.trim();
+    if(!title){ toast("Titel is verplicht"); return; }
+    const date=document.getElementById("dateInput").value;
+    const time=document.getElementById("timeInput").value;
+    const desc=document.getElementById("descInput").value.trim();
+    const reminder=document.getElementById("reminderSelect").value;
+    if(S.type==="appointment"&&!date){ toast("Datum is verplicht voor afspraken"); return; }
+    const data=await getAll();
+    const id=S.editId||nowId();
+    if(S.type==="appointment") data.appointments[id]={id:Number(id),date,time:time||"",desc:title,title,who:S.who,location:desc,createdAt:new Date().toISOString()};
+    else if(S.type==="birthday") data.birthdays[id]={id:Number(id),date,name:title,title,who:S.who,note:desc,createdAt:new Date().toISOString()};
+    else data.memories[id]={id:Number(id),date,time:time||"",title,desc,who:S.who,createdAt:new Date().toISOString()};
+    await setAll(data);
+    toast(S.editId?"Bijgewerkt ✓":"Opgeslagen ✓");
+    if(reminder&&date&&time){
+      const dt=new Date(`${date}T${time}:00`);
+      const rt=new Date(dt.getTime()-Number(reminder)*60000);
+      if(rt>new Date()) await scheduleNotif("📅 "+title,`Herinnering: ${title} om ${time}`,rt);
     }
+    clearForm(); await refreshAll(); setScreen("calendar");
+  }
 
-    // ── FCM PUSH MELDINGEN ────────────────────────────────────
-    const FCM_VAPID = "BHcSgoBWs8T5oiyoRR8lVHXOUIqQL6aqMAE86YnzPKrSTtaW-lw5UrZYb2NrHnyrJnMAAS4KK9rEuHvO-GVmOjw";
+  async function deleteItem(type,id){
+    if(!confirm("Verwijderen?")) return;
+    const data=await getAll();
+    const cat=type==="appointment"?"appointments":type==="birthday"?"birthdays":"memories";
+    if(data[cat]&&data[cat][id]) delete data[cat][id];
+    await setAll(data); toast("Verwijderd ✓"); closeModal(); await refreshAll();
+  }
 
-    async function initFCM(){
-      try{
-        if(!("Notification" in window)) return;
-        const permission = await Notification.requestPermission();
-        if(permission !== "granted"){ toast("Meldingen geweigerd"); return; }
+  async function loadEdit(type,id){
+    const data=await getAll();
+    const cat=type==="appointment"?"appointments":type==="birthday"?"birthdays":"memories";
+    const it=data[cat]&&data[cat][id]; if(!it){ toast("Niet gevonden"); return; }
+    S.editId=id; S.editType=type; setType(type);
+    document.getElementById("titleInput").value=type==="appointment"?(it.desc||it.title||""):type==="birthday"?(it.name||it.title||""):(it.title||it.desc||"");
+    document.getElementById("dateInput").value=it.date||"";
+    document.getElementById("timeInput").value=it.time||"";
+    document.getElementById("descInput").value=type==="birthday"?(it.note||""):(it.desc||it.location||"");
+    setWho(it.who||"samen");
+    document.getElementById("formTitle").textContent="Bewerken";
+    document.getElementById("formSub").textContent="Pas het item aan";
+    closeModal(); setScreen("add");
+  }
 
-        const { initializeApp, getApps } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");
-        const { getMessaging, getToken, onMessage } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js");
+  // ── AUTH ───────────────────────────────────────────────────────
+  function renderAuth(){
+    const el=document.getElementById("authStatus");
+    const dot=document.getElementById("statusDot");
+    const txt=document.getElementById("statusText");
+    const lb=document.getElementById("loginBtn");
+    const lo=document.getElementById("logoutBtn");
+    if(S.user){ el.textContent=`Ingelogd als ${S.user.email}`; lb.disabled=true; lo.disabled=false; dot.classList.remove("off"); txt.textContent=S.syncMode==="firebase"?"Online":"Lokaal"; }
+    else{ el.textContent="Niet ingelogd"; lb.disabled=false; lo.disabled=true; dot.classList.add("off"); txt.textContent="Offline"; }
+  }
 
-        const fcmConfig = {
-          apiKey: "AIzaSyC5gP6H084hLqdczzVjhWdFXsqagTCAYkM",
-          authDomain: "agenda-roblizet.firebaseapp.com",
-          databaseURL: "https://agenda-roblizet-default-rtdb.europe-west1.firebasedatabase.app",
-          projectId: "agenda-roblizet",
-          storageBucket: "agenda-roblizet.firebasestorage.app",
-          messagingSenderId: "789902813974",
-          appId: "1:789902813974:web:3efeb3021381b3ca91fe37"
-        };
+  async function doLogin(){
+    if(!fb||!S.fbReady){ toast("Firebase niet klaar"); return; }
+    const email=prompt("Email adres"); if(!email) return;
+    const pw=prompt("Wachtwoord"); if(!pw) return;
+    try{
+      await fb.uM.setPersistence(fb.auth,fb.uM.browserLocalPersistence);
+      await fb.uM.signInWithEmailAndPassword(fb.auth,email,pw);
+      toast("Ingelogd ✓");
+    }catch(e){ try{ await fb.uM.createUserWithEmailAndPassword(fb.auth,email,pw); toast("Account aangemaakt ✓"); }catch(err){ toast("Login mislukt: "+err.code); } }
+  }
 
-        const fcmApp = getApps().find(a=>a.name==="fcm") || initializeApp(fcmConfig, "fcm");
-        const messaging = getMessaging(fcmApp);
+  async function doLogout(){
+    if(!fb) return;
+    try{ await fb.uM.signOut(fb.auth); toast("Uitgelogd"); await refreshAll(); }catch(e){}
+  }
 
-        const token = await getToken(messaging, { vapidKey: FCM_VAPID });
-        localStorage.setItem("fcm_token", token);
-        console.log("FCM klaar ✓");
+  // ── AI CHAT ────────────────────────────────────────────────────
+  function addMsg(text,role){
+    const cont=document.getElementById("chatMessages");
+    const msg=document.createElement("div");
+    msg.className=`chat-msg ${role==="user"?"user":"bot"}`;
+    msg.textContent=text;
+    cont.appendChild(msg); cont.scrollTop=cont.scrollHeight; return msg;
+  }
 
-        // Melding ontvangen terwijl app OPEN is
-        onMessage(messaging, payload => {
-          const { title, body } = payload.notification || {};
-          if(title) new Notification(title, { body: body||"", icon: "./icon-192.png" });
-        });
+  function addTyping(){
+    const cont=document.getElementById("chatMessages");
+    const msg=document.createElement("div");
+    msg.className="chat-msg bot"; msg.id="typing";
+    msg.innerHTML=`<div class="typing-dots"><span></span><span></span><span></span></div>`;
+    cont.appendChild(msg); cont.scrollTop=cont.scrollHeight; return msg;
+  }
 
-        toast("Meldingen ingeschakeld ✓");
-      }catch(e){
-        console.warn("FCM fout:", e);
+  async function sendChat(){
+    const inp=document.getElementById("chatInput");
+    const text=inp.value.trim(); if(!text) return;
+    inp.value=""; inp.style.height="auto";
+    addMsg(text,"user"); S.chat.push({role:"user",content:text});
+    const typing=addTyping();
+    try{
+      const data=await getAll();
+      const appts=Object.values(data.appointments||{}).filter(Boolean).slice(-15).map(a=>({datum:a.date,tijd:a.time,titel:a.desc||a.title,wie:a.who}));
+      const bdays=Object.values(data.birthdays||{}).filter(Boolean).slice(-15).map(b=>({datum:b.date,naam:b.name||b.title,wie:b.who}));
+      const mems=Object.values(data.memories||{}).filter(Boolean).slice(-10).map(m=>({datum:m.date,titel:m.title,wie:m.who}));
+      const ctx=`Vandaag: ${isoDate(new Date())}\nAfspraken: ${JSON.stringify(appts)}\nVerjaardagen: ${JSON.stringify(bdays)}\nHerinneringen: ${JSON.stringify(mems)}`;
+      const resp=await fetch("https://api.anthropic.com/v1/messages",{
+        method:"POST",
+        headers:{"Content-Type":"application/json","x-api-key":AI_KEY,"anthropic-version":"2023-06-01","anthropic-dangerous-client-side-keys-allowed":"true"},
+        body:JSON.stringify({model:"claude-haiku-4-5-20251001",max_tokens:600,system:`Je bent een vriendelijke agenda-assistent voor Rob en Lizet. Antwoord altijd in het Nederlands. Wees bondig en behulpzaam.\n\nAgenda data:\n${ctx}`,messages:S.chat.slice(-8)})
+      });
+      const result=await resp.json();
+      const reply=result.content?.[0]?.text||"Sorry, probeer het opnieuw.";
+      typing.remove(); addMsg(reply,"bot"); S.chat.push({role:"assistant",content:reply});
+    }catch(e){ typing.remove(); addMsg("Oeps, er ging iets mis. Probeer het opnieuw.","bot"); }
+  }
+
+  // ── MIGRATE ────────────────────────────────────────────────────
+  async function migrateOldData(){
+    if(!fb||!S.user){ toast("Log eerst in"); return; }
+    try{
+      const merged={appointments:{},birthdays:{},memories:{}};
+      for(const key of ["zweetzakken_gmail_com","lizetdewerdt_live_nl"]){
+        const snap=await fb.dM.get(fb.dM.ref(fb.db,`users/${key}/data`));
+        if(snap.exists()){ const v=snap.val()||{}; Object.assign(merged.appointments,v.appointments||{}); Object.assign(merged.birthdays,v.birthdays||{}); Object.assign(merged.memories,v.memories||{}); }
       }
-    }
+      await setAll(merged); toast("Migratie klaar ✓"); await refreshAll();
+    }catch(e){ toast("Migratie fout: "+e.message); }
+  }
 
-    // Herinnering inplannen – slaat op in Firebase zodat Cloud Function het verstuurt
-    async function planMelding(titel, tekst, datumTijd){
-      const token = localStorage.getItem("fcm_token");
-      if(!token){ toast("Schakel eerst meldingen in"); return; }
-      if(!fb || !state.firebaseReady || !state.user){ toast("Log eerst in"); return; }
-      const ref = fb.dbMod.push(fb.dbMod.ref(fb.db, "meldingen"));
-      await fb.dbMod.set(ref, {
-        token,
-        titel,
-        tekst,
-        tijdstip: new Date(datumTijd).getTime(),
-        verzonden: false
-      });
-      toast("Herinnering ingepland ✓");
-    }
+  async function exportData(){
+    const data=await getAll();
+    const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+    const url=URL.createObjectURL(blob); const a=document.createElement("a"); a.href=url; a.download="agenda_roblizet.json";
+    document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url); toast("Export klaar ✓");
+  }
+  function importData(){
+    const inp=document.createElement("input"); inp.type="file"; inp.accept=".json";
+    inp.onchange=async()=>{ const f=inp.files[0]; if(!f) return; try{ const j=JSON.parse(await f.text()); await setAll({appointments:j.appointments||{},birthdays:j.birthdays||{},memories:j.memories||{}}); toast("Import klaar ✓"); await refreshAll(); }catch(e){ toast("Import fout"); } };
+    inp.click();
+  }
 
-    // Knop toevoegen aan Instellingen-scherm
-    (function addMeldingBtn(){
-      const card = document.querySelector("#screenSettings .settingsCard");
-      if(!card) return;
-      const hr = document.createElement("hr"); hr.className="hr";
-      const btn = document.createElement("button");
-      btn.className="btn primary"; btn.textContent="🔔 Meldingen inschakelen";
-      btn.addEventListener("click", initFCM);
-      card.appendChild(hr); card.appendChild(btn);
-      const note = document.createElement("p"); note.className="note";
-      note.textContent="Schakel meldingen in zodat je herinneringen ontvangt, ook als de app gesloten is.";
-      card.appendChild(note);
-    })();
+  // ── REFRESH ────────────────────────────────────────────────────
+  async function refreshAll(){ renderAuth(); document.getElementById("syncSelect").value=S.syncMode; await renderCal(); await renderList(S.filter); }
 
-    (async()=>{
-      els.syncSelect.value=state.syncMode; setStatus(state.syncMode); updateEditUI(); toggleTimeField();
-      if(state.syncMode==="firebase") await initFirebase();
-      await refreshAll();
-    })();
-  </script>
+  // ── EVENTS ────────────────────────────────────────────────────
+  document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>{
+    const tab=t.dataset.tab; setScreen(tab);
+    if(tab==="list") renderList(S.filter);
+    if(tab==="ai"&&!document.getElementById("chatMessages").children.length) addMsg("Hé 👋 Ik ben jullie agenda-assistent voor Rob & Lizet! Vraag me alles over jullie afspraken of laat me helpen met plannen.","bot");
+  }));
 
+  document.getElementById("prevMonth").addEventListener("click",async()=>{ S.viewM--; if(S.viewM<0){S.viewM=11;S.viewY--;} await renderCal(); });
+  document.getElementById("nextMonth").addEventListener("click",async()=>{ S.viewM++; if(S.viewM>11){S.viewM=0;S.viewY++;} await renderCal(); });
+  document.getElementById("goToday").addEventListener("click",async()=>{ const n=new Date(); S.viewY=n.getFullYear(); S.viewM=n.getMonth(); S.selDate=isoDate(n); await renderCal(); openModal(S.selDate,await getDayItems(S.selDate)); });
+  document.querySelectorAll("#typeSegment .seg-item").forEach(b=>b.addEventListener("click",()=>setType(b.dataset.type)));
+  ["rob","lizet","samen"].forEach(w=>document.getElementById(`who${w.charAt(0).toUpperCase()+w.slice(1)}`).addEventListener("click",()=>setWho(w)));
+  document.getElementById("saveBtn").addEventListener("click",saveItem);
+  document.getElementById("clearBtn").addEventListener("click",()=>{ clearForm(); toast("Formulier gewist"); });
+  document.getElementById("modalCloseBtn").addEventListener("click",closeModal);
+  document.getElementById("modalAddBtn").addEventListener("click",()=>{ closeModal(); setScreen("add"); if(S.selDate) document.getElementById("dateInput").value=S.selDate; });
+  document.getElementById("dayModal").addEventListener("click",e=>{ if(e.target===e.currentTarget) closeModal(); });
+  document.addEventListener("click",async e=>{
+    const del=e.target.closest(".btn-del"); if(del){ await deleteItem(del.dataset.type,del.dataset.id); await renderList(S.filter); return; }
+    const edit=e.target.closest(".btn-edit"); if(edit){ await loadEdit(edit.dataset.type,edit.dataset.id); return; }
+  });
+  document.querySelectorAll(".filter-chip").forEach(c=>c.addEventListener("click",()=>renderList(c.dataset.f)));
+  document.getElementById("loginBtn").addEventListener("click",doLogin);
+  document.getElementById("logoutBtn").addEventListener("click",doLogout);
+  document.getElementById("syncSelect").addEventListener("change",async()=>{ S.syncMode=document.getElementById("syncSelect").value; localStorage.setItem("rb_syncMode",S.syncMode); if(S.syncMode==="firebase")await initFirebase(); await refreshAll(); });
+  document.getElementById("enableNotifsBtn").addEventListener("click",enableNotifs);
+  document.getElementById("exportBtn").addEventListener("click",exportData);
+  document.getElementById("importBtn").addEventListener("click",importData);
+  document.getElementById("migrateBtn").addEventListener("click",migrateOldData);
+  document.getElementById("copyRulesBtn").addEventListener("click",()=>{ navigator.clipboard.writeText(FB_RULES).then(()=>toast("Regels gekopieerd ✓")).catch(()=>toast("Kopieer handmatig")); });
+  document.getElementById("saveAiKeyBtn").addEventListener("click",()=>{
+    const k=document.getElementById("aiKeyInput").value.trim();
+    if(k.startsWith("sk-ant")){
+      localStorage.setItem("ai_key",k);
+      document.getElementById("aiKeyStatus").textContent="✅ Opgeslagen";
+      document.getElementById("aiKeyStatus").style.color="var(--green)";
+      document.getElementById("aiKeyInput").value="";
+      toast("API Key opgeslagen ✓");
+    } else { toast("Ongeldige key — moet beginnen met sk-ant"); }
+  });
+  document.getElementById("chatSendBtn").addEventListener("click",sendChat);
+  document.getElementById("chatInput").addEventListener("keydown",e=>{ if(e.key==="Enter"&&!e.shiftKey){ e.preventDefault(); sendChat(); } });
+  document.getElementById("chatInput").addEventListener("input",function(){ this.style.height="auto"; this.style.height=this.scrollHeight+"px"; });
+  document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeModal(); });
+
+  // Firebase rules display
+  document.getElementById("fbRulesBlock").textContent=FB_RULES;
+  // AI key status tonen
+  const storedKey=localStorage.getItem("ai_key");
+  if(storedKey){
+    document.getElementById("aiKeyStatus").textContent="✅ API Key actief ("+storedKey.slice(0,16)+"...)";
+    document.getElementById("aiKeyStatus").style.color="var(--green)";
+  }
+  // Hide chatbar initially
+  document.getElementById("chatBar").style.display="none";
+
+  // ── INIT ───────────────────────────────────────────────────────
+  (async()=>{
+    initOneSignal();
+    if("serviceWorker" in navigator) navigator.serviceWorker.register("./OneSignalSDKWorker.js").catch(()=>{});
+    if(S.syncMode==="firebase") await initFirebase();
+    await refreshAll();
+  })();
+</script>
 </body>
 </html>
