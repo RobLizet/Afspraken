@@ -438,7 +438,7 @@
 
 <script type="module">
   // ── CONSTANTS ─────────────────────────────────────────────────
-  const APP_VERSION = "4.11";
+  const APP_VERSION = "4.12";
   // Auto-update: forceer herladen als er een nieuwe versie is
   (function(){
     const stored = localStorage.getItem("app_version");
@@ -578,26 +578,22 @@
   async function testNotif(){
     toast("⏳ Test melding versturen...");
     try{
-      const OS = S.osInstance || window.OneSignal;
-      if(!OS){ toast("❌ OneSignal niet geladen"); return; }
-      const sub = OS.User.PushSubscription;
-      const subId = S.osSubId || sub.id || sub.token || localStorage.getItem("os_sub_id");
-      if(!subId){ toast("❌ Geen subscription ID — sluit app en open opnieuw"); return; }
       const apiKey = localStorage.getItem("os_api_key");
-      if(!apiKey){ toast("❌ OneSignal API key niet ingesteld in Instellingen"); return; }
+      if(!apiKey){ toast("❌ Sla eerst de OneSignal API key op onder API Sleutels"); return; }
+      // Stuur naar alle abonnees (alleen Rob & Lizet)
       const resp = await fetch("https://api.onesignal.com/notifications",{
         method:"POST",
         headers:{"Content-Type":"application/json","Authorization":"Key "+apiKey},
         body: JSON.stringify({
           app_id: OS_APP_ID,
-          include_subscription_ids: [subId],
+          included_segments: ["Total Subscriptions"],
           headings: {nl:"🔔 Test melding", en:"🔔 Test notification"},
           contents: {nl:"Onze Agenda meldingen werken! 🎉", en:"Onze Agenda notifications work! 🎉"}
         })
       });
       const data = await resp.json();
-      if(data.id){ toast("✅ Test melding verstuurd!"); }
-      else { toast("❌ Fout: " + JSON.stringify(data).slice(0,80)); }
+      if(data.id){ toast("✅ Verstuurd naar " + (data.recipients||"?") + " apparaat(en)"); }
+      else { toast("❌ " + (data.errors?data.errors[0]:JSON.stringify(data)).slice(0,80)); }
     }catch(e){
       toast("Fout: " + (e.message||String(e)));
     }
@@ -654,17 +650,23 @@
   }
 
   async function scheduleNotif(title,body,when){
-    const ids=await getAllSubIds();
-    if(!ids.length){ toast("Schakel eerst meldingen in"); return; }
+    const apiKey = localStorage.getItem("os_api_key") || OS_API_KEY;
+    if(!apiKey){ toast("OneSignal API key niet ingesteld"); return; }
     try{
       const r=await fetch("https://api.onesignal.com/notifications",{
         method:"POST",
-        headers:{"Content-Type":"application/json","Authorization":`Key ${OS_API_KEY}`},
-        body:JSON.stringify({app_id:OS_APP_ID,include_subscription_ids:ids,headings:{nl:title,en:title},contents:{nl:body,en:body},send_after:when.toISOString()})
+        headers:{"Content-Type":"application/json","Authorization":"Key "+apiKey},
+        body:JSON.stringify({
+          app_id:OS_APP_ID,
+          included_segments:["Total Subscriptions"],
+          headings:{nl:title,en:title},
+          contents:{nl:body,en:body},
+          send_after:when.toISOString()
+        })
       });
       const d=await r.json();
       if(d.id) toast("Herinnering ingepland ✓");
-      else toast("Melding fout");
+      else toast("Melding fout: "+(d.errors?d.errors[0]:"onbekend"));
     }catch(e){ toast("Melding kon niet worden ingepland"); }
   }
 
