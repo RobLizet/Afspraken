@@ -438,7 +438,7 @@
 
 <script type="module">
   // ── CONSTANTS ─────────────────────────────────────────────────
-  const APP_VERSION = "4.15";
+  const APP_VERSION = "4.16";
   // Auto-update: forceer herladen als er een nieuwe versie is
   (function(){
     const stored = localStorage.getItem("app_version");
@@ -1080,11 +1080,8 @@
     initOneSignal();
     if("serviceWorker" in navigator){
       // App SW: netwerk-eerst + automatisch herladen bij update
-      // App SW: netwerk-eerst caching, géén auto-reload (voorkomt flicker)
-      navigator.serviceWorker.register("/Afspraken/sw.js", {scope:"/Afspraken/"})
-        .catch(e => console.warn("SW:", e));
-      // OneSignal SW
-      navigator.serviceWorker.register("./OneSignalSDKWorker.js").catch(()=>{});
+      // Alleen OneSignal SW registreren (geen conflict met eigen SW)
+      navigator.serviceWorker.register("/Afspraken/OneSignalSDKWorker.js", {scope:"/Afspraken/"}).catch(()=>{});
     }
     if(S.syncMode==="firebase") await initFirebase();
     await refreshAll();
