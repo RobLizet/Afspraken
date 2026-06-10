@@ -358,15 +358,23 @@
         <button class="btn btn-secondary btn-sm" id="copyRulesBtn" style="margin-top:10px">📋 Kopieer regels</button>
       </div>
 
-      <div class="section-title">AI Assistent</div>
+      <div class="section-title">API Sleutels</div>
       <div class="card">
-        <div class="set-row" style="flex-direction:column;align-items:flex-start;gap:8px">
-          <div><div class="set-label">Anthropic API Key</div><div class="set-sub">Sla eenmalig op, wordt lokaal bewaard</div></div>
+        <div class="set-row" style="flex-direction:column;align-items:flex-start;gap:8px;padding-bottom:12px;border-bottom:1px solid #F3F4F6;margin-bottom:12px">
+          <div><div class="set-label">Anthropic API Key</div><div class="set-sub">Voor de AI assistent — lokaal opgeslagen</div></div>
           <div style="display:flex;gap:7px;width:100%">
             <input type="password" id="aiKeyInput" class="form-input" placeholder="sk-ant-api03-..." style="flex:1;font-size:12px" value="">
             <button class="btn btn-primary btn-sm" id="saveAiKeyBtn">Opslaan</button>
           </div>
           <div id="aiKeyStatus" style="font-size:11px;color:var(--muted)">Niet ingesteld</div>
+        </div>
+        <div class="set-row" style="flex-direction:column;align-items:flex-start;gap:8px">
+          <div><div class="set-label">OneSignal API Key</div><div class="set-sub">Voor push meldingen — lokaal opgeslagen</div></div>
+          <div style="display:flex;gap:7px;width:100%">
+            <input type="password" id="osKeyInput" class="form-input" placeholder="os_v2_app_..." style="flex:1;font-size:12px" value="">
+            <button class="btn btn-primary btn-sm" id="saveOsKeyBtn">Opslaan</button>
+          </div>
+          <div id="osKeyStatus" style="font-size:11px;color:var(--muted)">Niet ingesteld</div>
         </div>
       </div>
 
@@ -424,9 +432,9 @@
 
 <script type="module">
   // ── CONSTANTS ─────────────────────────────────────────────────
-  const APP_VERSION = "4.1";
+  const APP_VERSION = "4.2";
   const OS_APP_ID   = "e2c74ceb-a800-4ebd-95ea-6f6ac01e5677";
-  const OS_API_KEY  = "os_v2_app_4lduz25iabhl3fpkn5vmahswo5vyyunnz42u7ruz5n6lvkxwu7uzwlfupzlslne2k6foczgvhgp2pmadtqjvhxncecz6kttyyhewywq";
+  const OS_API_KEY  = localStorage.getItem("os_api_key") || "";
   const AI_KEY      = localStorage.getItem('ai_key') || '';
   const SHARED      = "agenda/shared";
   const SUBS        = "agenda/subscriptions";
@@ -915,8 +923,18 @@
       document.getElementById("aiKeyStatus").textContent="✅ Opgeslagen";
       document.getElementById("aiKeyStatus").style.color="var(--green)";
       document.getElementById("aiKeyInput").value="";
-      toast("API Key opgeslagen ✓");
+      toast("Anthropic Key opgeslagen ✓");
     } else { toast("Ongeldige key — moet beginnen met sk-ant"); }
+  });
+  document.getElementById("saveOsKeyBtn").addEventListener("click",()=>{
+    const k=document.getElementById("osKeyInput").value.trim();
+    if(k.startsWith("os_v2_app_")){
+      localStorage.setItem("os_api_key",k);
+      document.getElementById("osKeyStatus").textContent="✅ Opgeslagen";
+      document.getElementById("osKeyStatus").style.color="var(--green)";
+      document.getElementById("osKeyInput").value="";
+      toast("OneSignal Key opgeslagen ✓");
+    } else { toast("Ongeldige key — moet beginnen met os_v2_app_"); }
   });
   document.getElementById("chatSendBtn").addEventListener("click",sendChat);
   document.getElementById("chatInput").addEventListener("keydown",e=>{ if(e.key==="Enter"&&!e.shiftKey){ e.preventDefault(); sendChat(); } });
@@ -926,6 +944,9 @@
   // Versie tonen
   document.getElementById("appVersion").textContent="v"+APP_VERSION;
   document.getElementById("topbarVersion").textContent=APP_VERSION;
+  // API key statussen tonen
+  const storedOsKey=localStorage.getItem("os_api_key");
+  if(storedOsKey){ document.getElementById("osKeyStatus").textContent="✅ Actief ("+storedOsKey.slice(0,18)+"...)"; document.getElementById("osKeyStatus").style.color="var(--green)"; }
   // Firebase rules display
   document.getElementById("fbRulesBlock").textContent=FB_RULES;
   // AI key status tonen
