@@ -2,6 +2,9 @@
 <html lang="nl">
 <head>
   <meta charset="utf-8">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -433,6 +436,16 @@
 <script type="module">
   // ── CONSTANTS ─────────────────────────────────────────────────
   const APP_VERSION = "4.5";
+  // Auto-update: forceer herladen als er een nieuwe versie is
+  (function(){
+    const stored = localStorage.getItem("app_version");
+    if(stored && stored !== APP_VERSION){
+      localStorage.setItem("app_version", APP_VERSION);
+      window.location.reload(true);
+    } else {
+      localStorage.setItem("app_version", APP_VERSION);
+    }
+  })();
   const OS_APP_ID   = "e2c74ceb-a800-4ebd-95ea-6f6ac01e5677";
   const OS_API_KEY  = localStorage.getItem("os_api_key") || "";
   const AI_KEY      = localStorage.getItem('ai_key') || '';
