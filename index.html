@@ -435,7 +435,7 @@
 
 <script type="module">
   // ── CONSTANTS ─────────────────────────────────────────────────
-  const APP_VERSION = "4.6";
+  const APP_VERSION = "4.7";
   // Auto-update: forceer herladen als er een nieuwe versie is
   (function(){
     const stored = localStorage.getItem("app_version");
@@ -571,25 +571,14 @@
   }
 
   async function enableNotifs(){
+    toast("⏳ Bezig...");
     try{
-      // Probeer window.OneSignal direct (v16 SDK)
       const OS = S.osInstance || window.OneSignal;
       if(!OS){ toast("❌ OneSignal niet geladen"); return; }
-      
-      // Vraag toestemming via Notifications API als fallback
-      if(Notification.permission === "denied"){
-        toast("❌ Meldingen geblokkeerd in browser — sta toe via site-instellingen");
-        return;
-      }
-      if(Notification.permission === "default"){
-        const perm = await Notification.requestPermission();
-        if(perm !== "granted"){ toast("Toestemming geweigerd"); return; }
-      }
-      
-      const sub = OS.User?.PushSubscription;
-      if(!sub){ toast("❌ Geen PushSubscription beschikbaar"); return; }
-      
-      if(sub.optedIn){
+      const sub = OS.User.PushSubscription;
+      const isOn = sub.optedIn;
+      toast("Status: " + (isOn ? "aan → uitschakelen" : "uit → inschakelen"));
+      if(isOn){
         await sub.optOut();
         updateNotifUI(false);
         toast("Meldingen uitgeschakeld");
@@ -598,9 +587,9 @@
         updateNotifUI(true);
         toast("Meldingen ingeschakeld ✓");
       }
-    }catch(e){ 
-      console.error("OneSignal fout:", e); 
+    }catch(e){
       toast("Fout: " + (e.message||String(e)));
+      console.error(e);
     }
   }
 
