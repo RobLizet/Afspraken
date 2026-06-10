@@ -438,7 +438,7 @@
 
 <script type="module">
   // ── CONSTANTS ─────────────────────────────────────────────────
-  const APP_VERSION = "4.14";
+  const APP_VERSION = "4.15";
   // Auto-update: forceer herladen als er een nieuwe versie is
   (function(){
     const stored = localStorage.getItem("app_version");
@@ -587,8 +587,8 @@
   async function testNotif(){
     toast("⏳ Test melding versturen...");
     try{
-      const apiKey = localStorage.getItem("os_api_key");
-      if(!apiKey){ toast("❌ Sla eerst de OneSignal API key op onder API Sleutels"); return; }
+      const apiKey = localStorage.getItem("os_api_key") || OS_API_KEY;
+      if(!apiKey){ toast("❌ Geen API key beschikbaar"); return; }
       const resp = await fetch(PUSH_PROXY,{
         method:"POST",
         headers:{"Content-Type":"application/json"},
