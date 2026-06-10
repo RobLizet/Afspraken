@@ -432,7 +432,7 @@
 
 <script type="module">
   // ── CONSTANTS ─────────────────────────────────────────────────
-  const APP_VERSION = "4.3";
+  const APP_VERSION = "4.4";
   const OS_APP_ID   = "e2c74ceb-a800-4ebd-95ea-6f6ac01e5677";
   const OS_API_KEY  = localStorage.getItem("os_api_key") || "";
   const AI_KEY      = localStorage.getItem('ai_key') || '';
@@ -454,7 +454,7 @@
     fbReady: false, user: null,
     editId: null, editType: null,
     who: "rob", type: "appointment",
-    filter: "upcoming", chat: [], osSubId: null
+    filter: "upcoming", chat: [], osSubId: null, osInstance: null
   };
 
   // ── UTILS ──────────────────────────────────────────────────────
@@ -537,6 +537,7 @@
   function initOneSignal(){
     window.OneSignalDeferred=window.OneSignalDeferred||[];
     OneSignalDeferred.push(async function(OS){
+      S.osInstance=OS;
       await OS.init({appId:OS_APP_ID,serviceWorkerPath:"OneSignalSDKWorker.js",serviceWorkerParam:{scope:"/Afspraken/"},notifyButton:{enable:false}});
       const sub=OS.User.PushSubscription;
       sub.addEventListener("change",async ev=>{
@@ -552,19 +553,17 @@
   }
 
   async function enableNotifs(){
-    window.OneSignalDeferred=window.OneSignalDeferred||[];
-    OneSignalDeferred.push(async OS=>{
-      try{
-        const sub=OS.User.PushSubscription;
-        if(sub.optedIn){
-          await sub.optOut();
-          toast("Meldingen uitgeschakeld");
-        } else {
-          await sub.optIn();
-          toast("Meldingen ingeschakeld ✓");
-        }
-      }catch(e){ toast("Meldingen wijzigen mislukt"); }
-    });
+    try{
+      if(!S.osInstance){ toast("OneSignal nog niet geladen, probeer opnieuw"); return; }
+      const sub=S.osInstance.User.PushSubscription;
+      if(sub.optedIn){
+        await sub.optOut();
+        toast("Meldingen uitgeschakeld");
+      } else {
+        await sub.optIn();
+        toast("Meldingen ingeschakeld ✓");
+      }
+    }catch(e){ console.error(e); toast("Meldingen wijzigen mislukt: "+e.message); }
   }
 
   async function saveSubId(id){
