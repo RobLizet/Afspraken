@@ -438,7 +438,7 @@
 
 <script type="module">
   // ── CONSTANTS ─────────────────────────────────────────────────
-  const APP_VERSION = "4.13";
+  const APP_VERSION = "4.14";
   // Auto-update: forceer herladen als er een nieuwe versie is
   (function(){
     const stored = localStorage.getItem("app_version");
@@ -450,7 +450,7 @@
     }
   })();
   const OS_APP_ID   = "e2c74ceb-a800-4ebd-95ea-6f6ac01e5677";
-  const OS_API_KEY  = localStorage.getItem("os_api_key") || "";
+  const OS_API_KEY  = localStorage.getItem("os_api_key") || "os_v2_app_4lduz25iabhl3fpkn5vmahswo7lzsrjuepzuocniskbscb277ky6vukcevimafb372h72fse72apvu5663hdpcqetfhlnfwezcssxri";
   const AI_KEY      = localStorage.getItem('ai_key') || '';
   const SHARED      = "agenda/shared";
   const SUBS        = "agenda/subscriptions";
@@ -552,7 +552,13 @@
     OneSignalDeferred.push(async function(OS){
       S.osInstance=OS;
       try{
-        await OS.init({appId:OS_APP_ID,serviceWorkerPath:"OneSignalSDKWorker.js",serviceWorkerParam:{scope:"/Afspraken/"},notifyButton:{enable:false}});
+        await OS.init({
+        appId: OS_APP_ID,
+        serviceWorkerPath: "/Afspraken/OneSignalSDKWorker.js",
+        serviceWorkerParam: {scope: "/Afspraken/"},
+        allowLocalhostAsSecureOrigin: false,
+        notifyButton: {enable: false}
+      });
       }catch(initErr){
         console.warn("OneSignal init waarschuwing:", initErr);
         // Doorgaan ondanks fout — SDK kan nog bruikbaar zijn
@@ -561,6 +567,7 @@
       sub.addEventListener("change",async ev=>{
         const on=ev.current.optedIn;
         S.osSubId = on ? (ev.current.id||ev.current.token||null) : null;
+        console.log("OneSignal subscription change:", on, "ID:", S.osSubId, "full:", JSON.stringify(ev.current));
         if(S.osSubId) localStorage.setItem("os_sub_id", S.osSubId);
         updateNotifUI(on);
         if(on) await saveSubId(S.osSubId);
