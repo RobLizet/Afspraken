@@ -344,7 +344,7 @@
         <div class="set-row">
           <div><div class="set-label">Push meldingen</div><div class="set-sub" id="notifStatus">Nog niet ingeschakeld</div></div>
           <div style="display:flex;gap:6px">
-            <button class="btn btn-secondary btn-sm" id="enableNotifsBtn">Inschakelen</button>
+            <button class="btn btn-secondary btn-sm" id="enableNotifsBtn" style="display:none">Inschakelen</button>
             <button class="btn btn-secondary btn-sm" id="testNotifBtn">🔔 Test</button>
           </div>
         </div>
@@ -438,7 +438,7 @@
 
 <script type="module">
   // ── CONSTANTS ─────────────────────────────────────────────────
-  const APP_VERSION = "4.10";
+  const APP_VERSION = "4.11";
   // Auto-update: forceer herladen als er een nieuwe versie is
   (function(){
     const stored = localStorage.getItem("app_version");
@@ -538,15 +538,12 @@
     if(enabled){
       status.textContent="✅ Ingeschakeld";
       status.style.color="var(--green)";
-      btn.textContent="Uitschakelen";
-      btn.classList.remove("btn-secondary");
-      btn.classList.add("btn-ghost");
+      btn.style.display="none"; // verberg inschakelen knop
     } else {
       status.textContent="Nog niet ingeschakeld";
       status.style.color="";
+      btn.style.display=""; // toon inschakelen knop
       btn.textContent="Inschakelen";
-      btn.classList.remove("btn-ghost");
-      btn.classList.add("btn-secondary");
     }
   }
 
@@ -1073,18 +1070,10 @@
     initOneSignal();
     if("serviceWorker" in navigator){
       // App SW: netwerk-eerst + automatisch herladen bij update
+      // App SW: netwerk-eerst caching, géén auto-reload (voorkomt flicker)
       navigator.serviceWorker.register("/Afspraken/sw.js", {scope:"/Afspraken/"})
-        .then(reg => {
-          reg.update(); // check meteen op update
-          reg.addEventListener("updatefound", () => {
-            const nw = reg.installing;
-            nw.addEventListener("statechange", () => {
-              if(nw.state === "activated" && navigator.serviceWorker.controller)
-                window.location.reload();
-            });
-          });
-        }).catch(e => console.warn("SW:", e));
-      // OneSignal SW apart
+        .catch(e => console.warn("SW:", e));
+      // OneSignal SW
       navigator.serviceWorker.register("./OneSignalSDKWorker.js").catch(()=>{});
     }
     if(S.syncMode==="firebase") await initFirebase();
