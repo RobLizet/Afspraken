@@ -1,4 +1,4 @@
-const CACHE = "onze-agenda-v4.8";
+const CACHE = "onze-agenda-v4.9";
 
 self.addEventListener("install", e => {
   self.skipWaiting();

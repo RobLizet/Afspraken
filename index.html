@@ -343,7 +343,10 @@
       <div class="card">
         <div class="set-row">
           <div><div class="set-label">Push meldingen</div><div class="set-sub" id="notifStatus">Nog niet ingeschakeld</div></div>
-          <button class="btn btn-secondary btn-sm" id="enableNotifsBtn">Inschakelen</button>
+          <div style="display:flex;gap:6px">
+            <button class="btn btn-secondary btn-sm" id="enableNotifsBtn">Inschakelen</button>
+            <button class="btn btn-secondary btn-sm" id="testNotifBtn">🔔 Test</button>
+          </div>
         </div>
       </div>
 
@@ -435,7 +438,7 @@
 
 <script type="module">
   // ── CONSTANTS ─────────────────────────────────────────────────
-  const APP_VERSION = "4.8";
+  const APP_VERSION = "4.9";
   // Auto-update: forceer herladen als er een nieuwe versie is
   (function(){
     const stored = localStorage.getItem("app_version");
@@ -568,6 +571,34 @@
       if(isOn){ S.osSubId=sub.id; }
       updateNotifUI(isOn);
     });
+  }
+
+  async function testNotif(){
+    toast("⏳ Test melding versturen...");
+    try{
+      const OS = S.osInstance || window.OneSignal;
+      if(!OS){ toast("❌ OneSignal niet geladen"); return; }
+      const sub = OS.User.PushSubscription;
+      const subId = sub.id;
+      if(!subId){ toast("❌ Geen subscription ID — meldingen inschakelen eerst"); return; }
+      const apiKey = localStorage.getItem("os_api_key");
+      if(!apiKey){ toast("❌ OneSignal API key niet ingesteld in Instellingen"); return; }
+      const resp = await fetch("https://api.onesignal.com/notifications",{
+        method:"POST",
+        headers:{"Content-Type":"application/json","Authorization":"Key "+apiKey},
+        body: JSON.stringify({
+          app_id: OS_APP_ID,
+          include_subscription_ids: [subId],
+          headings: {nl:"🔔 Test melding", en:"🔔 Test notification"},
+          contents: {nl:"Onze Agenda meldingen werken! 🎉", en:"Onze Agenda notifications work! 🎉"}
+        })
+      });
+      const data = await resp.json();
+      if(data.id){ toast("✅ Test melding verstuurd!"); }
+      else { toast("❌ Fout: " + JSON.stringify(data).slice(0,80)); }
+    }catch(e){
+      toast("Fout: " + (e.message||String(e)));
+    }
   }
 
   async function enableNotifs(){
@@ -999,6 +1030,7 @@
       toast("Anthropic Key opgeslagen ✓");
     } else { toast("Ongeldige key — moet beginnen met sk-ant"); }
   });
+  document.getElementById("testNotifBtn").addEventListener("click", testNotif);
   document.getElementById("saveOsKeyBtn").addEventListener("click",()=>{
     const k=document.getElementById("osKeyInput").value.trim();
     if(k.startsWith("os_v2_app_")){
