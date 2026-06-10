@@ -17,7 +17,6 @@
   <title>Onze Agenda</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
   <style>
     :root {
       --primary:#6D28D9; --primary-l:#EDE9FE; --primary-d:#5B21B6;
@@ -339,14 +338,11 @@
         </div>
       </div>
 
-      <div class="section-title">Meldingen (OneSignal)</div>
+      <div class="section-title">Meldingen</div>
       <div class="card">
         <div class="set-row">
-          <div><div class="set-label">Push meldingen</div><div class="set-sub" id="notifStatus">Nog niet ingeschakeld</div></div>
-          <div style="display:flex;gap:6px">
-            <button class="btn btn-secondary btn-sm" id="enableNotifsBtn" style="display:none">Inschakelen</button>
-            <button class="btn btn-secondary btn-sm" id="testNotifBtn">🔔 Test</button>
-          </div>
+          <div><div class="set-label">📅 Google Agenda</div><div class="set-sub">Herinneringen via Google Agenda — automatisch</div></div>
+          <div style="font-size:12px;color:var(--green);font-weight:600">✅ Actief</div>
         </div>
       </div>
 
@@ -438,7 +434,7 @@
 
 <script type="module">
   // ── CONSTANTS ─────────────────────────────────────────────────
-  const APP_VERSION = "4.16";
+  const APP_VERSION = "4.17";
   // Auto-update: forceer herladen als er een nieuwe versie is
   (function(){
     const stored = localStorage.getItem("app_version");
@@ -449,8 +445,6 @@
       localStorage.setItem("app_version", APP_VERSION);
     }
   })();
-  const OS_APP_ID   = "e2c74ceb-a800-4ebd-95ea-6f6ac01e5677";
-  const OS_API_KEY  = localStorage.getItem("os_api_key") || "os_v2_app_4lduz25iabhl3fpkn5vmahswo7lzsrjuepzuocniskbscb277ky6vukcevimafb372h72fse72apvu5663hdpcqetfhlnfwezcssxri";
   const AI_KEY      = localStorage.getItem('ai_key') || '';
   const SHARED      = "agenda/shared";
   const SUBS        = "agenda/subscriptions";
@@ -470,7 +464,7 @@
     fbReady: false, user: null,
     editId: null, editType: null,
     who: "rob", type: "appointment",
-    filter: "upcoming", chat: [], osSubId: null, osInstance: null
+    filter: "upcoming", chat: []
   };
 
   // ── UTILS ──────────────────────────────────────────────────────
@@ -532,131 +526,6 @@
   }
 
   // ── ONESIGNAL ──────────────────────────────────────────────────
-  function updateNotifUI(enabled){
-    const btn=document.getElementById("enableNotifsBtn");
-    const status=document.getElementById("notifStatus");
-    if(enabled){
-      status.textContent="✅ Ingeschakeld";
-      status.style.color="var(--green)";
-      btn.style.display="none"; // verberg inschakelen knop
-    } else {
-      status.textContent="Nog niet ingeschakeld";
-      status.style.color="";
-      btn.style.display=""; // toon inschakelen knop
-      btn.textContent="Inschakelen";
-    }
-  }
-
-  function initOneSignal(){
-    window.OneSignalDeferred=window.OneSignalDeferred||[];
-    OneSignalDeferred.push(async function(OS){
-      S.osInstance=OS;
-      try{
-        await OS.init({
-        appId: OS_APP_ID,
-        serviceWorkerPath: "/Afspraken/OneSignalSDKWorker.js",
-        serviceWorkerParam: {scope: "/Afspraken/"},
-        allowLocalhostAsSecureOrigin: false,
-        notifyButton: {enable: false}
-      });
-      }catch(initErr){
-        console.warn("OneSignal init waarschuwing:", initErr);
-        // Doorgaan ondanks fout — SDK kan nog bruikbaar zijn
-      }
-      const sub=OS.User.PushSubscription;
-      sub.addEventListener("change",async ev=>{
-        const on=ev.current.optedIn;
-        S.osSubId = on ? (ev.current.id||ev.current.token||null) : null;
-        console.log("OneSignal subscription change:", on, "ID:", S.osSubId, "full:", JSON.stringify(ev.current));
-        if(S.osSubId) localStorage.setItem("os_sub_id", S.osSubId);
-        updateNotifUI(on);
-        if(on) await saveSubId(S.osSubId);
-      });
-      const isOn = sub.optedIn;
-      if(isOn){
-        S.osSubId = sub.id || sub.token || null;
-        if(S.osSubId) localStorage.setItem("os_sub_id", S.osSubId);
-      }
-      if(!S.osSubId) S.osSubId = localStorage.getItem("os_sub_id");
-      updateNotifUI(isOn);
-    });
-  }
-
-  const PUSH_PROXY = "https://agenda-push.zweetzakken.workers.dev";
-
-  async function testNotif(){
-    toast("⏳ Test melding versturen...");
-    try{
-      const apiKey = localStorage.getItem("os_api_key") || OS_API_KEY;
-      if(!apiKey){ toast("❌ Geen API key beschikbaar"); return; }
-      const resp = await fetch(PUSH_PROXY,{
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({
-          app_id: OS_APP_ID,
-          api_key: apiKey,
-          title: "🔔 Test melding",
-          body: "Onze Agenda meldingen werken! 🎉"
-        })
-      });
-      const data = await resp.json();
-      if(data.id){ toast("✅ Verstuurd naar " + (data.recipients||"?") + " apparaat(en)!"); }
-      else { toast("❌ " + (data.errors?data.errors[0]:JSON.stringify(data)).slice(0,80)); }
-    }catch(e){
-      toast("Fout: " + (e.message||String(e)));
-    }
-  }
-
-  async function enableNotifs(){
-    toast("⏳ Bezig...");
-    try{
-      const OS = S.osInstance || window.OneSignal;
-      if(!OS){ toast("❌ OneSignal niet geladen"); return; }
-      const sub = OS.User.PushSubscription;
-      const isOn = sub.optedIn;
-      toast("Status: " + (isOn ? "aan → uitschakelen" : "uit → inschakelen"));
-      if(isOn){
-        try{
-          await sub.optOut();
-          updateNotifUI(false);
-          toast("Meldingen uitgeschakeld");
-        }catch(outErr){
-          // optOut() mislukt op sommige browsers — verberg knop ipv fout
-          console.warn("optOut mislukt:", outErr);
-          toast("Uitschakelen niet mogelijk in deze browser");
-          // Verberg uitschakelknop — meldingen blijven actief
-          document.getElementById("enableNotifsBtn").style.display="none";
-        }
-      } else {
-        try{
-          await sub.optIn();
-          updateNotifUI(true);
-          toast("Meldingen ingeschakeld ✓");
-        }catch(inErr){
-          toast("Inschakelen mislukt: " + (inErr.message||String(inErr)));
-          console.error(inErr);
-        }
-      }
-    }catch(e){
-      toast("Fout: " + (e.message||String(e)));
-      console.error(e);
-    }
-  }
-
-  async function saveSubId(id){
-    if(!fb||!S.user) return;
-    try{ await fb.dM.set(fb.dM.ref(fb.db,`${SUBS}/${S.user.uid}`),{subscriptionId:id,email:S.user.email,updatedAt:Date.now()}); }catch(e){}
-  }
-
-  async function getAllSubIds(){
-    if(!fb||!S.user) return S.osSubId?[S.osSubId]:[];
-    try{
-      const snap=await fb.dM.get(fb.dM.ref(fb.db,SUBS));
-      if(!snap.exists()) return S.osSubId?[S.osSubId]:[];
-      return Object.values(snap.val()||{}).map(s=>s.subscriptionId).filter(Boolean);
-    }catch(e){ return S.osSubId?[S.osSubId]:[]; }
-  }
-
   async function scheduleNotif(title,body,when){
     const apiKey = localStorage.getItem("os_api_key") || OS_API_KEY;
     if(!apiKey){ toast("OneSignal API key niet ingesteld"); return; }
@@ -876,10 +745,22 @@
     else data.memories[id]={id:Number(id),date,time:time||"",title,desc,who:S.who,createdAt:new Date().toISOString()};
     await setAll(data);
     toast(S.editId?"Bijgewerkt ✓":"Opgeslagen ✓");
-    if(reminder&&date&&time){
-      const dt=new Date(`${date}T${time}:00`);
-      const rt=new Date(dt.getTime()-Number(reminder)*60000);
-      if(rt>new Date()) await scheduleNotif("📅 "+title,`Herinnering: ${title} om ${time}`,rt);
+    if(reminder&&date&&time&&!S.editId){
+      setTimeout(()=>{
+        if(confirm(`📅 "${title}" toevoegen aan Google Agenda?`)){
+          const [y,m,d2]=date.split("-");
+          const t=time.replace(":","");
+          const endDt=new Date(`${date}T${time}:00`);
+          endDt.setMinutes(endDt.getMinutes()+60);
+          const endTime=`${String(endDt.getHours()).padStart(2,"0")}${String(endDt.getMinutes()).padStart(2,"0")}`;
+          const url=`https://calendar.google.com/calendar/render?action=TEMPLATE`
+            +`&text=${encodeURIComponent("📅 "+title)}`
+            +`&dates=${y}${m}${d2}T${t}00/${y}${m}${d2}T${endTime}00`
+            +`&details=${encodeURIComponent(desc||"Via Onze Agenda")}`
+            +`&sf=true`;
+          window.open(url,"_blank");
+        }
+      },300);
     }
     clearForm(); await refreshAll(); setScreen("calendar");
   }
@@ -1027,7 +908,6 @@
   document.getElementById("loginBtn").addEventListener("click",doLogin);
   document.getElementById("logoutBtn").addEventListener("click",doLogout);
   document.getElementById("syncSelect").addEventListener("change",async()=>{ S.syncMode=document.getElementById("syncSelect").value; localStorage.setItem("rb_syncMode",S.syncMode); if(S.syncMode==="firebase")await initFirebase(); await refreshAll(); });
-  document.getElementById("enableNotifsBtn").addEventListener("click",enableNotifs);
   document.getElementById("exportBtn").addEventListener("click",exportData);
   document.getElementById("importBtn").addEventListener("click",importData);
   document.getElementById("migrateBtn").addEventListener("click",migrateOldData);
@@ -1042,7 +922,6 @@
       toast("Anthropic Key opgeslagen ✓");
     } else { toast("Ongeldige key — moet beginnen met sk-ant"); }
   });
-  document.getElementById("testNotifBtn").addEventListener("click", testNotif);
   document.getElementById("saveOsKeyBtn").addEventListener("click",()=>{
     const k=document.getElementById("osKeyInput").value.trim();
     if(k.startsWith("os_v2_app_")){
@@ -1061,9 +940,6 @@
   // Versie tonen
   document.getElementById("appVersion").textContent="v"+APP_VERSION;
   document.getElementById("topbarVersion").textContent=APP_VERSION;
-  // API key statussen tonen
-  const storedOsKey=localStorage.getItem("os_api_key");
-  if(storedOsKey){ document.getElementById("osKeyStatus").textContent="✅ Actief ("+storedOsKey.slice(0,18)+"...)"; document.getElementById("osKeyStatus").style.color="var(--green)"; }
   // Firebase rules display
   document.getElementById("fbRulesBlock").textContent=FB_RULES;
   // AI key status tonen
@@ -1077,11 +953,8 @@
 
   // ── INIT ───────────────────────────────────────────────────────
   (async()=>{
-    initOneSignal();
     if("serviceWorker" in navigator){
       // App SW: netwerk-eerst + automatisch herladen bij update
-      // Alleen OneSignal SW registreren (geen conflict met eigen SW)
-      navigator.serviceWorker.register("/Afspraken/OneSignalSDKWorker.js", {scope:"/Afspraken/"}).catch(()=>{});
     }
     if(S.syncMode==="firebase") await initFirebase();
     await refreshAll();
