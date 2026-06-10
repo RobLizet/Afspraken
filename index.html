@@ -432,7 +432,7 @@
 
 <script type="module">
   // ── CONSTANTS ─────────────────────────────────────────────────
-  const APP_VERSION = "4.4";
+  const APP_VERSION = "4.5";
   const OS_APP_ID   = "e2c74ceb-a800-4ebd-95ea-6f6ac01e5677";
   const OS_API_KEY  = localStorage.getItem("os_api_key") || "";
   const AI_KEY      = localStorage.getItem('ai_key') || '';
@@ -538,7 +538,12 @@
     window.OneSignalDeferred=window.OneSignalDeferred||[];
     OneSignalDeferred.push(async function(OS){
       S.osInstance=OS;
-      await OS.init({appId:OS_APP_ID,serviceWorkerPath:"OneSignalSDKWorker.js",serviceWorkerParam:{scope:"/Afspraken/"},notifyButton:{enable:false}});
+      try{
+        await OS.init({appId:OS_APP_ID,serviceWorkerPath:"OneSignalSDKWorker.js",serviceWorkerParam:{scope:"/Afspraken/"},notifyButton:{enable:false}});
+      }catch(initErr){
+        console.warn("OneSignal init waarschuwing:", initErr);
+        // Doorgaan ondanks fout — SDK kan nog bruikbaar zijn
+      }
       const sub=OS.User.PushSubscription;
       sub.addEventListener("change",async ev=>{
         const on=ev.current.optedIn;
@@ -554,16 +559,36 @@
 
   async function enableNotifs(){
     try{
-      if(!S.osInstance){ toast("OneSignal nog niet geladen, probeer opnieuw"); return; }
-      const sub=S.osInstance.User.PushSubscription;
+      // Probeer window.OneSignal direct (v16 SDK)
+      const OS = S.osInstance || window.OneSignal;
+      if(!OS){ toast("❌ OneSignal niet geladen"); return; }
+      
+      // Vraag toestemming via Notifications API als fallback
+      if(Notification.permission === "denied"){
+        toast("❌ Meldingen geblokkeerd in browser — sta toe via site-instellingen");
+        return;
+      }
+      if(Notification.permission === "default"){
+        const perm = await Notification.requestPermission();
+        if(perm !== "granted"){ toast("Toestemming geweigerd"); return; }
+      }
+      
+      const sub = OS.User?.PushSubscription;
+      if(!sub){ toast("❌ Geen PushSubscription beschikbaar"); return; }
+      
       if(sub.optedIn){
         await sub.optOut();
+        updateNotifUI(false);
         toast("Meldingen uitgeschakeld");
       } else {
         await sub.optIn();
+        updateNotifUI(true);
         toast("Meldingen ingeschakeld ✓");
       }
-    }catch(e){ console.error(e); toast("Meldingen wijzigen mislukt: "+e.message); }
+    }catch(e){ 
+      console.error("OneSignal fout:", e); 
+      toast("Fout: " + (e.message||String(e)));
+    }
   }
 
   async function saveSubId(id){
