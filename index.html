@@ -438,7 +438,7 @@
 
 <script type="module">
   // ── CONSTANTS ─────────────────────────────────────────────────
-  const APP_VERSION = "4.12";
+  const APP_VERSION = "4.13";
   // Auto-update: forceer herladen als er een nieuwe versie is
   (function(){
     const stored = localStorage.getItem("app_version");
@@ -575,24 +575,25 @@
     });
   }
 
+  const PUSH_PROXY = "https://agenda-push.zweetzakken.workers.dev";
+
   async function testNotif(){
     toast("⏳ Test melding versturen...");
     try{
       const apiKey = localStorage.getItem("os_api_key");
       if(!apiKey){ toast("❌ Sla eerst de OneSignal API key op onder API Sleutels"); return; }
-      // Stuur naar alle abonnees (alleen Rob & Lizet)
-      const resp = await fetch("https://api.onesignal.com/notifications",{
+      const resp = await fetch(PUSH_PROXY,{
         method:"POST",
-        headers:{"Content-Type":"application/json","Authorization":"Key "+apiKey},
+        headers:{"Content-Type":"application/json"},
         body: JSON.stringify({
           app_id: OS_APP_ID,
-          included_segments: ["Total Subscriptions"],
-          headings: {nl:"🔔 Test melding", en:"🔔 Test notification"},
-          contents: {nl:"Onze Agenda meldingen werken! 🎉", en:"Onze Agenda notifications work! 🎉"}
+          api_key: apiKey,
+          title: "🔔 Test melding",
+          body: "Onze Agenda meldingen werken! 🎉"
         })
       });
       const data = await resp.json();
-      if(data.id){ toast("✅ Verstuurd naar " + (data.recipients||"?") + " apparaat(en)"); }
+      if(data.id){ toast("✅ Verstuurd naar " + (data.recipients||"?") + " apparaat(en)!"); }
       else { toast("❌ " + (data.errors?data.errors[0]:JSON.stringify(data)).slice(0,80)); }
     }catch(e){
       toast("Fout: " + (e.message||String(e)));
@@ -653,14 +654,14 @@
     const apiKey = localStorage.getItem("os_api_key") || OS_API_KEY;
     if(!apiKey){ toast("OneSignal API key niet ingesteld"); return; }
     try{
-      const r=await fetch("https://api.onesignal.com/notifications",{
+      const r=await fetch(PUSH_PROXY,{
         method:"POST",
-        headers:{"Content-Type":"application/json","Authorization":"Key "+apiKey},
+        headers:{"Content-Type":"application/json"},
         body:JSON.stringify({
           app_id:OS_APP_ID,
-          included_segments:["Total Subscriptions"],
-          headings:{nl:title,en:title},
-          contents:{nl:body,en:body},
+          api_key:apiKey,
+          title:title,
+          body:body,
           send_after:when.toISOString()
         })
       });
