@@ -432,7 +432,7 @@
 
 <script type="module">
   // ── CONSTANTS ─────────────────────────────────────────────────
-  const APP_VERSION = "4.2";
+  const APP_VERSION = "4.3";
   const OS_APP_ID   = "e2c74ceb-a800-4ebd-95ea-6f6ac01e5677";
   const OS_API_KEY  = localStorage.getItem("os_api_key") || "";
   const AI_KEY      = localStorage.getItem('ai_key') || '';
@@ -516,21 +516,55 @@
   }
 
   // ── ONESIGNAL ──────────────────────────────────────────────────
+  function updateNotifUI(enabled){
+    const btn=document.getElementById("enableNotifsBtn");
+    const status=document.getElementById("notifStatus");
+    if(enabled){
+      status.textContent="✅ Ingeschakeld";
+      status.style.color="var(--green)";
+      btn.textContent="Uitschakelen";
+      btn.classList.remove("btn-secondary");
+      btn.classList.add("btn-ghost");
+    } else {
+      status.textContent="Nog niet ingeschakeld";
+      status.style.color="";
+      btn.textContent="Inschakelen";
+      btn.classList.remove("btn-ghost");
+      btn.classList.add("btn-secondary");
+    }
+  }
+
   function initOneSignal(){
     window.OneSignalDeferred=window.OneSignalDeferred||[];
     OneSignalDeferred.push(async function(OS){
       await OS.init({appId:OS_APP_ID,serviceWorkerPath:"OneSignalSDKWorker.js",serviceWorkerParam:{scope:"/Afspraken/"},notifyButton:{enable:false}});
       const sub=OS.User.PushSubscription;
       sub.addEventListener("change",async ev=>{
-        if(ev.current.optedIn){ S.osSubId=ev.current.id; document.getElementById("notifStatus").textContent="Ingeschakeld ✓"; await saveSubId(ev.current.id); }
+        const on=ev.current.optedIn;
+        S.osSubId=on?ev.current.id:null;
+        updateNotifUI(on);
+        if(on) await saveSubId(ev.current.id);
       });
-      if(await sub.optedIn){ S.osSubId=sub.id; document.getElementById("notifStatus").textContent="Ingeschakeld ✓"; }
+      const isOn=sub.optedIn;
+      if(isOn){ S.osSubId=sub.id; }
+      updateNotifUI(isOn);
     });
   }
 
   async function enableNotifs(){
     window.OneSignalDeferred=window.OneSignalDeferred||[];
-    OneSignalDeferred.push(async OS=>{ try{ await OS.User.PushSubscription.optIn(); toast("Meldingen ingeschakeld ✓"); }catch(e){ toast("Meldingen inschakelen mislukt"); } });
+    OneSignalDeferred.push(async OS=>{
+      try{
+        const sub=OS.User.PushSubscription;
+        if(sub.optedIn){
+          await sub.optOut();
+          toast("Meldingen uitgeschakeld");
+        } else {
+          await sub.optIn();
+          toast("Meldingen ingeschakeld ✓");
+        }
+      }catch(e){ toast("Meldingen wijzigen mislukt"); }
+    });
   }
 
   async function saveSubId(id){
