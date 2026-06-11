@@ -269,7 +269,7 @@
   </div>
 
   <!-- ===== TOEVOEGEN ===== -->
-  <div class="screen" id="screenAdd">
+  <div class="screen" id="screenAdd" autocomplete="off">
     <div class="screen-inner">
       <div style="margin-bottom:12px"><div class="screen-title" id="formTitle" style="font-size:22px;font-weight:900">Toevoegen</div><div id="formSub" style="font-size:13px;color:var(--muted);font-weight:500;margin-top:2px">Nieuw item toevoegen</div></div>
       <div class="card">
@@ -281,9 +281,9 @@
             <button class="seg-item" data-type="memory">📝 Herinnering</button>
           </div>
         </div>
-        <div class="form-group"><label class="form-label" for="titleInput">Titel *</label><input class="form-input" id="titleInput" type="text" placeholder="Bijv. Etentje bij Theo"></div>
-        <div class="form-group"><label class="form-label" for="dateInput">Datum</label><input class="form-input" id="dateInput" type="date"></div>
-        <div class="form-group" id="timeField"><label class="form-label" for="timeInput">Tijd</label><input class="form-input" id="timeInput" type="time"></div>
+        <div class="form-group"><label class="form-label" for="titleInput">Titel *</label><input class="form-input" id="titleInput" type="text" autocomplete="off" placeholder="Bijv. Etentje bij Theo"></div>
+        <div class="form-group"><label class="form-label" for="dateInput">Datum</label><input class="form-input" id="dateInput" type="date" autocomplete="off"></div>
+        <div class="form-group" id="timeField"><label class="form-label" for="timeInput">Tijd</label><input class="form-input" id="timeInput" type="time" autocomplete="off"></div>
         <div class="form-group" id="reminderField">
           <label class="form-label" for="reminderSelect">Herinnering via OneSignal</label>
           <select class="form-select" id="reminderSelect">
@@ -293,7 +293,7 @@
             <option value="1440">1 dag van tevoren</option>
           </select>
         </div>
-        <div class="form-group"><label class="form-label" for="descInput">Beschrijving / locatie</label><textarea class="form-textarea" id="descInput" placeholder="Extra info..."></textarea></div>
+        <div class="form-group"><label class="form-label" for="descInput">Beschrijving / locatie</label><textarea class="form-textarea" id="descInput" autocomplete="off" placeholder="Extra info..."></textarea></div>
         <div class="form-group">
           <div class="form-label">Wie</div>
           <div class="who-row">
@@ -440,7 +440,7 @@
 
 <script type="module">
   // ── CONSTANTS ─────────────────────────────────────────────────
-  const APP_VERSION = "4.19";
+  const APP_VERSION = "4.20";
   // Auto-update: forceer herladen als er een nieuwe versie is
   (function(){
     const stored = localStorage.getItem("app_version");
