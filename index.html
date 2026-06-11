@@ -285,7 +285,7 @@
         <div class="form-group"><label class="form-label" for="dateInput">Datum</label><input class="form-input" id="dateInput" type="date" autocomplete="off"></div>
         <div class="form-group" id="timeField"><label class="form-label" for="timeInput">Tijd</label><input class="form-input" id="timeInput" type="time" autocomplete="off"></div>
         <div class="form-group" id="reminderField">
-          <label class="form-label" for="reminderSelect">Herinnering via OneSignal</label>
+          <label class="form-label" for="reminderSelect">Herinnering (Google Agenda)</label>
           <select class="form-select" id="reminderSelect">
             <option value="">Geen herinnering</option>
             <option value="15">15 min van tevoren</option>
@@ -376,14 +376,7 @@
           </div>
           <div id="aiKeyStatus" style="font-size:11px;color:var(--muted)">Niet ingesteld</div>
         </div>
-        <div class="set-row" style="flex-direction:column;align-items:flex-start;gap:8px">
-          <div><div class="set-label">OneSignal API Key</div><div class="set-sub">Voor push meldingen — lokaal opgeslagen</div></div>
-          <div style="display:flex;gap:7px;width:100%">
-            <input type="password" id="osKeyInput" class="form-input" placeholder="os_v2_app_..." style="flex:1;font-size:12px" value="">
-            <button class="btn btn-primary btn-sm" id="saveOsKeyBtn">Opslaan</button>
-          </div>
-          <div id="osKeyStatus" style="font-size:11px;color:var(--muted)">Niet ingesteld</div>
-        </div>
+
       </div>
 
       <div class="section-title">Over</div>
@@ -440,7 +433,7 @@
 
 <script type="module">
   // ── CONSTANTS ─────────────────────────────────────────────────
-  const APP_VERSION = "4.20";
+  const APP_VERSION = "4.21";
   // Auto-update: forceer herladen als er een nieuwe versie is
   (function(){
     const stored = localStorage.getItem("app_version");
@@ -994,16 +987,7 @@
       toast("Anthropic Key opgeslagen ✓");
     } else { toast("Ongeldige key — moet beginnen met sk-ant"); }
   });
-  document.getElementById("saveOsKeyBtn").addEventListener("click",()=>{
-    const k=document.getElementById("osKeyInput").value.trim();
-    if(k.startsWith("os_v2_app_")){
-      localStorage.setItem("os_api_key",k);
-      document.getElementById("osKeyStatus").textContent="✅ Opgeslagen";
-      document.getElementById("osKeyStatus").style.color="var(--green)";
-      document.getElementById("osKeyInput").value="";
-      toast("OneSignal Key opgeslagen ✓");
-    } else { toast("Ongeldige key — moet beginnen met os_v2_app_"); }
-  });
+
   document.getElementById("chatSendBtn").addEventListener("click",sendChat);
   document.getElementById("chatInput").addEventListener("keydown",e=>{ if(e.key==="Enter"&&!e.shiftKey){ e.preventDefault(); sendChat(); } });
   document.getElementById("chatInput").addEventListener("input",function(){ this.style.height="auto"; this.style.height=this.scrollHeight+"px"; });
