@@ -434,7 +434,7 @@
 
 <script type="module">
   // ── CONSTANTS ─────────────────────────────────────────────────
-  const APP_VERSION = "4.17";
+  const APP_VERSION = "4.18";
   // Auto-update: forceer herladen als er een nieuwe versie is
   (function(){
     const stored = localStorage.getItem("app_version");
@@ -551,11 +551,14 @@
   function setScreen(name){
     document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
     document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
-    const cap=name.charAt(0).toUpperCase()+name.slice(1);
-    document.getElementById(`screen${cap}`)?.classList.add("active");
+    // Speciale gevallen voor screen IDs
+    const screenId = name==="ai" ? "screenAI" : "screen"+name.charAt(0).toUpperCase()+name.slice(1);
+    document.getElementById(screenId)?.classList.add("active");
     document.querySelector(`.tab[data-tab="${name}"]`)?.classList.add("active");
-    // Fix chat bar: only show when AI is active
     document.getElementById("chatBar").style.display = name==="ai"?"flex":"none";
+    // Welkomstbericht als chat leeg is
+    if(name==="ai"&&!document.getElementById("chatMessages").children.length)
+      addMsg("Hé 👋 Ik ben jullie agenda-assistent! Vraag me alles over jullie afspraken.","bot");
   }
 
   // ── HERO ───────────────────────────────────────────────────────
@@ -887,7 +890,6 @@
   document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>{
     const tab=t.dataset.tab; setScreen(tab);
     if(tab==="list") renderList(S.filter);
-    if(tab==="ai"&&!document.getElementById("chatMessages").children.length) addMsg("Hé 👋 Ik ben jullie agenda-assistent voor Rob & Lizet! Vraag me alles over jullie afspraken of laat me helpen met plannen.","bot");
   }));
 
   document.getElementById("prevMonth").addEventListener("click",async()=>{ S.viewM--; if(S.viewM<0){S.viewM=11;S.viewY--;} await renderCal(); });
