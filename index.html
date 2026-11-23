@@ -355,6 +355,11 @@
       <div class="section-title">Data</div>
       <div class="card">
         <div class="set-row"><div><div class="set-label">Migreer oude data</div><div class="set-sub">Kopieer per-user naar gedeeld pad</div></div><button class="btn btn-secondary btn-sm" id="migrateBtn">Migreer</button></div>
+        <div class="set-row"><div><div class="set-label">🛟 Automatische backup</div><div class="set-sub" id="backupStatus">Elke dag, laatste 30 dagen bewaard</div></div></div>
+        <div class="set-row" style="gap:8px">
+          <select class="form-select" id="backupSelect" style="flex:1;min-width:0;padding:5px 8px;font-size:12px"><option value="">Geen backups</option></select>
+          <button class="btn btn-secondary btn-sm" id="restoreBtn" style="flex-shrink:0">Herstel</button>
+        </div>
         <div class="set-row"><div><div class="set-label">Export</div><div class="set-sub">Download als JSON</div></div><button class="btn btn-secondary btn-sm" id="exportBtn">Export</button></div>
         <div class="set-row"><div><div class="set-label">Import</div><div class="set-sub">Laad JSON backup</div></div><button class="btn btn-secondary btn-sm" id="importBtn">Import</button></div>
       </div>
@@ -433,7 +438,7 @@
 
 <script type="module">
   // ── CONSTANTS ─────────────────────────────────────────────────
-  const APP_VERSION = "4.22";
+  const APP_VERSION = "4.23";
   // Auto-update: forceer herladen als er een nieuwe versie is
   (function(){
     const stored = localStorage.getItem("app_version");
@@ -446,6 +451,8 @@
   })();
   const AI_KEY      = localStorage.getItem('ai_key') || '';
   const SHARED      = "agenda/shared";
+  const BACKUPS     = "agenda/backups";
+  const KEEP_CLOUD  = 30, KEEP_LOCAL = 7;
   const FB_RULES    = `{
   "rules": {
     "agenda": {
@@ -521,6 +528,80 @@
     if(S.syncMode==="firebase"&&S.fbReady&&S.user){
       try{await fb.dM.set(fb.dM.ref(fb.db,SHARED),data);}catch(e){}
     }
+  }
+
+  // ── BACKUP ─────────────────────────────────────────────────────
+  const countItems = d => Object.keys(d.appointments||{}).length+Object.keys(d.birthdays||{}).length+Object.keys(d.memories||{}).length;
+  const pad2 = n => String(n).padStart(2,"0");
+  const todayKey = () => { const n=new Date(); return `${n.getFullYear()}-${pad2(n.getMonth()+1)}-${pad2(n.getDate())}`; };
+  const stampKey = label => { const n=new Date(); return `${todayKey()}_${pad2(n.getHours())}${pad2(n.getMinutes())}${pad2(n.getSeconds())}_${label}`; };
+  const cloudOn = () => S.syncMode==="firebase"&&S.fbReady&&S.user;
+  const localBackups = () => { try{ return JSON.parse(localStorage.getItem("rb_backups")||"{}"); }catch(e){ return {}; } };
+
+  function saveLocalBackup(key,snap){
+    const b=localBackups(); b[key]=snap;
+    const keys=Object.keys(b).sort(); while(keys.length>KEEP_LOCAL) delete b[keys.shift()];
+    try{ localStorage.setItem("rb_backups",JSON.stringify(b)); }catch(e){}
+  }
+
+  async function writeBackup(key,data){
+    if(!countItems(data)) return false;               // nooit een lege agenda als backup opslaan
+    const snap={savedAt:new Date().toISOString(),by:S.user?.email||"lokaal",count:countItems(data),data};
+    saveLocalBackup(key,snap);
+    if(cloudOn()){
+      try{
+        await fb.dM.set(fb.dM.ref(fb.db,`${BACKUPS}/${key}`),snap);
+        const all=(await fb.dM.get(fb.dM.ref(fb.db,BACKUPS))).val()||{};
+        const keys=Object.keys(all).sort();
+        for(const k of keys.slice(0,Math.max(0,keys.length-KEEP_CLOUD))) await fb.dM.remove(fb.dM.ref(fb.db,`${BACKUPS}/${k}`));
+      }catch(e){}
+    }
+    return true;
+  }
+
+  let backupDone=false;
+  async function autoBackup(){
+    if(backupDone) return;
+    if(S.syncMode==="firebase"&&!cloudOn()) return;   // wacht tot ingelogd
+    backupDone=true;
+    const key=todayKey();
+    try{
+      if(cloudOn()){
+        const ex=await fb.dM.get(fb.dM.ref(fb.db,`${BACKUPS}/${key}`));
+        if(ex.exists()){ if(!localBackups()[key]) saveLocalBackup(key,ex.val()); return renderBackups(); }
+      } else if(localBackups()[key]) return renderBackups();
+      await writeBackup(key,await getAll());
+    }catch(e){}
+    renderBackups();
+  }
+
+  async function listBackups(){
+    const out={...localBackups()};
+    if(cloudOn()){ try{ Object.assign(out,(await fb.dM.get(fb.dM.ref(fb.db,BACKUPS))).val()||{}); }catch(e){} }
+    return out;
+  }
+
+  function backupLabel(k,b){
+    const [d,t,lbl]=k.split("_"); const [y,m,dd]=d.split("-");
+    const time=t?` ${t.slice(0,2)}:${t.slice(2,4)}`:"";
+    const why=lbl==="voor-import"?" · vóór import":lbl==="voor-herstel"?" · vóór herstel":"";
+    return `${dd}-${m}-${y}${time}${why} · ${b.count??countItems(b.data||{})} items`;
+  }
+
+  async function renderBackups(){
+    const sel=document.getElementById("backupSelect"); if(!sel) return;
+    const all=await listBackups(); const keys=Object.keys(all).sort().reverse();
+    sel.innerHTML=keys.length?keys.map(k=>`<option value="${k}">${backupLabel(k,all[k])}</option>`).join(""):'<option value="">Geen backups</option>';
+    document.getElementById("backupStatus").textContent=keys.length?`Laatste: ${backupLabel(keys[0],all[keys[0]])}`:"Elke dag, laatste 30 dagen bewaard";
+  }
+
+  async function restoreBackup(){
+    const key=document.getElementById("backupSelect").value; if(!key){ toast("Geen backup gekozen"); return; }
+    const b=(await listBackups())[key]; if(!b||!b.data){ toast("Backup niet gevonden"); return; }
+    if(!confirm(`Agenda terugzetten naar ${backupLabel(key,b)}?\n\nDe huidige stand wordt eerst zelf als backup bewaard.`)) return;
+    await writeBackup(stampKey("voor-herstel"),await getAll());
+    const d=b.data; await setAll({appointments:d.appointments||{},birthdays:d.birthdays||{},memories:d.memories||{}});
+    toast("Backup teruggezet ✓"); await refreshAll(); renderBackups();
   }
 
   // ── ZOEKEN ─────────────────────────────────────────────────────
@@ -912,18 +993,20 @@
   }
   function importData(){
     const inp=document.createElement("input"); inp.type="file"; inp.accept=".json";
-    inp.onchange=async()=>{ const f=inp.files[0]; if(!f) return; try{ const j=JSON.parse(await f.text()); await setAll({appointments:j.appointments||{},birthdays:j.birthdays||{},memories:j.memories||{}}); toast("Import klaar ✓"); await refreshAll(); }catch(e){ toast("Import fout"); } };
+    inp.onchange=async()=>{ const f=inp.files[0]; if(!f) return; try{ const j=JSON.parse(await f.text()); await writeBackup(stampKey("voor-import"),await getAll()); await setAll({appointments:j.appointments||{},birthdays:j.birthdays||{},memories:j.memories||{}}); toast("Import klaar ✓"); await refreshAll(); }catch(e){ toast("Import fout"); } };
     inp.click();
   }
 
   // ── REFRESH ────────────────────────────────────────────────────
-  async function refreshAll(){ renderAuth(); document.getElementById("syncSelect").value=S.syncMode; await renderCal(); await renderList(S.filter); }
+  async function refreshAll(){ renderAuth(); document.getElementById("syncSelect").value=S.syncMode; await renderCal(); await renderList(S.filter); autoBackup(); }
 
   // ── EVENTS ────────────────────────────────────────────────────
   document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>{
     const tab=t.dataset.tab; setScreen(tab);
     if(tab==="list") renderList(S.filter);
+    if(tab==="settings") renderBackups();
   }));
+  document.getElementById("restoreBtn").addEventListener("click",restoreBackup);
 
   document.getElementById("prevMonth").addEventListener("click",async()=>{ S.viewM--; if(S.viewM<0){S.viewM=11;S.viewY--;} await renderCal(); });
   document.getElementById("nextMonth").addEventListener("click",async()=>{ S.viewM++; if(S.viewM>11){S.viewM=0;S.viewY++;} await renderCal(); });
