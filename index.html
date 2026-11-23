@@ -433,7 +433,7 @@
 
 <script type="module">
   // ── CONSTANTS ─────────────────────────────────────────────────
-  const APP_VERSION = "4.21";
+  const APP_VERSION = "4.22";
   // Auto-update: forceer herladen als er een nieuwe versie is
   (function(){
     const stored = localStorage.getItem("app_version");
@@ -446,7 +446,6 @@
   })();
   const AI_KEY      = localStorage.getItem('ai_key') || '';
   const SHARED      = "agenda/shared";
-  const SUBS        = "agenda/subscriptions";
   const FB_RULES    = `{
   "rules": {
     "agenda": {
@@ -522,28 +521,6 @@
     if(S.syncMode==="firebase"&&S.fbReady&&S.user){
       try{await fb.dM.set(fb.dM.ref(fb.db,SHARED),data);}catch(e){}
     }
-  }
-
-  // ── ONESIGNAL ──────────────────────────────────────────────────
-  async function scheduleNotif(title,body,when){
-    const apiKey = localStorage.getItem("os_api_key") || OS_API_KEY;
-    if(!apiKey){ toast("OneSignal API key niet ingesteld"); return; }
-    try{
-      const r=await fetch(PUSH_PROXY,{
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({
-          app_id:OS_APP_ID,
-          api_key:apiKey,
-          title:title,
-          body:body,
-          send_after:when.toISOString()
-        })
-      });
-      const d=await r.json();
-      if(d.id) toast("Herinnering ingepland ✓");
-      else toast("Melding fout: "+(d.errors?d.errors[0]:"onbekend"));
-    }catch(e){ toast("Melding kon niet worden ingepland"); }
   }
 
   // ── ZOEKEN ─────────────────────────────────────────────────────
